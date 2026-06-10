@@ -53,6 +53,29 @@ class Person < ApplicationRecord
           .where.not(id: id)
   end
 
+  # --- Adding relatives (resolve the right Family so kinship stays derived) ---
+
+  # Add a parent: ensure this person has a birth family, then add the parent as
+  # a partner of it.
+  def add_parent(attributes)
+    family = families_as_child.first || Family.create!.tap { |f| f.children << self }
+    Person.create!(attributes).tap { |parent| family.partners << parent }
+  end
+
+  # Add a child: ensure this person partners in a family, then add the child to it
+  # (so an existing partner becomes the child's second parent).
+  def add_child(attributes)
+    family = families_as_partner.first || Family.create!.tap { |f| f.partners << self }
+    Person.create!(attributes).tap { |child| family.children << child }
+  end
+
+  # Add a partner: create a new union between this person and the new partner.
+  def add_partner(attributes)
+    Person.create!(attributes).tap do |partner|
+      Family.create!.partners << [ self, partner ]
+    end
+  end
+
   # Full display name composed from its parts (nickname is intentionally excluded).
   # Falls back to "Unknown" when no name parts are present.
   def display_name

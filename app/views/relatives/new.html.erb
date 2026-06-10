@@ -1,0 +1,16 @@
+<%= turbo_frame_tag "add_#{@relation}" do %>
+  <%= form_with model: @relative, url: person_relatives_path(@person), class: "form form--inline" do |f| %>
+    <%= hidden_field_tag :relation, @relation %>
+    <p class="inline-title">Add <%= @relation %></p>
+    <div class="field"><%= f.label :given_names %><%= f.text_field :given_names %></div>
+    <div class="field"><%= f.label :surname %><%= f.text_field :surname %></div>
+    <div class="field">
+      <%= f.label :sex %>
+      <%= f.select :sex, [ [ "Unknown", "U" ], [ "Male", "M" ], [ "Female", "F" ], [ "Other", "X" ] ] %>
+    </div>
+    <div class="actions">
+      <%= f.submit "Add" %>
+      <%= link_to "Cancel", person_path(@person), class: "linkish", data: { turbo_frame: "_top" } %>
+    </div>
+  <% end %>
+<% end %>

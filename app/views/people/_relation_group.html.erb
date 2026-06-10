@@ -1,0 +1,17 @@
+<div class="relation-group">
+  <h3><%= label %></h3>
+  <% if people.any? %>
+    <ul>
+      <% people.each do |relative| %>
+        <li><%= link_to relative.display_name, relative %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="muted">None recorded.</p>
+  <% end %>
+
+  <%= turbo_frame_tag "add_#{relation}" do %>
+    <%= link_to "+ Add #{label.singularize.downcase}",
+          new_person_relative_path(person, relation: relation), class: "linkish add-relative" %>
+  <% end %>
+</div>

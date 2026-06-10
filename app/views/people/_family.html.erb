@@ -1,0 +1,8 @@
+<%# Re-rendered whole on relative creation (turbo_stream target id "family"). %>
+<section class="relations" id="family">
+  <h2>Family</h2>
+  <%= render "people/relation_group", person: person, label: "Parents",  relation: "parent",  people: person.parents %>
+  <%= render "people/relation_group", person: person, label: "Partners", relation: "partner", people: person.partners %>
+  <%= render "people/relation_group", person: person, label: "Children", relation: "child",   people: person.children %>
+  <%= render "people/relations", label: "Siblings", people: person.siblings %>
+</section>

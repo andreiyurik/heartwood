@@ -18,8 +18,11 @@ Sequenced so each phase ships something real and testable. Priorities use MoSCoW
 - ✅ Built-in Rails 8 authentication (no Devise).
 - ✅ Person CRUD + list, vanilla CSS, morphing-first nav.
 - ✅ Minitest from day one (36 tests, 106 assertions).
-- ⏭️ Remaining slice: **add relatives & events via the UI** (inline "add parent/child/spouse",
-  birth/death forms) — the next natural step before Phase 2.
+- ✅ **Add relatives via the UI** — inline "add parent/child/partner" on the profile
+  (Turbo Frame form → Turbo Stream re-render of the family box). Domain methods
+  `add_parent/add_child/add_partner` on Person, TDD'd.
+- ⏭️ Remaining slice: **add/edit events via the UI** (birth/death/marriage forms) — small,
+  then Phase 2 (GEDCOM).
 
 ## Phase 2 — Interop (Must — this is the moat)
 - [[gedcom]] **import** (tolerant 5.5.1 + 7) via Active Storage → Solid Queue → Turbo Streams progress.

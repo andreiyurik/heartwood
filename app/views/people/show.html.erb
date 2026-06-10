@@ -19,13 +19,7 @@
     <% if @person.death %><dt>Died</dt><dd><%= @person.death.date_raw %></dd><% end %>
   </dl>
 
-  <section class="relations">
-    <h2>Family</h2>
-    <%= render "relations", label: "Parents", people: @person.parents %>
-    <%= render "relations", label: "Partners", people: @person.partners %>
-    <%= render "relations", label: "Children", people: @person.children %>
-    <%= render "relations", label: "Siblings", people: @person.siblings %>
-  </section>
+  <%= render "family", person: @person %>
 
   <%= button_to "Remove", @person, method: :delete, class: "danger",
         form: { data: { turbo_confirm: "Remove #{@person.display_name}?" } } %>
