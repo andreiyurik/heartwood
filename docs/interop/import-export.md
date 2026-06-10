@@ -34,7 +34,11 @@ User uploads .ged / .gedzip
 ```
 
 Every arrow is a stock Rails 8.1 capability. This is the canonical demo of the thesis in
-[[adr/0001-vanilla-rails-stack]].
+[[adr/0001-vanilla-rails-stack]]. See [[rails8-features]] for the full capability map.
+
+**Use ActiveJob Continuations (Rails 8.1)** for the import job: split into `step`s with a
+cursor over `find_each`, so a Kamal deploy (30s shutdown) or crash resumes from the last saved
+record instead of restarting. Emit progress via **`Rails.event`** + Turbo Streams.
 
 ## Design rules
 - **Idempotent & resumable** where feasible; a failed import must not leave half-state — wrap

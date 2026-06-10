@@ -30,6 +30,10 @@ The [[family-tree-view]] graph layout needs real JavaScript (a layout algorithm)
 confined to **one Stimulus controller** over SVG, with nodes as server partials. Everything
 else stays vanilla. See [[tree-rendering]], [[adr/0005-tree-rendering-svg-stimulus]].
 
+## Used to the fullest
+See [[rails8-features]] for how each Rails 8/8.1 capability maps to a concrete Heartwood use,
+and [[hotwire-native]] for the one-codebase web + mobile strategy.
+
 ## Decision filter
 Before adding any gem/lib/tool, ask: *does this break the vanilla-Rails thesis?* If yes, the
 default answer is **no** — find the Rails-native way. Record exceptions as an ADR.
