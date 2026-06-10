@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_10_120300) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_10_130543) do
   create_table "events", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date_end"
@@ -19,6 +19,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_120300) do
     t.date "date_start"
     t.integer "eventable_id", null: false
     t.string "eventable_type", null: false
+    t.json "gedcom_raw"
+    t.string "gedcom_xref"
     t.string "kind"
     t.datetime "updated_at", null: false
     t.string "value"
@@ -27,6 +29,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_120300) do
 
   create_table "families", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.json "gedcom_raw"
     t.string "gedcom_xref"
     t.datetime "updated_at", null: false
   end
@@ -54,6 +57,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_120300) do
 
   create_table "people", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.json "gedcom_raw"
     t.string "gedcom_xref"
     t.string "given_names"
     t.string "name_prefix"
