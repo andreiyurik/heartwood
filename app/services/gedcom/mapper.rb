@@ -2,8 +2,6 @@ module Gedcom
   class Mapper
     # Tags handled explicitly when nested under an INDI record.
     INDI_KNOWN = %w[NAME SEX BIRT DEAT BAPM BURI CHR OCCU RESI EDUC FAMS FAMC].freeze
-    # Tags handled explicitly when nested under a FAM record.
-    FAM_KNOWN  = %w[HUSB WIFE CHIL MARR DIV].freeze
     # Tags that map to Event records.
     EVENT_TAGS = %w[BIRT DEAT BAPM BURI CHR OCCU RESI EDUC MARR DIV].freeze
 
@@ -40,7 +38,7 @@ module Gedcom
       record[:children].each do |child|
         case child[:tag]
         when "SEX"  then attrs[:sex] = child[:value] if Person::SEXES.include?(child[:value])
-        when "NAME" then extract_name!(child, attrs)
+        when "NAME" then extract_name(child, attrs)
         when *INDI_KNOWN
           # event tags are processed after save; other known tags are no-ops here
         else
@@ -64,7 +62,9 @@ module Gedcom
     # --- FAM ---
 
     def map_fam(record)
-      fam = Family.create!(gedcom_xref: record[:xref])
+      fam      = Family.create!(gedcom_xref: record[:xref])
+      raw_tags = []
+
       @xref_map[record[:xref]] = fam
       @families << fam
 
@@ -80,9 +80,12 @@ module Gedcom
           end
         when *EVENT_TAGS
           map_event(child, fam)
+        else
+          raw_tags << { "tag" => child[:tag], "value" => child[:value] }.compact
         end
       end
 
+      fam.update!(gedcom_raw: raw_tags) if raw_tags.any?
       fam
     end
 
@@ -103,7 +106,7 @@ module Gedcom
 
     # Populate given_names / surname from a NAME record.
     # Prefers GIVN/SURN sub-tags; falls back to parsing the NAME value string.
-    def extract_name!(name_record, attrs)
+    def extract_name(name_record, attrs)
       givn = name_record[:children].find { |c| c[:tag] == "GIVN" }
       surn = name_record[:children].find { |c| c[:tag] == "SURN" }
 

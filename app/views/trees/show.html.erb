@@ -1,0 +1,33 @@
+<% content_for :title, t("trees.title", name: @person.display_name) %>
+
+<div class="tree-page">
+  <header class="page-head">
+    <h1><%= @person.display_name %></h1>
+    <div class="actions">
+      <% if @mode == "ancestors" %>
+        <%= link_to t("trees.descendants"), person_tree_path(@person, mode: "descendants"), class: "button button--outline" %>
+      <% else %>
+        <%= link_to t("trees.ancestors"), person_tree_path(@person, mode: "ancestors"), class: "button button--outline" %>
+      <% end %>
+      <%= link_to t("people.profile"), person_path(@person), class: "linkish" %>
+    </div>
+  </header>
+
+  <p class="tree-hint"><%= t("trees.hint") %></p>
+
+  <div class="tree-canvas"
+       data-controller="tree"
+       data-tree-graph-value="<%= @graph.to_json %>"
+       data-tree-mode-value="<%= @mode %>">
+    <div class="tree-inner" data-tree-target="inner">
+      <svg class="tree-edges" data-tree-target="svg" aria-hidden="true"></svg>
+      <div class="tree-nodes-layer">
+        <% @graph[:nodes].each do |node_data| %>
+          <%= render "trees/node",
+                person: @persons[node_data[:id]],
+                focus:  node_data[:id] == @person.id %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

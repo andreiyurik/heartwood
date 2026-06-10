@@ -1,10 +1,14 @@
 Rails.application.routes.draw do
+  get "/locale/:locale" => "locales#update", as: :set_locale,
+      constraints: { locale: /en|ru/ }
+
   resource :session
   resources :passwords, param: :token
 
   resources :people do
+    resource  :tree,     only: :show
     resources :relatives, only: %i[new create]
-    resources :events, only: %i[new create edit update destroy]
+    resources :events,    only: %i[new create edit update destroy]
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

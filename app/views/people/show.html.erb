@@ -4,23 +4,25 @@
   <header class="page-head">
     <h1><%= @person.display_name %></h1>
     <div class="actions">
-      <%= link_to "Edit", edit_person_path(@person), class: "button" %>
-      <%= link_to "All people", people_path, class: "linkish" %>
+      <%= link_to t("people.tree"), person_tree_path(@person), class: "button button--outline" %>
+      <%= link_to t("people.edit_button"), edit_person_path(@person), class: "button" %>
+      <%= link_to t("nav.all_people"), people_path, class: "linkish" %>
     </div>
   </header>
 
   <dl class="facts">
     <% if @person.nickname.present? %>
-      <dt>Nickname</dt><dd><%= @person.nickname %></dd>
+      <dt><%= t("people.nickname_label") %></dt><dd><%= @person.nickname %></dd>
     <% end %>
-    <dt>Sex</dt><dd><%= @person.sex %></dd>
-    <dt>Status</dt><dd><%= @person.living? ? "Living" : "Deceased" %></dd>
+    <dt><%= t("people.sex_label") %></dt><dd><%= t("people.sex.#{@person.sex}") %></dd>
+    <dt><%= t("people.status_label") %></dt>
+    <dd><%= @person.living? ? t("people.status.living") : t("people.status.deceased") %></dd>
   </dl>
 
   <%= render "events", person: @person %>
 
   <%= render "family", person: @person %>
 
-  <%= button_to "Remove", @person, method: :delete, class: "danger",
-        form: { data: { turbo_confirm: "Remove #{@person.display_name}?" } } %>
+  <%= button_to t("people.remove"), @person, method: :delete, class: "danger",
+        form: { data: { turbo_confirm: t("people.remove_confirm", name: @person.display_name) } } %>
 </article>

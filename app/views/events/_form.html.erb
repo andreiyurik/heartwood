@@ -8,21 +8,21 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :kind, "Type" %>
-    <%= f.select :kind, Event::PERSON_KINDS.map { |k| [ Event::KINDS[k], k ] },
-          { include_blank: "Select…" } %>
+    <%= f.label :kind, t("events.kind_label") %>
+    <%= f.select :kind, Event::PERSON_KINDS.map { |k| [t("events.kinds.#{k}"), k] },
+          { include_blank: t("events.select_blank") } %>
   </div>
   <div class="field">
-    <%= f.label :date_raw, "Date" %>
-    <%= f.text_field :date_raw, placeholder: "e.g. 10 DEC 1815 or 1815" %>
+    <%= f.label :date_raw, t("events.date_label") %>
+    <%= f.text_field :date_raw, placeholder: t("events.date_placeholder") %>
   </div>
   <div class="field">
-    <%= f.label :value, "Detail" %>
-    <%= f.text_field :value, placeholder: "e.g. Engineer (for facts)" %>
+    <%= f.label :value, t("events.detail_label") %>
+    <%= f.text_field :value, placeholder: t("events.detail_placeholder") %>
   </div>
 
   <div class="actions">
     <%= f.submit submit %>
-    <%= link_to "Cancel", person_path(person), class: "linkish", data: { turbo_frame: "_top" } %>
+    <%= link_to t("forms.cancel"), person_path(person), class: "linkish", data: { turbo_frame: "_top" } %>
   </div>
 <% end %>

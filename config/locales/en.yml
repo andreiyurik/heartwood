@@ -1,31 +1,152 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  nav:
+    sign_out: Sign out
+    all_people: All people
+  locale:
+    en: EN
+    ru: RU
+
+  helpers:
+    submit:
+      person:
+        create: Save
+        update: Save
+
+  people:
+    title: People
+    add: Add person
+    edit: "Edit %{name}"
+    remove: Remove
+    remove_confirm: "Remove %{name}?"
+    profile: Profile
+    tree: Tree
+    edit_button: Edit
+    empty: No people yet.
+    add_first: Add the first one
+    unknown_name: Unknown
+    sex_label: Sex
+    status_label: Status
+    nickname_label: Nickname
+    status:
+      living: Living
+      deceased: Deceased
+    sex:
+      M: Male
+      F: Female
+      U: Unknown
+      X: Other
+    flash:
+      created: Person was added.
+      updated: Person was updated.
+      destroyed: Person was removed.
+
+  family:
+    title: Family
+    parents: Parents
+    partners: Partners
+    children: Children
+    siblings: Siblings
+    none: None recorded.
+    add: "+ Add %{relation}"
+    add_title: "Add %{relation}"
+    relation_singular:
+      parent: parent
+      partner: partner
+      child: child
+    flash:
+      parent_added: Parent added.
+      partner_added: Partner added.
+      child_added: Child added.
+
+  events:
+    title: Life events
+    none: No events yet.
+    add: "+ Add event"
+    kind_label: Type
+    date_label: Date
+    detail_label: Detail
+    select_blank: "Select…"
+    date_placeholder: "e.g. 10 DEC 1815 or 1815"
+    detail_placeholder: "e.g. Engineer (for facts)"
+    remove_confirm: Remove this event?
+    edit: Edit
+    remove: Remove
+    submit_add: Add event
+    submit_update: Update event
+    flash:
+      created: Event added.
+      updated: Event updated.
+      destroyed: Event removed.
+    kinds:
+      BIRT: Birth
+      DEAT: Death
+      BAPM: Baptism
+      BURI: Burial
+      MARR: Marriage
+      DIV: Divorce
+      OCCU: Occupation
+      RESI: Residence
+      EDUC: Education
+
+  trees:
+    title: "%{name} — Family Tree"
+    ancestors: Ancestors
+    descendants: Descendants
+    hint: "Scroll to zoom · drag to pan · click a name to open profile"
+
+  auth:
+    email_placeholder: Enter your email address
+    password_placeholder: Enter your password
+    sign_in_submit: Sign in
+    forgot_link: Forgot password?
+    forgot_title: Forgot your password?
+    reset_submit: Email reset instructions
+    update_title: Update your password
+    new_password_placeholder: Enter new password
+    confirm_password_placeholder: Repeat new password
+    update_submit: Save
+
+  forms:
+    cancel: Cancel
+    save: Save
+    errors:
+      one: "1 error prevented saving:"
+      other: "%{count} errors prevented saving:"
+
+  flash:
+    try_later: Try again later.
+    invalid_credentials: Try another email address or password.
+    password_reset: Password has been reset.
+    password_instructions: "Password reset instructions sent (if user with that email address exists)."
+    passwords_mismatch: Passwords did not match.
+    invalid_token: Password reset link is invalid or has expired.
+
+  mailer:
+    password_reset:
+      subject: Reset your password
+      body: "You can reset your password by visiting the link below. This link will expire in %{expiry}."
+      link_text: Reset password
+      body_text: "Reset your password: %{url}\n\nThis link will expire in %{expiry}."
+
+  activerecord:
+    errors:
+      messages:
+        blank: can't be blank
+        required: must exist
+        inclusion: is not included in the list
+        invalid: is invalid
+        taken: has already been taken
+        too_short:
+          one: is too short (minimum is 1 character)
+          other: is too short (minimum is %{count} characters)
+        too_long:
+          one: is too long (maximum is 1 character)
+          other: is too long (maximum is %{count} characters)
+    attributes:
+      person:
+        given_names: Given names
+        surname: Surname
+        name_prefix: Prefix
+        name_suffix: Suffix
+        nickname: Nickname
+        sex: Sex

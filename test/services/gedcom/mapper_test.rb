@@ -63,6 +63,17 @@ class Gedcom::MapperTest < ActiveSupport::TestCase
     assert_equal "21 MAR 1685", birth.date_raw
   end
 
+  test "maps BIRT with PLAC to Event value on Person" do
+    result = import(<<~GED)
+      0 @I1@ INDI
+      1 BIRT
+      2 DATE 21 MAR 1685
+      2 PLAC Eisenach, Thuringia
+    GED
+    birth = result[:people].first.events.find_by(kind: "BIRT")
+    assert_equal "Eisenach, Thuringia", birth.value
+  end
+
   test "maps DEAT event to Person" do
     result = import(<<~GED)
       0 @I1@ INDI

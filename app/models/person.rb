@@ -53,6 +53,48 @@ class Person < ApplicationRecord
           .where.not(id: id)
   end
 
+  private
+
+  def traverse_graph(depth:, neighbors:, mode:)
+    persons    = {}
+    gens       = {}
+    orders     = {}
+    gen_counts = Hash.new(0)
+    edges      = []
+    queue      = [[self, 0]]
+
+    while (entry = queue.shift)
+      person, gen = entry
+      next if persons.key?(person.id) || gen > depth
+
+      persons[person.id] = person
+      gens[person.id]    = gen
+      orders[person.id]  = gen_counts[gen]
+      gen_counts[gen]   += 1
+
+      person.public_send(neighbors).each do |neighbor|
+        edges << { from_id: person.id, to_id: neighbor.id }
+        queue << [neighbor, gen + 1]
+      end
+    end
+
+    nodes = persons.values.map { |p| node_data(p, generation: gens[p.id], order: orders[p.id]) }
+    { nodes:, edges:, persons:, focus_id: id, mode: }
+  end
+
+  def node_data(person, generation:, order:)
+    {
+      id:         person.id,
+      generation:,
+      order:,
+      name:       person.display_name,
+      birth_year: person.birth&.date_raw,
+      sex:        person.sex
+    }
+  end
+
+  public
+
   # --- Adding relatives (resolve the right Family so kinship stays derived) ---
 
   # Add a parent: ensure this person has a birth family, then add the parent as
@@ -76,10 +118,20 @@ class Person < ApplicationRecord
     end
   end
 
+  # --- Graph traversal for the tree view (see docs/features/family-tree-view.md) ---
+
+  def ancestor_graph(depth: 4)
+    traverse_graph(depth:, neighbors: :parents, mode: "ancestors")
+  end
+
+  def descendant_graph(depth: 4)
+    traverse_graph(depth:, neighbors: :children, mode: "descendants")
+  end
+
   # Full display name composed from its parts (nickname is intentionally excluded).
   # Falls back to "Unknown" when no name parts are present.
   def display_name
     name = [ name_prefix, given_names, surname, name_suffix ].compact_blank.join(" ")
-    name.presence || "Unknown"
+    name.presence || I18n.t("people.unknown_name")
   end
 end

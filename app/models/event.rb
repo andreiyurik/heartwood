@@ -18,7 +18,7 @@ class Event < ApplicationRecord
   validates :kind, presence: true
 
   def kind_label
-    KINDS.fetch(kind, kind)
+    I18n.t("events.kinds.#{kind}", default: KINDS.fetch(kind, kind))
   end
 
   # What to show next to the label: the date for events, the value for facts.

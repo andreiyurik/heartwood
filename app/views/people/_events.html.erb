@@ -1,15 +1,15 @@
 <%# Re-rendered whole on event create/update/destroy (turbo_stream target id "events"). %>
 <section class="events" id="events">
-  <h2>Life events</h2>
+  <h2><%= t("events.title") %></h2>
   <% if person.events.any? %>
     <ul class="event-list">
       <%= render partial: "events/event", collection: person.events, locals: { person: person } %>
     </ul>
   <% else %>
-    <p class="muted">No events yet.</p>
+    <p class="muted"><%= t("events.none") %></p>
   <% end %>
 
   <%= turbo_frame_tag "add_event" do %>
-    <%= link_to "+ Add event", new_person_event_path(person), class: "linkish add-relative" %>
+    <%= link_to t("events.add"), new_person_event_path(person), class: "linkish add-relative" %>
   <% end %>
 </section>

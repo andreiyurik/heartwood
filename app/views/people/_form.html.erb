@@ -1,23 +1,23 @@
 <%= form_with model: person, class: "form" do |f| %>
   <% if person.errors.any? %>
     <div class="errors">
-      <p><%= pluralize(person.errors.count, "error") %> prevented saving:</p>
+      <p><%= t("forms.errors", count: person.errors.count) %></p>
       <ul><% person.errors.each do |e| %><li><%= e.full_message %></li><% end %></ul>
     </div>
   <% end %>
 
   <div class="field"><%= f.label :given_names %><%= f.text_field :given_names %></div>
   <div class="field"><%= f.label :surname %><%= f.text_field :surname %></div>
-  <div class="field"><%= f.label :name_prefix, "Prefix" %><%= f.text_field :name_prefix %></div>
-  <div class="field"><%= f.label :name_suffix, "Suffix" %><%= f.text_field :name_suffix %></div>
+  <div class="field"><%= f.label :name_prefix %><%= f.text_field :name_prefix %></div>
+  <div class="field"><%= f.label :name_suffix %><%= f.text_field :name_suffix %></div>
   <div class="field"><%= f.label :nickname %><%= f.text_field :nickname %></div>
   <div class="field">
     <%= f.label :sex %>
-    <%= f.select :sex, [ ["Unknown", "U"], ["Male", "M"], ["Female", "F"], ["Other", "X"] ] %>
+    <%= f.select :sex, Person::SEXES.map { |v| [t("people.sex.#{v}"), v] } %>
   </div>
 
   <div class="actions">
     <%= f.submit %>
-    <%= link_to "Cancel", (person.persisted? ? person : people_path), class: "linkish" %>
+    <%= link_to t("forms.cancel"), (person.persisted? ? person : people_path), class: "linkish" %>
   </div>
 <% end %>

@@ -1,0 +1,10 @@
+<div class="tree-node <%= "tree-node--focus" if local_assigns[:focus] %> tree-node--<%= person.sex.downcase %>"
+     data-tree-target="node"
+     data-tree-node-id="<%= person.id %>">
+  <%= link_to person_path(person) do %>
+    <p class="node-name"><%= person.display_name %></p>
+    <% if person.birth&.date_raw.present? %>
+      <p class="node-dates">b.&thinsp;<%= person.birth.date_raw %></p>
+    <% end %>
+  <% end %>
+</div>

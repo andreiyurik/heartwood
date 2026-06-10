@@ -20,7 +20,7 @@ class PeopleController < ApplicationController
   def create
     @person = Person.new(person_params)
     if @person.save
-      redirect_to @person, notice: "Person was added."
+      redirect_to @person, notice: t("people.flash.created")
     else
       render :new, status: :unprocessable_entity
     end
@@ -28,7 +28,7 @@ class PeopleController < ApplicationController
 
   def update
     if @person.update(person_params)
-      redirect_to @person, notice: "Person was updated."
+      redirect_to @person, notice: t("people.flash.updated")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -36,7 +36,7 @@ class PeopleController < ApplicationController
 
   def destroy
     @person.destroy!
-    redirect_to people_url, notice: "Person was removed."
+    redirect_to people_url, notice: t("people.flash.destroyed")
   end
 
   private

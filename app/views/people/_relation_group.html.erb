@@ -7,11 +7,11 @@
       <% end %>
     </ul>
   <% else %>
-    <p class="muted">None recorded.</p>
+    <p class="muted"><%= t("family.none") %></p>
   <% end %>
 
   <%= turbo_frame_tag "add_#{relation}" do %>
-    <%= link_to "+ Add #{label.singularize.downcase}",
+    <%= link_to t("family.add", relation: t("family.relation_singular.#{relation}")),
           new_person_relative_path(person, relation: relation), class: "linkish add-relative" %>
   <% end %>
 </div>

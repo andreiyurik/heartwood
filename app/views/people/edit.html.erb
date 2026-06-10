@@ -1,4 +1,4 @@
-<% content_for :title, "Edit #{@person.display_name}" %>
+<% content_for :title, t("people.edit", name: @person.display_name) %>
 
-<div class="page-head"><h1>Edit <%= @person.display_name %></h1></div>
+<div class="page-head"><h1><%= t("people.edit", name: @person.display_name) %></h1></div>
 <%= render "form", person: @person %>

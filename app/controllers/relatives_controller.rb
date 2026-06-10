@@ -14,7 +14,7 @@ class RelativesController < ApplicationController
     @relative = @person.public_send("add_#{@relation}", relative_params)
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to @person, notice: "#{@relation.capitalize} added." }
+      format.html { redirect_to @person, notice: t("family.flash.#{@relation}_added") }
     end
   end
 

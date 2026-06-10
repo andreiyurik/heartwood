@@ -14,7 +14,7 @@ class EventsController < ApplicationController
   def create
     @event = @person.events.new(event_params)
     if @event.save
-      respond_to_change "Event added."
+      respond_to_change :created
     else
       render :new, status: :unprocessable_entity
     end
@@ -22,7 +22,7 @@ class EventsController < ApplicationController
 
   def update
     if @event.update(event_params)
-      respond_to_change "Event updated."
+      respond_to_change :updated
     else
       render :edit, status: :unprocessable_entity
     end
@@ -30,7 +30,7 @@ class EventsController < ApplicationController
 
   def destroy
     @event.destroy!
-    respond_to_change "Event removed."
+    respond_to_change :destroyed
   end
 
   private
@@ -48,10 +48,10 @@ class EventsController < ApplicationController
   end
 
   # Both create/update/destroy refresh the events box (turbo) or redirect (html).
-  def respond_to_change(notice)
+  def respond_to_change(key)
     respond_to do |format|
       format.turbo_stream
-      format.html { redirect_to @person, notice: notice }
+      format.html { redirect_to @person, notice: t("events.flash.#{key}") }
     end
   end
 end

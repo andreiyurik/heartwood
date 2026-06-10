@@ -1,8 +1,8 @@
-<% content_for :title, "People" %>
+<% content_for :title, t("people.title") %>
 
 <div class="page-head">
-  <h1>People</h1>
-  <%= link_to "Add person", new_person_path, class: "button" %>
+  <h1><%= t("people.title") %></h1>
+  <%= link_to t("people.add"), new_person_path, class: "button" %>
 </div>
 
 <% if @people.any? %>
@@ -10,5 +10,5 @@
     <%= render @people %>
   </ul>
 <% else %>
-  <p class="empty">No people yet. <%= link_to "Add the first one", new_person_path %>.</p>
+  <p class="empty"><%= t("people.empty") %> <%= link_to t("people.add_first"), new_person_path %>.</p>
 <% end %>

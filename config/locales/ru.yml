@@ -1,0 +1,217 @@
+ru:
+  nav:
+    sign_out: Выйти
+    all_people: Все люди
+  locale:
+    en: EN
+    ru: RU
+
+  helpers:
+    submit:
+      person:
+        create: Сохранить
+        update: Сохранить
+
+  people:
+    title: Люди
+    add: Добавить человека
+    edit: "Редактировать %{name}"
+    remove: Удалить
+    remove_confirm: "Удалить %{name}?"
+    profile: Профиль
+    tree: Дерево
+    edit_button: Редактировать
+    empty: Нет ни одной записи.
+    add_first: Добавить первого
+    unknown_name: Неизвестный
+    sex_label: Пол
+    status_label: Статус
+    nickname_label: Прозвище
+    status:
+      living: Живёт
+      deceased: Умер(ла)
+    sex:
+      M: Мужской
+      F: Женский
+      U: Неизвестный
+      X: Другой
+    flash:
+      created: Человек добавлен.
+      updated: Данные сохранены.
+      destroyed: Запись удалена.
+
+  family:
+    title: Семья
+    parents: Родители
+    partners: Партнёры
+    children: Дети
+    siblings: Братья и сёстры
+    none: Нет записей.
+    add: "+ Добавить %{relation}"
+    add_title: "Добавить %{relation}"
+    relation_singular:
+      parent: родителя
+      partner: партнёра
+      child: ребёнка
+    flash:
+      parent_added: Родитель добавлен.
+      partner_added: Партнёр добавлен.
+      child_added: Ребёнок добавлен.
+
+  events:
+    title: Жизненные события
+    none: Событий пока нет.
+    add: "+ Добавить событие"
+    kind_label: Тип
+    date_label: Дата
+    detail_label: Подробности
+    select_blank: "Выберите…"
+    date_placeholder: "напр. 10 ДЕК 1815 или 1815"
+    detail_placeholder: "напр. Инженер"
+    remove_confirm: Удалить это событие?
+    edit: Изменить
+    remove: Удалить
+    submit_add: Добавить событие
+    submit_update: Сохранить
+    flash:
+      created: Событие добавлено.
+      updated: Событие обновлено.
+      destroyed: Событие удалено.
+    kinds:
+      BIRT: Рождение
+      DEAT: Смерть
+      BAPM: Крещение
+      BURI: Погребение
+      MARR: Бракосочетание
+      DIV: Развод
+      OCCU: Профессия
+      RESI: Место жительства
+      EDUC: Образование
+
+  trees:
+    title: "%{name} — Семейное дерево"
+    ancestors: Предки
+    descendants: Потомки
+    hint: "Колёсиком — масштаб · перетащите — панорама · клик — профиль"
+
+  auth:
+    email_placeholder: Введите email
+    password_placeholder: Введите пароль
+    sign_in_submit: Войти
+    forgot_link: Забыли пароль?
+    forgot_title: Забыли пароль?
+    reset_submit: Отправить инструкции
+    update_title: Смена пароля
+    new_password_placeholder: Новый пароль
+    confirm_password_placeholder: Повторите пароль
+    update_submit: Сохранить
+
+  forms:
+    cancel: Отмена
+    save: Сохранить
+    errors:
+      one: "1 ошибка не позволила сохранить:"
+      few: "%{count} ошибки не позволили сохранить:"
+      many: "%{count} ошибок не позволило сохранить:"
+      other: "%{count} ошибок не позволило сохранить:"
+
+  flash:
+    try_later: Слишком много попыток. Повторите позже.
+    invalid_credentials: Неверный email или пароль.
+    password_reset: Пароль успешно изменён.
+    password_instructions: "Инструкции отправлены (если пользователь с таким email существует)."
+    passwords_mismatch: Пароли не совпадают.
+    invalid_token: Ссылка для сброса пароля недействительна или устарела.
+
+  mailer:
+    password_reset:
+      subject: Сброс пароля
+      body: "Для сброса пароля перейдите по ссылке ниже. Ссылка действует %{expiry}."
+      link_text: Сбросить пароль
+      body_text: "Сброс пароля: %{url}\n\nСсылка действует %{expiry}."
+
+  datetime:
+    distance_in_words:
+      half_a_minute: полминуты
+      less_than_x_seconds:
+        one: меньше одной секунды
+        few: меньше %{count} секунд
+        many: меньше %{count} секунд
+        other: меньше %{count} секунд
+      x_seconds:
+        one: одна секунда
+        few: "%{count} секунды"
+        many: "%{count} секунд"
+        other: "%{count} секунды"
+      less_than_x_minutes:
+        one: меньше одной минуты
+        few: меньше %{count} минут
+        many: меньше %{count} минут
+        other: меньше %{count} минуты
+      x_minutes:
+        one: одна минута
+        few: "%{count} минуты"
+        many: "%{count} минут"
+        other: "%{count} минуты"
+      about_x_hours:
+        one: около одного часа
+        few: около %{count} часов
+        many: около %{count} часов
+        other: около %{count} часов
+      x_days:
+        one: один день
+        few: "%{count} дня"
+        many: "%{count} дней"
+        other: "%{count} дня"
+      about_x_months:
+        one: около одного месяца
+        few: около %{count} месяцев
+        many: около %{count} месяцев
+        other: около %{count} месяцев
+      x_months:
+        one: один месяц
+        few: "%{count} месяца"
+        many: "%{count} месяцев"
+        other: "%{count} месяца"
+      about_x_years:
+        one: около одного года
+        few: около %{count} лет
+        many: около %{count} лет
+        other: около %{count} лет
+      over_x_years:
+        one: больше одного года
+        few: больше %{count} лет
+        many: больше %{count} лет
+        other: больше %{count} лет
+      almost_x_years:
+        one: почти один год
+        few: почти %{count} года
+        many: почти %{count} лет
+        other: почти %{count} лет
+
+  activerecord:
+    errors:
+      messages:
+        blank: не может быть пустым
+        required: обязательное поле
+        inclusion: недопустимое значение
+        invalid: недопустимое значение
+        taken: уже занято
+        too_short:
+          one: слишком короткое (минимум 1 символ)
+          few: слишком короткое (минимум %{count} символа)
+          many: слишком короткое (минимум %{count} символов)
+          other: слишком короткое (минимум %{count} символа)
+        too_long:
+          one: слишком длинное (максимум 1 символ)
+          few: слишком длинное (максимум %{count} символа)
+          many: слишком длинное (максимум %{count} символов)
+          other: слишком длинное (максимум %{count} символа)
+    attributes:
+      person:
+        given_names: Имя
+        surname: Фамилия
+        name_prefix: Префикс
+        name_suffix: Суффикс
+        nickname: Прозвище
+        sex: Пол

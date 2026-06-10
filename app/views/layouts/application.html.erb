@@ -30,9 +30,18 @@
   <body>
     <header class="site-header">
       <a href="<%= root_path %>" class="brand">🌳 Heartwood</a>
-      <% if authenticated? %>
-        <%= button_to "Sign out", session_path, method: :delete, class: "linkish" %>
-      <% end %>
+      <div class="site-header__right">
+        <nav class="locale-switcher" aria-label="Language">
+          <% I18n.available_locales.each do |loc| %>
+            <%= link_to t("locale.#{loc}"), set_locale_path(loc),
+                  class: "locale-switcher__btn #{"locale-switcher__btn--active" if I18n.locale == loc}",
+                  aria: { current: I18n.locale == loc ? "true" : nil } %>
+          <% end %>
+        </nav>
+        <% if authenticated? %>
+          <%= button_to t("nav.sign_out"), session_path, method: :delete, class: "linkish" %>
+        <% end %>
+      </div>
     </header>
 
     <% if notice %><p class="flash" role="status"><%= notice %></p><% end %>

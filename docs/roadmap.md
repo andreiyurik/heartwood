@@ -9,6 +9,10 @@ status: draft
 Sequenced so each phase ships something real and testable. Priorities use MoSCoW
 (Must / Should / Could / Won't-yet). Tie-ins to [[features-index]].
 
+> For a **public-SaaS MVP cut** with research-backed demand/effort ratings and verified
+> sources, see [[mvp-and-growth]]. It re-sequences tenancy, privacy, search and sources
+> earlier than the phases below — read its "Divergence" section for the rationale.
+
 ## Phase 0 — Foundation ✅ (done)
 - Canonical Rails 8.1 skeleton, AGPL, README, this docs vault. See [[stack]].
 

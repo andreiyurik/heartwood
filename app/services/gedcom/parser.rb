@@ -31,11 +31,10 @@ module Gedcom
       lines.each_with_index do |line, idx|
         next if line.empty?
 
-        parsed = self.class.parse_line(line)
+        parsed = Parser.parse_line(line)
         if parsed.nil?
           @warnings << "Line #{idx + 1}: unparseable — #{line.inspect}"
         else
-          parsed[:children] = []
           raw << parsed
         end
       end
