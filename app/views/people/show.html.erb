@@ -1,0 +1,32 @@
+<% content_for :title, @person.display_name %>
+
+<article class="person">
+  <header class="page-head">
+    <h1><%= @person.display_name %></h1>
+    <div class="actions">
+      <%= link_to "Edit", edit_person_path(@person), class: "button" %>
+      <%= link_to "All people", people_path, class: "linkish" %>
+    </div>
+  </header>
+
+  <dl class="facts">
+    <% if @person.nickname.present? %>
+      <dt>Nickname</dt><dd><%= @person.nickname %></dd>
+    <% end %>
+    <dt>Sex</dt><dd><%= @person.sex %></dd>
+    <dt>Status</dt><dd><%= @person.living? ? "Living" : "Deceased" %></dd>
+    <% if @person.birth %><dt>Born</dt><dd><%= @person.birth.date_raw %></dd><% end %>
+    <% if @person.death %><dt>Died</dt><dd><%= @person.death.date_raw %></dd><% end %>
+  </dl>
+
+  <section class="relations">
+    <h2>Family</h2>
+    <%= render "relations", label: "Parents", people: @person.parents %>
+    <%= render "relations", label: "Partners", people: @person.partners %>
+    <%= render "relations", label: "Children", people: @person.children %>
+    <%= render "relations", label: "Siblings", people: @person.siblings %>
+  </section>
+
+  <%= button_to "Remove", @person, method: :delete, class: "danger",
+        form: { data: { turbo_confirm: "Remove #{@person.display_name}?" } } %>
+</article>

@@ -1,0 +1,51 @@
+# People — the first CRUD slice over the Person (INDI) domain model.
+# Authentication is required via the Authentication concern in ApplicationController.
+class PeopleController < ApplicationController
+  before_action :set_person, only: %i[show edit update destroy]
+
+  def index
+    @people = Person.order(:surname, :given_names)
+  end
+
+  def show
+  end
+
+  def new
+    @person = Person.new
+  end
+
+  def edit
+  end
+
+  def create
+    @person = Person.new(person_params)
+    if @person.save
+      redirect_to @person, notice: "Person was added."
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if @person.update(person_params)
+      redirect_to @person, notice: "Person was updated."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @person.destroy!
+    redirect_to people_url, notice: "Person was removed."
+  end
+
+  private
+
+  def set_person
+    @person = Person.find(params[:id])
+  end
+
+  def person_params
+    params.expect(person: %i[given_names surname name_prefix name_suffix nickname sex])
+  end
+end

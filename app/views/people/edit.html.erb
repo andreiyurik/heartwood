@@ -1,0 +1,4 @@
+<% content_for :title, "Edit #{@person.display_name}" %>
+
+<div class="page-head"><h1>Edit <%= @person.display_name %></h1></div>
+<%= render "form", person: @person %>

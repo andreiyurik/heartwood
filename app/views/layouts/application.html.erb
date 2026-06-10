@@ -6,6 +6,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Heartwood">
     <meta name="mobile-web-app-capable" content="yes">
+
+    <%# SPA-like page refreshes: morph the DOM in place and preserve scroll (see docs/architecture/rails8-features.md) %>
+    <meta name="turbo-refresh-method" content="morph">
+    <meta name="turbo-refresh-scroll" content="preserve">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -24,6 +28,18 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header class="site-header">
+      <a href="<%= root_path %>" class="brand">🌳 Heartwood</a>
+      <% if authenticated? %>
+        <%= button_to "Sign out", session_path, method: :delete, class: "linkish" %>
+      <% end %>
+    </header>
+
+    <% if notice %><p class="flash" role="status"><%= notice %></p><% end %>
+    <% if alert %><p class="flash flash--alert" role="alert"><%= alert %></p><% end %>
+
+    <main>
+      <%= yield %>
+    </main>
   </body>
 </html>

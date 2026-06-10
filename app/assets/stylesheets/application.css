@@ -1,10 +1,121 @@
 /*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
+ * Heartwood — vanilla CSS (no framework). Modern CSS: custom properties + nesting.
+ * Keep it calm, warm, and readable — see docs/vision.md.
  */
+
+:root {
+  --bg: #faf8f5;
+  --surface: #ffffff;
+  --ink: #2c2622;
+  --muted: #8a807a;
+  --line: #e7e1da;
+  --accent: #6b8f5e;       /* heartwood green */
+  --accent-ink: #3f5a36;
+  --danger: #b4533f;
+  --radius: 10px;
+  --maxw: 60rem;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+a { color: var(--accent-ink); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+
+  .brand { font-weight: 700; font-size: 1.15rem; color: var(--ink); }
+}
+
+main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
+
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+
+  h1 { margin: 0; font-size: 1.6rem; }
+}
+
+.flash {
+  max-width: var(--maxw);
+  margin: 1rem auto 0;
+  padding: 0.6rem 1rem;
+  background: #eaf2e6;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  color: var(--accent-ink);
+}
+.flash--alert { background: #f7e7e3; border-color: var(--danger); color: var(--danger); }
+
+/* Buttons & links */
+.button, button, input[type="submit"] {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font: inherit;
+  cursor: pointer;
+}
+.button:hover, button:hover { background: var(--accent-ink); text-decoration: none; }
+.linkish { background: none; color: var(--accent-ink); padding: 0.45rem 0.5rem; border: none; cursor: pointer; }
+.danger { background: var(--danger); margin-top: 1.5rem; }
+
+/* People list */
+.people-list { list-style: none; padding: 0; margin: 0; }
+.person-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0.7rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin-bottom: 0.5rem;
+
+  a { font-weight: 600; font-size: 1.05rem; }
+  .years { color: var(--muted); font-size: 0.9rem; }
+}
+.empty { color: var(--muted); }
+
+/* Person show */
+.person { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; }
+.facts { display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1rem; margin: 1rem 0 1.5rem; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; }
+
+.relations { border-top: 1px solid var(--line); padding-top: 1rem; }
+.relations h2 { font-size: 1.2rem; }
+.relation-group { margin-bottom: 1rem;
+  h3 { margin: 0 0 0.25rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+  ul { margin: 0; padding-left: 1.1rem; }
+}
+.muted { color: var(--muted); margin: 0; }
+
+/* Forms */
+.form { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; max-width: 32rem; }
+.field { display: flex; flex-direction: column; margin-bottom: 0.85rem;
+  label { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.2rem; }
+  input, select { padding: 0.5rem; border: 1px solid var(--line); border-radius: 8px; font: inherit; background: #fff; }
+}
+.form .actions { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+.errors { background: #f7e7e3; border: 1px solid var(--danger); color: var(--danger); border-radius: var(--radius); padding: 0.75rem 1rem; margin-bottom: 1rem;
+  ul { margin: 0.25rem 0 0; }
+}
