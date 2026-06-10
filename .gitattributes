@@ -1,5 +1,18 @@
 # See https://git-scm.com/docs/gitattributes for more about git attribute files.
 
+# Normalize line endings: store as LF in the repo. Keeps the codebase consistent
+# across Linux / macOS / WSL / Windows contributors — important for a self-hostable
+# project whose bin/ scripts must stay runnable.
+* text=auto eol=lf
+bin/*   text eol=lf
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+
 # Mark the database schema as having been generated.
 db/schema.rb linguist-generated
 
