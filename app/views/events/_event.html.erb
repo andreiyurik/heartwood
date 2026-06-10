@@ -1,0 +1,11 @@
+<%= tag.li id: dom_id(event), class: "event-row" do %>
+  <%= turbo_frame_tag dom_id(event, :edit) do %>
+    <span class="event-kind"><%= event.kind_label %></span>
+    <span class="event-summary"><%= event.summary %></span>
+    <span class="event-actions">
+      <%= link_to "Edit", edit_person_event_path(person, event), class: "linkish" %>
+      <%= button_to "Remove", person_event_path(person, event), method: :delete,
+            class: "linkish", form: { data: { turbo_confirm: "Remove this event?" } } %>
+    </span>
+  <% end %>
+<% end %>

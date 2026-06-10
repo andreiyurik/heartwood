@@ -3,7 +3,26 @@
 # `kind` is the GEDCOM tag (BIRT, DEAT, MARR, OCCU, ...). Dates keep the raw GEDCOM
 # string plus a parsed range. See docs/domain/event.md.
 class Event < ApplicationRecord
+  # GEDCOM tag => human label. Extend freely; import preserves unknown tags.
+  KINDS = {
+    "BIRT" => "Birth", "DEAT" => "Death", "BAPM" => "Baptism", "BURI" => "Burial",
+    "MARR" => "Marriage", "DIV" => "Divorce",
+    "OCCU" => "Occupation", "RESI" => "Residence", "EDUC" => "Education"
+  }.freeze
+
+  # Kinds offered when adding an event to a Person (marriage/divorce belong to a Family).
+  PERSON_KINDS = %w[BIRT DEAT BAPM BURI OCCU RESI EDUC].freeze
+
   belongs_to :eventable, polymorphic: true
 
   validates :kind, presence: true
+
+  def kind_label
+    KINDS.fetch(kind, kind)
+  end
+
+  # What to show next to the label: the date for events, the value for facts.
+  def summary
+    date_raw.presence || value.presence
+  end
 end

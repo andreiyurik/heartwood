@@ -41,4 +41,19 @@ class EventTest < ActiveSupport::TestCase
     assert_equal birth, @person.birth
     assert_equal death, @person.death
   end
+
+  test "kind_label returns a human label for known GEDCOM tags" do
+    assert_equal "Birth", Event.new(kind: "BIRT").kind_label
+    assert_equal "Death", Event.new(kind: "DEAT").kind_label
+    assert_equal "Occupation", Event.new(kind: "OCCU").kind_label
+  end
+
+  test "kind_label falls back to the raw tag when unknown" do
+    assert_equal "XYZ", Event.new(kind: "XYZ").kind_label
+  end
+
+  test "summary shows the date for events and the value for facts" do
+    assert_equal "10 DEC 1815", Event.new(kind: "BIRT", date_raw: "10 DEC 1815").summary
+    assert_equal "Engineer", Event.new(kind: "OCCU", value: "Engineer").summary
+  end
 end

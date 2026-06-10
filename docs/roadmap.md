@@ -21,8 +21,11 @@ Sequenced so each phase ships something real and testable. Priorities use MoSCoW
 - ✅ **Add relatives via the UI** — inline "add parent/child/partner" on the profile
   (Turbo Frame form → Turbo Stream re-render of the family box). Domain methods
   `add_parent/add_child/add_partner` on Person, TDD'd.
-- ⏭️ Remaining slice: **add/edit events via the UI** (birth/death/marriage forms) — small,
-  then Phase 2 (GEDCOM).
+- ✅ **Add/edit/remove life events via the UI** — inline events section on the profile
+  (`EventsController`, Turbo Frame forms → Turbo Stream re-render). `Event#kind_label`/`summary`,
+  GEDCOM-tag select. **Phase 1 complete** (60 tests, 175 assertions, green).
+
+➡️ **Next: Phase 2 — GEDCOM import/export** (the moat). See [[gedcom]], [[import-export]].
 
 ## Phase 2 — Interop (Must — this is the moat)
 - [[gedcom]] **import** (tolerant 5.5.1 + 7) via Active Storage → Solid Queue → Turbo Streams progress.

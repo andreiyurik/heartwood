@@ -1,0 +1,28 @@
+<%= form_with model: event,
+      url: (event.persisted? ? person_event_path(person, event) : person_events_path(person)),
+      class: "form form--inline" do |f| %>
+  <% if event.errors.any? %>
+    <div class="errors">
+      <ul><% event.errors.each do |e| %><li><%= e.full_message %></li><% end %></ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :kind, "Type" %>
+    <%= f.select :kind, Event::PERSON_KINDS.map { |k| [ Event::KINDS[k], k ] },
+          { include_blank: "Select…" } %>
+  </div>
+  <div class="field">
+    <%= f.label :date_raw, "Date" %>
+    <%= f.text_field :date_raw, placeholder: "e.g. 10 DEC 1815 or 1815" %>
+  </div>
+  <div class="field">
+    <%= f.label :value, "Detail" %>
+    <%= f.text_field :value, placeholder: "e.g. Engineer (for facts)" %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit submit %>
+    <%= link_to "Cancel", person_path(person), class: "linkish", data: { turbo_frame: "_top" } %>
+  </div>
+<% end %>

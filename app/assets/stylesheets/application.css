@@ -112,6 +112,17 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
 .form--inline { margin-top: 0.5rem; padding: 1rem; max-width: 22rem; }
 .form--inline .inline-title { margin: 0 0 0.5rem; font-weight: 600; text-transform: capitalize; }
 
+/* Events */
+.events { border-top: 1px solid var(--line); padding-top: 1rem; margin-top: 1rem; }
+.events h2 { font-size: 1.2rem; }
+.event-list { list-style: none; padding: 0; margin: 0 0 0.5rem; }
+.event-row { padding: 0.35rem 0; border-bottom: 1px solid var(--line); }
+.event-row turbo-frame { display: flex; align-items: baseline; gap: 0.75rem; }
+.event-kind { font-weight: 600; min-width: 7rem; }
+.event-summary { color: var(--ink); flex: 1; }
+.event-actions { display: flex; gap: 0.25rem; }
+.event-actions .linkish { padding: 0 0.4rem; font-size: 0.85rem; }
+
 /* Forms */
 .form { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; max-width: 32rem; }
 .field { display: flex; flex-direction: column; margin-bottom: 0.85rem;

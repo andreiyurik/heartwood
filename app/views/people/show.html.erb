@@ -15,9 +15,9 @@
     <% end %>
     <dt>Sex</dt><dd><%= @person.sex %></dd>
     <dt>Status</dt><dd><%= @person.living? ? "Living" : "Deceased" %></dd>
-    <% if @person.birth %><dt>Born</dt><dd><%= @person.birth.date_raw %></dd><% end %>
-    <% if @person.death %><dt>Died</dt><dd><%= @person.death.date_raw %></dd><% end %>
   </dl>
+
+  <%= render "events", person: @person %>
 
   <%= render "family", person: @person %>
 
