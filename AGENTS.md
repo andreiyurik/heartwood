@@ -4,6 +4,33 @@
 > working on **Heartwood**. The full design lives in the Obsidian-style vault at
 > [`docs/`](docs/index.md) — start at `docs/index.md`.
 
+## ⛔ Workflow — non-negotiable (read this before writing ANY code)
+
+Every coding task on Heartwood follows this order. No exceptions, no shortcuts — even for a
+"trivial" change. **We build strictly test-first (TDD).**
+
+1. **READ THE DOCS FIRST.** Start at [`docs/index.md`](docs/index.md). Find the notes relevant
+   to the task (domain entity, feature, ADR) and read them. The vault is the source of truth;
+   the code must match the design recorded there. If the docs are silent or wrong, update the
+   docs *first*, then proceed.
+2. **WRITE THE TEST NEXT (Minitest).** Write a failing Minitest test that expresses the desired
+   behavior — model/unit, integration, or system test as appropriate. Run it and **watch it
+   fail** (red). No production code is written before a failing test exists for it.
+3. **THEN WRITE THE CODE.** Write the minimum code to make the test pass (green). Run the test
+   and watch it pass.
+4. **REFACTOR.** Clean up with tests staying green. Then run the full suite (`bin/rails test`)
+   before considering the task done.
+
+Red → Green → Refactor. If you catch yourself writing production code without a failing test
+in front of it, stop and go back to step 2. Minitest only — **no RSpec** (see constraints below).
+
+```bash
+export PATH=~/.local/share/mise/installs/ruby/4.0.5/bin:$PATH
+bin/rails test                         # full suite
+bin/rails test test/models/person_test.rb   # one file
+bin/rails test test/models/person_test.rb:42 # one test by line
+```
+
 ## What this project is
 
 Heartwood is an **open-source, self-hostable genealogy / family-tree platform** with an
