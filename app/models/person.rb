@@ -1,6 +1,8 @@
 # Person (INDI) — one human being; the vertex of the family graph.
 # See docs/domain/person.md and docs/domain/domain-model.md.
 class Person < ApplicationRecord
+  include BelongsToTree
+
   # GEDCOM sex codes: Male, Female, Unknown, Other/Intersex.
   SEXES = %w[M F U X].freeze
 
@@ -33,24 +35,24 @@ class Person < ApplicationRecord
 
   # Partners of the family this person is a child of.
   def parents
-    Person.where(id: FamilyPartner.where(family_id: families_as_child.select(:id)).select(:person_id))
+    tree.people.where(id: FamilyPartner.where(family_id: families_as_child.select(:id)).select(:person_id))
   end
 
   # Children across every family this person is a partner in.
   def children
-    Person.where(id: FamilyChild.where(family_id: families_as_partner.select(:id)).select(:person_id))
+    tree.people.where(id: FamilyChild.where(family_id: families_as_partner.select(:id)).select(:person_id))
   end
 
   # Other children of the same parents.
   def siblings
-    Person.where(id: FamilyChild.where(family_id: families_as_child.select(:id)).select(:person_id))
-          .where.not(id: id)
+    tree.people.where(id: FamilyChild.where(family_id: families_as_child.select(:id)).select(:person_id))
+               .where.not(id: id)
   end
 
   # Other partners in the families this person is a partner in (spouses/co-parents).
   def partners
-    Person.where(id: FamilyPartner.where(family_id: families_as_partner.select(:id)).select(:person_id))
-          .where.not(id: id)
+    tree.people.where(id: FamilyPartner.where(family_id: families_as_partner.select(:id)).select(:person_id))
+               .where.not(id: id)
   end
 
   private
@@ -100,21 +102,21 @@ class Person < ApplicationRecord
   # Add a parent: ensure this person has a birth family, then add the parent as
   # a partner of it.
   def add_parent(attributes)
-    family = families_as_child.first || Family.create!.tap { |f| f.children << self }
-    Person.create!(attributes).tap { |parent| family.partners << parent }
+    family = families_as_child.first || Family.create!(tree: Current.tree).tap { |f| f.children << self }
+    Person.create!(attributes.merge(tree: Current.tree)).tap { |parent| family.partners << parent }
   end
 
   # Add a child: ensure this person partners in a family, then add the child to it
   # (so an existing partner becomes the child's second parent).
   def add_child(attributes)
-    family = families_as_partner.first || Family.create!.tap { |f| f.partners << self }
-    Person.create!(attributes).tap { |child| family.children << child }
+    family = families_as_partner.first || Family.create!(tree: Current.tree).tap { |f| f.partners << self }
+    Person.create!(attributes.merge(tree: Current.tree)).tap { |child| family.children << child }
   end
 
   # Add a partner: create a new union between this person and the new partner.
   def add_partner(attributes)
-    Person.create!(attributes).tap do |partner|
-      Family.create!.partners << [ self, partner ]
+    Person.create!(attributes.merge(tree: Current.tree)).tap do |partner|
+      Family.create!(tree: Current.tree).partners << [ self, partner ]
     end
   end
 

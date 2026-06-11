@@ -24,12 +24,12 @@ step it's listed.
 
 ## Phase 0 — decisions to lock before coding
 
-- [ ] **Tree architecture chosen**: per-user private trees with in-tree collaboration
+- [x] **Tree architecture chosen**: per-user private trees with in-tree collaboration
       (assumed default) vs single shared tree. See [[mvp-and-growth]] §0.1. *This plan
       assumes per-tree.*
-- [ ] **Tenant key naming** decided: `Tree` model (recommended) vs `Account`. This plan
+- [x] **Tenant key naming** decided: `Tree` model (recommended) vs `Account`. This plan
       uses `Tree`.
-- [ ] **Scoping strategy** decided: explicit association-scoping via `Current.tree`
+- [x] **Scoping strategy** decided: explicit association-scoping via `Current.tree`
       (recommended — fewer footguns) vs `default_scope`. This plan uses explicit
       association scoping, with a model guard as belt-and-suspenders.
 
@@ -45,56 +45,56 @@ already-loaded person — so the only cross-tenant leak vectors are *enumerating
 the rest stays in-tree.
 
 ### Models & migrations
-- [ ] `Tree` model + migration → `app/models/tree.rb`, `db/migrate/*_create_trees.rb`
+- [x] `Tree` model + migration → `app/models/tree.rb`, `db/migrate/*_create_trees.rb`
       - columns: `name:string`, `created_at/updated_at`
-- [ ] `TreeMembership` join model + migration (sets up [[collaboration]] later)
+- [x] `TreeMembership` join model + migration (sets up [[collaboration]] later)
       - columns: `tree_id` (FK), `user_id` (FK), `role:string` (default `"owner"`),
         unique index on `[tree_id, user_id]`
-- [ ] Migration: add `tree_id` (FK, indexed) to `people`, `families`,
+- [x] Migration: add `tree_id` (FK, indexed) to `people`, `families`,
       `family_partners`, `family_children`, `events`
       → `db/migrate/*_add_tree_to_domain_tables.rb`
       - **Backfill**: assign all existing rows to a single bootstrap tree owned by the
         first user (data migration in the same migration or a `rake` task)
       - Set `null: false` on `tree_id` *after* backfill
-- [ ] Associations:
+- [x] Associations:
       - `Tree has_many :people, :families, :events, :tree_memberships, :users (through)`
       - `User has_many :tree_memberships`, `has_many :trees, through:`
       - `Person/Family/Event/FamilyPartner/FamilyChild belongs_to :tree`
-- [ ] Model guard (belt-and-suspenders): a `BelongsToTree` concern that validates
+- [x] Model guard (belt-and-suspenders): a `BelongsToTree` concern that validates
       `tree_id` presence and (optionally) asserts associated records share the tree
       → `app/models/concerns/belongs_to_tree.rb`
 
 ### Request-scoping layer
-- [ ] Add `attribute :tree` to `Current` → `app/models/current.rb`
-- [ ] Resolve `Current.tree` per request from the membership (or a session-selected
+- [x] Add `attribute :tree` to `Current` → `app/models/current.rb`
+- [x] Resolve `Current.tree` per request from the membership (or a session-selected
       tree id) → `app/controllers/concerns/authentication.rb` or a new
       `TenantScoping` concern included in `ApplicationController`
-- [ ] `PeopleController#index`: `Person.order(...)` → `Current.tree.people.order(...)`
+- [x] `PeopleController#index`: `Person.order(...)` → `Current.tree.people.order(...)`
       → `app/controllers/people_controller.rb:7`
-- [ ] `PeopleController#set_person`: `Person.find` → `Current.tree.people.find`
+- [x] `PeopleController#set_person`: `Person.find` → `Current.tree.people.find`
       → `app/controllers/people_controller.rb:45` (this both scopes and authorizes →
       404 for other tenants)
-- [ ] `PeopleController#create`: build through `Current.tree.people.new(person_params)`
-- [ ] `TreesController#find_person`: `Person.find` → `Current.tree.people.find`
+- [x] `PeopleController#create`: build through `Current.tree.people.new(person_params)`
+- [x] `TreesController#find_person`: `Person.find` → `Current.tree.people.find`
       → `app/controllers/trees_controller.rb:16`
-- [ ] `EventsController` / `RelativesController`: load parent person via
+- [x] `EventsController` / `RelativesController`: load parent person via
       `Current.tree.people.find`; ensure newly created relatives/events inherit
       `tree_id` (set in `Person#add_parent/add_child/add_partner` and the events build)
       → `app/models/person.rb:102-119`, `app/controllers/events_controller.rb`
-- [ ] GEDCOM import: `Gedcom::Mapper#import!` assigns `Current.tree` (or a passed-in
+- [x] GEDCOM import: `Gedcom::Mapper#import!` assigns `Current.tree` (or a passed-in
       tree) to every created Person/Family/Event → `app/services/gedcom/mapper.rb`
 
 ### Tests
-- [ ] Model: a Person/Family/Event requires a tree; membership uniqueness
-- [ ] Controller: user A gets 404 on user B's person (`show`, `tree`, `events`)
-- [ ] Controller: `index` lists only `Current.tree` people
-- [ ] Integration: GEDCOM import lands all records in the importing user's tree
-- [ ] Fixtures updated: existing fixtures get a `tree:` association
+- [x] Model: a Person/Family/Event requires a tree; membership uniqueness
+- [x] Controller: user A gets 404 on user B's person (`show`, `tree`, `events`)
+- [x] Controller: `index` lists only `Current.tree` people
+- [x] Integration: GEDCOM import lands all records in the importing user's tree
+- [x] Fixtures updated: existing fixtures get a `tree:` association
 
 ### Done when
-- [ ] No controller query reads `Person`/`Family`/`Event` without a tree scope
-- [ ] Cross-tenant access returns 404, not another tree's data
-- [ ] Full suite green
+- [x] No controller query reads `Person`/`Family`/`Event` without a tree scope
+- [x] Cross-tenant access returns 404, not another tree's data
+- [x] Full suite green
 
 ---
 

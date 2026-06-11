@@ -36,7 +36,7 @@ class EventsController < ApplicationController
   private
 
   def set_person
-    @person = Person.find(params[:person_id])
+    @person = Current.tree.people.find(params[:person_id])
   end
 
   def set_event

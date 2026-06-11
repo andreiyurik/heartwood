@@ -3,7 +3,7 @@ require "test_helper"
 # Person (INDI) — see docs/domain/person.md
 class PersonTest < ActiveSupport::TestCase
   test "is valid with a given name and surname" do
-    person = Person.new(given_names: "John Fitzgerald", surname: "Kennedy")
+    person = Person.new(given_names: "John Fitzgerald", surname: "Kennedy", tree: trees(:alpha))
     assert person.valid?
   end
 
@@ -30,10 +30,16 @@ class PersonTest < ActiveSupport::TestCase
 
   test "sex must be a valid GEDCOM code" do
     %w[M F U X].each do |code|
-      assert Person.new(sex: code).valid?, "#{code} should be valid"
+      assert Person.new(sex: code, tree: trees(:alpha)).valid?, "#{code} should be valid"
     end
-    person = Person.new(sex: "Z")
+    person = Person.new(sex: "Z", tree: trees(:alpha))
     assert_not person.valid?
     assert_includes person.errors[:sex], "is not included in the list"
+  end
+
+  test "requires a tree" do
+    person = Person.new(sex: "U")
+    assert_not person.valid?
+    assert person.errors[:tree].any?
   end
 end

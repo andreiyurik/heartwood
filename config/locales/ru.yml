@@ -93,6 +93,7 @@ ru:
     ancestors: Предки
     descendants: Потомки
     hint: "Колёсиком — масштаб · перетащите — панорама · клик — профиль"
+    default_name: Моё дерево
 
   auth:
     email_placeholder: Введите email

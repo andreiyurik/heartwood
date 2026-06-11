@@ -5,7 +5,8 @@ module Gedcom
     # Tags that map to Event records.
     EVENT_TAGS = %w[BIRT DEAT BAPM BURI CHR OCCU RESI EDUC MARR DIV].freeze
 
-    def initialize(records)
+    def initialize(records, tree: nil)
+      @tree     = tree || Current.tree
       @records  = records
       @warnings = []
       @xref_map = {}  # gedcom_xref string => saved AR object
@@ -48,7 +49,7 @@ module Gedcom
 
       attrs[:gedcom_raw] = raw_tags.presence
 
-      person = Person.create!(attrs)
+      person = Person.create!(attrs.merge(tree: @tree))
       @xref_map[record[:xref]] = person
       @people << person
 
@@ -62,7 +63,7 @@ module Gedcom
     # --- FAM ---
 
     def map_fam(record)
-      fam      = Family.create!(gedcom_xref: record[:xref])
+      fam      = Family.create!(gedcom_xref: record[:xref], tree: @tree)
       raw_tags = []
 
       @xref_map[record[:xref]] = fam

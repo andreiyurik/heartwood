@@ -8,18 +8,19 @@ require "test_helper"
 #   Joe  + Lucy  -> child:    Tim
 class FamilyTest < ActiveSupport::TestCase
   setup do
-    @john = Person.create!(given_names: "John", surname: "Doe", sex: "M")
-    @jane = Person.create!(given_names: "Jane", surname: "Doe", sex: "F")
-    @joe  = Person.create!(given_names: "Joe",  surname: "Doe", sex: "M")
-    @mary = Person.create!(given_names: "Mary", surname: "Doe", sex: "F")
-    @lucy = Person.create!(given_names: "Lucy", surname: "Roe", sex: "F")
-    @tim  = Person.create!(given_names: "Tim",  surname: "Doe", sex: "M")
+    @tree = trees(:alpha)
+    @john = Person.create!(given_names: "John", surname: "Doe", sex: "M", tree: @tree)
+    @jane = Person.create!(given_names: "Jane", surname: "Doe", sex: "F", tree: @tree)
+    @joe  = Person.create!(given_names: "Joe",  surname: "Doe", sex: "M", tree: @tree)
+    @mary = Person.create!(given_names: "Mary", surname: "Doe", sex: "F", tree: @tree)
+    @lucy = Person.create!(given_names: "Lucy", surname: "Roe", sex: "F", tree: @tree)
+    @tim  = Person.create!(given_names: "Tim",  surname: "Doe", sex: "M", tree: @tree)
 
-    @f1 = Family.create!
+    @f1 = Family.create!(tree: @tree)
     @f1.partners << [ @john, @jane ]
     @f1.children << [ @joe, @mary ]
 
-    @f2 = Family.create!
+    @f2 = Family.create!(tree: @tree)
     @f2.partners << [ @joe, @lucy ]
     @f2.children << @tim
   end

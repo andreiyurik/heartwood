@@ -5,8 +5,11 @@ require "test_helper"
 # See docs/domain/family.md, docs/domain/relationship.md.
 class PersonRelativesTest < ActiveSupport::TestCase
   setup do
-    @p = Person.create!(given_names: "Pat", surname: "Root", sex: "U")
+    Current.tree = trees(:alpha)
+    @p = Person.create!(given_names: "Pat", surname: "Root", sex: "U", tree: Current.tree)
   end
+
+  teardown { Current.reset }
 
   test "add_parent links a new parent through the person's birth family" do
     mother = @p.add_parent(given_names: "Mary", surname: "Root", sex: "F")
@@ -50,5 +53,10 @@ class PersonRelativesTest < ActiveSupport::TestCase
     assert_kind_of Person, rel
     assert rel.persisted?
     assert_equal "Returned", rel.given_names
+  end
+
+  test "created relatives belong to Current.tree" do
+    parent = @p.add_parent(given_names: "Parent", sex: "F")
+    assert_equal Current.tree, parent.tree
   end
 end

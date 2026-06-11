@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_10_130543) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_11_000001) do
   create_table "events", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date_end"
@@ -22,16 +22,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_130543) do
     t.json "gedcom_raw"
     t.string "gedcom_xref"
     t.string "kind"
+    t.integer "tree_id", null: false
     t.datetime "updated_at", null: false
     t.string "value"
     t.index ["eventable_type", "eventable_id"], name: "index_events_on_eventable"
+    t.index ["tree_id"], name: "index_events_on_tree_id"
   end
 
   create_table "families", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.json "gedcom_raw"
     t.string "gedcom_xref"
+    t.integer "tree_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["tree_id"], name: "index_families_on_tree_id"
   end
 
   create_table "family_children", force: :cascade do |t|
@@ -40,9 +44,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_130543) do
     t.string "pedigree"
     t.integer "person_id", null: false
     t.integer "position"
+    t.integer "tree_id", null: false
     t.datetime "updated_at", null: false
     t.index ["family_id"], name: "index_family_children_on_family_id"
     t.index ["person_id"], name: "index_family_children_on_person_id"
+    t.index ["tree_id"], name: "index_family_children_on_tree_id"
   end
 
   create_table "family_partners", force: :cascade do |t|
@@ -50,9 +56,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_130543) do
     t.integer "family_id", null: false
     t.integer "person_id", null: false
     t.string "role"
+    t.integer "tree_id", null: false
     t.datetime "updated_at", null: false
     t.index ["family_id"], name: "index_family_partners_on_family_id"
     t.index ["person_id"], name: "index_family_partners_on_person_id"
+    t.index ["tree_id"], name: "index_family_partners_on_tree_id"
   end
 
   create_table "people", force: :cascade do |t|
@@ -65,8 +73,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_130543) do
     t.string "nickname"
     t.string "sex", default: "U", null: false
     t.string "surname"
+    t.integer "tree_id", null: false
     t.datetime "updated_at", null: false
     t.index ["gedcom_xref"], name: "index_people_on_gedcom_xref"
+    t.index ["tree_id"], name: "index_people_on_tree_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -78,6 +88,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_130543) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "tree_memberships", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "role", default: "owner", null: false
+    t.integer "tree_id", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["tree_id", "user_id"], name: "index_tree_memberships_on_tree_id_and_user_id", unique: true
+    t.index ["tree_id"], name: "index_tree_memberships_on_tree_id"
+    t.index ["user_id"], name: "index_tree_memberships_on_user_id"
+    t.index ["user_id"], name: "index_tree_memberships_unique_owner_per_user", unique: true, where: "role = 'owner'"
+  end
+
+  create_table "trees", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email_address", null: false
@@ -86,9 +114,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_130543) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "events", "trees"
+  add_foreign_key "families", "trees"
   add_foreign_key "family_children", "families"
   add_foreign_key "family_children", "people"
+  add_foreign_key "family_children", "trees"
   add_foreign_key "family_partners", "families"
   add_foreign_key "family_partners", "people"
+  add_foreign_key "family_partners", "trees"
+  add_foreign_key "people", "trees"
   add_foreign_key "sessions", "users"
+  add_foreign_key "tree_memberships", "trees"
+  add_foreign_key "tree_memberships", "users"
 end

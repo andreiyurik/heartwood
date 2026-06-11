@@ -13,7 +13,7 @@ class TreesController < ApplicationController
   private
 
   def find_person
-    @person = Person.find(params[:person_id])
+    @person = Current.tree.people.find(params[:person_id])
   end
 
   def depth_param

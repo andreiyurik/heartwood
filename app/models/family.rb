@@ -2,6 +2,8 @@
 # Kinship is derived *through* Family, never stored as direct person->person edges.
 # See docs/domain/family.md and docs/domain/domain-model.md.
 class Family < ApplicationRecord
+  include BelongsToTree
+
   has_many :partner_memberships, class_name: "FamilyPartner", dependent: :destroy
   has_many :partners, through: :partner_memberships, source: :person
 

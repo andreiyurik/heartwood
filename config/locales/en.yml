@@ -93,6 +93,7 @@ en:
     ancestors: Ancestors
     descendants: Descendants
     hint: "Scroll to zoom · drag to pan · click a name to open profile"
+    default_name: My Tree
 
   auth:
     email_placeholder: Enter your email address

@@ -1,10 +1,14 @@
 require "test_helper"
 
 class Gedcom::MapperTest < ActiveSupport::TestCase
-  # Parse GEDCOM text and run the mapper in one call.
+  setup do
+    @tree = trees(:alpha)
+  end
+
+  # Parse GEDCOM text and run the mapper using the test tree.
   def import(gedcom_text)
     records = Gedcom::Parser.new(gedcom_text).parse[:records]
-    Gedcom::Mapper.new(records).import!
+    Gedcom::Mapper.new(records, tree: @tree).import!
   end
 
   # --- INDI → Person ---
@@ -191,15 +195,30 @@ class Gedcom::MapperTest < ActiveSupport::TestCase
   # --- Full fixture ---
 
   test "imports minimal_551 fixture: 2 people, 1 family, no warnings" do
-    src     = File.read(Rails.root.join("test/fixtures/gedcom/minimal_551.ged"))
-    records = Gedcom::Parser.new(src).parse[:records]
-    result  = Gedcom::Mapper.new(records).import!
+    result = import(File.read(Rails.root.join("test/fixtures/gedcom/minimal_551.ged")))
 
     assert_empty result[:warnings]
     assert_equal 2, result[:people].size
     assert_equal 1, result[:families].size
-    # Marriage event mapped to the family
     fam = result[:families].first
     assert fam.events.exists?(kind: "MARR")
+  end
+
+  test "import assigns all records to the given tree" do
+    result = import(<<~GED)
+      0 @I1@ INDI
+      1 SEX M
+      0 @I2@ INDI
+      1 SEX F
+      0 @F1@ FAM
+      1 HUSB @I1@
+      1 WIFE @I2@
+      1 MARR
+      2 DATE 1900
+    GED
+
+    assert result[:people].all? { |p| p.tree == @tree }
+    assert result[:families].all? { |f| f.tree == @tree }
+    assert result[:families].first.events.all? { |e| e.tree == @tree }
   end
 end

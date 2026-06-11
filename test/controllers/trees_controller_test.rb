@@ -2,8 +2,10 @@ require "test_helper"
 
 class TreesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @person = Person.create!(given_names: "Johann Sebastian", surname: "Bach", sex: "M")
+    @tree   = trees(:alpha)
+    @person = Person.create!(given_names: "Johann Sebastian", surname: "Bach", sex: "M", tree: @tree)
     sign_in_as users(:one)
+    Current.tree = @tree
   end
 
   test "GET show renders the ancestors tree by default" do
@@ -41,8 +43,8 @@ class TreesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET show with depth param limits the graph depth" do
-    parent = Person.create!(sex: "M")
-    fam = Family.create!
+    parent = Person.create!(sex: "M", tree: @tree)
+    fam = Family.create!(tree: @tree)
     fam.partners << parent
     fam.children << @person
 

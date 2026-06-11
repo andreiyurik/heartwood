@@ -4,7 +4,7 @@ class PeopleController < ApplicationController
   before_action :set_person, only: %i[show edit update destroy]
 
   def index
-    @people = Person.order(:surname, :given_names)
+    @people = Current.tree.people.order(:surname, :given_names)
   end
 
   def show
@@ -18,7 +18,7 @@ class PeopleController < ApplicationController
   end
 
   def create
-    @person = Person.new(person_params)
+    @person = Current.tree.people.build(person_params)
     if @person.save
       redirect_to @person, notice: t("people.flash.created")
     else
@@ -42,7 +42,7 @@ class PeopleController < ApplicationController
   private
 
   def set_person
-    @person = Person.find(params[:id])
+    @person = Current.tree.people.find(params[:id])
   end
 
   def person_params

@@ -2,10 +2,11 @@ require "test_helper"
 
 class PersonGraphTest < ActiveSupport::TestCase
   setup do
-    @child  = Person.create!(sex: "U")
-    @father = Person.create!(sex: "M")
-    @mother = Person.create!(sex: "F")
-    fam = Family.create!
+    @tree   = trees(:alpha)
+    @child  = Person.create!(sex: "U", tree: @tree)
+    @father = Person.create!(sex: "M", tree: @tree)
+    @mother = Person.create!(sex: "F", tree: @tree)
+    fam = Family.create!(tree: @tree)
     fam.partners << @father << @mother
     fam.children << @child
   end
@@ -13,7 +14,7 @@ class PersonGraphTest < ActiveSupport::TestCase
   # --- ancestor_graph ---
 
   test "ancestor_graph for isolated person has only the focus node" do
-    loner = Person.create!(sex: "U")
+    loner = Person.create!(sex: "U", tree: @tree)
     graph = loner.ancestor_graph
     assert_equal 1, graph[:nodes].size
     assert_empty  graph[:edges]
@@ -39,8 +40,8 @@ class PersonGraphTest < ActiveSupport::TestCase
   end
 
   test "ancestor_graph respects depth: stops at the given generation" do
-    grandpa = Person.create!(sex: "M")
-    gran_fam = Family.create!
+    grandpa  = Person.create!(sex: "M", tree: @tree)
+    gran_fam = Family.create!(tree: @tree)
     gran_fam.partners << grandpa
     gran_fam.children << @father
 
@@ -72,7 +73,7 @@ class PersonGraphTest < ActiveSupport::TestCase
 
   test "ancestor_graph does not revisit the same person twice" do
     # father is both in @child's family and is its own parent (corner case via separate fam)
-    self_fam = Family.create!
+    self_fam = Family.create!(tree: @tree)
     self_fam.partners << @father
     self_fam.children << @father  # contrived but should not loop
     graph = @child.ancestor_graph(depth: 10)
@@ -83,7 +84,7 @@ class PersonGraphTest < ActiveSupport::TestCase
   # --- descendant_graph ---
 
   test "descendant_graph for person with no children has only the focus node" do
-    loner = Person.create!(sex: "U")
+    loner = Person.create!(sex: "U", tree: @tree)
     graph = loner.descendant_graph
     assert_equal 1,             graph[:nodes].size
     assert_empty                graph[:edges]
@@ -105,8 +106,8 @@ class PersonGraphTest < ActiveSupport::TestCase
   end
 
   test "descendant_graph respects depth: stops at the given generation" do
-    grandchild = Person.create!(sex: "U")
-    gc_fam = Family.create!
+    grandchild = Person.create!(sex: "U", tree: @tree)
+    gc_fam = Family.create!(tree: @tree)
     gc_fam.partners << @child
     gc_fam.children << grandchild
 

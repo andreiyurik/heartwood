@@ -1,0 +1,9 @@
+one_alpha:
+  user: one
+  tree: alpha
+  role: owner
+
+two_beta:
+  user: two
+  tree: beta
+  role: owner

@@ -3,8 +3,10 @@ require "test_helper"
 # Adding relatives to a Person through the UI. See docs/features/person-profile.md.
 class RelativesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @person = Person.create!(given_names: "Pat", surname: "Root", sex: "U")
+    @tree   = trees(:alpha)
+    @person = Person.create!(given_names: "Pat", surname: "Root", sex: "U", tree: @tree)
     sign_in_as users(:one)
+    Current.tree = @tree
   end
 
   test "requires authentication" do
