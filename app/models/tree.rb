@@ -4,6 +4,7 @@ class Tree < ApplicationRecord
   has_many :people, dependent: :destroy
   has_many :families, dependent: :destroy
   has_many :events, dependent: :destroy
+  has_many :sources, dependent: :destroy
 
   validates :name, presence: true
 end

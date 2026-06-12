@@ -1,0 +1,12 @@
+<dl class="facts">
+  <% if person.nickname.present? %>
+    <dt><%= t("people.nickname_label") %></dt><dd><%= person.nickname %></dd>
+  <% end %>
+  <dt><%= t("people.sex_label") %></dt><dd><%= t("people.sex.#{person.sex}") %></dd>
+  <dt><%= t("people.status_label") %></dt>
+  <dd><%= person.living? ? t("people.status.living") : t("people.status.deceased") %></dd>
+</dl>
+
+<%= render "people/events", person: person %>
+
+<%= render "people/family", person: person %>

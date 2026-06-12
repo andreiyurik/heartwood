@@ -6,7 +6,43 @@ class Person < ApplicationRecord
   # GEDCOM sex codes: Male, Female, Unknown, Other/Intersex.
   SEXES = %w[M F U X].freeze
 
+  # Anyone born within this many years of today with no death evidence is "possibly living".
+  LIVING_CUTOFF_YEARS = 120
+
+  has_one_attached :avatar
+
   validates :sex, inclusion: { in: SEXES }
+  validate :avatar_is_an_image, if: -> { avatar.attached? }
+
+  AVATAR_CONTENT_TYPES = %w[image/jpeg image/png image/webp image/gif].freeze
+  AVATAR_MAX_BYTES     = 5.megabytes
+
+  # Full-text search across given_names, surname, nickname (LIKE; prefix on each term).
+  # Tree-scoped and visibility-scoped: apply after `.visible_to` or chain directly.
+  scope :search, ->(query, user: nil) {
+    base = visible_to(user)
+    terms = query.to_s.strip.split.first(8)
+    terms.reduce(base) do |rel, term|
+      pattern = "%#{ApplicationRecord.sanitize_sql_like(term)}%"
+      rel.where(
+        "given_names LIKE :p OR surname LIKE :p OR nickname LIKE :p",
+        p: pattern
+      )
+    end
+  }
+
+  # Members of the person's tree see all; others see only verifiably non-living, non-private people.
+  scope :visible_to, ->(user) {
+    known_dead    = Event.where(eventable_type: "Person", kind: DEATH_KINDS).select(:eventable_id)
+    cutoff        = LIVING_CUTOFF_YEARS.years.ago.to_date
+    born_long_ago = Event.where(eventable_type: "Person", kind: "BIRT")
+                         .where(date_start: ..cutoff).select(:eventable_id)
+
+    publicly_visible = where(private: false, id: known_dead).or(where(private: false, id: born_long_ago))
+    next publicly_visible unless user
+
+    where(tree_id: user.tree_memberships.select(:tree_id)).or(publicly_visible)
+  }
 
   # Families this person formed as a partner, and the families they were a child in.
   has_many :partner_memberships, class_name: "FamilyPartner", dependent: :destroy
@@ -25,10 +61,17 @@ class Person < ApplicationRecord
   def birth = events.find_by(kind: "BIRT")
   def death = events.find_by(kind: "DEAT")
 
-  # A person is treated as living until we have evidence of death.
-  # (A birth-date age cutoff for privacy is layered on later; see privacy-access.md.)
+  # Possibly living = no death evidence AND (unknown birth year OR born within LIVING_CUTOFF_YEARS).
   def living?
-    events.where(kind: DEATH_KINDS).none?
+    return false if events.where(kind: DEATH_KINDS).any?
+    birth_year = birth&.date_start&.year
+    birth_year.nil? || birth_year > Date.current.year - LIVING_CUTOFF_YEARS
+  end
+
+  # Tree members see everyone; outsiders and guests only see verifiably non-living, non-private people.
+  def visible_to?(user)
+    return true if user && tree.users.exists?(user.id)
+    !living? && !private?
   end
 
   # --- Derived relationships (computed through Family; see relationship.md) ---
@@ -85,14 +128,20 @@ class Person < ApplicationRecord
   end
 
   def node_data(person, generation:, order:)
-    {
-      id:         person.id,
-      generation:,
-      order:,
-      name:       person.display_name,
-      birth_year: person.birth&.date_raw,
-      sex:        person.sex
-    }
+    base = { id: person.id, generation:, order: }
+    unless person.visible_to?(Current.user)
+      return base.merge(name: I18n.t("people.living"), birth_year: nil, sex: nil, living: true)
+    end
+    base.merge(name: person.display_name, birth_year: person.birth&.date_raw, sex: person.sex)
+  end
+
+  def avatar_is_an_image
+    unless avatar.content_type.in?(AVATAR_CONTENT_TYPES)
+      errors.add(:avatar, :invalid_content_type)
+    end
+    if avatar.byte_size > AVATAR_MAX_BYTES
+      errors.add(:avatar, :too_large)
+    end
   end
 
   public

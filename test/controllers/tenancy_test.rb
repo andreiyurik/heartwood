@@ -5,8 +5,9 @@ require "test_helper"
 class TenancyTest < ActionDispatch::IntegrationTest
   setup do
     # user :one owns tree :alpha
-    @tree_a  = trees(:alpha)
+    @tree_a   = trees(:alpha)
     @person_a = Person.create!(given_names: "Alice", surname: "Alpha", sex: "F", tree: @tree_a)
+    @event_a  = Event.create!(kind: "BIRT", eventable: @person_a, tree: @tree_a)
 
     # user :two owns tree :beta — no people in it yet
     @tree_b = trees(:beta)
@@ -48,6 +49,58 @@ class TenancyTest < ActionDispatch::IntegrationTest
     sign_in_as users(:one)
     get person_url(@person_a)
     assert_response :success
+  end
+
+  # --- PATCH / DELETE people: cross-tenant mutation returns 404, data untouched ---
+
+  test "user B cannot update user A's person" do
+    sign_in_as users(:two)
+    patch person_url(@person_a), params: { person: { given_names: "Hacked" } }
+    assert_response :not_found
+    assert_equal "Alice", @person_a.reload.given_names
+  end
+
+  test "user B cannot delete user A's person" do
+    sign_in_as users(:two)
+    delete person_url(@person_a)
+    assert_response :not_found
+    assert @person_a.reload.persisted?
+  end
+
+  # --- Events: cross-tenant create / update / delete returns 404 ---
+
+  test "user B cannot create an event on user A's person" do
+    sign_in_as users(:two)
+    assert_no_difference "Event.count" do
+      post person_events_url(@person_a), params: { event: { kind: "DEAT" } }
+    end
+    assert_response :not_found
+  end
+
+  test "user B cannot update user A's event" do
+    sign_in_as users(:two)
+    patch person_event_url(@person_a, @event_a), params: { event: { date_raw: "1 JAN 1900" } }
+    assert_response :not_found
+    assert_nil @event_a.reload.date_raw
+  end
+
+  test "user B cannot delete user A's event" do
+    sign_in_as users(:two)
+    assert_no_difference "Event.count" do
+      delete person_event_url(@person_a, @event_a)
+    end
+    assert_response :not_found
+  end
+
+  # --- Relatives: cross-tenant create returns 404, no record created ---
+
+  test "user B cannot add a relative to user A's person" do
+    sign_in_as users(:two)
+    assert_no_difference "Person.count" do
+      post person_relatives_url(@person_a),
+           params: { relation: "child", person: { given_names: "Stolen", sex: "U" } }
+    end
+    assert_response :not_found
   end
 
   # --- new user gets a bootstrap tree on first request ---

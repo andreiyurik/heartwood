@@ -24,6 +24,23 @@ ru:
     empty: Нет ни одной записи.
     add_first: Добавить первого
     unknown_name: Неизвестный
+    living: Живёт
+    tabs_label: Разделы профиля
+    avatar_label: Фото
+    avatar_hint: JPEG, PNG или WebP · не более 5 МБ
+    tabs:
+      details: Данные
+      sources: Источники
+      memories: Воспоминания
+      timeline: Хронология
+      sources_stub: Источники появятся здесь (в версии 0.7).
+      memories_stub: Загрузите фото, чтобы оно появилось здесь.
+      memories_more_stub: Полная галерея появится в Block 1.
+      timeline_stub: Хронология появится в Block 1.
+    search_placeholder: Поиск по имени…
+    search_empty: Никого не найдено.
+    search_clear: Сбросить
+    sex_filter_all: Все
     sex_label: Пол
     status_label: Статус
     nickname_label: Прозвище
@@ -88,11 +105,31 @@ ru:
       RESI: Место жительства
       EDUC: Образование
 
+  citations:
+    add: + Добавить источник
+    add_title: "Добавить источник для «%{event}»"
+    submit_add: Сохранить источник
+    sourced_badge: "✓"
+    sourced_title: К этому событию прикреплён источник
+    remove: Удалить источник
+    none_for_person: Источников пока нет. Добавьте источник к любому жизненному событию.
+    source_title_label: Название
+    source_url_label: URL (необязательно)
+    citation_text_label: Примечание (необязательно)
+    citation_text_placeholder: "напр. стр. 42, метрическая книга"
+    flash:
+      created: Источник добавлен.
+      destroyed: Источник удалён.
+
+  exports:
+    create: Экспорт GEDCOM
+
   trees:
     title: "%{name} — Семейное дерево"
     ancestors: Предки
     descendants: Потомки
-    hint: "Колёсиком — масштаб · перетащите — панорама · клик — профиль"
+    hint: "Колёсиком — масштаб · перетащите — панорама · клик — перефокус"
+    depth_label: Поколения
     default_name: Моё дерево
 
   auth:
@@ -216,3 +253,11 @@ ru:
         name_suffix: Суффикс
         nickname: Прозвище
         sex: Пол
+        avatar: Фото
+    errors:
+      models:
+        person:
+          attributes:
+            avatar:
+              invalid_content_type: должно быть изображением JPEG, PNG или WebP
+              too_large: не должно превышать 5 МБ

@@ -1,0 +1,29 @@
+<% sourced_events = person.events.includes(citations: :source).select { |e| e.citations.any? } %>
+
+<% if sourced_events.any? %>
+  <dl class="sources-list">
+    <% sourced_events.each do |event| %>
+      <% event.citations.each do |citation| %>
+        <dt class="source-event-label"><%= event.kind_label %></dt>
+        <dd class="source-item">
+          <p class="source-title">
+            <% if citation.source.url.present? %>
+              <%= link_to citation.source.title, citation.source.url,
+                    target: "_blank", rel: "noopener noreferrer" %>
+            <% else %>
+              <%= citation.source.title %>
+            <% end %>
+          </p>
+          <% if citation.source.citation_text.present? %>
+            <p class="source-citation-text muted"><%= citation.source.citation_text %></p>
+          <% end %>
+          <%= button_to t("citations.remove"),
+                person_event_citation_path(person, event, citation),
+                method: :delete, class: "linkish citation-remove" %>
+        </dd>
+      <% end %>
+    <% end %>
+  </dl>
+<% else %>
+  <p class="muted tab-stub"><%= t("citations.none_for_person") %></p>
+<% end %>

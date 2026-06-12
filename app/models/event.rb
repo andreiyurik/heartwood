@@ -17,6 +17,9 @@ class Event < ApplicationRecord
 
   belongs_to :eventable, polymorphic: true
 
+  has_many :citations, as: :citable, dependent: :destroy
+  has_many :sources,   through: :citations
+
   validates :kind, presence: true
 
   before_validation :inherit_tree_from_eventable

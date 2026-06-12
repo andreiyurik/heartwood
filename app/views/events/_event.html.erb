@@ -2,10 +2,14 @@
   <%= turbo_frame_tag dom_id(event, :edit) do %>
     <span class="event-kind"><%= event.kind_label %></span>
     <span class="event-summary"><%= event.summary %></span>
+    <% if event.citations.loaded? ? event.citations.any? : event.citations.exists? %>
+      <span class="sourced-badge" title="<%= t("citations.sourced_title") %>"><%= t("citations.sourced_badge") %></span>
+    <% end %>
     <span class="event-actions">
       <%= link_to t("events.edit"), edit_person_event_path(person, event), class: "linkish" %>
       <%= button_to t("events.remove"), person_event_path(person, event), method: :delete,
             class: "linkish", form: { data: { turbo_confirm: t("events.remove_confirm") } } %>
     </span>
   <% end %>
+  <%= render "citations/add_link", event: event, person: person %>
 <% end %>

@@ -9,7 +9,10 @@ class PersonGraphTest < ActiveSupport::TestCase
     fam = Family.create!(tree: @tree)
     fam.partners << @father << @mother
     fam.children << @child
+    Current.session = users(:one).sessions.create!
   end
+
+  teardown { Current.reset }
 
   # --- ancestor_graph ---
 

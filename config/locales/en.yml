@@ -24,6 +24,23 @@ en:
     empty: No people yet.
     add_first: Add the first one
     unknown_name: Unknown
+    living: Living
+    tabs_label: Profile sections
+    avatar_label: Photo
+    avatar_hint: JPEG, PNG or WebP · max 5 MB
+    tabs:
+      details: Details
+      sources: Sources
+      memories: Memories
+      timeline: Timeline
+      sources_stub: Sources will appear here (coming in 0.7).
+      memories_stub: Upload a photo to see it here.
+      memories_more_stub: Full photo gallery coming in Block 1.
+      timeline_stub: Timeline view coming in Block 1.
+    search_placeholder: Search by name…
+    search_empty: No people match your search.
+    search_clear: Clear
+    sex_filter_all: All sexes
     sex_label: Sex
     status_label: Status
     nickname_label: Nickname
@@ -88,11 +105,31 @@ en:
       RESI: Residence
       EDUC: Education
 
+  citations:
+    add: + Add source
+    add_title: "Add source for %{event}"
+    submit_add: Save source
+    sourced_badge: "✓"
+    sourced_title: This event has a source
+    remove: Remove source
+    none_for_person: No sources cited yet. Add a source to any life event.
+    source_title_label: Title
+    source_url_label: URL (optional)
+    citation_text_label: Notes (optional)
+    citation_text_placeholder: "e.g. page 42, parish register"
+    flash:
+      created: Source added.
+      destroyed: Source removed.
+
+  exports:
+    create: Export GEDCOM
+
   trees:
     title: "%{name} — Family Tree"
     ancestors: Ancestors
     descendants: Descendants
-    hint: "Scroll to zoom · drag to pan · click a name to open profile"
+    hint: "Scroll to zoom · drag to pan · click a node to refocus"
+    depth_label: Generations
     default_name: My Tree
 
   auth:
@@ -151,3 +188,11 @@ en:
         name_suffix: Suffix
         nickname: Nickname
         sex: Sex
+        avatar: Photo
+    errors:
+      models:
+        person:
+          attributes:
+            avatar:
+              invalid_content_type: must be a JPEG, PNG, or WebP image
+              too_large: must be smaller than 5 MB

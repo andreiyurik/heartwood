@@ -55,4 +55,48 @@ class TreesControllerTest < ActionDispatch::IntegrationTest
     get person_tree_url(@person, depth: 1)
     assert_select ".tree-node", count: 2
   end
+
+  test "mode toggle links preserve current depth" do
+    get person_tree_url(@person, mode: "ancestors", depth: 3)
+    # The descendants button should carry depth=3
+    assert_select "a[href*='mode=descendants'][href*='depth=3']"
+  end
+
+  test "depth controls link to incremented and decremented depth" do
+    get person_tree_url(@person, mode: "ancestors", depth: 3)
+    assert_select "a[href*='depth=2']"
+    assert_select "a[href*='depth=4']"
+  end
+
+  test "depth control minus is disabled at minimum depth" do
+    get person_tree_url(@person, depth: 1)
+    assert_select "span.button--disabled", text: "−"
+  end
+
+  test "depth control plus is disabled at maximum depth" do
+    get person_tree_url(@person, depth: 6)
+    assert_select "span.button--disabled", text: "+"
+  end
+
+  test "node link goes to tree path for refocus (not profile)" do
+    parent = Person.create!(sex: "M", tree: @tree)
+    fam = Family.create!(tree: @tree)
+    fam.partners << parent
+    fam.children << @person
+
+    get person_tree_url(@person, depth: 1)
+    # Each visible non-focus node should link to person_tree_path, not person_path
+    assert_select ".tree-node:not(.tree-node--focus) a[href*='/tree']"
+  end
+
+  test "non-focus nodes link to that person's tree for refocus" do
+    child = Person.create!(sex: "F", tree: @tree)
+    fam = Family.create!(tree: @tree)
+    fam.partners << @person
+    fam.children << child
+
+    get person_tree_url(@person, mode: "descendants", depth: 1)
+    # Child node must link to the child's tree path (refocus), not their profile
+    assert_select ".tree-node:not(.tree-node--focus) a[href*='/tree']"
+  end
 end

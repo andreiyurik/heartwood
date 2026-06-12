@@ -26,6 +26,54 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     assert_select "body", /Ada Lovelace/
   end
 
+  test "profile defaults to details tab" do
+    get person_url(@person)
+    assert_select ".profile-tab--active", text: /Details/i
+    assert_select ".facts"
+  end
+
+  test "profile renders sources tab" do
+    get person_url(@person, tab: "sources")
+    assert_response :success
+    assert_select ".profile-tab--active", text: /Sources/i
+  end
+
+  test "profile renders memories tab" do
+    get person_url(@person, tab: "memories")
+    assert_response :success
+    assert_select ".profile-tab--active", text: /Memories/i
+  end
+
+  test "profile renders timeline tab" do
+    get person_url(@person, tab: "timeline")
+    assert_response :success
+    assert_select ".profile-tab--active", text: /Timeline/i
+  end
+
+  test "unknown tab falls back to details" do
+    get person_url(@person, tab: "hacker/../../etc")
+    assert_response :success
+    assert_select ".profile-tab--active", text: /Details/i
+  end
+
+  test "index search filters by name" do
+    hidden = Person.create!(given_names: "Turing", surname: "Alan", sex: "M", tree: @tree)
+    get people_url(q: "Lovelace")
+    assert_select "body", /Lovelace/
+    assert_select "body", text: /Turing/, count: 0
+  end
+
+  test "index sex filter narrows results" do
+    get people_url(sex: "F")
+    assert_select "body", /Lovelace/
+  end
+
+  test "index renders search form" do
+    get people_url
+    assert_select "form[data-controller='search']"
+    assert_select "input[type='search']"
+  end
+
   test "creates a person" do
     assert_difference "Person.count", 1 do
       post people_url, params: { person: { given_names: "Grace", surname: "Hopper", sex: "F" } }

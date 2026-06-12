@@ -2,9 +2,10 @@ class TreesController < ApplicationController
   before_action :find_person
 
   def show
+    @depth  = depth_param
     result  = params[:mode] == "descendants" ?
-                @person.descendant_graph(depth: depth_param) :
-                @person.ancestor_graph(depth: depth_param)
+                @person.descendant_graph(depth: @depth) :
+                @person.ancestor_graph(depth: @depth)
     @mode    = result[:mode]
     @graph   = result.except(:persons)
     @persons = result[:persons]

@@ -1,0 +1,7 @@
+<%# Update the event row to show the sourced badge, and reset the citation form link %>
+<%= turbo_stream.replace dom_id(@event) do %>
+  <%= render "events/event", event: @event, person: @person %>
+<% end %>
+<%= turbo_stream.replace dom_id(@event, :citation_form) do %>
+  <%= render "citations/add_link", event: @event, person: @person %>
+<% end %>

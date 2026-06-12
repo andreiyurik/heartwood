@@ -3,12 +3,15 @@ Rails.application.routes.draw do
       constraints: { locale: /en|ru/ }
 
   resource :session
+  resource :export, only: :create
   resources :passwords, param: :token
 
   resources :people do
     resource  :tree,     only: :show
     resources :relatives, only: %i[new create]
-    resources :events,    only: %i[new create edit update destroy]
+    resources :events,    only: %i[new create edit update destroy] do
+      resources :citations, only: %i[new create destroy]
+    end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
