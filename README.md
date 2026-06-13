@@ -9,6 +9,12 @@ rather just fill in your family's story and not think about servers.
 The name is the dense, enduring core of a tree's trunk. That's the idea: an open **core**
 you truly own, that outlives any single company or subscription.
 
+## Screenshots
+
+| People list | Person profile | Add person |
+|:-----------:|:--------------:|:----------:|
+| [![People list](docs/screenshots/people-list.png)](docs/screenshots/people-list.png) | [![Person profile](docs/screenshots/person-profile.png)](docs/screenshots/person-profile.png) | [![Add person](docs/screenshots/add-person.png)](docs/screenshots/add-person.png) |
+
 ## Philosophy
 
 - **Own your roots.** Your family's history is too important to rent. The core is
