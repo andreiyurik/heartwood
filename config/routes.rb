@@ -7,7 +7,10 @@ Rails.application.routes.draw do
   resource :export, only: :create
   resources :passwords, param: :token
 
-  get "places/search", to: "places#search", as: :search_places
+  get "places/search",  to: "places#search",  as: :search_places
+  get "places/geocode", to: "places#geocode", as: :geocode_places
+
+  get "tree",       to: "clan_trees#show", as: :clan_tree
 
   get "map",        to: "maps#show",   as: :tree_map
   get "map/events", to: "maps#events", as: :tree_map_events

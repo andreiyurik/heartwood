@@ -1,0 +1,30 @@
+<%# locals: graph (graph hash), mode (string), depth (integer), focus_id (id of the highlighted person) %>
+<div class="tree-canvas"
+     data-controller="tree"
+     data-tree-graph-value="<%= graph.to_json %>"
+     data-tree-mode-value="<%= mode %>"
+     data-tree-expand-label-value="<%= t("trees.expand") %>"
+     data-tree-collapse-label-value="<%= t("trees.collapse") %>">
+  <div class="tree-search">
+    <input type="search" class="tree-search-input"
+           data-tree-target="searchInput"
+           data-action="input->tree#search keydown->tree#searchKeys"
+           placeholder="<%= t("trees.search_placeholder") %>"
+           aria-label="<%= t("trees.search_placeholder") %>"
+           autocomplete="off">
+    <ul class="tree-search-results" data-tree-target="searchResults" hidden></ul>
+  </div>
+
+  <div class="tree-inner" data-tree-target="inner">
+    <svg class="tree-edges" data-tree-target="svg" aria-hidden="true"></svg>
+    <div class="tree-nodes-layer">
+      <% graph[:nodes].each do |nd| %>
+        <%= render "trees/node",
+              node:  nd,
+              focus: nd[:id] == focus_id,
+              mode:  mode,
+              depth: depth %>
+      <% end %>
+    </div>
+  </div>
+</div>

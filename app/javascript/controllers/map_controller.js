@@ -1,26 +1,26 @@
 import { Controller } from "@hotwired/stimulus"
-import L from "leaflet"
+import { loadLeaflet, osmTiles, escapeHtml } from "maps"
 
 // Renders a Leaflet map and drops a marker per geolocated event fetched from a
-// JSON endpoint. No markers → a calm world view, never an error.
+// JSON endpoint. Leaflet is imported lazily so a blocked CDN shows a clear
+// message instead of leaving the controller unregistered and the box blank.
 export default class extends Controller {
-  static values = { url: String }
+  static values = { url: String, unavailable: String }
 
-  connect() {
+  async connect() {
+    const L = await loadLeaflet()
+    if (!L) return this.showUnavailable()
+
     this.map = L.map(this.element)
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "© OpenStreetMap contributors",
-      maxZoom: 19
-    }).addTo(this.map)
-
-    this.loadMarkers()
+    osmTiles(L, this.map)
+    this.loadMarkers(L)
   }
 
   disconnect() {
     this.map?.remove()
   }
 
-  async loadMarkers() {
+  async loadMarkers(L) {
     const markers = await this.fetchMarkers()
     const points = []
 
@@ -46,15 +46,14 @@ export default class extends Controller {
     }
   }
 
+  showUnavailable() {
+    this.element.classList.add("map-canvas--empty")
+    this.element.textContent = this.unavailableValue || ""
+  }
+
   popup(m) {
-    const lines = [m.kind, m.date, m.place].filter(Boolean).map(esc).join(" · ")
-    const who = m.person ? `<a href="${esc(m.person.url)}">${esc(m.person.name)}</a><br>` : ""
+    const lines = [m.kind, m.date, m.place].filter(Boolean).map(escapeHtml).join(" · ")
+    const who = m.person ? `<a href="${escapeHtml(m.person.url)}">${escapeHtml(m.person.name)}</a><br>` : ""
     return `${who}${lines}`
   }
-}
-
-function esc(value) {
-  return String(value).replace(/[&<>"']/g, (c) => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-  })[c])
 }

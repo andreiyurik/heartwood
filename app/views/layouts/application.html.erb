@@ -26,8 +26,8 @@
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%# Lexxy editor styles (shipped by the lexxy gem) %>
     <%= stylesheet_link_tag "lexxy", "data-turbo-track": "reload" %>
-    <%# Leaflet map styles (CDN, MIT) — only used on the place/map views %>
-    <%= stylesheet_link_tag "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" %>
+    <%# Leaflet map styles (self-hosted, MIT) — only used on the place/map views %>
+    <%= stylesheet_link_tag "leaflet" %>
     <%= javascript_importmap_tags %>
   </head>
 

@@ -157,6 +157,77 @@ class PersonGraphTest < ActiveSupport::TestCase
     assert_nil node[:avatar_url]
   end
 
+  # --- unions (couples) ---
+
+  test "ancestor_graph pairs both parents into one union over the child" do
+    graph = @child.ancestor_graph(depth: 1)
+    assert_equal 1, graph[:unions].size
+    union = graph[:unions].first
+    assert_equal [ @father.id, @mother.id ].sort, union[:partner_ids].sort
+    assert_equal [ @child.id ], union[:child_ids]
+  end
+
+  test "descendant_graph surfaces the married-in spouse as a partner" do
+    # @father's children come through his family with @mother; @mother is not a
+    # blood descendant, so she must be pulled in and paired with him.
+    graph = @father.descendant_graph(depth: 1)
+    ids = graph[:nodes].map { |n| n[:id] }
+    assert_includes ids, @mother.id, "spouse who married in should appear"
+
+    assert_equal 1, graph[:unions].size
+    union = graph[:unions].first
+    assert_equal [ @father.id, @mother.id ].sort, union[:partner_ids].sort
+    assert_equal [ @child.id ], union[:child_ids]
+  end
+
+  test "married-in spouse sits at the same generation as their partner" do
+    graph  = @father.descendant_graph(depth: 1)
+    father = graph[:nodes].find { |n| n[:id] == @father.id }
+    mother = graph[:nodes].find { |n| n[:id] == @mother.id }
+    assert_equal father[:generation], mother[:generation]
+  end
+
+  test "a single parent yields no union (no phantom partner)" do
+    solo  = Person.create!(sex: "F", tree: @tree)
+    kid   = Person.create!(sex: "U", tree: @tree)
+    fam   = Family.create!(tree: @tree)
+    fam.partners << solo
+    fam.children << kid
+
+    graph = solo.descendant_graph(depth: 1)
+    assert_empty graph[:unions]
+    assert_equal [ solo.id, kid.id ].sort, graph[:nodes].map { |n| n[:id] }.sort
+  end
+
+  test "a living married-in spouse is redacted but still paired" do
+    Current.reset
+    outsider = users(:two)   # not a member of tree :alpha
+    Current.session = outsider.sessions.create!
+
+    dad  = Person.create!(given_names: "Dad", sex: "M", tree: @tree)
+    mom  = Person.create!(given_names: "Mom", sex: "F", tree: @tree)   # no death → living
+    kid  = Person.create!(given_names: "Kid", sex: "U", tree: @tree)
+    Event.create!(kind: "DEAT", eventable: dad, tree: @tree)
+    Event.create!(kind: "DEAT", eventable: kid, tree: @tree)
+    fam = Family.create!(tree: @tree)
+    fam.partners << dad << mom
+    fam.children << kid
+
+    graph    = dad.descendant_graph(depth: 1)
+    mom_node = graph[:nodes].find { |n| n[:id] == mom.id }
+    assert mom_node[:living], "living spouse must be redacted"
+    assert_includes graph[:unions].first[:partner_ids], mom.id
+  end
+
+  test "unions only reference people inside the current tree scope" do
+    graph    = @child.ancestor_graph(depth: 2)
+    node_ids = graph[:nodes].map { |n| n[:id] }.to_set
+    graph[:unions].each do |union|
+      assert (union[:partner_ids] + union[:child_ids]).all? { |id| node_ids.include?(id) },
+        "a union must not reference anyone outside the traversed (tree-scoped) graph"
+    end
+  end
+
   private
 
   def attach_avatar(person)

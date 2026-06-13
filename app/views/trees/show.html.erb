@@ -25,6 +25,7 @@
               tag.span("+", class: "button button--outline button--icon button--disabled", aria: { disabled: true }) %>
       </div>
 
+      <%= link_to t("trees.clan_link"), clan_tree_path, class: "button button--outline" %>
       <%= link_to t("maps.tree_link"), tree_map_path, class: "button button--outline" %>
       <%= link_to t("people.profile"), person_path(@person), class: "linkish" %>
     </div>
@@ -32,21 +33,5 @@
 
   <p class="tree-hint"><%= t("trees.hint") %></p>
 
-  <div class="tree-canvas"
-       data-controller="tree"
-       data-tree-graph-value="<%= @graph.to_json %>"
-       data-tree-mode-value="<%= @mode %>">
-    <div class="tree-inner" data-tree-target="inner">
-      <svg class="tree-edges" data-tree-target="svg" aria-hidden="true"></svg>
-      <div class="tree-nodes-layer">
-        <% @graph[:nodes].each do |nd| %>
-          <%= render "trees/node",
-                node:  nd,
-                focus: nd[:id] == @person.id,
-                mode:  @mode,
-                depth: @depth %>
-        <% end %>
-      </div>
-    </div>
-  </div>
+  <%= render "trees/canvas", graph: @graph, mode: @mode, depth: @depth, focus_id: @person.id %>
 </div>

@@ -11,7 +11,10 @@
   --line: #e7e1da;
   --accent: #6b8f5e;       /* heartwood green */
   --accent-ink: #3f5a36;
+  --accent-wash: #eef3e9;  /* tint for selected/active accent surfaces */
   --danger: #b4533f;
+  --danger-wash: #fbf3f1;
+  --danger-line: #e6c9c2;
   --radius: 10px;
   --maxw: 60rem;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -109,6 +112,29 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
 .button:hover, button:hover { background: var(--accent-ink); text-decoration: none; }
 .linkish { background: none; color: var(--accent-ink); padding: 0.45rem 0.5rem; border: none; cursor: pointer; }
 .danger { background: var(--danger); margin-top: 1.5rem; }
+
+/* Unified destructive affordance: subtle inline delete link (events, sources, …) */
+.delete-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 0.4rem;
+  font-size: 0.85rem;
+  color: var(--danger);
+}
+.delete-link:hover { text-decoration: underline; }
+
+/* Record-level destructive action, kept to the edit screen */
+.danger-zone {
+  margin-top: 2rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--danger-line);
+  border-radius: var(--radius);
+  background: var(--danger-wash);
+}
+.danger-zone h2 { margin: 0 0 0.25rem; font-size: 1rem; color: var(--danger); }
+.danger-zone p { margin: 0 0 0.75rem; font-size: 0.9rem; }
+.danger-zone .danger { margin-top: 0; }
 
 /* Avatars */
 .avatar {
@@ -237,7 +263,6 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
 .sourced-badge { font-size: 0.75rem; color: var(--accent-ink); font-weight: 700; margin-left: 0.2rem; }
 .citation-add { font-size: 0.8rem; color: var(--muted); padding: 0 0 0.25rem; display: inline-block; }
 .citation-add:hover { color: var(--accent-ink); }
-.citation-remove { font-size: 0.8rem; color: var(--muted); }
 
 /* Biography (Action Text + Lexxy) */
 .biography-section { border-top: 1px solid var(--line); padding-top: 1rem; margin-top: 1rem; }
@@ -375,6 +400,8 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
   position: absolute;
   top: 0;
   left: 0;
+  width: 168px;   /* keep in sync with NODE_W in tree_controller.js */
+  height: 56px;   /* keep in sync with NODE_H */
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -421,7 +448,15 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
 .tree-node--m { border-left: 3px solid #6b9fb8; }
 .tree-node--f { border-left: 3px solid #b87ca0; }
 .tree-node--living { border-left: 3px solid var(--line); background: var(--bg); }
-.node-name--living { color: var(--muted); font-style: italic; padding: 0.5rem 0.75rem; margin: 0; }
+.node-name--living {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: var(--muted);
+  font-style: italic;
+  padding: 0.5rem 0.75rem;
+  margin: 0;
+}
 
 /* Depth controls */
 .depth-controls {
@@ -459,6 +494,80 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
   font-size: 0.75rem;
   color: var(--muted);
   margin: 0.15rem 0 0;
+}
+
+/* Collapse/expand toggles — small pills at a unit's growth-facing edge. */
+.tree-toggles { position: absolute; top: 0; left: 0; }
+.tree-toggle {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  min-width: 1.3rem;
+  height: 1.3rem;
+  padding: 0 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--accent-ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+}
+.tree-toggle:hover { background: var(--accent-wash); border-color: var(--accent); }
+.tree-toggle--collapsed { border-color: var(--accent); }
+
+/* Search-to-fly box — floats over the canvas, fixed (does not pan/zoom). */
+.tree-search {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 3;
+  width: min(15rem, 60%);
+}
+.tree-search-input {
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.85rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: text;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.tree-search-input:focus { outline: none; border-color: var(--accent); }
+.tree-search-results {
+  list-style: none;
+  margin: 0.25rem 0 0;
+  padding: 0.25rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 24px rgba(0,0,0,.08);
+  max-height: 14rem;
+  overflow: auto;
+}
+.tree-search-results li {
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tree-search-results li:hover,
+.tree-search-results li:focus { background: var(--accent-wash); outline: none; }
+
+/* Brief pulse when the search camera lands on a person. */
+.tree-node--found { animation: tree-found 1.6s ease; }
+@keyframes tree-found {
+  0%, 100% { box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  25%, 60% { box-shadow: 0 0 0 3px var(--accent); }
 }
 
 /* Auth screens (sign up / sign in / password) — calm, centered card à la fizzy */
@@ -502,21 +611,23 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
   ul { margin: 0.25rem 0 0; }
 }
 
-/* Relationship calculator ("how are we related?") */
-.relationship {
-  margin-top: 1.5rem;
+/* Relationship calculator — a labelled tool block on the profile */
+.relationship-tool {
+  margin-top: 1.75rem;
   padding-top: 1.25rem;
   border-top: 1px solid var(--line);
 }
-.relationship .inline-title { margin: 0 0 0.5rem; font-weight: 600; }
+.relationship-tool h2 { margin: 0 0 0.25rem; font-size: 1.1rem; }
+.relationship-lede { margin: 0 0 0.85rem; font-size: 0.9rem; }
+.relationship { margin-top: 0.5rem; }
 .relationship-result {
   margin: 0.75rem 0 0;
   padding: 0.6rem 0.8rem;
-  background: var(--surface);
+  font-weight: 600;
+  background: var(--accent-wash);
   border: 1px solid var(--line);
   border-radius: var(--radius);
 }
-.relationship-trigger { display: inline-block; margin-top: 1.5rem; }
 
 /* Place autocomplete on the event form */
 .place-field { position: relative; }
@@ -533,6 +644,30 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 .event-place { color: var(--muted); font-size: 0.85rem; }
+.place-input-row { display: flex; gap: 0.5rem; align-items: stretch; }
+.place-input-row input[type="text"] { flex: 1; }
+.button--small { padding: 0.3rem 0.7rem; font-size: 0.85rem; white-space: nowrap; }
+.event-add-actions { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; }
+.place-candidates { display: grid; gap: 0.25rem; margin: 0.5rem 0 0; }
+.place-candidate {
+  display: flex;
+  gap: 0.5rem;
+  align-items: start;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.place-candidate:has(input:checked) { border-color: var(--accent); background: var(--accent-wash); }
+.place-no-match { margin: 0.5rem 0 0; font-size: 0.85rem; }
+.place-map {
+  height: 240px;
+  margin-top: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
 
 /* Leaflet map views (person Map tab + whole-tree map) */
 .map-canvas {
@@ -573,7 +708,7 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
   padding: 0.15rem 0.4rem;
   font-weight: 700;
   color: var(--accent-ink);
-  background: #eef3e9;
+  background: var(--accent-wash);
   border-radius: 999px;
 }
 .hint-reasons { list-style: none; display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0; padding: 0; }

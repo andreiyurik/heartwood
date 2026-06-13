@@ -28,4 +28,23 @@ class PlacesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_no_match(/Foreignville/, @response.body)
   end
+
+  test "search returns a bare fragment, never the page layout" do
+    get search_places_url(q: "Nowhere")
+    assert_response :success
+    assert_no_match(/<html/, @response.body)
+    assert_select "header", false
+  end
+
+  test "geocode responds with a json array (empty for a blank query, no network)" do
+    get geocode_places_url(q: "")
+    assert_response :success
+    assert_equal [], JSON.parse(@response.body)
+  end
+
+  test "geocode requires authentication" do
+    sign_out
+    get geocode_places_url(q: "Boston")
+    assert_redirected_to new_session_url
+  end
 end

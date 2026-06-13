@@ -31,10 +31,11 @@
     <%= render "people/tabs/#{@tab}", person: @person %>
   </div>
 
-  <%= turbo_frame_tag "relationship" do %>
-    <%= link_to t("relationships.cta"), person_relationship_path(@person), class: "linkish relationship-trigger" %>
-  <% end %>
-
-  <%= button_to t("people.remove"), @person, method: :delete, class: "danger",
-        form: { data: { turbo_confirm: t("people.remove_confirm", name: @person.display_name) } } %>
+  <section class="relationship-tool">
+    <h2><%= t("relationships.section_title") %></h2>
+    <p class="muted relationship-lede"><%= t("relationships.lede", name: @person.display_name) %></p>
+    <%= turbo_frame_tag "relationship" do %>
+      <%= link_to t("relationships.cta"), person_relationship_path(@person), class: "button button--outline" %>
+    <% end %>
+  </section>
 </article>

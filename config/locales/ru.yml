@@ -17,7 +17,10 @@ ru:
     add: Добавить человека
     edit: "Редактировать %{name}"
     remove: Удалить
+    delete_person: Удалить человека
     remove_confirm: "Удалить %{name}?"
+    danger_zone: Опасная зона
+    danger_zone_hint: Безвозвратно удалить этого человека вместе с его событиями, источниками и воспоминаниями. Отменить нельзя.
     profile: Профиль
     tree: Дерево
     edit_button: Редактировать
@@ -83,11 +86,13 @@ ru:
       or_new: или добавьте нового
 
   relationships:
-    cta: Кем мы приходимся друг другу?
+    section_title: Родство
+    cta: Рассчитать родство
+    lede: "Узнайте степень родства между %{name} и любым человеком в дереве."
     search_placeholder: Найти человека…
     search_none: Совпадений нет.
-    result: "%{other} — ваш(а) %{relation}."
-    none: "%{other} вам не родственник."
+    result: "%{other} — %{relation} для %{person}."
+    none: "Родство между %{person} и %{other} не найдено."
     great_prefix: "пра"
     ordinal_fallback: "%{count}-юродный"
     ordinals:
@@ -134,10 +139,15 @@ ru:
       F: племянница
       U: племянник/племянница
 
+  places:
+    locate: Найти на карте
+    no_match: Не удалось найти это место. Можно сохранить название как есть или уточнить запрос и перетащить булавку.
+
   maps:
     tree_title: Карта семьи
     tree_link: На карте
     person_note: Здесь показаны места с координатами; события без определённого места не отображаются.
+    unavailable: Не удалось загрузить библиотеку карт. Проверьте соединение и обновите страницу.
 
   hints:
     title: Возможные дубликаты
@@ -171,6 +181,8 @@ ru:
     detail_placeholder: "напр. Инженер"
     place_label: Место
     place_placeholder: "напр. Бостон, Массачусетс"
+    add_birthplace: + Место рождения
+    add_residence: + Где жил
     remove_confirm: Удалить это событие?
     edit: Изменить
     remove: Удалить
@@ -198,6 +210,7 @@ ru:
     sourced_badge: "✓"
     sourced_title: К этому событию прикреплён источник
     remove: Удалить источник
+    remove_confirm: Удалить этот источник?
     none_for_person: Источников пока нет. Добавьте источник к любому жизненному событию.
     source_title_label: Название
     source_url_label: URL (необязательно)
@@ -217,6 +230,12 @@ ru:
     hint: "Колёсиком — масштаб · перетащите — панорама · клик — перефокус"
     depth_label: Поколения
     default_name: Моё дерево
+    clan_link: Родовое древо
+    clan_title: "Родовое древо — %{name}"
+    clan_empty: В этом дереве пока нет людей.
+    search_placeholder: Найти человека…
+    expand: Развернуть ветвь
+    collapse: Свернуть ветвь
 
   auth:
     sign_in_title: Вход в Heartwood

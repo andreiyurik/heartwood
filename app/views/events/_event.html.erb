@@ -10,8 +10,8 @@
     <% end %>
     <span class="event-actions">
       <%= link_to t("events.edit"), edit_person_event_path(person, event), class: "linkish" %>
-      <%= button_to t("events.remove"), person_event_path(person, event), method: :delete,
-            class: "linkish", form: { data: { turbo_confirm: t("events.remove_confirm") } } %>
+      <%= render "shared/delete_button", url: person_event_path(person, event),
+            label: t("events.remove"), confirm: t("events.remove_confirm") %>
     </span>
   <% end %>
   <%= render "citations/add_link", event: event, person: person %>

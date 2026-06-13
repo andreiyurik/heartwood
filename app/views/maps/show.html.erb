@@ -10,5 +10,6 @@
 
   <div class="map-canvas map-canvas--full"
        data-controller="map"
-       data-map-url-value="<%= tree_map_events_path(format: :json) %>"></div>
+       data-map-url-value="<%= tree_map_events_path(format: :json) %>"
+       data-map-unavailable-value="<%= t("maps.unavailable") %>"></div>
 </div>

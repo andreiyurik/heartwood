@@ -1,0 +1,20 @@
+<% content_for :title, t("trees.clan_title", name: Current.tree.name) %>
+
+<div class="tree-page">
+  <header class="page-head">
+    <h1><%= t("trees.clan_title", name: Current.tree.name) %></h1>
+    <div class="actions">
+      <%= link_to t("maps.tree_link"), tree_map_path, class: "button button--outline" %>
+      <%= link_to t("people.title"), root_path, class: "linkish" %>
+    </div>
+  </header>
+
+  <% if @root %>
+    <p class="tree-hint"><%= t("trees.hint") %></p>
+    <%= render "trees/canvas", graph: @graph, mode: @mode, depth: @depth, focus_id: @root.id %>
+  <% else %>
+    <p class="empty">
+      <%= t("trees.clan_empty") %> <%= link_to t("people.add_first"), new_person_path %>.
+    </p>
+  <% end %>
+</div>

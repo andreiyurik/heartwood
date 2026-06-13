@@ -102,6 +102,19 @@ class Person < ApplicationRecord
                .where.not(id: id)
   end
 
+  # How many distinct descendants this person has, walking down through children
+  # (dedup guards against pedigree collapse / cycles). Used to pick a tree's
+  # progenitor — see Tree#root_person.
+  def descendant_count
+    seen  = Set.new
+    queue = children.to_a
+    while (person = queue.shift)
+      next unless seen.add?(person.id)
+      queue.concat(person.children.to_a)
+    end
+    seen.size
+  end
+
   # --- Relationship calculator (see relationship.md) ---
 
   # A localized name for how `other` relates to this person ("mother", "second
@@ -164,8 +177,72 @@ class Person < ApplicationRecord
       end
     end
 
+    # Derive couples from Family so the view can draw partners as one block.
+    # In descendants mode this also pulls in spouses who married into the line.
+    unions = collect_unions(persons:, gens:, orders:, gen_counts:, mode:)
+
     nodes = persons.values.map { |p| node_data(p, generation: gens[p.id], order: orders[p.id]) }
-    { nodes:, edges:, persons:, focus_id: id, mode: }
+    { nodes:, edges:, unions:, persons:, focus_id: id, mode: }
+  end
+
+  # Couples for the tree view, derived from Family (the source of truth on pairs and
+  # children). A union is a single layout block of two partner cards with their
+  # children hanging from the middle. Only people present in the current traversal
+  # appear; see docs/features/family-tree-view.md for the model and its trade-offs.
+  #
+  # Mutates the traversal maps: descendants mode adds the married-in spouse (not a
+  # blood descendant, so the BFS never reached them) at their partner's generation.
+  def collect_unions(persons:, gens:, orders:, gen_counts:, mode:)
+    unions    = []
+    seen_fam  = Set.new
+    partnered = Set.new   # keep each person in at most one couple block
+
+    # Iterate a snapshot — added spouses become nodes but never seed their own union,
+    # which would drag in unrelated families through a married-in person.
+    persons.values.sort_by { |p| [ gens[p.id], orders[p.id] ] }.each do |person|
+      family = union_family_for(person, persons, mode)
+      next unless family && seen_fam.add?(family.id)
+
+      partners = family.partners.to_a
+      add_spouses(partners, person, persons:, gens:, orders:, gen_counts:) if mode == "descendants"
+
+      partner_ids = partners.map(&:id).select { |pid| persons.key?(pid) }.first(2)
+      next if partner_ids.size < 2                                   # single parent → plain node
+      next if partner_ids.any? { |pid| partnered.include?(pid) }    # already in another block
+
+      partner_ids.each { |pid| partnered << pid }
+      child_ids = family.children.map(&:id).select { |cid| persons.key?(cid) }
+      unions << { partner_ids:, child_ids: }
+    end
+
+    unions
+  end
+
+  # The family that anchors a person's couple block: their parents (ancestors mode)
+  # or the marriage that produced the descendants we're showing (descendants mode).
+  # Remarriages beyond that one are left out of v1 — see the feature doc.
+  def union_family_for(person, persons, mode)
+    families = (mode == "ancestors" ? person.families_as_child : person.families_as_partner).to_a
+    return families.first if families.size <= 1
+
+    if mode == "ancestors"
+      families.find { |f| f.partners.count >= 2 } || families.first
+    else
+      families.find { |f| f.children.any? { |c| persons.key?(c.id) } } || families.first
+    end
+  end
+
+  # Add a partner who isn't already in the graph at their spouse's generation, as a
+  # leaf (no ancestors of their own on this side). Privacy still applies via node_data.
+  def add_spouses(partners, anchor, persons:, gens:, orders:, gen_counts:)
+    gen = gens[anchor.id]
+    partners.each do |partner|
+      next if persons.key?(partner.id)
+      persons[partner.id] = partner
+      gens[partner.id]    = gen
+      orders[partner.id]  = gen_counts[gen]
+      gen_counts[gen]    += 1
+    end
   end
 
   def node_data(person, generation:, order:)

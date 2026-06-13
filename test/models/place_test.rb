@@ -43,4 +43,12 @@ class PlaceTest < ActiveSupport::TestCase
     event.update!(place_name: "")
     assert_nil event.reload.place
   end
+
+  test "coordinates picked on the map create a geocoded place" do
+    person = Person.create!(given_names: "P", sex: "U", tree: Current.tree)
+    event  = person.events.create!(kind: "BIRT", place_name: "Boston",
+                                   place_latitude: "42.3601", place_longitude: "-71.0589")
+    assert event.place.geocoded?
+    assert_in_delta 42.3601, event.place.latitude.to_f, 0.0001
+  end
 end

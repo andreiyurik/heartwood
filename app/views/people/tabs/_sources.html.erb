@@ -17,9 +17,9 @@
           <% if citation.source.citation_text.present? %>
             <p class="source-citation-text muted"><%= citation.source.citation_text %></p>
           <% end %>
-          <%= button_to t("citations.remove"),
-                person_event_citation_path(person, event, citation),
-                method: :delete, class: "linkish citation-remove" %>
+          <%= render "shared/delete_button",
+                url: person_event_citation_path(person, event, citation),
+                label: t("citations.remove"), confirm: t("citations.remove_confirm") %>
         </dd>
       <% end %>
     <% end %>

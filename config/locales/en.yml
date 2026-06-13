@@ -17,7 +17,10 @@ en:
     add: Add person
     edit: "Edit %{name}"
     remove: Remove
+    delete_person: Delete this person
     remove_confirm: "Remove %{name}?"
+    danger_zone: Danger zone
+    danger_zone_hint: Permanently delete this person along with their events, sources, and memories. This can't be undone.
     profile: Profile
     tree: Tree
     edit_button: Edit
@@ -83,11 +86,13 @@ en:
       or_new: or add someone new
 
   relationships:
-    cta: How are we related?
+    section_title: Relationship
+    cta: Calculate relationship
+    lede: "See how %{name} is related to anyone else in the tree."
     search_placeholder: Search for a person…
     search_none: No matches.
-    result: "%{other} is your %{relation}."
-    none: "%{other} is not related to you."
+    result: "%{other} is %{person}’s %{relation}."
+    none: "No relationship found between %{person} and %{other}."
     great_prefix: "great-"
     ordinal_fallback: "%{count}th"
     ordinals:
@@ -137,10 +142,15 @@ en:
       F: niece
       U: niece or nephew
 
+  places:
+    locate: Find on map
+    no_match: We couldn't find that place. You can still save the name, or drag the pin after a closer search.
+
   maps:
     tree_title: Family map
     tree_link: Map view
     person_note: Places with coordinates appear here; events without a located place aren't shown.
+    unavailable: The map library couldn't be loaded. Check your connection and refresh.
 
   hints:
     title: Possible duplicates
@@ -174,6 +184,8 @@ en:
     detail_placeholder: "e.g. Engineer (for facts)"
     place_label: Place
     place_placeholder: "e.g. Boston, Massachusetts"
+    add_birthplace: + Birthplace
+    add_residence: + Where they lived
     remove_confirm: Remove this event?
     edit: Edit
     remove: Remove
@@ -201,6 +213,7 @@ en:
     sourced_badge: "✓"
     sourced_title: This event has a source
     remove: Remove source
+    remove_confirm: Remove this source?
     none_for_person: No sources cited yet. Add a source to any life event.
     source_title_label: Title
     source_url_label: URL (optional)
@@ -220,6 +233,12 @@ en:
     hint: "Scroll to zoom · drag to pan · click a node to refocus"
     depth_label: Generations
     default_name: My Tree
+    clan_link: Family tree
+    clan_title: "Family tree — %{name}"
+    clan_empty: This tree has no people yet.
+    search_placeholder: Find a person…
+    expand: Expand branch
+    collapse: Collapse branch
 
   auth:
     sign_in_title: Sign in to Heartwood

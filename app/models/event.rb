@@ -44,6 +44,10 @@ class Event < ApplicationRecord
     @place_name = value.to_s.strip
   end
 
+  # Coordinates the user confirmed on the map picker. Optional — without them the
+  # place is geocoded in the background instead (see PlaceGeocodeJob).
+  attr_accessor :place_latitude, :place_longitude
+
   private
 
   def inherit_tree_from_eventable
@@ -52,6 +56,26 @@ class Event < ApplicationRecord
 
   def assign_place
     return if @place_name.nil?
-    self.place = @place_name.present? ? tree.places.find_or_create_by!(name: @place_name) : nil
+
+    if @place_name.blank?
+      self.place = nil
+      return
+    end
+
+    # A Place is shared by name across the tree, so we only fill in coordinates
+    # we don't already have — picking a spot for one event never moves the pin
+    # for everyone else's events at the same place.
+    found = tree.places.find_or_initialize_by(name: @place_name)
+    if picked_coordinates? && !found.geocoded?
+      found.latitude  = place_latitude
+      found.longitude = place_longitude
+    end
+    found.save! if found.changed?
+
+    self.place = found
+  end
+
+  def picked_coordinates?
+    place_latitude.present? && place_longitude.present?
   end
 end

@@ -27,14 +27,15 @@ class RelationshipsControllerTest < ActionDispatch::IntegrationTest
   test "show names the relationship to the chosen person" do
     get person_relationship_url(@person, with: @mother.id)
     assert_response :success
-    assert_match(/is your mother/, @response.body)
+    assert_match(/Mary Root/, @response.body)
+    assert_match(/mother/, @response.body)
   end
 
   test "show reports when two people are not related" do
     stranger = Person.create!(given_names: "Stranger", sex: "U", tree: @tree)
     get person_relationship_url(@person, with: stranger.id)
     assert_response :success
-    assert_match(/not related/, @response.body)
+    assert_match(/No relationship found/, @response.body)
   end
 
   test "cannot target a person from another tree" do

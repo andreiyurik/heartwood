@@ -3,8 +3,6 @@
     the named result and a fresh search to try another person. %>
 <%= turbo_frame_tag "relationship" do %>
   <div class="relationship">
-    <p class="inline-title"><%= t("relationships.cta") %></p>
-
     <%= form_with url: search_person_relationship_path(@person), method: :get,
           data: { controller: "search", turbo_frame: "relationship_candidates" },
           class: "combobox" do %>
@@ -18,9 +16,9 @@
     <% if @other %>
       <p class="relationship-result">
         <% if @relationship %>
-          <%= t("relationships.result", other: @other.display_name, relation: @relationship) %>
+          <%= t("relationships.result", other: @other.display_name, person: @person.display_name, relation: @relationship) %>
         <% else %>
-          <%= t("relationships.none", other: @other.display_name) %>
+          <%= t("relationships.none", other: @other.display_name, person: @person.display_name) %>
         <% end %>
       </p>
     <% end %>

@@ -89,6 +89,19 @@ class TreesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".tree-node:not(.tree-node--focus) a[href*='/tree']"
   end
 
+  test "descendants view renders the married-in spouse as a couple" do
+    spouse = Person.create!(given_names: "Spouse", surname: "Married", sex: "F", tree: @tree)
+    child  = Person.create!(given_names: "Kid",    surname: "Bach",    sex: "M", tree: @tree)
+    fam = Family.create!(tree: @tree)
+    fam.partners << @person << spouse   # spouse married in — not a blood descendant
+    fam.children << child
+
+    get person_tree_url(@person, mode: "descendants", depth: 1)
+    # The spouse has no blood-descendant path, but the couple model surfaces them.
+    assert_select ".tree-node[data-tree-node-id='#{spouse.id}']"
+    assert_select "[data-tree-graph-value*='unions']"
+  end
+
   test "non-focus nodes link to that person's tree for refocus" do
     child = Person.create!(sex: "F", tree: @tree)
     fam = Family.create!(tree: @tree)

@@ -2,3 +2,11 @@
 
 <div class="page-head"><h1><%= t("people.edit", name: @person.display_name) %></h1></div>
 <%= render "form", person: @person %>
+
+<section class="danger-zone" aria-label="<%= t("people.danger_zone") %>">
+  <h2><%= t("people.danger_zone") %></h2>
+  <p><%= t("people.danger_zone_hint") %></p>
+  <%= render "shared/delete_button",
+        url: @person, label: t("people.delete_person"), class: "danger",
+        confirm: t("people.remove_confirm", name: @person.display_name) %>
+</section>
