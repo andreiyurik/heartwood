@@ -28,6 +28,9 @@ en:
     tabs_label: Profile sections
     avatar_label: Photo
     avatar_hint: JPEG, PNG or WebP · max 5 MB
+    biography_label: Biography
+    biography_hint: Their life story, in your own words.
+    biography_empty: No biography yet. Edit this person to add their story.
     tabs:
       details: Details
       sources: Sources

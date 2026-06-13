@@ -11,6 +11,10 @@ class Person < ApplicationRecord
 
   has_one_attached :avatar
 
+  # Free-prose life story, edited with the Lexxy rich-text editor (Action Text).
+  # See docs/architecture/adr/0008-action-text-lexxy.md.
+  has_rich_text :biography
+
   validates :sex, inclusion: { in: SEXES }
   validate :avatar_is_an_image, if: -> { avatar.attached? }
 

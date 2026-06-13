@@ -28,6 +28,9 @@ ru:
     tabs_label: Разделы профиля
     avatar_label: Фото
     avatar_hint: JPEG, PNG или WebP · не более 5 МБ
+    biography_label: Биография
+    biography_hint: История жизни человека — своими словами.
+    biography_empty: Биографии пока нет. Откройте редактирование, чтобы добавить историю.
     tabs:
       details: Данные
       sources: Источники

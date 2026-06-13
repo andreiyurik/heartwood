@@ -27,6 +27,12 @@
     <span class="field-hint"><%= t("people.avatar_hint") %></span>
   </div>
 
+  <div class="field field--biography">
+    <%= f.label :biography, t("people.biography_label") %>
+    <span class="field-hint"><%= t("people.biography_hint") %></span>
+    <%= f.rich_text_area :biography %>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
     <%= link_to t("forms.cancel"), (person.persisted? ? person : people_path), class: "linkish" %>

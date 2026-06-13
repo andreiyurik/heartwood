@@ -28,4 +28,16 @@ class TreeTest < ActiveSupport::TestCase
       tree.destroy
     end
   end
+
+  test "destroying a tree cascades to its families, events and sources" do
+    tree   = Tree.create!(name: "Temp Cascade")
+    person = Person.create!(sex: "U", tree: tree)
+    Family.create!(tree: tree)
+    Event.create!(kind: "BIRT", eventable: person, tree: tree)
+    Source.create!(title: "Parish register", tree: tree)
+
+    assert_difference [ "Family.count", "Event.count", "Source.count" ], -1 do
+      tree.destroy
+    end
+  end
 end

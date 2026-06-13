@@ -35,6 +35,13 @@ class CitationsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "create with a blank source title re-renders the form (422)" do
+    assert_no_difference [ "Source.count", "Citation.count" ] do
+      post person_event_citations_url(@person, @event), params: { source: { title: "" } }
+    end
+    assert_response :unprocessable_entity
+  end
+
   test "DELETE destroy removes the citation" do
     source   = Source.create!(title: "Vital record", tree: @tree)
     citation = Citation.create!(source: source, citable: @event)

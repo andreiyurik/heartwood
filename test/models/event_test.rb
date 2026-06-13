@@ -15,6 +15,14 @@ class EventTest < ActiveSupport::TestCase
     assert_includes event.errors[:kind], "can't be blank"
   end
 
+  # Decision (characterization): kind is validated for presence only — NOT inclusion in
+  # KINDS. Unknown GEDCOM tags must round-trip through import/export, so arbitrary tags
+  # are accepted by design. If this ever changes, the GEDCOM mapper must change with it.
+  test "kind accepts arbitrary GEDCOM tags (unknown tags are preserved, not rejected)" do
+    event = @person.events.new(kind: "_CUSTOM")
+    assert event.valid?
+  end
+
   test "attaches to a person (eventable)" do
     event = @person.events.create!(kind: "BIRT", date_raw: "10 DEC 1815")
     assert_equal @person, event.eventable

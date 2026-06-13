@@ -21,6 +21,8 @@ The vertex of the graph: one human being. Part of [[domain-model]].
 - `sex` — GEDCOM uses `M`/`F`/`U`/`X`. Store the GEDCOM code for interop; present respectfully.
 - `living` (boolean/derived) — drives [[privacy-access]] defaults.
 - `gedcom_xref` — original `@I123@` id, kept for stable round-trip [[gedcom]] export.
+- `biography` — rich-text life story via Action Text, edited with Lexxy
+  (see [[adr/0008-action-text-lexxy]]). Prose, not structured facts; maps to a GEDCOM `NOTE`.
 
 ## Associations
 - has_many [[event]] (polymorphic `eventable`)

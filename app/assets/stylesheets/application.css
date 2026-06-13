@@ -239,6 +239,12 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
 .citation-add:hover { color: var(--accent-ink); }
 .citation-remove { font-size: 0.8rem; color: var(--muted); }
 
+/* Biography (Action Text + Lexxy) */
+.biography-section { border-top: 1px solid var(--line); padding-top: 1rem; margin-top: 1rem; }
+.biography-section h2 { font-size: 1.2rem; }
+.biography.lexxy-content { max-width: 40rem; line-height: 1.6; }
+.field--biography lexxy-editor { display: block; min-height: 8rem; }
+
 /* Sources tab */
 .sources-list { margin: 0; }
 .source-event-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 1rem 0 0.15rem; font-weight: 600; }

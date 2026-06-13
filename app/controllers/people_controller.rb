@@ -54,6 +54,6 @@ class PeopleController < ApplicationController
   end
 
   def person_params
-    params.expect(person: %i[given_names surname name_prefix name_suffix nickname sex avatar])
+    params.expect(person: %i[given_names surname name_prefix name_suffix nickname sex avatar biography])
   end
 end
