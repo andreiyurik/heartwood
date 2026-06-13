@@ -1,10 +1,18 @@
-<h1><%= t("auth.forgot_title") %></h1>
+<% content_for :title, t("auth.forgot_title") %>
 
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1><%= t("auth.forgot_title") %></h1>
 
-<%= form_with url: passwords_path do |form| %>
-  <%= form.email_field :email_address, required: true, autofocus: true,
-        autocomplete: "username", placeholder: t("auth.email_placeholder"),
-        value: params[:email_address] %><br>
-  <%= form.submit t("auth.reset_submit") %>
-<% end %>
+    <%= form_with url: passwords_path, class: "auth-form" do |form| %>
+      <%= form.email_field :email_address, required: true, autofocus: true,
+            autocomplete: "username", placeholder: t("auth.email_placeholder"),
+            value: params[:email_address] %>
+      <%= form.submit t("auth.reset_submit"), class: "button" %>
+    <% end %>
+
+    <p class="auth-alt">
+      <%= link_to t("auth.sign_in_submit"), new_session_path %>
+    </p>
+  </div>
+</div>

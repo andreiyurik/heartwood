@@ -35,6 +35,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     fill_in "email_address", with: user.email_address
     fill_in "password",      with: password
     click_on I18n.t("auth.sign_in_submit")
-    assert_selector "h1", text: I18n.t("people.title"), wait: 5
+    assert_selector "h1", text: I18n.t("people.title"), wait: 10
   end
 end

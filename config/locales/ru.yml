@@ -139,6 +139,7 @@ ru:
     default_name: Моё дерево
 
   auth:
+    sign_in_title: Вход в Heartwood
     email_placeholder: Введите email
     password_placeholder: Введите пароль
     sign_in_submit: Войти
@@ -149,6 +150,18 @@ ru:
     new_password_placeholder: Новый пароль
     confirm_password_placeholder: Повторите пароль
     update_submit: Сохранить
+
+  registrations:
+    title: Создайте свой Heartwood
+    lede: Начните семейное древо — это бесплатно и навсегда ваше.
+    name_placeholder: Ваше имя
+    password_placeholder: Придумайте пароль
+    password_hint: Минимум 8 символов.
+    submit: Создать аккаунт
+    have_account: Уже есть аккаунт?
+    no_account: Впервые в Heartwood?
+    flash:
+      welcome: "Добро пожаловать в Heartwood, %{name}! 🌳"
 
   forms:
     cancel: Отмена
@@ -173,6 +186,14 @@ ru:
       body: "Для сброса пароля перейдите по ссылке ниже. Ссылка действует %{expiry}."
       link_text: Сбросить пароль
       body_text: "Сброс пароля: %{url}\n\nСсылка действует %{expiry}."
+    welcome:
+      subject: Добро пожаловать в Heartwood 🌳
+      heading: Добро пожаловать в Heartwood
+      greeting: "Здравствуйте, %{name}!"
+      intro: "Heartwood — живой дом для вашего семейного древа: открытый, ваш и созданный на поколения."
+      next_steps: "Готовы начать? Добавьте первого человека или импортируйте файл GEDCOM, чтобы перенести всё древо целиком."
+      cta_link: Открыть Heartwood
+      signoff: "— Команда Heartwood"
 
   datetime:
     distance_in_words:

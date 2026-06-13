@@ -1,0 +1,35 @@
+<% content_for :title, t("registrations.title") %>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1><%= t("registrations.title") %></h1>
+    <p class="auth-lede"><%= t("registrations.lede") %></p>
+
+    <% if @user.errors.any? %>
+      <div class="errors">
+        <p><%= t("forms.errors", count: @user.errors.count) %></p>
+        <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <%= form_with model: @user, url: registration_path, class: "auth-form" do |form| %>
+      <%= form.text_field :name, required: true, autofocus: true, autocomplete: "name",
+            placeholder: t("registrations.name_placeholder") %>
+      <%= form.email_field :email_address, required: true, autocomplete: "username",
+            placeholder: t("auth.email_placeholder") %>
+      <%= form.password_field :password, required: true, autocomplete: "new-password",
+            minlength: 8, maxlength: 72, placeholder: t("registrations.password_placeholder") %>
+      <p class="auth-hint"><%= t("registrations.password_hint") %></p>
+      <%= form.submit t("registrations.submit"), class: "button" %>
+    <% end %>
+
+    <p class="auth-alt">
+      <%= t("registrations.have_account") %>
+      <%= link_to t("auth.sign_in_submit"), new_session_path %>
+    </p>
+  </div>
+</div>

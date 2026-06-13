@@ -106,7 +106,7 @@ class TenancyTest < ActionDispatch::IntegrationTest
   # --- new user gets a bootstrap tree on first request ---
 
   test "a new user with no tree gets one bootstrapped automatically" do
-    new_user = User.create!(email_address: "new@example.com", password: "password123")
+    new_user = User.create!(name: "New User", email_address: "new@example.com", password: "password123")
     sign_in_as new_user
     get people_url
     assert_response :success

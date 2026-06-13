@@ -1,14 +1,24 @@
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
-<%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %>
+<% content_for :title, t("auth.sign_in_title") %>
 
-<%= form_with url: session_path do |form| %>
-  <%= form.email_field :email_address, required: true, autofocus: true,
-        autocomplete: "username", placeholder: t("auth.email_placeholder"),
-        value: params[:email_address] %><br>
-  <%= form.password_field :password, required: true, autocomplete: "current-password",
-        placeholder: t("auth.password_placeholder"), maxlength: 72 %><br>
-  <%= form.submit t("auth.sign_in_submit") %>
-<% end %>
-<br>
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1><%= t("auth.sign_in_title") %></h1>
 
-<%= link_to t("auth.forgot_link"), new_password_path %>
+    <%= form_with url: session_path, class: "auth-form" do |form| %>
+      <%= form.email_field :email_address, required: true, autofocus: true,
+            autocomplete: "username", placeholder: t("auth.email_placeholder"),
+            value: params[:email_address] %>
+      <%= form.password_field :password, required: true, autocomplete: "current-password",
+            maxlength: 72, placeholder: t("auth.password_placeholder") %>
+      <%= form.submit t("auth.sign_in_submit"), class: "button" %>
+    <% end %>
+
+    <p class="auth-alt">
+      <%= t("registrations.no_account") %>
+      <%= link_to t("registrations.submit"), new_registration_path %>
+    </p>
+    <p class="auth-alt">
+      <%= link_to t("auth.forgot_link"), new_password_path %>
+    </p>
+  </div>
+</div>

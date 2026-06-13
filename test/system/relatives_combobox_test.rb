@@ -17,13 +17,12 @@ class RelativesComboboxTest < ApplicationSystemTestCase
 
     click_link I18n.t("family.add", relation: I18n.t("family.relation_singular.parent"))
 
-    # The add-parent Turbo Frame loads the combobox; wait for its search field.
-    field = find_field("q", wait: 10)
-    field.set("Grace")
-    # Nudge one more input AFTER the frame has settled, in case the Stimulus search
-    # controller connected just after the first keystrokes (otherwise the debounce that
-    # submits the search never fires and no candidate appears).
-    field.send_keys(" ", :backspace)
+    # The add-parent Turbo Frame loads the combobox; wait for its search field, then for
+    # its Stimulus controller to connect before typing (otherwise the debounced search
+    # never fires and no candidate appears).
+    find_field("q", wait: 10)
+    wait_for_stimulus("search", "form.combobox")
+    fill_in "q", with: "Grace"
 
     # click_on waits for the candidate button to render in the relative_candidates frame.
     click_on "Grace Hopper", wait: 10    # button_to create with existing_person_id, target _top

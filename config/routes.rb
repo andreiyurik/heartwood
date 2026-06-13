@@ -3,6 +3,7 @@ Rails.application.routes.draw do
       constraints: { locale: /en|ru/ }
 
   resource :session
+  resource :registration, only: %i[new create]
   resource :export, only: :create
   resources :passwords, param: :token
 

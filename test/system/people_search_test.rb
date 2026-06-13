@@ -16,11 +16,10 @@ class PeopleSearchTest < ApplicationSystemTestCase
     assert_text "Ada Lovelace"
     assert_text "Grace Hopper"
 
-    field = find_field("q")
-    field.set("Grace")
-    # Guarantee an input event after the Stimulus search controller has connected, so the
-    # debounced submit (→ Turbo morph) reliably fires under headless-browser timing.
-    field.send_keys(" ", :backspace)
+    # Ensure the search controller is connected before typing, so the debounced submit
+    # (→ Turbo morph) reliably fires under headless-browser timing.
+    wait_for_stimulus("search", "form.search-form")
+    fill_in "q", with: "Grace"
 
     assert_text "Grace Hopper", wait: 10
     assert_no_text "Ada Lovelace", wait: 10
