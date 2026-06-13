@@ -11,6 +11,8 @@ you truly own, that outlives any single company or subscription.
 
 ## Screenshots
 
+[![Family tree](docs/screenshots/family-tree.png)](docs/screenshots/family-tree.png)
+
 | People list | Person profile | Add person |
 |:-----------:|:--------------:|:----------:|
 | [![People list](docs/screenshots/people-list.png)](docs/screenshots/people-list.png) | [![Person profile](docs/screenshots/person-profile.png)](docs/screenshots/person-profile.png) | [![Add person](docs/screenshots/add-person.png)](docs/screenshots/add-person.png) |
