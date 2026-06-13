@@ -6,10 +6,17 @@
     <p class="node-name node-name--living"><%= node[:name] %></p>
   <% else %>
     <%= link_to person_tree_path(node[:id], mode: mode, depth: depth) do %>
-      <p class="node-name"><%= node[:name] %></p>
-      <% if node[:birth_year].present? %>
-        <p class="node-dates">b.&thinsp;<%= node[:birth_year] %></p>
+      <% if node[:avatar_url].present? %>
+        <%= image_tag node[:avatar_url], class: "node-avatar", alt: node[:name] %>
+      <% else %>
+        <span class="node-avatar node-avatar--initials" aria-hidden="true"><%= node[:name].to_s.split.map(&:first).first(2).join.upcase %></span>
       <% end %>
+      <div class="node-text">
+        <p class="node-name"><%= node[:name] %></p>
+        <% if node[:birth_year].present? %>
+          <p class="node-dates">b.&thinsp;<%= node[:birth_year] %></p>
+        <% end %>
+      </div>
     <% end %>
   <% end %>
 </div>

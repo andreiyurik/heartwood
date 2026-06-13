@@ -120,14 +120,14 @@ also covers tree graph, export, and search.
 - [x] `PeopleController#show` redaction for non-members (or 404)
 - [x] Tree graph: `ancestor_graph`/`descendant_graph` emit a redacted node ("Living")
       for hidden people instead of name/birth → `app/models/person.rb` `node_data`
-- [ ] GEDCOM export (0.4) skips/redacts living people for non-owner exports
-- [ ] Search (0.5) excludes hidden people from non-member results
+- [x] GEDCOM export (0.4) skips/redacts living people for non-owner exports
+- [x] Search (0.5) excludes hidden people from non-member results
 
 ### Tests
 - [x] `living?` cutoff logic (born recently / has death / unknown)
 - [x] `visible_to?` matrix (member vs guest × living vs deceased)
 - [x] Graph redaction: hidden person renders as "Living" node, no birth year
-- [ ] Export omits living people for guest-scope export
+- [x] Export omits living people for guest-scope export
 
 ### Done when
 - [x] A guest/non-member never sees a living person's name, dates, or events anywhere
@@ -144,8 +144,9 @@ Engine exists (`tree_controller.js`, pan/zoom, SVG layout). Finish UX.
       → `app/views/trees/_node.html.erb`, `app/controllers/trees_controller.rb`
 - [x] Mode toggle (ancestors ↔ descendants) in the UI, preserving depth
       → `app/views/trees/show.html.erb`
-- [ ] Photo-in-node: render avatar `<image>` in the SVG node once 0.6 lands
-      (`node_data` already returns `sex`; add `avatar_url`) → `app/models/person.rb:85`
+- [x] Photo-in-node: avatar rendered in node (photo + initials fallback);
+      `node_data` returns `avatar_url`, never set for redacted living people
+      → `app/models/person.rb` (`avatar_url_for`), `app/views/trees/_node.html.erb`
 - [x] Honor 0.2 privacy in nodes (redacted "Living" rendering — CSS + partial ready)
 - [x] Empty/edge states: single-node tree works (no relatives → focus-only graph)
 - [x] Tests: `trees_controller_test` covers refocus + mode + depth clamping
@@ -259,9 +260,9 @@ into tabs instead of one long page.
       **Details / Sources / Memories (photos) / Timeline** (start with these four;
       Collaborate/About later) → `app/views/people/show.html.erb`, new partials
 - [x] *Details* = the existing inline vitals editor (Person + Event)
-- [ ] *Sources* = 0.7
-- [ ] *Memories* = 0.6 photos/gallery
-- [ ] *Timeline* = stub now (a placeholder frame), filled by the Block-1 timeline
+- [x] *Sources* = 0.7
+- [x] *Memories* = 0.6 photos/gallery
+- [x] *Timeline* = stub now (a placeholder frame), filled by the Block-1 timeline
 - [x] Tab navigation works without full reload; deep-linkable (tab in URL/anchor)
 - [x] i18n tab labels
 

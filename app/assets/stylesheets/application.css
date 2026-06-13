@@ -319,7 +319,9 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
   box-shadow: 0 1px 3px rgba(0,0,0,.06);
 
   a {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     padding: 0.5rem 0.75rem;
     color: inherit;
     height: 100%;
@@ -327,6 +329,26 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
     &:hover { background: var(--bg); text-decoration: none; }
   }
 }
+
+/* Avatar inside a tree node — photo or initials fallback. */
+.node-avatar {
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.node-avatar--initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.node-text { min-width: 0; }
 
 .tree-node--focus {
   border-color: var(--accent);

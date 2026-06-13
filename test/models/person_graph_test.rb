@@ -128,4 +128,39 @@ class PersonGraphTest < ActiveSupport::TestCase
     assert_kind_of Hash, graph[:persons]
     assert_equal @child, graph[:persons][@child.id]
   end
+
+  # --- avatar in node (0.3 photo-in-node) ---
+
+  test "node carries avatar_url when an avatar is attached" do
+    attach_avatar(@child)
+    graph = @child.ancestor_graph(depth: 1)
+    focus = graph[:nodes].find { |n| n[:id] == @child.id }
+    assert focus.key?(:avatar_url), "node should expose :avatar_url"
+    assert focus[:avatar_url].present?, "attached avatar should yield a url"
+  end
+
+  test "node avatar_url is nil when no avatar is attached" do
+    graph = @child.ancestor_graph(depth: 1)
+    focus = graph[:nodes].find { |n| n[:id] == @child.id }
+    assert_nil focus[:avatar_url]
+  end
+
+  test "redacted living person never leaks an avatar_url" do
+    Current.reset
+    outsider = users(:two)   # owns tree :beta, not :alpha
+    Current.session = outsider.sessions.create!
+    living = Person.create!(given_names: "Eve", sex: "F", tree: @tree)
+    attach_avatar(living)
+
+    node = living.send(:node_data, living, generation: 0, order: 0)
+    assert node[:living]
+    assert_nil node[:avatar_url]
+  end
+
+  private
+
+  def attach_avatar(person)
+    png = StringIO.new("\x89PNG\r\n\x1a\n" + "\x00" * 100)
+    person.avatar.attach(io: png, filename: "a.png", content_type: "image/png")
+  end
 end

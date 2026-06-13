@@ -132,7 +132,16 @@ class Person < ApplicationRecord
     unless person.visible_to?(Current.user)
       return base.merge(name: I18n.t("people.living"), birth_year: nil, sex: nil, living: true)
     end
-    base.merge(name: person.display_name, birth_year: person.birth&.date_raw, sex: person.sex)
+    base.merge(name: person.display_name, birth_year: person.birth&.date_raw,
+               sex: person.sex, avatar_url: avatar_url_for(person))
+  end
+
+  # A path to the person's avatar for in-node rendering, or nil when none is
+  # attached. Only reached for visible people — redacted nodes never get here,
+  # so a living person's photo is never leaked.
+  def avatar_url_for(person)
+    return unless person.avatar.attached?
+    Rails.application.routes.url_helpers.rails_blob_path(person.avatar, only_path: true)
   end
 
   def avatar_is_an_image
