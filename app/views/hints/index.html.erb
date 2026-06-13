@@ -1,0 +1,18 @@
+<% content_for :title, t("hints.title") %>
+
+<div class="page-head">
+  <h1><%= t("hints.title") %></h1>
+  <div class="page-head-actions">
+    <%= button_to t("hints.scan"), scan_hints_path, method: :post, class: "button button--outline" %>
+  </div>
+</div>
+
+<p class="muted hints-lede"><%= t("hints.lede") %></p>
+
+<% if @hints.any? %>
+  <ul class="hints-list" id="hints">
+    <%= render partial: "hint", collection: @hints %>
+  </ul>
+<% else %>
+  <p class="empty" id="hints"><%= t("hints.empty") %></p>
+<% end %>

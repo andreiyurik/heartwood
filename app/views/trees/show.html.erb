@@ -25,6 +25,7 @@
               tag.span("+", class: "button button--outline button--icon button--disabled", aria: { disabled: true }) %>
       </div>
 
+      <%= link_to t("maps.tree_link"), tree_map_path, class: "button button--outline" %>
       <%= link_to t("people.profile"), person_path(@person), class: "linkish" %>
     </div>
   </header>

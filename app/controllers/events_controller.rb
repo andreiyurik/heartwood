@@ -44,7 +44,7 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.expect(event: %i[kind date_raw value])
+    params.expect(event: %i[kind date_raw value place_name])
   end
 
   # Both create/update/destroy refresh the events box (turbo) or redirect (html).

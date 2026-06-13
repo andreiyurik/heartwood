@@ -7,13 +7,29 @@ Rails.application.routes.draw do
   resource :export, only: :create
   resources :passwords, param: :token
 
+  get "places/search", to: "places#search", as: :search_places
+
+  get "map",        to: "maps#show",   as: :tree_map
+  get "map/events", to: "maps#events", as: :tree_map_events
+
+  resources :hints, only: :index do
+    collection { post :scan }
+    member     { patch :dismiss }
+  end
+
   resources :people do
     resource  :tree,     only: :show
+    resource  :relationship, only: :show do
+      get :search, on: :member
+    end
     resources :relatives, only: %i[new create] do
       get :search, on: :collection
     end
     resources :events,    only: %i[new create edit update destroy] do
       resources :citations, only: %i[new create destroy]
+    end
+    member do
+      get :map, to: "maps#person"
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

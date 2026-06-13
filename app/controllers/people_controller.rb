@@ -1,7 +1,7 @@
 # People — the first CRUD slice over the Person (INDI) domain model.
 # Authentication is required via the Authentication concern in ApplicationController.
 class PeopleController < ApplicationController
-  TABS = %w[details sources memories timeline].freeze
+  TABS = %w[details sources memories timeline map].freeze
 
   before_action :set_person, only: %i[show edit update destroy]
 

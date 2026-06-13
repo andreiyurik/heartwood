@@ -2,6 +2,9 @@
   <%= turbo_frame_tag dom_id(event, :edit) do %>
     <span class="event-kind"><%= event.kind_label %></span>
     <span class="event-summary"><%= event.summary %></span>
+    <% if event.place %>
+      <span class="event-place">· <%= event.place.name %></span>
+    <% end %>
     <% if event.citations.loaded? ? event.citations.any? : event.citations.exists? %>
       <span class="sourced-badge" title="<%= t("citations.sourced_title") %>"><%= t("citations.sourced_badge") %></span>
     <% end %>

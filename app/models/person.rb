@@ -102,6 +102,43 @@ class Person < ApplicationRecord
                .where.not(id: id)
   end
 
+  # --- Relationship calculator (see relationship.md) ---
+
+  # A localized name for how `other` relates to this person ("mother", "second
+  # cousin once removed"), or nil when they share no traceable kinship in this
+  # tree. Marriage is checked first; otherwise we name the lowest common ancestor.
+  def relationship_to(other)
+    return nil unless other.is_a?(Person) && other.tree_id == tree_id && other.id != id
+
+    return Kinship.spouse(other.sex) if partners.exists?(other.id)
+
+    mine   = ancestor_distances
+    theirs = other.ancestor_distances
+    shared = mine.keys & theirs.keys
+    return nil if shared.empty?
+
+    lca = shared.min_by { |id| mine[id] + theirs[id] }
+    Kinship.new(up: mine[lca], down: theirs[lca], sex: other.sex).to_s
+  end
+
+  # Every ancestor reachable by walking up through parents, mapped to how many
+  # generations up they are. Includes self at distance 0 so two people who share
+  # one as the other's ancestor still find a common entry.
+  def ancestor_distances
+    distances = { id => 0 }
+    queue     = [ self ]
+
+    while (person = queue.shift)
+      person.parents.each do |parent|
+        next if distances.key?(parent.id)
+        distances[parent.id] = distances[person.id] + 1
+        queue << parent
+      end
+    end
+
+    distances
+  end
+
   private
 
   def traverse_graph(depth:, neighbors:, mode:)

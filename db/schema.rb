@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_13_140000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_13_150002) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -59,6 +59,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_13_140000) do
     t.index ["source_id"], name: "index_citations_on_source_id"
   end
 
+  create_table "duplicate_hints", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "person_a_id", null: false
+    t.integer "person_b_id", null: false
+    t.json "reasons"
+    t.integer "score", null: false
+    t.string "status", default: "pending", null: false
+    t.integer "tree_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_a_id", "person_b_id"], name: "index_duplicate_hints_on_person_a_id_and_person_b_id"
+    t.index ["tree_id", "status"], name: "index_duplicate_hints_on_tree_id_and_status"
+    t.index ["tree_id"], name: "index_duplicate_hints_on_tree_id"
+  end
+
   create_table "events", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date_end"
@@ -70,10 +84,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_13_140000) do
     t.json "gedcom_raw"
     t.string "gedcom_xref"
     t.string "kind"
+    t.integer "place_id"
     t.integer "tree_id", null: false
     t.datetime "updated_at", null: false
     t.string "value"
     t.index ["eventable_type", "eventable_id"], name: "index_events_on_eventable"
+    t.index ["place_id"], name: "index_events_on_place_id"
     t.index ["tree_id"], name: "index_events_on_tree_id"
   end
 
@@ -128,6 +144,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_13_140000) do
     t.index ["tree_id"], name: "index_people_on_tree_id"
   end
 
+  create_table "places", force: :cascade do |t|
+    t.string "city"
+    t.string "country"
+    t.datetime "created_at", null: false
+    t.string "gedcom_raw"
+    t.decimal "latitude", precision: 10, scale: 7
+    t.decimal "longitude", precision: 10, scale: 7
+    t.string "name", null: false
+    t.string "region"
+    t.integer "tree_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tree_id"], name: "index_places_on_tree_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "ip_address"
@@ -177,6 +207,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_13_140000) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "citations", "sources"
+  add_foreign_key "duplicate_hints", "people", column: "person_a_id"
+  add_foreign_key "duplicate_hints", "people", column: "person_b_id"
+  add_foreign_key "duplicate_hints", "trees"
   add_foreign_key "events", "trees"
   add_foreign_key "families", "trees"
   add_foreign_key "family_children", "families"
@@ -186,6 +219,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_13_140000) do
   add_foreign_key "family_partners", "people"
   add_foreign_key "family_partners", "trees"
   add_foreign_key "people", "trees"
+  add_foreign_key "places", "trees"
   add_foreign_key "sessions", "users"
   add_foreign_key "sources", "trees"
   add_foreign_key "tree_memberships", "trees"

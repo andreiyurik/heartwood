@@ -40,7 +40,7 @@ owns the unoccupied corner: modern UX + open + self-hostable + managed-optional,
 | Sources & citations (evidence-first) | ✅ | ✅ | ✅ | ⚠️ | ✅ |
 | Photo & media attachments | ✅ | ✅ | ✅ | ❌ | ✅ |
 | Rich-text life story / biography | ✅ | ⚠️ notes | ⚠️ | ❌ | ✅ |
-| Relationship calculator | 🔜 | ✅ | ✅ | ✅ | ✅ |
+| Relationship calculator | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Collaboration** |
 | Multi-user support | ✅ | ✅ | ✅ | ❌ | ✅ |
 | Role-based access (owner / editor) | ✅ | ✅ | ⚠️ | ❌ | ✅ |
@@ -50,9 +50,9 @@ owns the unoccupied corner: modern UX + open + self-hostable + managed-optional,
 | Modern, responsive UI | ✅ | ⚠️ | ⚠️ | ❌ | ✅ |
 | Inline editing — no page reloads | ✅ Hotwire | ⚠️ | ⚠️ | ❌ | ✅ |
 | Timeline view | ✅ | ✅ | ✅ | ❌ | ✅ |
-| Place maps | 🔜 | ✅ | ✅ | ❌ | ✅ |
+| Place maps | ✅ | ✅ | ✅ | ❌ | ✅ |
 | **Advanced** |
-| Smart hints / duplicate matching | 🔜 | ❌ | ❌ | ❌ | ✅ ($$$) |
+| Smart hints / duplicate matching | ⚠️ within-tree | ❌ | ❌ | ❌ | ✅ ($$$) |
 | DNA matching | 🔜 | ❌ | ❌ | ❌ | ✅ ($$$) |
 | Free forever, no subscription | ✅ | ✅ | ✅ | ✅ | ❌ |
 

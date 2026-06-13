@@ -36,6 +36,7 @@ en:
       sources: Sources
       memories: Memories
       timeline: Timeline
+      map: Map
       memories_stub: No photos yet. Add one when you edit this person.
       memories_more_stub: More photos and albums are coming soon.
       timeline_stub: Coming soon — this person's life events, laid out in order.
@@ -81,6 +82,86 @@ en:
       none: No matches. Add someone new below.
       or_new: or add someone new
 
+  relationships:
+    cta: How are we related?
+    search_placeholder: Search for a person…
+    search_none: No matches.
+    result: "%{other} is your %{relation}."
+    none: "%{other} is not related to you."
+    great_prefix: "great-"
+    ordinal_fallback: "%{count}th"
+    ordinals:
+      - first
+      - second
+      - third
+      - fourth
+      - fifth
+      - sixth
+      - seventh
+      - eighth
+    cousin: "%{ordinal} cousin"
+    removed:
+      once: once removed
+      twice: twice removed
+      other: "%{count} times removed"
+    spouse:
+      M: husband
+      F: wife
+      U: spouse
+    parent:
+      M: father
+      F: mother
+      U: parent
+    grandparent:
+      M: grandfather
+      F: grandmother
+      U: grandparent
+    child:
+      M: son
+      F: daughter
+      U: child
+    grandchild:
+      M: grandson
+      F: granddaughter
+      U: grandchild
+    sibling:
+      M: brother
+      F: sister
+      U: sibling
+    aunt_uncle:
+      M: uncle
+      F: aunt
+      U: aunt or uncle
+    niece_nephew:
+      M: nephew
+      F: niece
+      U: niece or nephew
+
+  maps:
+    tree_title: Family map
+    tree_link: Map view
+    person_note: Places with coordinates appear here; events without a located place aren't shown.
+
+  hints:
+    title: Possible duplicates
+    nav: Duplicates
+    lede: We only suggest. Review each pair and dismiss or merge it yourself — nothing changes automatically.
+    empty: No possible duplicates found.
+    scan: Scan now
+    vs: "&"
+    score_title: Match score
+    merge: Merge
+    merge_soon: Merging arrives in a later version.
+    dismiss: Dismiss
+    reasons:
+      surname: same surname
+      given_names: similar given names
+      birth_year: similar birth year
+      sex: same sex
+    flash:
+      scanning: Scanning for duplicates…
+      dismissed: Hint dismissed.
+
   events:
     title: Life events
     none: No events yet.
@@ -91,6 +172,8 @@ en:
     select_blank: "Select…"
     date_placeholder: "e.g. 10 DEC 1815 or 1815"
     detail_placeholder: "e.g. Engineer (for facts)"
+    place_label: Place
+    place_placeholder: "e.g. Boston, Massachusetts"
     remove_confirm: Remove this event?
     edit: Edit
     remove: Remove

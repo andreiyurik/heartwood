@@ -4,6 +4,7 @@
   <h1><%= t("people.title") %></h1>
   <div class="page-head-actions">
     <%= link_to t("people.add"), new_person_path, class: "button" %>
+    <%= link_to t("maps.tree_link"), tree_map_path, class: "button button--outline" %>
     <%= button_to t("exports.create"), export_path, method: :post, class: "button button--secondary" %>
   </div>
 </div>

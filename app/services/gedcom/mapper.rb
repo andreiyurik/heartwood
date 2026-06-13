@@ -25,6 +25,10 @@ module Gedcom
           end
         end
       end
+
+      # A fresh import is the most likely moment for duplicates to appear.
+      DuplicateScanJob.perform_later(@tree)
+
       { people: @people, families: @families, warnings: @warnings }
     end
 
@@ -96,10 +100,13 @@ module Gedcom
       date_child = record[:children].find { |c| c[:tag] == "DATE" }
       plac_child = record[:children].find { |c| c[:tag] == "PLAC" }
 
+      # PLAC stays in `value` for a lossless round-trip; it also seeds a normalized
+      # Place so imported events can earn map pins (see place.md).
       eventable.events.create!(
-        kind:     record[:tag],
-        date_raw: date_child&.[](:value),
-        value:    plac_child&.[](:value)
+        kind:       record[:tag],
+        date_raw:   date_child&.[](:value),
+        value:      plac_child&.[](:value),
+        place_name: plac_child&.[](:value)
       )
     end
 

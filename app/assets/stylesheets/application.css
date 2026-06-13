@@ -501,3 +501,95 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
 .errors { background: #f7e7e3; border: 1px solid var(--danger); color: var(--danger); border-radius: var(--radius); padding: 0.75rem 1rem; margin-bottom: 1rem;
   ul { margin: 0.25rem 0 0; }
 }
+
+/* Relationship calculator ("how are we related?") */
+.relationship {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+.relationship .inline-title { margin: 0 0 0.5rem; font-weight: 600; }
+.relationship-result {
+  margin: 0.75rem 0 0;
+  padding: 0.6rem 0.8rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.relationship-trigger { display: inline-block; margin-top: 1.5rem; }
+
+/* Place autocomplete on the event form */
+.place-field { position: relative; }
+.place-suggestions { position: relative; }
+.place-suggestions .combobox-options {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  right: 0;
+  margin: 0.2rem 0 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+.event-place { color: var(--muted); font-size: 0.85rem; }
+
+/* Leaflet map views (person Map tab + whole-tree map) */
+.map-canvas {
+  height: 420px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+.map-canvas--full { height: 70vh; }
+.map-canvas--empty { background: var(--bg); }
+.map-note { margin: 0.5rem 0 0; font-size: 0.85rem; }
+.map-page { max-width: var(--maxw); margin: 1.5rem auto; padding: 0 1.25rem; }
+/* Keep Leaflet controls/panes above the warm surface */
+.leaflet-container { font: inherit; }
+
+/* Smart hints — duplicate review queue */
+.hints-lede { margin: 0 0 1rem; max-width: 42rem; }
+.hints-list { list-style: none; margin: 0; padding: 0; }
+.hint-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  padding: 0.85rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin-bottom: 0.6rem;
+}
+.hint-pair { font-weight: 600; }
+.hint-vs { color: var(--muted); font-weight: 400; margin: 0 0.35rem; }
+.hint-meta { display: flex; align-items: center; gap: 0.6rem; margin-left: auto; }
+.hint-score {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.1rem;
+  padding: 0.15rem 0.4rem;
+  font-weight: 700;
+  color: var(--accent-ink);
+  background: #eef3e9;
+  border-radius: 999px;
+}
+.hint-reasons { list-style: none; display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0; padding: 0; }
+.hint-reasons li { font-size: 0.78rem; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 0.1rem 0.5rem; }
+.hint-actions { display: flex; align-items: center; gap: 0.5rem; }
+
+/* Nav badge */
+.hints-badge-wrap { display: inline-flex; }
+.hints-badge { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.85rem; font-weight: 600; }
+.hints-badge-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.25rem;
+  padding: 0 0.3rem;
+  font-size: 0.75rem;
+  color: #fff;
+  background: var(--danger);
+  border-radius: 999px;
+}
