@@ -17,6 +17,47 @@ you truly own, that outlives any single company or subscription.
 |:-----------:|:--------------:|:----------:|
 | [![People list](docs/screenshots/people-list.png)](docs/screenshots/people-list.png) | [![Person profile](docs/screenshots/person-profile.png)](docs/screenshots/person-profile.png) | [![Add person](docs/screenshots/add-person.png)](docs/screenshots/add-person.png) |
 
+## How Heartwood compares
+
+The open-source genealogy space has powerful tools, but they were built in the PHP/desktop
+era. The polished tools (Ancestry, MyHeritage) are closed and rent-seeking. **Heartwood
+owns the unoccupied corner: modern UX + open + self-hostable + managed-optional, all at once.**
+
+| Feature | **Heartwood** | webtrees | Gramps Web | GeneWeb | Ancestry |
+|---|:---:|:---:|:---:|:---:|:---:|
+| **Setup & Hosting** |
+| Open source | ✅ AGPL | ✅ GPL | ✅ GPL | ✅ LGPL | ❌ |
+| Self-hostable | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Managed hosting option | ✅ | ❌ | ❌ | ❌ | ✅ ($$$) |
+| One-command deploy (Kamal) | ✅ | ❌ | ❌ | ❌ | — |
+| SQLite in production — zero DB ops | ✅ | ❌ MySQL | ❌ | ❌ | — |
+| No Node.js / no build step | ✅ | ✅ | ⚠️ | ✅ | — |
+| **Core Genealogy** |
+| GEDCOM import | ✅ | ✅ | ✅ | ✅ | ✅ |
+| GEDCOM export — no lock-in | ✅ | ✅ | ✅ | ✅ | ⚠️ limited |
+| Interactive tree view (pedigree / descendants) | ✅ | ✅ | ✅ | ⚠️ | ✅ |
+| Person profiles with life events | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Sources & citations (evidence-first) | ✅ | ✅ | ✅ | ⚠️ | ✅ |
+| Photo & media attachments | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Rich-text life story / biography | ✅ | ⚠️ notes | ⚠️ | ❌ | ✅ |
+| Relationship calculator | 🔜 | ✅ | ✅ | ✅ | ✅ |
+| **Collaboration** |
+| Multi-user support | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Role-based access (owner / editor) | ✅ | ✅ | ⚠️ | ❌ | ✅ |
+| Multiple trees per installation | ✅ | ✅ | ✅ | ⚠️ | ✅ |
+| Living-person privacy (built into schema) | ✅ | ✅ | ✅ | ✅ | ⚠️ |
+| **UX & Design** |
+| Modern, responsive UI | ✅ | ⚠️ | ⚠️ | ❌ | ✅ |
+| Inline editing — no page reloads | ✅ Hotwire | ⚠️ | ⚠️ | ❌ | ✅ |
+| Timeline view | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Place maps | 🔜 | ✅ | ✅ | ❌ | ✅ |
+| **Advanced** |
+| Smart hints / duplicate matching | 🔜 | ❌ | ❌ | ❌ | ✅ ($$$) |
+| DNA matching | 🔜 | ❌ | ❌ | ❌ | ✅ ($$$) |
+| Free forever, no subscription | ✅ | ✅ | ✅ | ✅ | ❌ |
+
+> ✅ Supported · ⚠️ Partial · ❌ Not available · 🔜 Planned · — Not applicable
+
 ## Philosophy
 
 - **Own your roots.** Your family's history is too important to rent. The core is
