@@ -136,6 +136,13 @@ class Person < ApplicationRecord
                sex: person.sex, avatar_url: avatar_url_for(person))
   end
 
+  # Resolve a relative argument into a persisted Person: an existing Person is
+  # linked as-is; a hash of attributes builds a new tree-scoped person.
+  def resolve_person(relative)
+    return relative if relative.is_a?(Person)
+    Person.create!(relative.merge(tree: Current.tree))
+  end
+
   # A path to the person's avatar for in-node rendering, or nil when none is
   # attached. Only reached for visible people — redacted nodes never get here,
   # so a living person's photo is never leaked.
@@ -157,23 +164,26 @@ class Person < ApplicationRecord
 
   # --- Adding relatives (resolve the right Family so kinship stays derived) ---
 
+  # Each method takes either a hash of attributes (build a brand-new person) or
+  # an existing Person to link in — see #resolve_person.
+
   # Add a parent: ensure this person has a birth family, then add the parent as
   # a partner of it.
-  def add_parent(attributes)
+  def add_parent(relative)
     family = families_as_child.first || Family.create!(tree: Current.tree).tap { |f| f.children << self }
-    Person.create!(attributes.merge(tree: Current.tree)).tap { |parent| family.partners << parent }
+    resolve_person(relative).tap { |parent| family.partners << parent }
   end
 
   # Add a child: ensure this person partners in a family, then add the child to it
   # (so an existing partner becomes the child's second parent).
-  def add_child(attributes)
+  def add_child(relative)
     family = families_as_partner.first || Family.create!(tree: Current.tree).tap { |f| f.partners << self }
-    Person.create!(attributes.merge(tree: Current.tree)).tap { |child| family.children << child }
+    resolve_person(relative).tap { |child| family.children << child }
   end
 
-  # Add a partner: create a new union between this person and the new partner.
-  def add_partner(attributes)
-    Person.create!(attributes.merge(tree: Current.tree)).tap do |partner|
+  # Add a partner: create a new union between this person and the partner.
+  def add_partner(relative)
+    resolve_person(relative).tap do |partner|
       Family.create!(tree: Current.tree).partners << [ self, partner ]
     end
   end

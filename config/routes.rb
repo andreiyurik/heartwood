@@ -8,7 +8,9 @@ Rails.application.routes.draw do
 
   resources :people do
     resource  :tree,     only: :show
-    resources :relatives, only: %i[new create]
+    resources :relatives, only: %i[new create] do
+      get :search, on: :collection
+    end
     resources :events,    only: %i[new create edit update destroy] do
       resources :citations, only: %i[new create destroy]
     end

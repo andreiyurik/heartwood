@@ -33,10 +33,9 @@ ru:
       sources: Источники
       memories: Воспоминания
       timeline: Хронология
-      sources_stub: Источники появятся здесь (в версии 0.7).
-      memories_stub: Загрузите фото, чтобы оно появилось здесь.
-      memories_more_stub: Полная галерея появится в Block 1.
-      timeline_stub: Хронология появится в Block 1.
+      memories_stub: Фотографий пока нет. Добавьте её при редактировании профиля.
+      memories_more_stub: Скоро здесь появятся новые фотографии и альбомы.
+      timeline_stub: Скоро — жизненные события этого человека по порядку.
     search_placeholder: Поиск по имени…
     search_empty: Никого не найдено.
     search_clear: Сбросить
@@ -74,6 +73,10 @@ ru:
       parent_added: Родитель добавлен.
       partner_added: Партнёр добавлен.
       child_added: Ребёнок добавлен.
+    combobox:
+      placeholder: Поиск среди существующих…
+      none: Совпадений нет. Добавьте нового ниже.
+      or_new: или добавьте нового
 
   events:
     title: Жизненные события

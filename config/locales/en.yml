@@ -33,10 +33,9 @@ en:
       sources: Sources
       memories: Memories
       timeline: Timeline
-      sources_stub: Sources will appear here (coming in 0.7).
-      memories_stub: Upload a photo to see it here.
-      memories_more_stub: Full photo gallery coming in Block 1.
-      timeline_stub: Timeline view coming in Block 1.
+      memories_stub: No photos yet. Add one when you edit this person.
+      memories_more_stub: More photos and albums are coming soon.
+      timeline_stub: Coming soon — this person's life events, laid out in order.
     search_placeholder: Search by name…
     search_empty: No people match your search.
     search_clear: Clear
@@ -74,6 +73,10 @@ en:
       parent_added: Parent added.
       partner_added: Partner added.
       child_added: Child added.
+    combobox:
+      placeholder: Search existing people…
+      none: No matches. Add someone new below.
+      or_new: or add someone new
 
   events:
     title: Life events

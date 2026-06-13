@@ -59,4 +59,35 @@ class PersonRelativesTest < ActiveSupport::TestCase
     parent = @p.add_parent(given_names: "Parent", sex: "F")
     assert_equal Current.tree, parent.tree
   end
+
+  # --- Linking an *existing* person (the combobox path) ---
+
+  test "add_parent links an existing person without creating a record" do
+    existing = Person.create!(given_names: "Grandpa", sex: "M", tree: Current.tree)
+    result = nil
+    assert_no_difference "Person.count" do
+      result = @p.add_parent(existing)
+    end
+    assert_equal existing, result
+    assert_includes @p.parents, existing
+    assert_includes existing.children, @p
+  end
+
+  test "add_child links an existing person without creating a record" do
+    existing = Person.create!(given_names: "Existing", sex: "U", tree: Current.tree)
+    assert_no_difference "Person.count" do
+      @p.add_child(existing)
+    end
+    assert_includes @p.children, existing
+    assert_includes existing.parents, @p
+  end
+
+  test "add_partner links an existing person reciprocally" do
+    existing = Person.create!(given_names: "Existing", sex: "F", tree: Current.tree)
+    assert_no_difference "Person.count" do
+      @p.add_partner(existing)
+    end
+    assert_includes @p.partners, existing
+    assert_includes existing.partners, @p
+  end
 end

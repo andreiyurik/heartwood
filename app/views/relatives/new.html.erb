@@ -1,16 +1,35 @@
 <%= turbo_frame_tag "add_#{@relation}" do %>
-  <%= form_with model: @relative, url: person_relatives_path(@person), class: "form form--inline" do |f| %>
-    <%= hidden_field_tag :relation, @relation %>
+  <div class="relative-picker">
     <p class="inline-title"><%= t("family.add_title", relation: t("family.relation_singular.#{@relation}")) %></p>
-    <div class="field"><%= f.label :given_names %><%= f.text_field :given_names %></div>
-    <div class="field"><%= f.label :surname %><%= f.text_field :surname %></div>
-    <div class="field">
-      <%= f.label :sex %>
-      <%= f.select :sex, Person::SEXES.map { |v| [t("people.sex.#{v}"), v] } %>
-    </div>
-    <div class="actions">
-      <%= f.submit t("people.add") %>
-      <%= link_to t("forms.cancel"), person_path(@person), class: "linkish", data: { turbo_frame: "_top" } %>
-    </div>
-  <% end %>
+
+    <%# 1) Find and link an existing person. Typing debounce-submits to #search,
+        which renders matches into the nested "relative_candidates" frame. %>
+    <%= form_with url: search_person_relatives_path(@person), method: :get,
+          data: { controller: "search", turbo_frame: "relative_candidates" },
+          class: "combobox" do %>
+      <%= hidden_field_tag :relation, @relation %>
+      <%= search_field_tag :q, nil,
+            placeholder: t("family.combobox.placeholder"),
+            autocomplete: "off",
+            data: { search_target: "input", action: "input->search#debounce" } %>
+    <% end %>
+    <%= turbo_frame_tag "relative_candidates" %>
+
+    <p class="combobox-or"><span><%= t("family.combobox.or_new") %></span></p>
+
+    <%# 2) Or create a brand-new person. %>
+    <%= form_with model: @relative, url: person_relatives_path(@person), class: "form form--inline" do |f| %>
+      <%= hidden_field_tag :relation, @relation %>
+      <div class="field"><%= f.label :given_names %><%= f.text_field :given_names %></div>
+      <div class="field"><%= f.label :surname %><%= f.text_field :surname %></div>
+      <div class="field">
+        <%= f.label :sex %>
+        <%= f.select :sex, Person::SEXES.map { |v| [t("people.sex.#{v}"), v] } %>
+      </div>
+      <div class="actions">
+        <%= f.submit t("people.add") %>
+        <%= link_to t("forms.cancel"), person_path(@person), class: "linkish", data: { turbo_frame: "_top" } %>
+      </div>
+    <% end %>
+  </div>
 <% end %>
