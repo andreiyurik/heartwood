@@ -37,7 +37,7 @@ class PersonGraphTest < ActiveSupport::TestCase
     graph = @child.ancestor_graph(depth: 1)
     from_ids = graph[:edges].map { |e| e[:from_id] }
     to_ids   = graph[:edges].map { |e| e[:to_id] }
-    assert_equal [@child.id, @child.id], from_ids.sort
+    assert_equal [ @child.id, @child.id ], from_ids.sort
     assert_includes to_ids, @father.id
     assert_includes to_ids, @mother.id
   end
@@ -64,7 +64,7 @@ class PersonGraphTest < ActiveSupport::TestCase
 
     parent_nodes = graph[:nodes].select { |n| n[:generation] == 1 }
     assert_equal 2, parent_nodes.size
-    assert_equal [0, 1], parent_nodes.map { |n| n[:order] }.sort
+    assert_equal [ 0, 1 ], parent_nodes.map { |n| n[:order] }.sort
   end
 
   test "ancestor_graph nodes carry name and sex" do

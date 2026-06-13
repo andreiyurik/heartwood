@@ -22,7 +22,7 @@ module Gedcom
       families = Family.where(id: fam_ids.to_a)
                        .includes(:events, :partners, :children)
 
-      parts = [header]
+      parts = [ header ]
       people.each   { |p| parts << indi_block(p) }
       families.each { |f| parts << fam_block(f, visible_ids) }
       parts << "0 TRLR"
@@ -44,7 +44,7 @@ module Gedcom
     end
 
     def indi_block(person)
-      lines = ["0 #{person_xref(person)} INDI"]
+      lines = [ "0 #{person_xref(person)} INDI" ]
 
       if person.given_names.present? || person.surname.present?
         name_val = [
@@ -71,7 +71,7 @@ module Gedcom
     end
 
     def fam_block(family, visible_ids)
-      lines = ["0 #{family_xref(family)} FAM"]
+      lines = [ "0 #{family_xref(family)} FAM" ]
 
       family.partners.select { |p| visible_ids.include?(p.id) }.sort_by(&:id).each do |p|
         tag = p.sex == "F" ? "WIFE" : "HUSB"

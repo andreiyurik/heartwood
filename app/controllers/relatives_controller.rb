@@ -65,11 +65,11 @@ class RelativesController < ApplicationController
   # not show up as fresh candidates.
   def excluded_ids
     already = case @relation
-              when "parent"  then @person.parents
-              when "child"   then @person.children
-              when "partner" then @person.partners
-              else []
-              end
+    when "parent"  then @person.parents
+    when "child"   then @person.children
+    when "partner" then @person.partners
+    else []
+    end
     [ @person.id, *already.map(&:id) ]
   end
 end

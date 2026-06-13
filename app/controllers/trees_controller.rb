@@ -18,6 +18,6 @@ class TreesController < ApplicationController
   end
 
   def depth_param
-    [[params.fetch(:depth, 4).to_i, 0].max, 6].min
+    [ [ params.fetch(:depth, 4).to_i, 0 ].max, 6 ].min
   end
 end

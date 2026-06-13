@@ -10,7 +10,7 @@ class PersonSearchTest < ActiveSupport::TestCase
     @handel = Person.create!(given_names: "Georg",  surname: "Handel",  sex: "M", tree: @tree)
     @clara  = Person.create!(given_names: "Clara",  surname: "Schumann", sex: "F", tree: @tree)
     # Make them deceased so they're visible to outsiders too
-    [@bach, @handel, @clara].each do |p|
+    [ @bach, @handel, @clara ].each do |p|
       Event.create!(kind: "DEAT", eventable: p, tree: @tree)
     end
 

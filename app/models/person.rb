@@ -110,7 +110,7 @@ class Person < ApplicationRecord
     orders     = {}
     gen_counts = Hash.new(0)
     edges      = []
-    queue      = [[self, 0]]
+    queue      = [ [ self, 0 ] ]
 
     while (entry = queue.shift)
       person, gen = entry
@@ -123,7 +123,7 @@ class Person < ApplicationRecord
 
       person.public_send(neighbors).each do |neighbor|
         edges << { from_id: person.id, to_id: neighbor.id }
-        queue << [neighbor, gen + 1]
+        queue << [ neighbor, gen + 1 ]
       end
     end
 
