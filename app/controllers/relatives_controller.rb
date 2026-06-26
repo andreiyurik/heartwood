@@ -1,7 +1,14 @@
 # Adds a relative (parent / child / partner) to a Person, delegating the graph
 # wiring to the domain methods on Person. See docs/features/person-profile.md.
 class RelativesController < ApplicationController
-  RELATIONS = %w[parent child partner].freeze
+  # Maps each allowed relation to the domain method that wires it into the
+  # graph. Lookups go through this constant so no user input ever reaches
+  # public_send as a method name.
+  RELATION_METHODS = {
+    "parent"  => :add_parent,
+    "child"   => :add_child,
+    "partner" => :add_partner
+  }.freeze
 
   before_action :set_person
   before_action :set_relation
@@ -17,7 +24,7 @@ class RelativesController < ApplicationController
   end
 
   def create
-    @relative = @person.public_send("add_#{@relation}", relative_source)
+    @relative = @person.public_send(RELATION_METHODS.fetch(@relation), relative_source)
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to @person, notice: t("family.flash.#{@relation}_added") }
@@ -43,7 +50,7 @@ class RelativesController < ApplicationController
   # Guard the relation against the whitelist before any public_send.
   def set_relation
     @relation = params[:relation].to_s
-    head :unprocessable_entity unless RELATIONS.include?(@relation)
+    head :unprocessable_entity unless RELATION_METHODS.key?(@relation)
   end
 
   def relative_params
