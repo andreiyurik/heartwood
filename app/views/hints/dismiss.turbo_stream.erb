@@ -1,0 +1,4 @@
+<%= turbo_stream.remove dom_id(@hint) %>
+<%= turbo_stream.replace "hints-badge" do %>
+  <%= render "hints/badge", count: Current.tree.duplicate_hints.pending.count %>
+<% end %>

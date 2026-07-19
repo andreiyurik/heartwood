@@ -1,0 +1,30 @@
+<%= turbo_frame_tag dom_id(@event, :citation_form) do %>
+  <%= form_with model: [@person, @event, @citation],
+        url: person_event_citations_path(@person, @event),
+        class: "form form--inline" do |f| %>
+    <p class="inline-title"><%= t("citations.add_title", event: @event.kind_label) %></p>
+
+    <%= fields_for :source, @source do |sf| %>
+      <div class="field">
+        <%= sf.label :title, t("citations.source_title_label") %>
+        <%= sf.text_field :title, required: true %>
+      </div>
+      <div class="field">
+        <%= sf.label :url, t("citations.source_url_label") %>
+        <%= sf.url_field :url, placeholder: "https://…" %>
+      </div>
+      <div class="field">
+        <%= sf.label :citation_text, t("citations.citation_text_label") %>
+        <%= sf.text_area :citation_text, rows: 2, placeholder: t("citations.citation_text_placeholder") %>
+      </div>
+    <% end %>
+
+    <div class="actions">
+      <%= f.submit t("citations.submit_add") %>
+      <%= link_to t("forms.cancel"),
+            person_event_citations_path(@person, @event),
+            data: { turbo_frame: dom_id(@event, :citation_form) },
+            class: "linkish" %>
+    </div>
+  <% end %>
+<% end %>

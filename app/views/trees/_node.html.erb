@@ -1,10 +1,22 @@
-<div class="tree-node <%= "tree-node--focus" if local_assigns[:focus] %> tree-node--<%= person.sex.downcase %>"
+<%# locals: node (graph node hash), focus (bool), mode (string), depth (integer) %>
+<div class="tree-node <%= "tree-node--focus" if focus %> <%= node[:living] ? "tree-node--living" : "tree-node--#{node[:sex]&.downcase}" %>"
      data-tree-target="node"
-     data-tree-node-id="<%= person.id %>">
-  <%= link_to person_path(person) do %>
-    <p class="node-name"><%= person.display_name %></p>
-    <% if person.birth&.date_raw.present? %>
-      <p class="node-dates">b.&thinsp;<%= person.birth.date_raw %></p>
+     data-tree-node-id="<%= node[:id] %>">
+  <% if node[:living] %>
+    <p class="node-name node-name--living"><%= node[:name] %></p>
+  <% else %>
+    <%= link_to person_tree_path(node[:id], mode: mode, depth: depth) do %>
+      <% if node[:avatar_url].present? %>
+        <%= image_tag node[:avatar_url], class: "node-avatar", alt: node[:name] %>
+      <% else %>
+        <span class="node-avatar node-avatar--initials" aria-hidden="true"><%= node[:name].to_s.split.map(&:first).first(2).join.upcase %></span>
+      <% end %>
+      <div class="node-text">
+        <p class="node-name"><%= node[:name] %></p>
+        <% if node[:birth_year].present? %>
+          <p class="node-dates">b.&thinsp;<%= node[:birth_year] %></p>
+        <% end %>
+      </div>
     <% end %>
   <% end %>
 </div>

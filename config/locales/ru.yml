@@ -17,13 +17,36 @@ ru:
     add: Добавить человека
     edit: "Редактировать %{name}"
     remove: Удалить
+    delete_person: Удалить человека
     remove_confirm: "Удалить %{name}?"
+    danger_zone: Опасная зона
+    danger_zone_hint: Безвозвратно удалить этого человека вместе с его событиями, источниками и воспоминаниями. Отменить нельзя.
     profile: Профиль
     tree: Дерево
     edit_button: Редактировать
     empty: Нет ни одной записи.
     add_first: Добавить первого
     unknown_name: Неизвестный
+    living: Живёт
+    tabs_label: Разделы профиля
+    avatar_label: Фото
+    avatar_hint: JPEG, PNG или WebP · не более 5 МБ
+    biography_label: Биография
+    biography_hint: История жизни человека — своими словами.
+    biography_empty: Биографии пока нет. Откройте редактирование, чтобы добавить историю.
+    tabs:
+      details: Данные
+      sources: Источники
+      memories: Воспоминания
+      timeline: Хронология
+      map: Карта
+      memories_stub: Фотографий пока нет. Добавьте её при редактировании профиля.
+      memories_more_stub: Скоро здесь появятся новые фотографии и альбомы.
+      timeline_stub: Скоро — жизненные события этого человека по порядку.
+    search_placeholder: Поиск по имени…
+    search_empty: Никого не найдено.
+    search_clear: Сбросить
+    sex_filter_all: Все
     sex_label: Пол
     status_label: Статус
     nickname_label: Прозвище
@@ -57,6 +80,94 @@ ru:
       parent_added: Родитель добавлен.
       partner_added: Партнёр добавлен.
       child_added: Ребёнок добавлен.
+    combobox:
+      placeholder: Поиск среди существующих…
+      none: Совпадений нет. Добавьте нового ниже.
+      or_new: или добавьте нового
+
+  relationships:
+    section_title: Родство
+    cta: Рассчитать родство
+    lede: "Узнайте степень родства между %{name} и любым человеком в дереве."
+    search_placeholder: Найти человека…
+    search_none: Совпадений нет.
+    result: "%{other} — %{relation} для %{person}."
+    none: "Родство между %{person} и %{other} не найдено."
+    great_prefix: "пра"
+    ordinal_fallback: "%{count}-юродный"
+    ordinals:
+      - двоюродный
+      - троюродный
+      - четвероюродный
+      - пятиюродный
+      - шестиюродный
+    cousin: "%{ordinal} брат/сестра"
+    removed:
+      once: однажды удалённый
+      twice: дважды удалённый
+      other: "удалён на %{count} поколения"
+    spouse:
+      M: муж
+      F: жена
+      U: супруг(а)
+    parent:
+      M: отец
+      F: мать
+      U: родитель
+    grandparent:
+      M: дедушка
+      F: бабушка
+      U: дедушка/бабушка
+    child:
+      M: сын
+      F: дочь
+      U: ребёнок
+    grandchild:
+      M: внук
+      F: внучка
+      U: внук/внучка
+    sibling:
+      M: брат
+      F: сестра
+      U: брат/сестра
+    aunt_uncle:
+      M: дядя
+      F: тётя
+      U: тётя/дядя
+    niece_nephew:
+      M: племянник
+      F: племянница
+      U: племянник/племянница
+
+  places:
+    locate: Найти на карте
+    no_match: Не удалось найти это место. Можно сохранить название как есть или уточнить запрос и перетащить булавку.
+
+  maps:
+    tree_title: Карта семьи
+    tree_link: На карте
+    person_note: Здесь показаны места с координатами; события без определённого места не отображаются.
+    unavailable: Не удалось загрузить библиотеку карт. Проверьте соединение и обновите страницу.
+
+  hints:
+    title: Возможные дубликаты
+    nav: Дубликаты
+    lede: Мы только подсказываем. Просмотрите каждую пару и сами отклоните или объедините — ничего не меняется автоматически.
+    empty: Возможных дубликатов не найдено.
+    scan: Сканировать
+    vs: "и"
+    score_title: Оценка совпадения
+    merge: Объединить
+    merge_soon: Объединение появится в следующей версии.
+    dismiss: Отклонить
+    reasons:
+      surname: одинаковая фамилия
+      given_names: похожие имена
+      birth_year: близкий год рождения
+      sex: одинаковый пол
+    flash:
+      scanning: Идёт поиск дубликатов…
+      dismissed: Подсказка отклонена.
 
   events:
     title: Жизненные события
@@ -68,6 +179,10 @@ ru:
     select_blank: "Выберите…"
     date_placeholder: "напр. 10 ДЕК 1815 или 1815"
     detail_placeholder: "напр. Инженер"
+    place_label: Место
+    place_placeholder: "напр. Бостон, Массачусетс"
+    add_birthplace: + Место рождения
+    add_residence: + Где жил
     remove_confirm: Удалить это событие?
     edit: Изменить
     remove: Удалить
@@ -88,13 +203,42 @@ ru:
       RESI: Место жительства
       EDUC: Образование
 
+  citations:
+    add: + Добавить источник
+    add_title: "Добавить источник для «%{event}»"
+    submit_add: Сохранить источник
+    sourced_badge: "✓"
+    sourced_title: К этому событию прикреплён источник
+    remove: Удалить источник
+    remove_confirm: Удалить этот источник?
+    none_for_person: Источников пока нет. Добавьте источник к любому жизненному событию.
+    source_title_label: Название
+    source_url_label: URL (необязательно)
+    citation_text_label: Примечание (необязательно)
+    citation_text_placeholder: "напр. стр. 42, метрическая книга"
+    flash:
+      created: Источник добавлен.
+      destroyed: Источник удалён.
+
+  exports:
+    create: Экспорт GEDCOM
+
   trees:
     title: "%{name} — Семейное дерево"
     ancestors: Предки
     descendants: Потомки
-    hint: "Колёсиком — масштаб · перетащите — панорама · клик — профиль"
+    hint: "Колёсиком — масштаб · перетащите — панорама · клик — перефокус"
+    depth_label: Поколения
+    default_name: Моё дерево
+    clan_link: Родовое древо
+    clan_title: "Родовое древо — %{name}"
+    clan_empty: В этом дереве пока нет людей.
+    search_placeholder: Найти человека…
+    expand: Развернуть ветвь
+    collapse: Свернуть ветвь
 
   auth:
+    sign_in_title: Вход в Heartwood
     email_placeholder: Введите email
     password_placeholder: Введите пароль
     sign_in_submit: Войти
@@ -105,6 +249,18 @@ ru:
     new_password_placeholder: Новый пароль
     confirm_password_placeholder: Повторите пароль
     update_submit: Сохранить
+
+  registrations:
+    title: Создайте свой Heartwood
+    lede: Начните семейное древо — это бесплатно и навсегда ваше.
+    name_placeholder: Ваше имя
+    password_placeholder: Придумайте пароль
+    password_hint: Минимум 8 символов.
+    submit: Создать аккаунт
+    have_account: Уже есть аккаунт?
+    no_account: Впервые в Heartwood?
+    flash:
+      welcome: "Добро пожаловать в Heartwood, %{name}! 🌳"
 
   forms:
     cancel: Отмена
@@ -129,6 +285,14 @@ ru:
       body: "Для сброса пароля перейдите по ссылке ниже. Ссылка действует %{expiry}."
       link_text: Сбросить пароль
       body_text: "Сброс пароля: %{url}\n\nСсылка действует %{expiry}."
+    welcome:
+      subject: Добро пожаловать в Heartwood 🌳
+      heading: Добро пожаловать в Heartwood
+      greeting: "Здравствуйте, %{name}!"
+      intro: "Heartwood — живой дом для вашего семейного древа: открытый, ваш и созданный на поколения."
+      next_steps: "Готовы начать? Добавьте первого человека или импортируйте файл GEDCOM, чтобы перенести всё древо целиком."
+      cta_link: Открыть Heartwood
+      signoff: "— Команда Heartwood"
 
   datetime:
     distance_in_words:
@@ -215,3 +379,11 @@ ru:
         name_suffix: Суффикс
         nickname: Прозвище
         sex: Пол
+        avatar: Фото
+    errors:
+      models:
+        person:
+          attributes:
+            avatar:
+              invalid_content_type: должно быть изображением JPEG, PNG или WebP
+              too_large: не должно превышать 5 МБ

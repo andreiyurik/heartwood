@@ -10,7 +10,69 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_10_130543) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_13_150002) do
+  create_table "action_text_rich_texts", force: :cascade do |t|
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
+  end
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.string "content_type"
+    t.datetime "created_at", null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "citations", force: :cascade do |t|
+    t.integer "citable_id", null: false
+    t.string "citable_type", null: false
+    t.datetime "created_at", null: false
+    t.integer "source_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["citable_type", "citable_id"], name: "index_citations_on_citable"
+    t.index ["source_id"], name: "index_citations_on_source_id"
+  end
+
+  create_table "duplicate_hints", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "person_a_id", null: false
+    t.integer "person_b_id", null: false
+    t.json "reasons"
+    t.integer "score", null: false
+    t.string "status", default: "pending", null: false
+    t.integer "tree_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_a_id", "person_b_id"], name: "index_duplicate_hints_on_person_a_id_and_person_b_id"
+    t.index ["tree_id", "status"], name: "index_duplicate_hints_on_tree_id_and_status"
+    t.index ["tree_id"], name: "index_duplicate_hints_on_tree_id"
+  end
+
   create_table "events", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date_end"
@@ -22,16 +84,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_130543) do
     t.json "gedcom_raw"
     t.string "gedcom_xref"
     t.string "kind"
+    t.integer "place_id"
+    t.integer "tree_id", null: false
     t.datetime "updated_at", null: false
     t.string "value"
     t.index ["eventable_type", "eventable_id"], name: "index_events_on_eventable"
+    t.index ["place_id"], name: "index_events_on_place_id"
+    t.index ["tree_id"], name: "index_events_on_tree_id"
   end
 
   create_table "families", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.json "gedcom_raw"
     t.string "gedcom_xref"
+    t.integer "tree_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["tree_id"], name: "index_families_on_tree_id"
   end
 
   create_table "family_children", force: :cascade do |t|
@@ -40,9 +108,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_130543) do
     t.string "pedigree"
     t.integer "person_id", null: false
     t.integer "position"
+    t.integer "tree_id", null: false
     t.datetime "updated_at", null: false
     t.index ["family_id"], name: "index_family_children_on_family_id"
     t.index ["person_id"], name: "index_family_children_on_person_id"
+    t.index ["tree_id"], name: "index_family_children_on_tree_id"
   end
 
   create_table "family_partners", force: :cascade do |t|
@@ -50,9 +120,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_130543) do
     t.integer "family_id", null: false
     t.integer "person_id", null: false
     t.string "role"
+    t.integer "tree_id", null: false
     t.datetime "updated_at", null: false
     t.index ["family_id"], name: "index_family_partners_on_family_id"
     t.index ["person_id"], name: "index_family_partners_on_person_id"
+    t.index ["tree_id"], name: "index_family_partners_on_tree_id"
   end
 
   create_table "people", force: :cascade do |t|
@@ -63,10 +135,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_130543) do
     t.string "name_prefix"
     t.string "name_suffix"
     t.string "nickname"
+    t.boolean "private", default: false, null: false
     t.string "sex", default: "U", null: false
     t.string "surname"
+    t.integer "tree_id", null: false
     t.datetime "updated_at", null: false
     t.index ["gedcom_xref"], name: "index_people_on_gedcom_xref"
+    t.index ["tree_id"], name: "index_people_on_tree_id"
+  end
+
+  create_table "places", force: :cascade do |t|
+    t.string "city"
+    t.string "country"
+    t.datetime "created_at", null: false
+    t.string "gedcom_raw"
+    t.decimal "latitude", precision: 10, scale: 7
+    t.decimal "longitude", precision: 10, scale: 7
+    t.string "name", null: false
+    t.string "region"
+    t.integer "tree_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tree_id"], name: "index_places_on_tree_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -78,17 +167,61 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_10_130543) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "sources", force: :cascade do |t|
+    t.text "citation_text"
+    t.datetime "created_at", null: false
+    t.string "title", null: false
+    t.integer "tree_id", null: false
+    t.datetime "updated_at", null: false
+    t.string "url"
+    t.index ["tree_id"], name: "index_sources_on_tree_id"
+  end
+
+  create_table "tree_memberships", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "role", default: "owner", null: false
+    t.integer "tree_id", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["tree_id", "user_id"], name: "index_tree_memberships_on_tree_id_and_user_id", unique: true
+    t.index ["tree_id"], name: "index_tree_memberships_on_tree_id"
+    t.index ["user_id"], name: "index_tree_memberships_on_user_id"
+    t.index ["user_id"], name: "index_tree_memberships_unique_owner_per_user", unique: true, where: "role = 'owner'"
+  end
+
+  create_table "trees", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email_address", null: false
+    t.string "name"
     t.string "password_digest", null: false
     t.datetime "updated_at", null: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "citations", "sources"
+  add_foreign_key "duplicate_hints", "people", column: "person_a_id"
+  add_foreign_key "duplicate_hints", "people", column: "person_b_id"
+  add_foreign_key "duplicate_hints", "trees"
+  add_foreign_key "events", "trees"
+  add_foreign_key "families", "trees"
   add_foreign_key "family_children", "families"
   add_foreign_key "family_children", "people"
+  add_foreign_key "family_children", "trees"
   add_foreign_key "family_partners", "families"
   add_foreign_key "family_partners", "people"
+  add_foreign_key "family_partners", "trees"
+  add_foreign_key "people", "trees"
+  add_foreign_key "places", "trees"
   add_foreign_key "sessions", "users"
+  add_foreign_key "sources", "trees"
+  add_foreign_key "tree_memberships", "trees"
+  add_foreign_key "tree_memberships", "users"
 end

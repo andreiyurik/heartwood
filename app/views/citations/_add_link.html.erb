@@ -1,0 +1,3 @@
+<%= turbo_frame_tag dom_id(event, :citation_form) do %>
+  <%= link_to t("citations.add"), new_person_event_citation_path(person, event), class: "linkish citation-add" %>
+<% end %>

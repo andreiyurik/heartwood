@@ -5,7 +5,8 @@ module Gedcom
     # Tags that map to Event records.
     EVENT_TAGS = %w[BIRT DEAT BAPM BURI CHR OCCU RESI EDUC MARR DIV].freeze
 
-    def initialize(records)
+    def initialize(records, tree: nil)
+      @tree     = tree || Current.tree
       @records  = records
       @warnings = []
       @xref_map = {}  # gedcom_xref string => saved AR object
@@ -24,6 +25,10 @@ module Gedcom
           end
         end
       end
+
+      # A fresh import is the most likely moment for duplicates to appear.
+      DuplicateScanJob.perform_later(@tree)
+
       { people: @people, families: @families, warnings: @warnings }
     end
 
@@ -48,7 +53,7 @@ module Gedcom
 
       attrs[:gedcom_raw] = raw_tags.presence
 
-      person = Person.create!(attrs)
+      person = Person.create!(attrs.merge(tree: @tree))
       @xref_map[record[:xref]] = person
       @people << person
 
@@ -62,7 +67,7 @@ module Gedcom
     # --- FAM ---
 
     def map_fam(record)
-      fam      = Family.create!(gedcom_xref: record[:xref])
+      fam      = Family.create!(gedcom_xref: record[:xref], tree: @tree)
       raw_tags = []
 
       @xref_map[record[:xref]] = fam
@@ -95,10 +100,13 @@ module Gedcom
       date_child = record[:children].find { |c| c[:tag] == "DATE" }
       plac_child = record[:children].find { |c| c[:tag] == "PLAC" }
 
+      # PLAC stays in `value` for a lossless round-trip; it also seeds a normalized
+      # Place so imported events can earn map pins (see place.md).
       eventable.events.create!(
-        kind:     record[:tag],
-        date_raw: date_child&.[](:value),
-        value:    plac_child&.[](:value)
+        kind:       record[:tag],
+        date_raw:   date_child&.[](:value),
+        value:      plac_child&.[](:value),
+        place_name: plac_child&.[](:value)
       )
     end
 

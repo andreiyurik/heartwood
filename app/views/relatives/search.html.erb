@@ -1,0 +1,22 @@
+<%# Candidate list for the add-relative combobox. Updates the inner frame only. %>
+<%= turbo_frame_tag "relative_candidates" do %>
+  <% if @matches.any? %>
+    <ul class="combobox-options" role="listbox">
+      <% @matches.each do |candidate| %>
+        <li role="option">
+          <%= button_to person_relatives_path(@person),
+                params: { relation: @relation, existing_person_id: candidate.id },
+                class: "combobox-option",
+                form: { data: { turbo_frame: "_top" } } do %>
+            <span class="combobox-option-name"><%= candidate.display_name %></span>
+            <% if candidate.birth&.date_raw.present? %>
+              <span class="combobox-option-meta">b.&thinsp;<%= candidate.birth.date_raw %></span>
+            <% end %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% elsif params[:q].present? %>
+    <p class="combobox-empty"><%= t("family.combobox.none") %></p>
+  <% end %>
+<% end %>

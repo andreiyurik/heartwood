@@ -2,7 +2,16 @@
 
 <article class="person">
   <header class="page-head">
-    <h1><%= @person.display_name %></h1>
+    <div class="profile-identity">
+      <% if @person.avatar.attached? %>
+        <%= image_tag @person.avatar, class: "avatar avatar--large", alt: @person.display_name %>
+      <% else %>
+        <div class="avatar avatar--large avatar--initials" aria-hidden="true">
+          <%= @person.display_name.split.map(&:first).first(2).join.upcase %>
+        </div>
+      <% end %>
+      <h1><%= @person.display_name %></h1>
+    </div>
     <div class="actions">
       <%= link_to t("people.tree"), person_tree_path(@person), class: "button button--outline" %>
       <%= link_to t("people.edit_button"), edit_person_path(@person), class: "button" %>
@@ -10,19 +19,23 @@
     </div>
   </header>
 
-  <dl class="facts">
-    <% if @person.nickname.present? %>
-      <dt><%= t("people.nickname_label") %></dt><dd><%= @person.nickname %></dd>
+  <nav class="profile-tabs" aria-label="<%= t("people.tabs_label") %>">
+    <% PeopleController::TABS.each do |tab| %>
+      <%= link_to t("people.tabs.#{tab}"), person_path(@person, tab: tab),
+            class: "profile-tab #{"profile-tab--active" if @tab == tab}",
+            aria: { current: @tab == tab ? "page" : nil } %>
     <% end %>
-    <dt><%= t("people.sex_label") %></dt><dd><%= t("people.sex.#{@person.sex}") %></dd>
-    <dt><%= t("people.status_label") %></dt>
-    <dd><%= @person.living? ? t("people.status.living") : t("people.status.deceased") %></dd>
-  </dl>
+  </nav>
 
-  <%= render "events", person: @person %>
+  <div class="tab-panel" id="tab-<%= @tab %>">
+    <%= render "people/tabs/#{@tab}", person: @person %>
+  </div>
 
-  <%= render "family", person: @person %>
-
-  <%= button_to t("people.remove"), @person, method: :delete, class: "danger",
-        form: { data: { turbo_confirm: t("people.remove_confirm", name: @person.display_name) } } %>
+  <section class="relationship-tool">
+    <h2><%= t("relationships.section_title") %></h2>
+    <p class="muted relationship-lede"><%= t("relationships.lede", name: @person.display_name) %></p>
+    <%= turbo_frame_tag "relationship" do %>
+      <%= link_to t("relationships.cta"), person_relationship_path(@person), class: "button button--outline" %>
+    <% end %>
+  </section>
 </article>

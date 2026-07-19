@@ -20,6 +20,24 @@
     <%= f.label :value, t("events.detail_label") %>
     <%= f.text_field :value, placeholder: t("events.detail_placeholder") %>
   </div>
+  <div class="field place-field"
+       data-controller="place"
+       data-place-search-url-value="<%= search_places_path %>"
+       data-place-geocode-url-value="<%= geocode_places_path %>"
+       data-place-no-match-value="<%= t("places.no_match") %>">
+    <%= f.label :place_name, t("events.place_label") %>
+    <div class="place-input-row">
+      <%= f.text_field :place_name, placeholder: t("events.place_placeholder"), autocomplete: "off",
+            data: { place_target: "input", action: "input->place#search" } %>
+      <button type="button" class="button button--outline button--small"
+              data-action="place#locate"><%= t("places.locate") %></button>
+    </div>
+    <div class="place-suggestions" data-place-target="suggestions" data-action="click->place#chooseSuggestion"></div>
+    <div class="place-candidates" data-place-target="candidates"></div>
+    <div class="place-map" data-place-target="map" hidden></div>
+    <%= f.hidden_field :place_latitude,  data: { place_target: "lat" } %>
+    <%= f.hidden_field :place_longitude, data: { place_target: "lng" } %>
+  </div>
 
   <div class="actions">
     <%= f.submit submit %>

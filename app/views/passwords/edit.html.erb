@@ -1,11 +1,19 @@
-<h1><%= t("auth.update_title") %></h1>
+<% content_for :title, t("auth.update_title") %>
 
-<%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1><%= t("auth.update_title") %></h1>
 
-<%= form_with url: password_path(params[:token]), method: :put do |form| %>
-  <%= form.password_field :password, required: true, autocomplete: "new-password",
-        placeholder: t("auth.new_password_placeholder"), maxlength: 72 %><br>
-  <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password",
-        placeholder: t("auth.confirm_password_placeholder"), maxlength: 72 %><br>
-  <%= form.submit t("auth.update_submit") %>
-<% end %>
+    <%= form_with url: password_path(params[:token]), method: :put, class: "auth-form" do |form| %>
+      <%= form.password_field :password, required: true, autofocus: true, autocomplete: "new-password",
+            minlength: 8, maxlength: 72, placeholder: t("auth.new_password_placeholder") %>
+      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password",
+            minlength: 8, maxlength: 72, placeholder: t("auth.confirm_password_placeholder") %>
+      <%= form.submit t("auth.update_submit"), class: "button" %>
+    <% end %>
+
+    <p class="auth-alt">
+      <%= link_to t("auth.sign_in_submit"), new_session_path %>
+    </p>
+  </div>
+</div>

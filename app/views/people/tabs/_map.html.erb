@@ -1,0 +1,7 @@
+<%# Lazy: the Stimulus controller fetches geolocated events as JSON on connect and
+    drops Leaflet markers. Events without coordinates simply don't appear. %>
+<div class="map-canvas"
+     data-controller="map"
+     data-map-url-value="<%= map_person_path(person, format: :json) %>"
+     data-map-unavailable-value="<%= t("maps.unavailable") %>"></div>
+<p class="muted map-note"><%= t("maps.person_note") %></p>

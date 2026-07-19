@@ -1,0 +1,6 @@
+<%# One consistent destructive action across the app: a confirmed DELETE button.
+    Locals: url, label; optional `confirm` (no prompt when omitted) and `class`
+    (defaults to the subtle inline delete-link; pass "danger" for the heavy one). %>
+<%= button_to label, url, method: :delete,
+      class: local_assigns.fetch(:class, "delete-link"),
+      form: { data: { turbo_confirm: local_assigns[:confirm] } } %>

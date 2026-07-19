@@ -16,6 +16,23 @@
     <%= f.select :sex, Person::SEXES.map { |v| [t("people.sex.#{v}"), v] } %>
   </div>
 
+  <div class="field">
+    <%= f.label :avatar, t("people.avatar_label") %>
+    <% if person.avatar.attached? %>
+      <div class="avatar-preview">
+        <%= image_tag person.avatar, class: "avatar avatar--medium", alt: person.display_name %>
+      </div>
+    <% end %>
+    <%= f.file_field :avatar, accept: Person::AVATAR_CONTENT_TYPES.join(",") %>
+    <span class="field-hint"><%= t("people.avatar_hint") %></span>
+  </div>
+
+  <div class="field field--biography">
+    <%= f.label :biography, t("people.biography_label") %>
+    <span class="field-hint"><%= t("people.biography_hint") %></span>
+    <%= f.rich_text_area :biography %>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
     <%= link_to t("forms.cancel"), (person.persisted? ? person : people_path), class: "linkish" %>

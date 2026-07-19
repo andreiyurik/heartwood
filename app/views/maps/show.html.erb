@@ -1,0 +1,15 @@
+<% content_for :title, t("maps.tree_title") %>
+
+<div class="map-page">
+  <header class="page-head">
+    <h1><%= t("maps.tree_title") %></h1>
+    <div class="actions">
+      <%= link_to t("nav.all_people"), people_path, class: "linkish" %>
+    </div>
+  </header>
+
+  <div class="map-canvas map-canvas--full"
+       data-controller="map"
+       data-map-url-value="<%= tree_map_events_path(format: :json) %>"
+       data-map-unavailable-value="<%= t("maps.unavailable") %>"></div>
+</div>

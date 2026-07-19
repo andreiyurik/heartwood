@@ -4,14 +4,23 @@ require "test_helper"
 # Person or a Family. See docs/domain/event.md, docs/domain/domain-model.md.
 class EventTest < ActiveSupport::TestCase
   setup do
-    @person = Person.create!(given_names: "Ada", surname: "Lovelace", sex: "F")
-    @family = Family.create!
+    @tree   = trees(:alpha)
+    @person = Person.create!(given_names: "Ada", surname: "Lovelace", sex: "F", tree: @tree)
+    @family = Family.create!(tree: @tree)
   end
 
   test "requires a kind" do
     event = Event.new(eventable: @person)
     assert_not event.valid?
     assert_includes event.errors[:kind], "can't be blank"
+  end
+
+  # Decision (characterization): kind is validated for presence only — NOT inclusion in
+  # KINDS. Unknown GEDCOM tags must round-trip through import/export, so arbitrary tags
+  # are accepted by design. If this ever changes, the GEDCOM mapper must change with it.
+  test "kind accepts arbitrary GEDCOM tags (unknown tags are preserved, not rejected)" do
+    event = @person.events.new(kind: "_CUSTOM")
+    assert event.valid?
   end
 
   test "attaches to a person (eventable)" do
@@ -24,6 +33,16 @@ class EventTest < ActiveSupport::TestCase
     event = @family.events.create!(kind: "MARR")
     assert_equal @family, event.eventable
     assert_includes @family.events, event
+  end
+
+  test "event inherits tree from its eventable person" do
+    event = @person.events.create!(kind: "BIRT")
+    assert_equal @tree, event.tree
+  end
+
+  test "event inherits tree from its eventable family" do
+    event = @family.events.create!(kind: "MARR")
+    assert_equal @tree, event.tree
   end
 
   test "a person with no death event is considered living" do

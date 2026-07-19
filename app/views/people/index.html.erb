@@ -2,13 +2,43 @@
 
 <div class="page-head">
   <h1><%= t("people.title") %></h1>
-  <%= link_to t("people.add"), new_person_path, class: "button" %>
+  <div class="page-head-actions">
+    <%= link_to t("people.add"), new_person_path, class: "button" %>
+    <%= link_to t("trees.clan_link"), clan_tree_path, class: "button button--outline" %>
+    <%= link_to t("maps.tree_link"), tree_map_path, class: "button button--outline" %>
+    <%= button_to t("exports.create"), export_path, method: :post, class: "button button--secondary" %>
+  </div>
 </div>
+
+<%= form_with url: people_path, method: :get,
+      data: { controller: "search", turbo_action: "advance" },
+      class: "search-form" do |f| %>
+  <div class="search-bar">
+    <%= f.search_field :q, value: @q,
+          placeholder: t("people.search_placeholder"),
+          autocomplete: "off",
+          data: { search_target: "input", action: "input->search#debounce" } %>
+    <%= f.select :sex,
+          Person::SEXES.map { |s| [t("people.sex.#{s}"), s] },
+          { include_blank: t("people.sex_filter_all"), selected: @sex },
+          class: "search-filter",
+          data: { action: "change->search#submit" } %>
+    <% if @q.present? || @sex.present? %>
+      <%= link_to t("people.search_clear"), people_path, class: "linkish search-clear" %>
+    <% end %>
+  </div>
+<% end %>
 
 <% if @people.any? %>
   <ul class="people-list">
     <%= render @people %>
   </ul>
 <% else %>
-  <p class="empty"><%= t("people.empty") %> <%= link_to t("people.add_first"), new_person_path %>.</p>
+  <p class="empty">
+    <% if @q.present? || @sex.present? %>
+      <%= t("people.search_empty") %>
+    <% else %>
+      <%= t("people.empty") %> <%= link_to t("people.add_first"), new_person_path %>.
+    <% end %>
+  </p>
 <% end %>

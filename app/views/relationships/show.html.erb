@@ -1,0 +1,26 @@
+<%# The whole "how are we related?" island, swapped in as one Turbo Frame. The
+    candidate links break out to this frame, so picking someone reloads it with
+    the named result and a fresh search to try another person. %>
+<%= turbo_frame_tag "relationship" do %>
+  <div class="relationship">
+    <%= form_with url: search_person_relationship_path(@person), method: :get,
+          data: { controller: "search", turbo_frame: "relationship_candidates" },
+          class: "combobox" do %>
+      <%= search_field_tag :q, nil,
+            placeholder: t("relationships.search_placeholder"),
+            autocomplete: "off",
+            data: { search_target: "input", action: "input->search#debounce" } %>
+    <% end %>
+    <%= turbo_frame_tag "relationship_candidates" %>
+
+    <% if @other %>
+      <p class="relationship-result">
+        <% if @relationship %>
+          <%= t("relationships.result", other: @other.display_name, person: @person.display_name, relation: @relationship) %>
+        <% else %>
+          <%= t("relationships.none", other: @other.display_name, person: @person.display_name) %>
+        <% end %>
+      </p>
+    <% end %>
+  </div>
+<% end %>

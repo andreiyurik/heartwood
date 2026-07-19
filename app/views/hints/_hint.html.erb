@@ -1,0 +1,23 @@
+<%= tag.li id: dom_id(hint), class: "hint-row" do %>
+  <div class="hint-pair">
+    <%= link_to hint.person_a.display_name, hint.person_a, class: "hint-person" %>
+    <span class="hint-vs"><%= t("hints.vs") %></span>
+    <%= link_to hint.person_b.display_name, hint.person_b, class: "hint-person" %>
+  </div>
+
+  <div class="hint-meta">
+    <span class="hint-score" title="<%= t("hints.score_title") %>"><%= hint.score %></span>
+    <ul class="hint-reasons">
+      <% hint.reasons.each do |reason| %>
+        <li><%= t("hints.reasons.#{reason}", default: reason) %></li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="hint-actions">
+    <%# Merge is a deliberate v2 step — suggest, never one-click-accept. %>
+    <span class="button button--outline button--disabled" aria-disabled="true"
+          title="<%= t("hints.merge_soon") %>"><%= t("hints.merge") %></span>
+    <%= button_to t("hints.dismiss"), dismiss_hint_path(hint), method: :patch, class: "linkish" %>
+  </div>
+<% end %>

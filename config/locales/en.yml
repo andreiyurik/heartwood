@@ -17,13 +17,36 @@ en:
     add: Add person
     edit: "Edit %{name}"
     remove: Remove
+    delete_person: Delete this person
     remove_confirm: "Remove %{name}?"
+    danger_zone: Danger zone
+    danger_zone_hint: Permanently delete this person along with their events, sources, and memories. This can't be undone.
     profile: Profile
     tree: Tree
     edit_button: Edit
     empty: No people yet.
     add_first: Add the first one
     unknown_name: Unknown
+    living: Living
+    tabs_label: Profile sections
+    avatar_label: Photo
+    avatar_hint: JPEG, PNG or WebP · max 5 MB
+    biography_label: Biography
+    biography_hint: Their life story, in your own words.
+    biography_empty: No biography yet. Edit this person to add their story.
+    tabs:
+      details: Details
+      sources: Sources
+      memories: Memories
+      timeline: Timeline
+      map: Map
+      memories_stub: No photos yet. Add one when you edit this person.
+      memories_more_stub: More photos and albums are coming soon.
+      timeline_stub: Coming soon — this person's life events, laid out in order.
+    search_placeholder: Search by name…
+    search_empty: No people match your search.
+    search_clear: Clear
+    sex_filter_all: All sexes
     sex_label: Sex
     status_label: Status
     nickname_label: Nickname
@@ -57,6 +80,97 @@ en:
       parent_added: Parent added.
       partner_added: Partner added.
       child_added: Child added.
+    combobox:
+      placeholder: Search existing people…
+      none: No matches. Add someone new below.
+      or_new: or add someone new
+
+  relationships:
+    section_title: Relationship
+    cta: Calculate relationship
+    lede: "See how %{name} is related to anyone else in the tree."
+    search_placeholder: Search for a person…
+    search_none: No matches.
+    result: "%{other} is %{person}’s %{relation}."
+    none: "No relationship found between %{person} and %{other}."
+    great_prefix: "great-"
+    ordinal_fallback: "%{count}th"
+    ordinals:
+      - first
+      - second
+      - third
+      - fourth
+      - fifth
+      - sixth
+      - seventh
+      - eighth
+    cousin: "%{ordinal} cousin"
+    removed:
+      once: once removed
+      twice: twice removed
+      other: "%{count} times removed"
+    spouse:
+      M: husband
+      F: wife
+      U: spouse
+    parent:
+      M: father
+      F: mother
+      U: parent
+    grandparent:
+      M: grandfather
+      F: grandmother
+      U: grandparent
+    child:
+      M: son
+      F: daughter
+      U: child
+    grandchild:
+      M: grandson
+      F: granddaughter
+      U: grandchild
+    sibling:
+      M: brother
+      F: sister
+      U: sibling
+    aunt_uncle:
+      M: uncle
+      F: aunt
+      U: aunt or uncle
+    niece_nephew:
+      M: nephew
+      F: niece
+      U: niece or nephew
+
+  places:
+    locate: Find on map
+    no_match: We couldn't find that place. You can still save the name, or drag the pin after a closer search.
+
+  maps:
+    tree_title: Family map
+    tree_link: Map view
+    person_note: Places with coordinates appear here; events without a located place aren't shown.
+    unavailable: The map library couldn't be loaded. Check your connection and refresh.
+
+  hints:
+    title: Possible duplicates
+    nav: Duplicates
+    lede: We only suggest. Review each pair and dismiss or merge it yourself — nothing changes automatically.
+    empty: No possible duplicates found.
+    scan: Scan now
+    vs: "&"
+    score_title: Match score
+    merge: Merge
+    merge_soon: Merging arrives in a later version.
+    dismiss: Dismiss
+    reasons:
+      surname: same surname
+      given_names: similar given names
+      birth_year: similar birth year
+      sex: same sex
+    flash:
+      scanning: Scanning for duplicates…
+      dismissed: Hint dismissed.
 
   events:
     title: Life events
@@ -68,6 +182,10 @@ en:
     select_blank: "Select…"
     date_placeholder: "e.g. 10 DEC 1815 or 1815"
     detail_placeholder: "e.g. Engineer (for facts)"
+    place_label: Place
+    place_placeholder: "e.g. Boston, Massachusetts"
+    add_birthplace: + Birthplace
+    add_residence: + Where they lived
     remove_confirm: Remove this event?
     edit: Edit
     remove: Remove
@@ -88,13 +206,42 @@ en:
       RESI: Residence
       EDUC: Education
 
+  citations:
+    add: + Add source
+    add_title: "Add source for %{event}"
+    submit_add: Save source
+    sourced_badge: "✓"
+    sourced_title: This event has a source
+    remove: Remove source
+    remove_confirm: Remove this source?
+    none_for_person: No sources cited yet. Add a source to any life event.
+    source_title_label: Title
+    source_url_label: URL (optional)
+    citation_text_label: Notes (optional)
+    citation_text_placeholder: "e.g. page 42, parish register"
+    flash:
+      created: Source added.
+      destroyed: Source removed.
+
+  exports:
+    create: Export GEDCOM
+
   trees:
     title: "%{name} — Family Tree"
     ancestors: Ancestors
     descendants: Descendants
-    hint: "Scroll to zoom · drag to pan · click a name to open profile"
+    hint: "Scroll to zoom · drag to pan · click a node to refocus"
+    depth_label: Generations
+    default_name: My Tree
+    clan_link: Family tree
+    clan_title: "Family tree — %{name}"
+    clan_empty: This tree has no people yet.
+    search_placeholder: Find a person…
+    expand: Expand branch
+    collapse: Collapse branch
 
   auth:
+    sign_in_title: Sign in to Heartwood
     email_placeholder: Enter your email address
     password_placeholder: Enter your password
     sign_in_submit: Sign in
@@ -105,6 +252,18 @@ en:
     new_password_placeholder: Enter new password
     confirm_password_placeholder: Repeat new password
     update_submit: Save
+
+  registrations:
+    title: Create your Heartwood
+    lede: Start your family tree — it's free and yours to keep.
+    name_placeholder: Your name
+    password_placeholder: Choose a password
+    password_hint: At least 8 characters.
+    submit: Create account
+    have_account: Already have an account?
+    no_account: New to Heartwood?
+    flash:
+      welcome: "Welcome to Heartwood, %{name}! 🌳"
 
   forms:
     cancel: Cancel
@@ -127,6 +286,14 @@ en:
       body: "You can reset your password by visiting the link below. This link will expire in %{expiry}."
       link_text: Reset password
       body_text: "Reset your password: %{url}\n\nThis link will expire in %{expiry}."
+    welcome:
+      subject: Welcome to Heartwood 🌳
+      heading: Welcome to Heartwood
+      greeting: "Hello %{name},"
+      intro: Heartwood is the living home for your family tree — open, yours, and built to last generations.
+      next_steps: "Ready to begin? Add your first person, or import an existing GEDCOM file to bring your whole tree in at once."
+      cta_link: Open Heartwood
+      signoff: "— The Heartwood team"
 
   activerecord:
     errors:
@@ -150,3 +317,11 @@ en:
         name_suffix: Suffix
         nickname: Nickname
         sex: Sex
+        avatar: Photo
+    errors:
+      models:
+        person:
+          attributes:
+            avatar:
+              invalid_content_type: must be a JPEG, PNG, or WebP image
+              too_large: must be smaller than 5 MB

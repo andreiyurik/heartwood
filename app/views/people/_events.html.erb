@@ -10,6 +10,10 @@
   <% end %>
 
   <%= turbo_frame_tag "add_event" do %>
-    <%= link_to t("events.add"), new_person_event_path(person), class: "linkish add-relative" %>
+    <div class="event-add-actions">
+      <%= link_to t("events.add"), new_person_event_path(person), class: "linkish add-relative" %>
+      <%= link_to t("events.add_birthplace"), new_person_event_path(person, kind: "BIRT"), class: "linkish" %>
+      <%= link_to t("events.add_residence"), new_person_event_path(person, kind: "RESI"), class: "linkish" %>
+    </div>
   <% end %>
 </section>

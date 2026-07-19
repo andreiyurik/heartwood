@@ -1,0 +1,8 @@
+<span id="hints-badge" class="hints-badge-wrap">
+  <% if count.positive? %>
+    <%= link_to hints_path, class: "hints-badge", title: t("hints.title") do %>
+      <%= t("hints.nav") %>
+      <span class="hints-badge-count"><%= count %></span>
+    <% end %>
+  <% end %>
+</span>

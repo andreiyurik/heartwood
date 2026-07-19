@@ -1,0 +1,21 @@
+<dl class="facts">
+  <% if person.nickname.present? %>
+    <dt><%= t("people.nickname_label") %></dt><dd><%= person.nickname %></dd>
+  <% end %>
+  <dt><%= t("people.sex_label") %></dt><dd><%= t("people.sex.#{person.sex}") %></dd>
+  <dt><%= t("people.status_label") %></dt>
+  <dd><%= person.living? ? t("people.status.living") : t("people.status.deceased") %></dd>
+</dl>
+
+<section class="biography-section">
+  <h2><%= t("people.biography_label") %></h2>
+  <% if person.biography.present? %>
+    <div class="biography lexxy-content"><%= person.biography %></div>
+  <% else %>
+    <p class="muted tab-stub"><%= t("people.biography_empty") %></p>
+  <% end %>
+</section>
+
+<%= render "people/events", person: person %>
+
+<%= render "people/family", person: person %>

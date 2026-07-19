@@ -24,6 +24,10 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%# Lexxy editor styles (shipped by the lexxy gem) %>
+    <%= stylesheet_link_tag "lexxy", "data-turbo-track": "reload" %>
+    <%# Leaflet map styles (self-hosted, MIT) — only used on the place/map views %>
+    <%= stylesheet_link_tag "leaflet" %>
     <%= javascript_importmap_tags %>
   </head>
 
@@ -39,13 +43,15 @@
           <% end %>
         </nav>
         <% if authenticated? %>
+          <%= turbo_stream_from Current.tree, :hints %>
+          <%= render "hints/badge", count: Current.tree.duplicate_hints.pending.count %>
           <%= button_to t("nav.sign_out"), session_path, method: :delete, class: "linkish" %>
         <% end %>
       </div>
     </header>
 
-    <% if notice %><p class="flash" role="status"><%= notice %></p><% end %>
-    <% if alert %><p class="flash flash--alert" role="alert"><%= alert %></p><% end %>
+    <% if notice %><div class="flash" role="status"><%= notice %></div><% end %>
+    <% if alert %><div class="flash flash--alert" role="alert"><%= alert %></div><% end %>
 
     <main>
       <%= yield %>

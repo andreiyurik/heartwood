@@ -14,6 +14,9 @@ gem "importmap-rails"
 gem "turbo-rails"
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
+# Rich text editing via Action Text, using the Lexxy editor instead of Trix
+# (37signals' Lexical-based editor) — see docs/architecture/adr/0008-action-text-lexxy.md
+gem "lexxy", "~> 0.9.18"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 

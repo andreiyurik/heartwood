@@ -1,0 +1,13 @@
+<%# Suggestions for the event place field. The place Stimulus controller copies
+    the chosen name into the text input; typing a new one still works. %>
+<% if @matches.any? %>
+  <ul class="combobox-options" role="listbox">
+    <% @matches.each do |place| %>
+      <li role="option">
+        <button type="button" class="combobox-option" data-place-name="<%= place.name %>">
+          <span class="combobox-option-name"><%= place.name %></span>
+        </button>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

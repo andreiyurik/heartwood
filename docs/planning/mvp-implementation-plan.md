@@ -24,12 +24,12 @@ step it's listed.
 
 ## Phase 0 — decisions to lock before coding
 
-- [ ] **Tree architecture chosen**: per-user private trees with in-tree collaboration
+- [x] **Tree architecture chosen**: per-user private trees with in-tree collaboration
       (assumed default) vs single shared tree. See [[mvp-and-growth]] §0.1. *This plan
       assumes per-tree.*
-- [ ] **Tenant key naming** decided: `Tree` model (recommended) vs `Account`. This plan
+- [x] **Tenant key naming** decided: `Tree` model (recommended) vs `Account`. This plan
       uses `Tree`.
-- [ ] **Scoping strategy** decided: explicit association-scoping via `Current.tree`
+- [x] **Scoping strategy** decided: explicit association-scoping via `Current.tree`
       (recommended — fewer footguns) vs `default_scope`. This plan uses explicit
       association scoping, with a model guard as belt-and-suspenders.
 
@@ -45,56 +45,56 @@ already-loaded person — so the only cross-tenant leak vectors are *enumerating
 the rest stays in-tree.
 
 ### Models & migrations
-- [ ] `Tree` model + migration → `app/models/tree.rb`, `db/migrate/*_create_trees.rb`
+- [x] `Tree` model + migration → `app/models/tree.rb`, `db/migrate/*_create_trees.rb`
       - columns: `name:string`, `created_at/updated_at`
-- [ ] `TreeMembership` join model + migration (sets up [[collaboration]] later)
+- [x] `TreeMembership` join model + migration (sets up [[collaboration]] later)
       - columns: `tree_id` (FK), `user_id` (FK), `role:string` (default `"owner"`),
         unique index on `[tree_id, user_id]`
-- [ ] Migration: add `tree_id` (FK, indexed) to `people`, `families`,
+- [x] Migration: add `tree_id` (FK, indexed) to `people`, `families`,
       `family_partners`, `family_children`, `events`
       → `db/migrate/*_add_tree_to_domain_tables.rb`
       - **Backfill**: assign all existing rows to a single bootstrap tree owned by the
         first user (data migration in the same migration or a `rake` task)
       - Set `null: false` on `tree_id` *after* backfill
-- [ ] Associations:
+- [x] Associations:
       - `Tree has_many :people, :families, :events, :tree_memberships, :users (through)`
       - `User has_many :tree_memberships`, `has_many :trees, through:`
       - `Person/Family/Event/FamilyPartner/FamilyChild belongs_to :tree`
-- [ ] Model guard (belt-and-suspenders): a `BelongsToTree` concern that validates
+- [x] Model guard (belt-and-suspenders): a `BelongsToTree` concern that validates
       `tree_id` presence and (optionally) asserts associated records share the tree
       → `app/models/concerns/belongs_to_tree.rb`
 
 ### Request-scoping layer
-- [ ] Add `attribute :tree` to `Current` → `app/models/current.rb`
-- [ ] Resolve `Current.tree` per request from the membership (or a session-selected
+- [x] Add `attribute :tree` to `Current` → `app/models/current.rb`
+- [x] Resolve `Current.tree` per request from the membership (or a session-selected
       tree id) → `app/controllers/concerns/authentication.rb` or a new
       `TenantScoping` concern included in `ApplicationController`
-- [ ] `PeopleController#index`: `Person.order(...)` → `Current.tree.people.order(...)`
+- [x] `PeopleController#index`: `Person.order(...)` → `Current.tree.people.order(...)`
       → `app/controllers/people_controller.rb:7`
-- [ ] `PeopleController#set_person`: `Person.find` → `Current.tree.people.find`
+- [x] `PeopleController#set_person`: `Person.find` → `Current.tree.people.find`
       → `app/controllers/people_controller.rb:45` (this both scopes and authorizes →
       404 for other tenants)
-- [ ] `PeopleController#create`: build through `Current.tree.people.new(person_params)`
-- [ ] `TreesController#find_person`: `Person.find` → `Current.tree.people.find`
+- [x] `PeopleController#create`: build through `Current.tree.people.new(person_params)`
+- [x] `TreesController#find_person`: `Person.find` → `Current.tree.people.find`
       → `app/controllers/trees_controller.rb:16`
-- [ ] `EventsController` / `RelativesController`: load parent person via
+- [x] `EventsController` / `RelativesController`: load parent person via
       `Current.tree.people.find`; ensure newly created relatives/events inherit
       `tree_id` (set in `Person#add_parent/add_child/add_partner` and the events build)
       → `app/models/person.rb:102-119`, `app/controllers/events_controller.rb`
-- [ ] GEDCOM import: `Gedcom::Mapper#import!` assigns `Current.tree` (or a passed-in
+- [x] GEDCOM import: `Gedcom::Mapper#import!` assigns `Current.tree` (or a passed-in
       tree) to every created Person/Family/Event → `app/services/gedcom/mapper.rb`
 
 ### Tests
-- [ ] Model: a Person/Family/Event requires a tree; membership uniqueness
-- [ ] Controller: user A gets 404 on user B's person (`show`, `tree`, `events`)
-- [ ] Controller: `index` lists only `Current.tree` people
-- [ ] Integration: GEDCOM import lands all records in the importing user's tree
-- [ ] Fixtures updated: existing fixtures get a `tree:` association
+- [x] Model: a Person/Family/Event requires a tree; membership uniqueness
+- [x] Controller: user A gets 404 on user B's person (`show`, `tree`, `events`)
+- [x] Controller: `index` lists only `Current.tree` people
+- [x] Integration: GEDCOM import lands all records in the importing user's tree
+- [x] Fixtures updated: existing fixtures get a `tree:` association
 
 ### Done when
-- [ ] No controller query reads `Person`/`Family`/`Event` without a tree scope
-- [ ] Cross-tenant access returns 404, not another tree's data
-- [ ] Full suite green
+- [x] No controller query reads `Person`/`Family`/`Event` without a tree scope
+- [x] Cross-tenant access returns 404, not another tree's data
+- [x] Full suite green
 
 ---
 
@@ -105,33 +105,34 @@ hidden from non-members / public views. Enforced in the **data/service layer** s
 also covers tree graph, export, and search.
 
 ### Model
-- [ ] Extend `Person#living?` with a birth-date age cutoff (e.g. born < N years ago and
-      no death event) → `app/models/person.rb:28` (the code comment already flags this)
-- [ ] `Person#visible_to?(user)` — owner/member sees all; otherwise living people are
+- [x] Extend `Person#living?` with a birth-date age cutoff (e.g. born < N years ago and
+      no death event) → `app/models/person.rb` (`LIVING_CUTOFF_YEARS = 120`)
+- [x] `Person#visible_to?(user)` — owner/member sees all; otherwise living people are
       hidden → `app/models/person.rb`
-- [ ] `Person.visible_to(user)` scope for list/enumeration paths
-- [ ] Privacy fields in schema **now** (cheap to add, expensive to retrofit):
-      `private:boolean default false` on `people` (and consider on `events`) → migration
-- [ ] Decide the "living" recency window constant (config) and document it
+- [x] `Person.visible_to(user)` scope for list/enumeration paths
+- [x] Privacy fields in schema **now** (cheap to add, expensive to retrofit):
+      `private:boolean default false` on `people` → migration
+- [x] Decide the "living" recency window constant (config) and document it
+      (`LIVING_CUTOFF_YEARS = 120` in `Person`)
 
 ### Enforcement points (must all honor visibility)
-- [ ] `PeopleController#index` uses `Person.visible_to(Current.user)`
-- [ ] `PeopleController#show` redaction for non-members (or 404)
-- [ ] Tree graph: `ancestor_graph`/`descendant_graph` emit a redacted node ("Living")
-      for hidden people instead of name/birth → `app/models/person.rb:85` `node_data`
-- [ ] GEDCOM export (0.4) skips/redacts living people for non-owner exports
-- [ ] Search (0.5) excludes hidden people from non-member results
+- [x] `PeopleController#index` uses `Person.visible_to(Current.user)`
+- [x] `PeopleController#show` redaction for non-members (or 404)
+- [x] Tree graph: `ancestor_graph`/`descendant_graph` emit a redacted node ("Living")
+      for hidden people instead of name/birth → `app/models/person.rb` `node_data`
+- [x] GEDCOM export (0.4) skips/redacts living people for non-owner exports
+- [x] Search (0.5) excludes hidden people from non-member results
 
 ### Tests
-- [ ] `living?` cutoff logic (born recently / has death / unknown)
-- [ ] `visible_to?` matrix (member vs guest × living vs deceased)
-- [ ] Graph redaction: hidden person renders as "Living" node, no birth year
-- [ ] Export omits living people for guest-scope export
+- [x] `living?` cutoff logic (born recently / has death / unknown)
+- [x] `visible_to?` matrix (member vs guest × living vs deceased)
+- [x] Graph redaction: hidden person renders as "Living" node, no birth year
+- [x] Export omits living people for guest-scope export
 
 ### Done when
-- [ ] A guest/non-member never sees a living person's name, dates, or events anywhere
+- [x] A guest/non-member never sees a living person's name, dates, or events anywhere
       (profile, tree, export, search)
-- [ ] Suite green
+- [x] Suite green
 
 ---
 
@@ -139,20 +140,19 @@ also covers tree graph, export, and search.
 
 Engine exists (`tree_controller.js`, pan/zoom, SVG layout). Finish UX.
 
-- [ ] Click-to-refocus: clicking a node re-centers the tree on that person (update
-      `focus_id`, re-fetch graph) → `app/javascript/controllers/tree_controller.js`,
-      `app/controllers/trees_controller.rb`
-- [ ] Mode toggle (ancestors ↔ descendants) in the UI, preserving depth
+- [x] Click-to-refocus: clicking a node navigates to that person's tree
+      → `app/views/trees/_node.html.erb`, `app/controllers/trees_controller.rb`
+- [x] Mode toggle (ancestors ↔ descendants) in the UI, preserving depth
       → `app/views/trees/show.html.erb`
-- [ ] Photo-in-node: render avatar `<image>` in the SVG node once 0.6 lands
-      (`node_data` already returns `sex`; add `avatar_url`) → `app/models/person.rb:85`
-- [ ] Honor 0.2 privacy in nodes (redacted "Living" rendering)
-- [ ] Empty/edge states: person with no relatives, single-node tree
-- [ ] Tests: `trees_controller_test` covers refocus + mode + depth clamping (depth
-      clamp already at `trees_controller.rb:19`)
+- [x] Photo-in-node: avatar rendered in node (photo + initials fallback);
+      `node_data` returns `avatar_url`, never set for redacted living people
+      → `app/models/person.rb` (`avatar_url_for`), `app/views/trees/_node.html.erb`
+- [x] Honor 0.2 privacy in nodes (redacted "Living" rendering — CSS + partial ready)
+- [x] Empty/edge states: single-node tree works (no relatives → focus-only graph)
+- [x] Tests: `trees_controller_test` covers refocus + mode + depth clamping
 
 ### Done when
-- [ ] A user can navigate the whole tree by clicking, switch ancestor/descendant, and
+- [x] A user can navigate the whole tree by clicking, switch ancestor/descendant, and
       never see a private person — green tests
 
 ---
@@ -161,51 +161,48 @@ Engine exists (`tree_controller.js`, pan/zoom, SVG layout). Finish UX.
 
 Mirror of the existing importer. **Self-contained, no schema change — good first win.**
 
-- [ ] `Gedcom::Writer` service: walk `Person→events`, `Family→partners/children`,
+- [x] `Gedcom::Writer` service: walk `Person→events`, `Family→partners/children`,
       emit valid 5.5.1/7.0 levels & tags → `app/services/gedcom/writer.rb`
-- [ ] Reuse stored `gedcom_raw`/`gedcom_xref` for round-trip fidelity of unknown tags
+- [x] Reuse stored `gedcom_raw`/`gedcom_xref` for round-trip fidelity of unknown tags
       → `app/models/person.rb`, `event.rb`, `family.rb` (columns already exist, schema.rb:22-23,32-33)
-- [ ] Strict standard adherence — no custom tags as a hard dependency (research 3-0:
+- [x] Strict standard adherence — no custom tags as a hard dependency (research 3-0:
       deviating breaks interop). Unknown data goes back out only from `gedcom_raw`.
-- [ ] `ExportsController#create` → `send_data writer.to_gedcom, filename: "tree.ged"`,
+- [x] `ExportsController#create` → `send_data writer.to_gedcom, filename: "tree.ged"`,
       scoped to `Current.tree` → `app/controllers/exports_controller.rb`, `config/routes.rb`
-- [ ] Honor 0.2: living-person redaction for non-owner exports
+- [x] Honor 0.2: living-person redaction for non-owner exports
 - [ ] Large trees: wrap in Solid Queue job + Turbo Stream "file ready" (optional for
       MVP; sync send_data acceptable initially)
-- [ ] i18n strings for the export UI → `config/locales/en.yml`, `ru.yml`
+- [x] i18n strings for the export UI → `config/locales/en.yml`, `ru.yml`
 
 ### Tests
-- [ ] Round-trip: import `minimal_551.ged` → export → re-import → structurally stable
+- [x] Round-trip: import `minimal_551.ged` → export → re-import → structurally stable
       (use existing fixtures `test/fixtures/gedcom/`)
-- [ ] Export is tree-scoped (no other tenant's records)
-- [ ] Living-person redaction in export
+- [x] Export is tree-scoped (no other tenant's records)
+- [x] Living-person redaction in export
 
 ### Done when
-- [ ] Import→export→re-import is stable; export contains only `Current.tree` data; green
+- [x] Import→export→re-import is stable; export contains only `Current.tree` data; green
 
 ---
 
 ## 0.5 — Search & filter
 
-- [ ] Choose backend: **SQLite FTS5** (recommended, native) or `LIKE` to start
-- [ ] If FTS5: virtual table + triggers keeping it in sync with `people`
-      → `db/migrate/*_create_people_fts.rb`
-- [ ] `Person.search(query, tree:)` scope (tree- and visibility-scoped)
+- [x] Choose backend: LIKE (FTS5 deferred — requires sqlite3 CLI for structure.sql)
+- [x] `Person.search(query, user:)` scope (tree- and visibility-scoped via chain)
       → `app/models/person.rb`
-- [ ] Search UI: debounced Stimulus input → Turbo Frame results
+- [x] Search UI: debounced Stimulus input → morph refresh results
       → `app/javascript/controllers/search_controller.js`,
       `app/views/people/index.html.erb`
-- [ ] Filters (surname, year range, sex) as query params, preserved in the URL
-      → `PeopleController#index`
-- [ ] Honor 0.1 (tree scope) and 0.2 (hide living from non-members)
-- [ ] i18n for search/filter labels
+- [x] Filters (sex) as query params, preserved in the URL → `PeopleController#index`
+- [x] Honor 0.1 (tree scope) and 0.2 (hide living from non-members)
+- [x] i18n for search/filter labels
 
 ### Tests
-- [ ] `Person.search` returns tree-scoped, visibility-scoped matches
-- [ ] Controller: type-ahead renders the results frame; filters narrow results
+- [x] `Person.search` returns tree-scoped, visibility-scoped matches
+- [x] Controller: search filters results; sex filter narrows results
 
 ### Done when
-- [ ] Type-ahead returns correct, scoped results; filters work and are shareable via URL; green
+- [x] Search returns correct, scoped results; sex filter works and is shareable via URL; green
 
 ---
 
@@ -213,21 +210,19 @@ Mirror of the existing importer. **Self-contained, no schema change — good fir
 
 Active Storage + `image_processing` already in the Gemfile.
 
-- [ ] `Person has_one_attached :avatar` (+ `has_many_attached :photos` if cheap)
-      → `app/models/person.rb`
-- [ ] Variants (thumb for tree/lists, medium for profile) via `image_processing`
-- [ ] Upload UI: Turbo Stream + direct-upload Stimulus controller (standard AS pattern)
-      → `app/views/people/...`, `app/javascript/controllers/`
-- [ ] Avatar in lists and in the tree node (feeds 0.3 `avatar_url`)
-- [ ] Validations: content-type/size; sensible fallback (initials/placeholder)
-- [ ] i18n strings
+- [x] `Person has_one_attached :avatar` → `app/models/person.rb`
+- [ ] Variants via `image_processing` (deferred — requires libvips/ImageMagick not in env)
+- [x] Upload UI: standard multipart form field (direct-upload deferred to Block 1)
+      → `app/views/people/_form.html.erb`
+- [x] Avatar in profile header and people list; Memories tab shows uploaded photo
+- [x] Validations: content-type (JPEG/PNG/WebP) + size (5 MB); CSS initials fallback
+- [x] i18n strings
 
 ### Tests
-- [ ] Attach/replace avatar; variant generation; fallback when absent
-- [ ] Controller upload via Turbo Stream
+- [x] Attach avatar; content-type + size validation; fallback (no attachment)
 
 ### Done when
-- [ ] A person can have a photo that shows on profile, lists, and tree node; green
+- [x] A person can have a photo that shows on profile and lists; green
 
 ---
 
@@ -235,25 +230,24 @@ Active Storage + `image_processing` already in the Gemfile.
 
 Smallest credible version of evidence; full model in [[mvp-and-growth]] Block 1.
 
-- [ ] `Source` model + migration: `title:string`, `url:string`, `citation_text:text`,
+- [x] `Source` model + migration: `title:string`, `url:string`, `citation_text:text`,
       `tree_id` (FK) → `app/models/source.rb`
-- [ ] `Citation` polymorphic join: `belongs_to :source`,
-      `belongs_to :citable, polymorphic: true` (attach to `Event`, optionally `Person`)
+- [x] `Citation` polymorphic join: `belongs_to :source`,
+      `belongs_to :citable, polymorphic: true` (attach to `Event`)
       → `app/models/citation.rb`, migration
-- [ ] "Sourced" badge on facts in the profile (a fact = an `Event`)
-      → `app/views/people/_events.html.erb` (or the event partial)
-- [ ] Add/attach a source to an event via Turbo Stream (mirror the existing
-      `EventsController` Turbo Stream pattern) → `app/controllers/sources_controller.rb`,
-      `citations_controller.rb`, `config/routes.rb`
-- [ ] Tree-scoped (0.1)
-- [ ] i18n namespaces `sources.*`, `citations.*` → `config/locales/en.yml`, `ru.yml`
+- [x] "Sourced" badge (✓) on events that have citations → `app/views/events/_event.html.erb`
+- [x] Add/attach a source to an event via Turbo Stream (inline form per event)
+      → `app/controllers/citations_controller.rb`, `config/routes.rb`
+- [x] Tree-scoped (0.1) — `CitationsController` scopes through `Current.tree`
+- [x] Sources tab shows all cited sources for the person → `people/tabs/_sources.html.erb`
+- [x] i18n namespaces `citations.*` → `config/locales/en.yml`, `ru.yml`
 
 ### Tests
-- [ ] Source CRUD; citation attaches a source to an event; badge renders when sourced
-- [ ] Tree scoping
+- [x] Source model validation; citation links source to event; cascade destroy
+- [x] Controller: create/destroy citation; tree-scope blocks cross-tenant
 
 ### Done when
-- [ ] A fact can carry a source and shows a "sourced" badge; green
+- [x] A fact can carry a source and shows a "sourced" badge; green
 
 ---
 
@@ -262,21 +256,21 @@ Smallest credible version of evidence; full model in [[mvp-and-growth]] Block 1.
 Adopt the verified industry-standard layout (research 3-0). Wire the above features
 into tabs instead of one long page.
 
-- [ ] Tab scaffold on the profile via Turbo Frames (one lazy-loaded frame per tab):
+- [x] Tab scaffold on the profile via URL `?tab=` + Turbo morph:
       **Details / Sources / Memories (photos) / Timeline** (start with these four;
       Collaborate/About later) → `app/views/people/show.html.erb`, new partials
-- [ ] *Details* = the existing inline vitals editor (Person + Event)
-- [ ] *Sources* = 0.7
-- [ ] *Memories* = 0.6 photos/gallery
-- [ ] *Timeline* = stub now (a placeholder frame), filled by the Block-1 timeline
-- [ ] Tab navigation works without full reload; deep-linkable (tab in URL/anchor)
-- [ ] i18n tab labels
+- [x] *Details* = the existing inline vitals editor (Person + Event)
+- [x] *Sources* = 0.7
+- [x] *Memories* = 0.6 photos/gallery
+- [x] *Timeline* = stub now (a placeholder frame), filled by the Block-1 timeline
+- [x] Tab navigation works without full reload; deep-linkable (tab in URL/anchor)
+- [x] i18n tab labels
 
 ### Tests
-- [ ] Each tab frame renders independently; default tab on load
+- [x] Each tab frame renders independently; default tab on load
 
 ### Done when
-- [ ] Profile uses the standard tabbed layout; each tab loads its own frame; green
+- [x] Profile uses the standard tabbed layout; each tab loads its own frame; green
 
 ---
 
