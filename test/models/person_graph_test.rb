@@ -74,6 +74,23 @@ class PersonGraphTest < ActiveSupport::TestCase
     assert_equal @child.sex,          focus[:sex]
   end
 
+  test "nodes carry the given/surname split for the two-line card" do
+    named = Person.create!(given_names: "Johann Sebastian", surname: "Bach", sex: "M", tree: @tree)
+    node  = named.send(:node_data, named, generation: 0, order: 0)
+    assert_equal "Johann Sebastian", node[:given]
+    assert_equal "Bach",             node[:surname]
+  end
+
+  test "redacted living node carries no given or surname" do
+    Current.reset
+    Current.session = users(:two).sessions.create!   # outsider — living people are redacted
+    living = Person.create!(given_names: "Eve", surname: "Hidden", sex: "F", tree: @tree)
+    node   = living.send(:node_data, living, generation: 0, order: 0)
+    assert node[:living]
+    assert_nil node[:given]
+    assert_nil node[:surname]
+  end
+
   test "ancestor_graph does not revisit the same person twice" do
     # father is both in @child's family and is its own parent (corner case via separate fam)
     self_fam = Family.create!(tree: @tree)

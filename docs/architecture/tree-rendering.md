@@ -23,13 +23,13 @@ Server renders node HTML partials (avatar, name, dates)  ──► Turbo Frames
         │
         ▼
 One Stimulus controller runs the layout (positions) + pan/zoom on an <svg>/<div> canvas
-        │  layout engine: evaluate elkjs / dagre / d3-hierarchy / d3-dag
+        │  layout engine: hand-written tidy tree (no library) — see [[family-tree-view]]
         ▼
 Click a node → load [[person-profile]] into a side Turbo Frame. Edit → Turbo Stream back.
 ```
 This keeps **data, content, and interactivity on Rails**, and confines JS to **just the math**.
 
-## Library options to evaluate (Phase 3)
+## Library options evaluated (decision: none — hand-written tidy tree, see [[family-tree-view]])
 - **elkjs** — powerful general graph layout (good for messy genealogy graphs).
 - **dagre** — simpler directed-graph layout.
 - **d3-hierarchy / d3-dag** — d3-based; `d3-dag` handles multi-parent DAGs.

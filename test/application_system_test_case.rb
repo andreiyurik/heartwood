@@ -7,7 +7,16 @@ require "test_helper"
 # NOTE: requires a Chrome/Chromium + chromedriver on the host. They are NOT part of the
 # default `bin/rails test` run — execute with `bin/rails test:system`.
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
-  driven_by :selenium, using: :headless_chrome, screen_size: [ 1400, 1400 ]
+  driven_by :selenium, using: :headless_chrome, screen_size: [ 1400, 1400 ] do |options|
+    # Rails eagerly pins Chrome::Service.driver_path (Browser#preload), which makes
+    # selenium-webdriver skip Selenium Manager at session time — the managed browser
+    # path is lost and chromedriver falls back to whatever "chrome" it finds on the
+    # system (on WSL that's /usr/bin/chromium-browser, a snap stub that exits at once:
+    # "session not created: Chrome instance exited"). Resolve the browser through
+    # Selenium Manager ourselves so driver and browser stay a matched pair.
+    paths = Selenium::WebDriver::SeleniumManager.binary_paths("--browser", "chrome")
+    options.binary = paths["browser_path"] if paths["browser_path"].present?
+  end
 
   # Absorb Turbo navigation / Stimulus-connect latency under load (default is 2s).
   Capybara.default_max_wait_time = 5

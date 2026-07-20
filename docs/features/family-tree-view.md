@@ -84,10 +84,21 @@ sibling subtrees never overlap.
   server's `edges` (`from_id` = layout-parent/focus-side, `to_id` = layout-child, in both
   modes) lifted onto units; `unions` only decide which cards sit side-by-side. First edge into
   a unit wins, so a person reached twice via pedigree collapse is placed once (spanning tree).
+- **Cards.** A node card shows the name on **two lines** — given names over surname — so
+  full Russian ФИО stay readable at the fixed card width (210×72, `NODE_W`/`NODE_H` in
+  `tree_controller.js`, mirrored in `.tree-node` CSS). When either half of the name is
+  missing the card falls back to the single-line `display_name`. Nickname/prefix/suffix are
+  profile-only detail — the card stays compact.
 - **Edges.** Vertical béziers from a parent unit's centre to each child unit's centre, drawn in
-  the growth direction. A couple's two cards are joined by a short horizontal connector; their
-  children descend from the connector's midpoint.
-- **Viewport.** Pan/zoom live in the controller; on load the view centres on the focus card.
+  the growth direction. Edges use a dedicated visible stroke (`--tree-edge`), not the faint
+  hairline `--line`. A couple's two cards are joined by a short horizontal connector drawn as
+  a **thicker bond line** (`.tree-edge--bond`), so marriage reads differently from descent;
+  their children descend from the connector's midpoint.
+- **Viewport.** Pan/zoom live in the controller. On load the camera **fits the whole tree**
+  in the canvas: zoom out (never in) until it fits, floored at `MIN_FIT` — below that a huge
+  tree would shrink to confetti, so the camera falls back to centring the focus card. Wheel
+  zoom is **anchored at the cursor**: the point under the pointer stays fixed as the scale
+  changes.
 
 ## Couples model (`unions`)
 

@@ -12,6 +12,7 @@
   --accent: #6b8f5e;       /* heartwood green */
   --accent-ink: #3f5a36;
   --accent-wash: #eef3e9;  /* tint for selected/active accent surfaces */
+  --tree-edge: #b3a695;    /* tree connector lines — must stay visible on --bg */
   --danger: #b4533f;
   --danger-wash: #fbf3f1;
   --danger-line: #e6c9c2;
@@ -390,9 +391,12 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
 
 .tree-edge {
   fill: none;
-  stroke: var(--line);
+  stroke: var(--tree-edge);
   stroke-width: 1.5;
 }
+
+/* Marriage bond between the two cards of a couple — thicker than descent edges. */
+.tree-edge--bond { stroke-width: 3; }
 
 .tree-nodes-layer { position: relative; }
 
@@ -400,8 +404,8 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
   position: absolute;
   top: 0;
   left: 0;
-  width: 168px;   /* keep in sync with NODE_W in tree_controller.js */
-  height: 56px;   /* keep in sync with NODE_H */
+  width: 210px;   /* keep in sync with NODE_W in tree_controller.js */
+  height: 88px;   /* keep in sync with NODE_H — fits a wrapped name + dates */
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -481,19 +485,35 @@ main { max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; }
   pointer-events: none;
 }
 
-.node-name {
+.node-name,
+.node-surname {
   font-weight: 600;
   font-size: 0.875rem;
+  line-height: 1.25;
   margin: 0;
-  white-space: nowrap;
   overflow: hidden;
+}
+
+/* Given names carry the patronymic ("Александр Сергеевич") and routinely outrun the
+   card width, so this line wraps to at most two lines instead of being clipped. */
+.node-name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow-wrap: anywhere;
+}
+
+/* A surname is a single token — clip it rather than let it wrap the card open. */
+.node-surname {
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
 
 .node-dates {
   font-size: 0.75rem;
+  line-height: 1.2;
   color: var(--muted);
-  margin: 0.15rem 0 0;
+  margin: 0.1rem 0 0;
 }
 
 /* Collapse/expand toggles — small pills at a unit's growth-facing edge. */

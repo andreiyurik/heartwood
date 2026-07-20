@@ -19,9 +19,12 @@ class TreeNavigationTest < ApplicationSystemTestCase
     sign_in_as users(:one)
   end
 
+  # Cards render the name on two lines (given over surname), so match the halves
+  # rather than the joined display_name.
   test "clicking a parent node refocuses the tree on that person" do
     visit person_tree_path(@focus)
-    assert_selector ".tree-node--focus", text: "Focus Person"
+    assert_selector ".tree-node--focus .node-name",    text: "Focus"
+    assert_selector ".tree-node--focus .node-surname", text: "Person"
 
     # Wait for the Stimulus controller to lay out nodes and draw edges before clicking —
     # before layout, every node is stacked at (0,0) and overlaps the focus node.
@@ -34,6 +37,7 @@ class TreeNavigationTest < ApplicationSystemTestCase
     page.execute_script("arguments[0].click()", link)
 
     assert_current_path person_tree_path(@parent), ignore_query: true
-    assert_selector ".tree-node--focus", text: "Pat Parent"
+    assert_selector ".tree-node--focus .node-name",    text: "Pat"
+    assert_selector ".tree-node--focus .node-surname", text: "Parent"
   end
 end

@@ -12,8 +12,9 @@ import { Controller } from "@hotwired/stimulus"
 // camera to a person (expanding the path to them first). Units are built once; a
 // collapse/expand only re-runs the cheap positioning pass.
 
-const NODE_W      = 168   // card width (keep in sync with .tree-node in application.css)
-const NODE_H      = 56    // card height
+const NODE_W      = 210   // card width (keep in sync with .tree-node in application.css)
+const NODE_H      = 88    // card height (name wrapping to 2 lines + surname + dates)
+const MIN_FIT     = 0.35  // fit-to-view floor — below this a huge tree is confetti
 const PAIR_GAP    = 20    // gap between the two cards of a couple
 const SIBLING_GAP = 40    // gap between adjacent units in a row
 const ROW_GAP     = 64    // vertical gap between generation rows
@@ -40,8 +41,7 @@ export default class extends Controller {
     this.innerTarget.appendChild(this._toggleLayer)
 
     this._relayout()
-    this._centerOn(this.graphValue.focus_id)
-    this._applyTransform()
+    this._fitToView()
     this._bindPanZoom()
   }
 
@@ -241,13 +241,14 @@ export default class extends Controller {
     }
   }
 
-  // Short horizontal line joining the two partner cards of a couple.
+  // Short horizontal line joining the two partner cards of a couple — drawn thicker
+  // than descent edges so marriage reads differently from parent-child.
   _connector(u) {
     const [a, b] = u.members
     const x1 = this._pos[a].cx + NODE_W / 2
     const x2 = this._pos[b].cx - NODE_W / 2
     const y  = u.y + NODE_H / 2
-    this._path(`M${x1},${y} L${x2},${y}`)
+    this._path(`M${x1},${y} L${x2},${y}`, "tree-edge tree-edge--bond")
   }
 
   // Vertical bézier from a parent unit to a child unit, in the growth direction.
@@ -260,10 +261,10 @@ export default class extends Controller {
     this._path(`M${px},${y1} C${px},${my} ${cx},${my} ${cx},${y2}`)
   }
 
-  _path(d) {
+  _path(d, cls = "tree-edge") {
     const path = document.createElementNS("http://www.w3.org/2000/svg", "path")
     path.setAttribute("d", d)
-    path.setAttribute("class", "tree-edge")
+    path.setAttribute("class", cls)
     this.svgTarget.appendChild(path)
   }
 
@@ -371,6 +372,22 @@ export default class extends Controller {
 
   // --- Camera (pan & zoom) ----------------------------------------------------
 
+  // Initial camera: zoom out (never in) until the whole tree fits the canvas,
+  // floored at MIN_FIT. If even that can't contain it, fall back to centring the
+  // focus card — panning beats a confetti-scale overview.
+  _fitToView() {
+    const vw  = this.element.clientWidth,     vh = this.element.clientHeight
+    const w   = this.innerTarget.offsetWidth, h  = this.innerTarget.offsetHeight
+    const fit = Math.min(vw / w, vh / h, 1)
+    this._scale = Math.max(fit, MIN_FIT)
+    if (fit >= MIN_FIT) {
+      this._pan = { x: (vw - w * this._scale) / 2, y: (vh - h * this._scale) / 2 }
+      this._applyTransform()
+    } else {
+      this._centerOn(this.graphValue.focus_id)
+    }
+  }
+
   _centerOn(focusId, animate = false) {
     const p = this._pos[focusId]
     if (p) this._panTo(p.cx, p.y + NODE_H / 2, animate)
@@ -423,9 +440,16 @@ export default class extends Controller {
 
   _onUp() { this._drag = null }
 
+  // Zoom anchored at the cursor: the tree-space point under the pointer stays put.
   _onWheel(e) {
     e.preventDefault()
-    this._scale = Math.max(0.2, Math.min(4, this._scale * (e.deltaY < 0 ? 1.1 : 0.9)))
+    const rect = this.element.getBoundingClientRect()
+    const mx   = e.clientX - rect.left, my = e.clientY - rect.top
+    const next = Math.max(0.2, Math.min(4, this._scale * (e.deltaY < 0 ? 1.1 : 0.9)))
+    const k    = next / this._scale
+    this._pan.x = mx - (mx - this._pan.x) * k
+    this._pan.y = my - (my - this._pan.y) * k
+    this._scale = next
     this._applyTransform()
   }
 

@@ -19,6 +19,12 @@ class TreeInteractionsTest < ApplicationSystemTestCase
     sign_in_as users(:one)
   end
 
+  test "a couple's connector is drawn as a distinct bond edge" do
+    visit clan_tree_path
+    # Two couples in the fixture → two bond connectors, styled apart from descent edges.
+    assert_selector ".tree-edges path.tree-edge--bond", count: 2, wait: 5
+  end
+
   test "collapsing a branch hides its descendants; search-fly reopens the path" do
     visit clan_tree_path
     assert_selector ".tree-edges path", wait: 5

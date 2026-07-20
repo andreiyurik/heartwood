@@ -250,7 +250,8 @@ class Person < ApplicationRecord
     unless person.visible_to?(Current.user)
       return base.merge(name: I18n.t("people.living"), birth_year: nil, sex: nil, living: true)
     end
-    base.merge(name: person.display_name, birth_year: person.birth&.date_raw,
+    base.merge(name: person.display_name, given: person.given_names, surname: person.surname,
+               birth_year: person.birth&.date_raw,
                sex: person.sex, avatar_url: avatar_url_for(person))
   end
 

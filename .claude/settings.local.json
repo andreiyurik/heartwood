@@ -3,7 +3,12 @@
     "allow": [
       "Bash(mise exec *)",
       "Bash(sed -n '1,60p' app/views/people/index.html.erb)",
-      "Bash(sed -n '1,40p' app/controllers/people_controller.rb)"
+      "Bash(sed -n '1,40p' app/controllers/people_controller.rb)",
+      "Bash(timeout 15 git ls-remote origin HEAD)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(gh pr *)",
+      "Bash(git ls-remote *)",
+      "Bash(bin/rails test:system)"
     ]
   }
 }

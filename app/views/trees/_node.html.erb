@@ -12,7 +12,14 @@
         <span class="node-avatar node-avatar--initials" aria-hidden="true"><%= node[:name].to_s.split.map(&:first).first(2).join.upcase %></span>
       <% end %>
       <div class="node-text">
-        <p class="node-name"><%= node[:name] %></p>
+        <%# Two lines — given names over surname — so full names stay readable at the
+            fixed card width; single-line display_name when either half is missing. %>
+        <% if node[:given].present? && node[:surname].present? %>
+          <p class="node-name"><%= node[:given] %></p>
+          <p class="node-surname"><%= node[:surname] %></p>
+        <% else %>
+          <p class="node-name"><%= node[:name] %></p>
+        <% end %>
         <% if node[:birth_year].present? %>
           <p class="node-dates">b.&thinsp;<%= node[:birth_year] %></p>
         <% end %>

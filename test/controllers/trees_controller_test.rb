@@ -42,6 +42,12 @@ class TreesControllerTest < ActionDispatch::IntegrationTest
     assert_select ".tree-node", minimum: 1
   end
 
+  test "node renders the name on two lines: given names over surname" do
+    get person_tree_url(@person)
+    assert_select ".tree-node--focus .node-name",    text: "Johann Sebastian"
+    assert_select ".tree-node--focus .node-surname", text: "Bach"
+  end
+
   test "GET show with depth param limits the graph depth" do
     parent = Person.create!(sex: "M", tree: @tree)
     fam = Family.create!(tree: @tree)
