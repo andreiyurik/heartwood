@@ -41,7 +41,7 @@ gem "kamal", require: false
 gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-gem "image_processing", "~> 2.0"
+gem "image_processing", "~> 2.1"
 # image_processing 2.0 больше не тянет бэкенд как зависимость — объявляем явно,
 # т.к. Rails 8 по умолчанию использует variant_processor = :vips
 # require: false — libvips подгружается лениво самим image_processing,
