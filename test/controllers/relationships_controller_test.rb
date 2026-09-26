@@ -46,20 +46,20 @@ class RelationshipsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "search lists matching people as options" do
-    get search_person_relationship_url(@person, q: "Mary")
+    get autocompletable_people_url(person_id: @person.id, for: "relationship", q: "Mary")
     assert_response :success
     assert_select "a", text: /Mary Root/
   end
 
   test "search excludes the focus person" do
-    get search_person_relationship_url(@person, q: "Pat")
+    get autocompletable_people_url(person_id: @person.id, for: "relationship", q: "Pat")
     assert_response :success
     assert_no_match(/Pat Root/, @response.body)
   end
 
   test "search is scoped to the current tree" do
     Person.create!(given_names: "Foreigner", sex: "U", tree: trees(:beta))
-    get search_person_relationship_url(@person, q: "Foreigner")
+    get autocompletable_people_url(person_id: @person.id, for: "relationship", q: "Foreigner")
     assert_response :success
     assert_no_match(/Foreigner/, @response.body)
   end

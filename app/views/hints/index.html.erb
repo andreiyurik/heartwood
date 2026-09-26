@@ -2,7 +2,7 @@
 <% back_link root_path %>
 
 <% content_for :header do %>
-  <%= button_to t("hints.scan"), scan_hints_path, method: :post, class: "btn" %>
+  <%= button_to t("hints.scan"), hints_scan_path, class: "btn" %>
 <% end %>
 
 <p class="muted hints-lede"><%= t("hints.lede") %></p>

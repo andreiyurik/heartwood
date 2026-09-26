@@ -97,9 +97,12 @@ Reference: campfire/writebook `app/models`, `app/controllers/concerns`, `config/
       `create!` calls in tests: 327 → 316.
 - [ ] Split `Person` (423 lines) into concerns: `Searchable`, `Living`, `Relatives`, `Kin`,
       `Avatar`; tree-graph builder as a PORO without `Current`/URL building.
-- [ ] `PersonScoped` controller concern (one `set_person` + one visibility rule; today 5 copies).
-- [ ] Custom actions → noun resources (`hints/scans`, `hints/dismissals`, `places/searches`,
-      `people/panels`, `autocompletable/people`, `resource :locale` via PATCH).
+- [x] `PersonScoped` controller concern: one `set_person`, always through `visible_to`
+      (was 5 copies with two different visibility rules).
+- [x] Custom actions → noun resources: `Hints::ScansController`, `Hints::DismissalsController`,
+      `Places::SearchesController`/`GeocodesController`, `People::PanelsController`/`MapsController`,
+      `Maps::EventsController`, `Autocompletable::PeopleController` (`for=relative|relationship`,
+      candidates from `Person#relative_candidates`), `resource :locale` via PATCH.
 - [ ] `app/services/gedcom` → `app/models/gedcom`; `DuplicateFinder` → `tree.scan_for_duplicates`;
       jobs become one-liners calling model methods.
 - [ ] `enum :role` on `TreeMembership`; `belongs_to :tree, default: -> { Current.tree }`.

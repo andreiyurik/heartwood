@@ -23,7 +23,7 @@
     <% if node[:living] %>
       <p class="node-name node-name--living"><%= node[:name] %></p>
     <% else %>
-      <%= link_to panel_person_path(node[:id], return_to: request.fullpath), data: { turbo_frame: "person-panel" } do %>
+      <%= link_to person_panel_path(node[:id], return_to: request.fullpath), data: { turbo_frame: "person-panel" } do %>
         <% if shape == "card" %>
           <span class="node-band node-surname"><%= node[:surname] %></span>
           <div class="node-body">
