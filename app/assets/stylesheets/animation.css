@@ -1,3 +1,8 @@
+@keyframes appear-then-fade {
+  0%,100% { opacity: 0; }
+  5%,60%  { opacity: 1; }
+}
+
 @keyframes success {
   0%  { background-color: var(--color-border-darker); scale: 0.8; }
   20% { background-color: var(--color-border-darker); scale: 1; }
