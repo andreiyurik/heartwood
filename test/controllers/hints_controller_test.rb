@@ -40,11 +40,11 @@ class HintsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to hints_url
   end
 
-  test "dismiss marks the hint and removes its row via turbo stream" do
-    post hint_dismissal_url(@hint), as: :turbo_stream
-    assert_response :success
+  test "dismiss marks the hint and lets Turbo morph the list" do
+    post hint_dismissal_url(@hint)
+    assert_redirected_to hints_url
+    assert_response :see_other
     assert_equal "dismissed", @hint.reload.status
-    assert_select "turbo-stream[action=remove][target=?]", "duplicate_hint_#{@hint.id}"
   end
 
   test "cannot dismiss a hint from another tree" do

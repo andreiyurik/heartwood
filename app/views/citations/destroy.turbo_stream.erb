@@ -1,4 +1,0 @@
-<%# Update the event row (badge may disappear) and refresh sources tab if visible %>
-<%= turbo_stream.replace dom_id(@event) do %>
-  <%= render "events/event", event: @event, person: @person %>
-<% end %>

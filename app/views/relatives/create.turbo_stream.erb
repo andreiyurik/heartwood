@@ -1,4 +1,0 @@
-<%# Re-render the whole family box: new relative appears, add-forms reset to links. %>
-<%= turbo_stream.replace "family" do %>
-  <%= render "people/family", person: @person %>
-<% end %>

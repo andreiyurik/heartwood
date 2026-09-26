@@ -32,7 +32,7 @@
 
     <%# 2) Or create a brand-new person. %>
     <%= form_with model: @relative, url: person_relatives_path(@person), class: "form form--inline",
-          data: (panel ? { turbo_frame: "_top" } : {}) do |f| %>
+          data: { turbo_frame: "_top" } do |f| %>
       <%= hidden_field_tag :person_id, @person.id %>
       <%= hidden_field_tag :for, "relative" %>
       <%= hidden_field_tag :relation, @relation %>

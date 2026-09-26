@@ -9,12 +9,8 @@ class CitationsController < ApplicationController
   end
 
   def create
-    @citation = @event.cite(source_params, citation_params)
-
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to person_path(@person, tab: "sources") }
-    end
+    @event.cite(source_params, citation_params)
+    redirect_back_or_to person_path(@person, tab: "sources"), status: :see_other
   rescue ActiveRecord::RecordInvalid => error
     @citation = Citation.new
     @source   = error.record
@@ -22,13 +18,8 @@ class CitationsController < ApplicationController
   end
 
   def destroy
-    @citation = @event.citations.find(params[:id])
-    @citation.destroy!
-
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to person_path(@person, tab: "sources") }
-    end
+    @event.citations.find(params[:id]).destroy!
+    redirect_back_or_to person_path(@person, tab: "sources"), status: :see_other
   end
 
   private

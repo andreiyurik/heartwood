@@ -5,4 +5,8 @@ export default class extends Controller {
   sync() {
     this.element.toggleAttribute("data-turbo-permanent", this.element.querySelector("form") !== null)
   }
+
+  release({ detail: { success } }) {
+    if (success) this.element.removeAttribute("data-turbo-permanent")
+  }
 }
