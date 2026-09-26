@@ -5,20 +5,24 @@
 </div>
 
 <% if Current.membership.owner? %>
+  <% url = join_url(Current.tree.join_code) %>
+
   <section class="invite-box">
-    <label class="input--actor">
-      <input type="text" class="input" value="<%= join_url(Current.tree.join_code) %>"
-             readonly data-clipboard-target="source">
-      <button type="button" class="btn btn--circle" data-controller="clipboard"
-              data-action="clipboard#copy" title="<%= t("tree_memberships.copy_link") %>">
+    <strong id="invite_label"><%= t("tree_memberships.invite_label") %></strong>
+    <div class="invite-box__actions">
+      <input type="text" class="input" value="<%= url %>" aria-labelledby="invite_label" readonly>
+
+      <%= button_to_copy_to_clipboard(url) do %>
         <%= icon_tag "copy-paste" %>
-      </button>
-    </label>
-    <%= button_to tree_join_code_path, class: "btn btn--circle",
-          title: t("tree_memberships.reset_link"),
-          data: { turbo_confirm: t("tree_memberships.reset_confirm") } do %>
-      <%= icon_tag "refresh" %>
-    <% end %>
+        <span class="for-screen-reader"><%= t("tree_memberships.copy_link") %></span>
+      <% end %>
+
+      <%= button_to tree_join_code_path, class: "btn btn--circle",
+            data: { turbo_confirm: t("tree_memberships.reset_confirm") } do %>
+        <%= icon_tag "refresh" %>
+        <span class="for-screen-reader"><%= t("tree_memberships.reset_link") %></span>
+      <% end %>
+    </div>
   </section>
 <% end %>
 

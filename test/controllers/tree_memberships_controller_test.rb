@@ -17,6 +17,15 @@ class TreeMembershipsControllerTest < ActionDispatch::IntegrationTest
     assert_match(@editor_user.name, @response.body)
   end
 
+  test "the invite box copies the join link and labels it" do
+    post session_url, params: { email_address: @owner.email_address, password: "password" }
+    get tree_memberships_url
+
+    assert_select "button[data-controller=copy-to-clipboard][data-copy-to-clipboard-content-value=?]", join_url(@tree.join_code)
+    assert_select "input[readonly][aria-labelledby=invite_label][value=?]", join_url(@tree.join_code)
+    assert_select "#invite_label", text: I18n.t("tree_memberships.invite_label")
+  end
+
   test "owner sees the invite box, non-owner does not" do
     post session_url, params: { email_address: @owner.email_address, password: "password" }
     get tree_memberships_url
