@@ -13,8 +13,10 @@ trees rather than one account per install).
 
 ## Shipped
 - **Invite links**: each tree has a `join_code` (`Tree#reset_join_code!` to revoke and reissue).
-  `GET/POST /join/:join_code` — an unauthenticated visitor is bounced through the existing
-  sign-in-or-register flow and lands back on the confirm page once authenticated.
+  `GET/POST /join/:join_code` — a guest sees the tree's name and a sign-up form; one request
+  creates the user and an editor `TreeMembership` (`User.sign_up!(join:)`). "Already have an
+  account?" signs in and returns to the confirm page. Self sign-up (`/registration`) names the
+  tree and creates user, tree and owner membership together; the owner renames it in `/settings`.
 - **Roles**: owner (created the tree, sole admin) / editor (full read-write) / viewer
   (read-only), on `TreeMembership#role`. Enforced at the controller level
   (`TreeAuthorization#require_can_edit`/`#require_owner`) on every mutating action across
