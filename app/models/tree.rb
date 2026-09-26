@@ -1,7 +1,5 @@
 class Tree < ApplicationRecord
-  # Plans: "free" forever with a people cap; "family" is the paid yearly tier.
-  # An expired family plan behaves as free for *adding* people — existing data
-  # is never locked away or deleted. See docs/features/monetization.md.
+  # An expired family plan behaves as free only for adding people; existing data is never locked.
   PLANS = {
     "free"   => { people_limit: 100 },
     "family" => { people_limit: nil }
@@ -23,12 +21,10 @@ class Tree < ApplicationRecord
 
   before_validation { self.join_code ||= generate_join_code }
 
-  # Revokes the current invite link by swapping in a new code — see [[collaboration]].
   def reset_join_code!
     update! join_code: generate_join_code
   end
 
-  # The plan whose limits actually apply right now (family lapses back to free).
   def effective_plan
     plan == "family" && (plan_expires_at.nil? || plan_expires_at.future?) ? "family" : "free"
   end
@@ -37,7 +33,6 @@ class Tree < ApplicationRecord
 
   def people_limit = PLANS.fetch(effective_plan)[:people_limit]
 
-  # nil = unlimited.
   def people_remaining
     people_limit && [ people_limit - people.count, 0 ].max
   end
@@ -46,21 +41,12 @@ class Tree < ApplicationRecord
     people_limit ? people.count >= people_limit : false
   end
 
-  # Called when a payment lands: extends from the current expiry when renewing
-  # early, from now when the plan had lapsed.
   def activate_family!(period: 1.year)
     base = [ plan_expires_at, Time.current ].compact.max
     update!(plan: "family", plan_expires_at: base + period)
   end
 
-  # The род's progenitor: the parentless ancestor with the most descendants — the
-  # natural root of the whole-family "родовое древо" (a full descendancy from the
-  # founder is the one case where the род stays a clean tree). Ties break to the
-  # earliest birth, then id, so the pick is stable. nil for an empty tree.
-  #
-  # Computed (not stored) so it always tracks the data; cheap at current scale.
-  # A manual override and multi-line trees are a future extension — see
-  # docs/features/family-tree-view.md.
+  # Ties break to the earliest birth, then id, so the pick is stable.
   def root_person
     return if people.none?
 
@@ -73,7 +59,6 @@ class Tree < ApplicationRecord
   end
 
   private
-    # Human-shareable format: "AB12-CD34-EF56" (once-campfire's join_code shape).
     def generate_join_code
       SecureRandom.alphanumeric(12).scan(/.{4}/).join("-")
     end

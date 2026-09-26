@@ -1,5 +1,3 @@
-# The tree's member list — visible to everyone in the tree; role changes and
-# removal are owner-only. See [[collaboration]].
 class TreeMembershipsController < ApplicationController
   before_action :require_owner, only: %i[update destroy]
   before_action :set_membership, only: %i[update destroy]
@@ -19,7 +17,6 @@ class TreeMembershipsController < ApplicationController
   end
 
   private
-    # The owner row can't be demoted or removed through this controller.
     def set_membership
       @membership = Current.tree.tree_memberships.find(params[:id])
       head :forbidden if @membership.owner?

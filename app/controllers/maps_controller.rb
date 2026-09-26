@@ -1,17 +1,11 @@
-# Map data and pages for the place views. The JSON actions feed the Leaflet
-# Stimulus controller; events without geocoded places are simply left off the
-# map (graceful degradation). See place.md and the family map feature.
 class MapsController < ApplicationController
-  # Whole-tree map page.
   def show
   end
 
-  # Markers for every geolocated event in the tree.
   def events
     render json: markers(Current.tree.events)
   end
 
-  # Markers for one person's geolocated events (the profile Map tab).
   def person
     person = Current.tree.people.visible_to(Current.user).find(params[:id])
     render json: markers(person.events)
@@ -35,7 +29,7 @@ class MapsController < ApplicationController
     end
   end
 
-  # Only Person events carry a name/link; Family events (e.g. marriage) don't.
+  # Family events (e.g. marriage) carry no name or link.
   def person_for(event)
     return unless event.eventable.is_a?(Person)
     { name: event.eventable.display_name, url: person_path(event.eventable) }

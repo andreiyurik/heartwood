@@ -1,15 +1,13 @@
 module Gedcom
   class Mapper
-    # Tags handled explicitly when nested under an INDI record.
     INDI_KNOWN = %w[NAME SEX BIRT DEAT BAPM BURI CHR OCCU RESI EDUC FAMS FAMC].freeze
-    # Tags that map to Event records.
     EVENT_TAGS = %w[BIRT DEAT BAPM BURI CHR OCCU RESI EDUC MARR DIV].freeze
 
     def initialize(records, tree: nil)
       @tree     = tree || Current.tree
       @records  = records
       @warnings = []
-      @xref_map = {}  # gedcom_xref string => saved AR object
+      @xref_map = {}
       @people   = []
       @families = []
     end
@@ -26,15 +24,13 @@ module Gedcom
         end
       end
 
-      # A fresh import is the most likely moment for duplicates to appear.
+      # A fresh import is the likeliest moment for duplicates.
       DuplicateScanJob.perform_later(@tree)
 
       { people: @people, families: @families, warnings: @warnings }
     end
 
     private
-
-    # --- INDI ---
 
     def map_indi(record)
       attrs    = { gedcom_xref: record[:xref], sex: "U" }
@@ -45,7 +41,6 @@ module Gedcom
         when "SEX"  then attrs[:sex] = child[:value] if Person::SEXES.include?(child[:value])
         when "NAME" then extract_name(child, attrs)
         when *INDI_KNOWN
-          # event tags are processed after save; other known tags are no-ops here
         else
           raw_tags << { "tag" => child[:tag], "value" => child[:value] }.compact
         end
@@ -63,8 +58,6 @@ module Gedcom
 
       person
     end
-
-    # --- FAM ---
 
     def map_fam(record)
       fam      = Family.create!(gedcom_xref: record[:xref], tree: @tree)
@@ -94,14 +87,11 @@ module Gedcom
       fam
     end
 
-    # --- Shared event mapping ---
-
     def map_event(record, eventable)
       date_child = record[:children].find { |c| c[:tag] == "DATE" }
       plac_child = record[:children].find { |c| c[:tag] == "PLAC" }
 
-      # PLAC stays in `value` for a lossless round-trip; it also seeds a normalized
-      # Place so imported events can earn map pins (see place.md).
+      # PLAC stays in `value` for a lossless round-trip and also seeds a Place for map pins.
       eventable.events.create!(
         kind:       record[:tag],
         date_raw:   date_child&.[](:value),
@@ -110,10 +100,6 @@ module Gedcom
       )
     end
 
-    # --- Helpers ---
-
-    # Populate given_names / surname from a NAME record.
-    # Prefers GIVN/SURN sub-tags; falls back to parsing the NAME value string.
     def extract_name(name_record, attrs)
       givn = name_record[:children].find { |c| c[:tag] == "GIVN" }
       surn = name_record[:children].find { |c| c[:tag] == "SURN" }
@@ -122,7 +108,7 @@ module Gedcom
         attrs[:given_names] = givn&.[](:value)
         attrs[:surname]     = surn&.[](:value)
       elsif (val = name_record[:value])
-        # GEDCOM surname convention: surname is wrapped in slashes — "Johann /Bach/"
+        # GEDCOM wraps the surname in slashes: "Johann /Bach/".
         if (m = val.match(/\A(.*?)\s*\/([^\/]*)\//))
           attrs[:given_names] = m[1].strip.presence
           attrs[:surname]     = m[2].strip.presence

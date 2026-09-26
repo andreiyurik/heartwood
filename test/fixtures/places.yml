@@ -1,0 +1,11 @@
+eisenach:
+  tree: bach
+  name: Eisenach, Thuringia
+  latitude: 50.9747
+  longitude: 10.3235
+
+leipzig:
+  tree: bach
+  name: Leipzig, Saxony
+  latitude: 51.3397
+  longitude: 12.3731

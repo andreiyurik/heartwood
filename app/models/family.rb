@@ -1,6 +1,3 @@
-# Family (FAM) — the structural hub linking partners and their children.
-# Kinship is derived *through* Family, never stored as direct person->person edges.
-# See docs/domain/family.md and docs/domain/domain-model.md.
 class Family < ApplicationRecord
   include BelongsToTree
 

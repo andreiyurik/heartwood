@@ -1,9 +1,5 @@
-# Adds a relative (parent / child / partner) to a Person, delegating the graph
-# wiring to the domain methods on Person. See docs/features/person-profile.md.
 class RelativesController < ApplicationController
-  # Maps each allowed relation to the domain method that wires it into the
-  # graph. Lookups go through this constant so no user input ever reaches
-  # public_send as a method name.
+  # A whitelist, so no user input reaches public_send as a method name.
   RELATION_METHODS = {
     "parent"  => :add_parent,
     "child"   => :add_child,
@@ -18,16 +14,13 @@ class RelativesController < ApplicationController
     @relative = Person.new
   end
 
-  # Combobox lookup: people in this tree who could be linked as @relation,
-  # excluding the focus person and anyone already in that relation.
   def search
     @matches = candidate_people
   end
 
   def create
     @relative = @person.public_send(RELATION_METHODS.fetch(@relation), relative_source)
-    # From the tree's panel the form carries return_to (the tree page) — land back
-    # there so the new person appears in the graph. url_from rejects foreign hosts.
+    # From the tree's panel, land back on the tree page; url_from rejects foreign hosts.
     if (return_url = url_from(params[:return_to]))
       redirect_to return_url, notice: t("family.flash.#{@relation}_added")
     else
@@ -44,8 +37,6 @@ class RelativesController < ApplicationController
     @person = Current.tree.people.find(params[:person_id])
   end
 
-  # Link an existing person (tree-scoped — 404 across tenants) when one is
-  # picked from the combobox; otherwise build a new person from the form.
   def relative_source
     if params[:existing_person_id].present?
       Current.tree.people.find(params[:existing_person_id])
@@ -54,7 +45,6 @@ class RelativesController < ApplicationController
     end
   end
 
-  # Guard the relation against the whitelist before any public_send.
   def set_relation
     @relation = params[:relation].to_s
     head :unprocessable_entity unless RELATION_METHODS.key?(@relation)
@@ -75,8 +65,6 @@ class RelativesController < ApplicationController
            .limit(8)
   end
 
-  # The focus person plus anyone already linked in this relation — they should
-  # not show up as fresh candidates.
   def excluded_ids
     already = case @relation
     when "parent"  then @person.parents

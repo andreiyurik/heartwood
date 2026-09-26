@@ -1,7 +1,3 @@
-# Open sign-up: create a User, sign them in, and welcome them. The owner tree is
-# bootstrapped on the first authenticated request by TenantScoping. Passwordless
-# magic-link auth (fizzy-style) was considered but rejected — see the auth model
-# discussion: a self-hostable app shouldn't require SMTP just to log in.
 class RegistrationsController < ApplicationController
   allow_unauthenticated_access
   before_action :redirect_authenticated_user

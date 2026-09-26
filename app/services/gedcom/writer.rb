@@ -1,7 +1,5 @@
 module Gedcom
-  # Serialises a Tree (or a subset of it) to GEDCOM 5.5.1 text.
-  # Privacy: `user` governs visibility — Person.visible_to(user) is applied so
-  # living people are never emitted to non-members.
+  # Person.visible_to(user) keeps living people out of exports for non-members.
   class Writer
     def initialize(tree, user: nil)
       @tree = tree

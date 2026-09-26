@@ -4,9 +4,9 @@ require "test_helper"
 # Person or a Family. See docs/domain/event.md, docs/domain/domain-model.md.
 class EventTest < ActiveSupport::TestCase
   setup do
-    @tree   = trees(:alpha)
-    @person = Person.create!(given_names: "Ada", surname: "Lovelace", sex: "F", tree: @tree)
-    @family = Family.create!(tree: @tree)
+    @tree   = trees(:bach)
+    @person = people(:wilhelm_friedemann)
+    @family = families(:first_marriage)
   end
 
   test "requires a kind" do

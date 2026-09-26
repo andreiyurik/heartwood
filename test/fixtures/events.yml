@@ -1,0 +1,29 @@
+sebastian_birth:
+  tree: bach
+  eventable: johann_sebastian (Person)
+  kind: BIRT
+  date_raw: 21 MAR 1685
+  date_start: 1685-03-21
+  place: eisenach
+
+sebastian_death:
+  tree: bach
+  eventable: johann_sebastian (Person)
+  kind: DEAT
+  date_raw: 28 JUL 1750
+  date_start: 1750-07-28
+  place: leipzig
+
+ambrosius_birth:
+  tree: bach
+  eventable: ambrosius (Person)
+  kind: BIRT
+  date_raw: 1645
+  date_start: 1645-01-01
+
+first_marriage_wedding:
+  tree: bach
+  eventable: first_marriage (Family)
+  kind: MARR
+  date_raw: 17 OCT 1707
+  date_start: 1707-10-17

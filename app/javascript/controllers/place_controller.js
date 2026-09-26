@@ -1,15 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import { loadLeaflet, osmTiles, escapeHtml } from "maps"
 
-// The event place field. Three layers, each a graceful enhancement over a plain
-// text input that already find-or-creates a Place on submit:
-//   1. instant autocomplete against places already in this tree
-//   2. "Find on map" → geocode candidates the user can choose between
-//   3. a draggable pin on a mini-map to confirm/fine-tune the location
-//
-// Leaflet is imported lazily (only when a map is actually shown) so a slow or
-// blocked CDN never stops the controller from registering — the button and
-// autocomplete keep working regardless.
+// Leaflet is imported lazily so a blocked CDN never stops autocomplete and the button from working.
 let groupId = 0
 
 export default class extends Controller {
@@ -27,8 +19,6 @@ export default class extends Controller {
     clearTimeout(this._timer)
     this._map?.remove()
   }
-
-  // --- 1. Autocomplete from our own places (instant) ---
 
   search() {
     clearTimeout(this._timer)
@@ -54,13 +44,11 @@ export default class extends Controller {
     this.suggestionsTarget.innerHTML = ""
   }
 
-  // --- 2. Confirm a location on the map (on demand, via Nominatim) ---
-
   async locate() {
     const query = this.inputTarget.value.trim()
     if (!query) return
 
-    clearTimeout(this._timer) // drop any pending autocomplete so it can't repopulate
+    clearTimeout(this._timer)
     this.suggestionsTarget.innerHTML = ""
     this.candidatesTarget.innerHTML = ""
 
@@ -102,11 +90,9 @@ export default class extends Controller {
     this.showMap(candidate.lat, candidate.lng)
   }
 
-  // --- 3. The mini-map (Leaflet loaded lazily; degrades to coords-only) ---
-
   async showMap(lat, lng) {
     const L = await loadLeaflet()
-    if (!L) return // CDN unavailable — we still keep the coordinates
+    if (!L) return
 
     this.mapTarget.hidden = false
 
@@ -119,7 +105,7 @@ export default class extends Controller {
         const point = this._marker.getLatLng()
         this.setCoords(point.lat, point.lng)
       })
-      // The container was hidden until now; let Leaflet recompute its size.
+      // The container was hidden until now; Leaflet must recompute its size.
       setTimeout(() => this._map.invalidateSize(), 0)
     } else {
       this._map.setView([lat, lng], 11)

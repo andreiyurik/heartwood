@@ -2,9 +2,9 @@ require "test_helper"
 
 class TreesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @tree   = trees(:alpha)
-    @person = Person.create!(given_names: "Johann Sebastian", surname: "Bach", sex: "M", tree: @tree)
-    sign_in_as users(:one)
+    @tree   = trees(:bach)
+    @person = people(:johann_sebastian)
+    sign_in_as users(:bach)
     Current.tree = @tree
   end
 
@@ -49,17 +49,11 @@ class TreesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET show with depth param limits the graph depth" do
-    parent = Person.create!(sex: "M", tree: @tree)
-    fam = Family.create!(tree: @tree)
-    fam.partners << parent
-    fam.children << @person
-
     get person_tree_url(@person, depth: 0)
-    # depth 0 → only focus person in graph JSON (checked via node count in DOM)
     assert_select ".tree-node", count: 1
 
     get person_tree_url(@person, depth: 1)
-    assert_select ".tree-node", count: 2
+    assert_select ".tree-node", count: 3
   end
 
   test "mode toggle links preserve current depth" do
@@ -85,26 +79,14 @@ class TreesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "node link loads the person panel into the drawer frame" do
-    parent = Person.create!(sex: "M", tree: @tree)
-    fam = Family.create!(tree: @tree)
-    fam.partners << parent
-    fam.children << @person
-
     get person_tree_url(@person, depth: 1)
-    # Nodes open the slide-over panel (turbo-frame), not a full-page navigation.
     assert_select ".tree-node:not(.tree-node--focus) a[href*='/panel'][data-turbo-frame='person-panel']"
   end
 
   test "descendants view renders the married-in spouse as a couple" do
-    spouse = Person.create!(given_names: "Spouse", surname: "Married", sex: "F", tree: @tree)
-    child  = Person.create!(given_names: "Kid",    surname: "Bach",    sex: "M", tree: @tree)
-    fam = Family.create!(tree: @tree)
-    fam.partners << @person << spouse   # spouse married in — not a blood descendant
-    fam.children << child
-
     get person_tree_url(@person, mode: "descendants", depth: 1)
-    # The spouse has no blood-descendant path, but the couple model surfaces them.
-    assert_select ".tree-node[data-tree-node-id='#{spouse.id}']"
+    wives = [ people(:maria_barbara), people(:anna_magdalena) ].map { |wife| ".tree-node[data-tree-node-id='#{wife.id}']" }
+    assert_select wives.join(", "), minimum: 1
     assert_select "[data-tree-graph-value*='unions']"
   end
 
@@ -119,11 +101,6 @@ class TreesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "non-focus nodes link to their panel card" do
-    child = Person.create!(sex: "F", tree: @tree)
-    fam = Family.create!(tree: @tree)
-    fam.partners << @person
-    fam.children << child
-
     get person_tree_url(@person, mode: "descendants", depth: 1)
     assert_select ".tree-node:not(.tree-node--focus) a[href*='/panel']"
   end

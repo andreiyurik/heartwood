@@ -1,9 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import { loadLeaflet, osmTiles, escapeHtml } from "maps"
 
-// Renders a Leaflet map and drops a marker per geolocated event fetched from a
-// JSON endpoint. Leaflet is imported lazily so a blocked CDN shows a clear
-// message instead of leaving the controller unregistered and the box blank.
+// Leaflet is imported lazily so a blocked CDN shows a message instead of a blank box.
 export default class extends Controller {
   static values = { url: String, unavailable: String }
 
