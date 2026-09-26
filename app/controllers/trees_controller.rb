@@ -1,14 +1,9 @@
 class TreesController < ApplicationController
-  include PersonScoped
+  include PersonScoped, TreeGraphs
 
   def show
-    @depth  = depth_param
-    result  = params[:mode] == "descendants" ?
-                @person.descendant_graph(depth: @depth) :
-                @person.ancestor_graph(depth: @depth)
-    @mode    = result[:mode]
-    @graph   = result.except(:persons)
-    @persons = result[:persons]
+    @depth = depth_param
+    build_tree_graph @person, mode: params[:mode].presence_in(%w[ancestors descendants]) || "ancestors", depth: @depth
   end
 
   private
