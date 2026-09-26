@@ -1,9 +1,4 @@
-/*
- * Mask-image icon system (fizzy's approach, reimplemented here — not copied):
- * a currentColor mask means icons theme for free under dark mode / inside
- * .btn--reversed, no separate "invert for dark backgrounds" filter needed.
- * Add an `.icon--<name> { --svg: url("<name>.svg"); }` line per icon as needed.
- */
+/* Technique from fizzy, reimplemented (fizzy code must not be copied). Add one .icon--<name> per svg. */
 .icon {
   background-color: currentColor;
   block-size: var(--icon-size, 1em);

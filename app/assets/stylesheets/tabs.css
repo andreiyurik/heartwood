@@ -1,29 +1,36 @@
-/* Profile tabs */
 .profile-tabs {
+  border-block-end: 2px solid var(--color-border-dark);
   display: flex;
-  gap: 0;
-  border-bottom: 2px solid var(--color-border-dark);
   margin: 0 0 1.25rem;
 }
 
 .profile-tab {
-  padding: 0.55rem 1rem;
+  border-block-end: 2px solid transparent;
+  color: var(--color-muted);
   font-size: 0.9rem;
   font-weight: 500;
-  color: var(--color-muted);
+  margin-block-end: -2px;
+  padding: 0.55rem 1rem;
   text-decoration: none;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
   transition: color 0.1s, border-color 0.1s;
 
-  &:hover { color: var(--color-text); text-decoration: none; }
+  &:hover {
+    color: var(--color-text);
+    text-decoration: none;
+  }
 }
 
 .profile-tab--active {
+  border-block-end-color: var(--color-selected-dark);
   color: var(--color-link);
-  border-bottom-color: var(--color-selected-dark);
   font-weight: 600;
 }
 
-.tab-panel { min-height: 6rem; }
-.tab-stub { padding: 1.5rem 0; font-style: italic; }
+.tab-panel {
+  min-block-size: 6rem;
+}
+
+.tab-stub {
+  font-style: italic;
+  padding: 1.5rem 0;
+}

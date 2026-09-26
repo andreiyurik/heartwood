@@ -1,11 +1,63 @@
-/* Sources tab */
-.sources-list { margin: 0; }
-.source-event-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-muted); margin: 1rem 0 0.15rem; font-weight: 600; }
-.source-event-label:first-child { margin-top: 0; }
-.source-item { margin: 0 0 0.5rem 0; padding: 0.75rem; background: var(--color-bg); border-radius: var(--radius); border: 1px solid var(--color-border-dark); }
-.source-title { margin: 0 0 0.25rem; font-weight: 600; }
-.source-meta { margin: 0.1rem 0; font-size: 0.85rem; }
-.source-quote { margin: 0.3rem 0; padding-left: 0.6rem; border-left: 2px solid var(--color-border-dark); font-size: 0.9rem; font-style: italic; }
-.source-citation-text { margin: 0.2rem 0; font-size: 0.9rem; }
-.confidence-badge { font-size: 0.72rem; color: var(--color-muted); background: var(--color-surface); border: 1px solid var(--color-border-dark); border-radius: 999px; padding: 0.05rem 0.5rem; margin-left: 0.4rem; }
-.confidence-badge--high, .confidence-badge--very_high { color: var(--color-link); border-color: var(--color-selected-dark); }
+.sources-list {
+  margin: 0;
+}
+
+.source-event-label {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin: 1rem 0 0.15rem;
+  text-transform: uppercase;
+
+  &:first-child {
+    margin-block-start: 0;
+  }
+}
+
+.source-item {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border-dark);
+  border-radius: var(--radius);
+  margin: 0 0 0.5rem;
+  padding: 0.75rem;
+}
+
+.source-title {
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.source-meta {
+  font-size: 0.85rem;
+  margin: 0.1rem 0;
+}
+
+.source-quote {
+  border-inline-start: 2px solid var(--color-border-dark);
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 0.3rem 0;
+  padding-inline-start: 0.6rem;
+}
+
+.source-citation-text {
+  font-size: 0.9rem;
+  margin: 0.2rem 0;
+}
+
+.confidence-badge {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-dark);
+  border-radius: 999px;
+  color: var(--color-muted);
+  font-size: 0.72rem;
+  margin-inline-start: 0.4rem;
+  padding: 0.05rem 0.5rem;
+}
+
+.confidence-badge--high,
+.confidence-badge--very_high {
+  border-color: var(--color-selected-dark);
+  color: var(--color-link);
+}

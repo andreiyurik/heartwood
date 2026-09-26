@@ -1,9 +1,4 @@
-/*
- * .btn — canonical pill button. Default is a neutral white/bordered pill;
- * .btn--reversed (black) is how primary/emphasis actions are marked instead of
- * tinting the button with the brand color — the accent stays reserved for
- * links/selection (see colors.css).
- */
+/* Primary actions use .btn--reversed; the green accent is reserved for links and selection */
 :root {
   --btn-size: 2.65em;
 }
