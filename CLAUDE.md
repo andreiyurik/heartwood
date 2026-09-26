@@ -32,6 +32,20 @@ bin/rails test test/models/person_test.rb   # one file
 bin/rails test test/models/person_test.rb:42 # one test by line
 ```
 
+## Comments — minimal, like 37signals code
+
+Write code the way campfire/writebook do: clear names and small methods instead of comments.
+Most files should have **no comments at all**.
+
+- **Only comment what the code can't say:** a non-obvious *why* (a workaround, a GEDCOM/Gramps
+  quirk, a security or data-integrity constraint), or a hint an LLM agent would otherwise get
+  wrong when editing this code later. One short line is the norm.
+- **Never:** restate what the code does, narrate steps, section-divider banners, docblocks on
+  obvious methods, "added X"/"changed Y" history notes, or references to the current task/PR.
+  Design rationale belongs in the `docs/` vault, not in code comments.
+- When editing existing code, don't add comments to lines you didn't need to explain; remove
+  stale or redundant ones you touch.
+
 ## What this project is
 
 Heartwood is an **open-source, self-hostable genealogy / family-tree platform** with an
@@ -43,10 +57,32 @@ instead of one person's local file. Open core licensed AGPL-3.0; the goal is a
 
 ## Build it as if DHH and 37signals made it — not "inspired by," based on the actual source
 
+Heartwood is a **canonical Rails application, written as if the Basecamp/37signals team, DHH
+and the Rails core team built it on Hotwire**. That is the bar for every line of code and
+every pixel.
+
+**Decision rule — before any code or style decision** (a new controller, a model concern, a
+Stimulus controller, a CSS pattern, a form, a naming choice), first go look how it's done in
+the reference apps below. If they have an equivalent, follow it. If they don't, ask "how would
+DHH do this?" — the Rails way, the omakase default, the least code — and do that. Don't invent
+a pattern the references already solved.
+
+**Product bar: simple, intuitive, but functional.** Like Basecamp/HEY: few screens, obvious
+actions, no settings sprawl, no clever UI — yet the real genealogy depth is there when needed.
+When simplicity and capability conflict, find the design that keeps both (progressive
+disclosure) rather than cutting the capability or exposing all of it at once.
+
 For Rails/Hotwire/CSS architecture (not genealogy domain logic — see [[prior-art]] for that
-split), don't improvise a Rails style from general knowledge. Three reference apps are cloned
-at `~/dhh-references/`; **read their actual source and base the code and architectural
-decisions on it**:
+split), don't improvise a Rails style from general knowledge. The three official
+[Rails reference apps](https://rubyonrails.org/docs/reference-apps) are cloned at
+`~/dhh-references/`; **read their actual source and base the code and architectural
+decisions on it**. If missing or stale:
+
+```bash
+mkdir -p ~/dhh-references && cd ~/dhh-references
+for r in once-campfire writebook fizzy; do git clone --depth 1 https://github.com/basecamp/$r.git; done
+# update: git -C ~/dhh-references/<app> pull --ff-only
+```
 
 - **once-campfire** and **Writebook** (both MIT) — the primary references. Controllers,
   models, views, CSS: read the real files, not just the rendered UI, before building the
@@ -101,7 +137,9 @@ Full detail: [[gedcom]] "The Gramps round-trip", [[import-export]], [[positionin
 This is a **canonical "vanilla Rails 8" app, on purpose**. Before adding any dependency,
 check it against these rules — they are the whole point of the project:
 
-- ✅ **Ruby on Rails 8.1**, Ruby 4.0.x
+- ✅ **Ruby on Rails 8.1** (latest stable 8.1.x), Ruby 4.0.x — *not* edge. The reference apps
+  run Rails `main` (8.2.0.alpha); we stay on stable releases for self-hosters and move to 8.2
+  once it's released. Don't copy edge-only APIs from the references.
 - ✅ **SQLite** in development *and production* — see [[adr/0002-sqlite-production]]
 - ✅ **Hotwire** (Turbo + Stimulus) for all interactivity — no SPA
 - ✅ **Vanilla CSS** (modern CSS: nesting, custom properties) — **NO Tailwind / Bootstrap**

@@ -13,7 +13,7 @@ hard rules in [`CLAUDE.md`](../../CLAUDE.md).
 ## The stack
 | Layer | Choice | Why |
 |-------|--------|-----|
-| Framework | **Rails 8.1** (Ruby 4.0.x) | The whole point |
+| Framework | **Rails 8.1** — latest stable 8.1.x, not edge (Ruby 4.0.x) | The whole point; stable for self-hosters, move to 8.2 on release |
 | DB | **SQLite** (dev + prod) | Zero-ops self-host — [[adr/0002-sqlite-production]] |
 | Interactivity | **Hotwire** (Turbo + Stimulus) | No SPA, server-rendered |
 | Assets | **Propshaft + importmap** | No Node, no bundler |
