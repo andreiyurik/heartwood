@@ -11,13 +11,15 @@
         <%= icon_tag "check" %>
       </span>
     <% end %>
-    <span class="event-actions">
-      <%= link_to edit_person_event_path(person, event), class: "btn btn--plain" do %>
-        <%= icon_tag "pencil" %> <%= t("events.edit") %>
-      <% end %>
-      <%= render "shared/delete_button", url: person_event_path(person, event),
-            label: t("events.remove"), confirm: t("events.remove_confirm") %>
-    </span>
+    <% if can_edit? %>
+      <span class="event-actions">
+        <%= link_to edit_person_event_path(person, event), class: "btn btn--plain" do %>
+          <%= icon_tag "pencil" %> <%= t("events.edit") %>
+        <% end %>
+        <%= render "shared/delete_button", url: person_event_path(person, event),
+              label: t("events.remove"), confirm: t("events.remove_confirm") %>
+      </span>
+    <% end %>
   <% end %>
-  <%= render "citations/add_link", event: event, person: person %>
+  <%= render "citations/add_link", event: event, person: person if can_edit? %>
 <% end %>
