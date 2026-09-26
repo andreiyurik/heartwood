@@ -153,28 +153,22 @@ class PersonPrivacyTest < ActiveSupport::TestCase
   # -----------------------------------------------------------------------
 
   test "node_data for a living person is redacted for a non-member" do
-    Current.session = @outsider.sessions.create!
     person = Person.create!(given_names: "Alice", sex: "F", tree: @tree)
-    node = person.send(:node_data, person, generation: 0, order: 0)
+    node = Person::TreeGraph.new(person, mode: "ancestors", depth: 0, viewer: @outsider).build[:nodes].first
 
     assert_equal "Living", node[:name]
     assert_nil             node[:birth_year]
     assert_nil             node[:sex]
     assert                 node[:living]
-  ensure
-    Current.reset
   end
 
   test "node_data for a deceased person is NOT redacted for a non-member" do
-    Current.session = @outsider.sessions.create!
     person = Person.create!(given_names: "Bob", sex: "M", tree: @tree)
     Event.create!(kind: "DEAT", eventable: person, tree: @tree)
-    node = person.send(:node_data, person, generation: 0, order: 0)
+    node = Person::TreeGraph.new(person, mode: "ancestors", depth: 0, viewer: @outsider).build[:nodes].first
 
     assert_equal "Bob", node[:name]
     assert_equal "M",   node[:sex]
     assert_nil          node[:living]
-  ensure
-    Current.reset
   end
 end

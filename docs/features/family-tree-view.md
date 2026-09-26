@@ -27,7 +27,7 @@ answer is to render the **full descendancy from one progenitor** — the one cas
 - **Progenitor** = `Tree#root_person`: the parentless ancestor with the most descendants
   (ties → earliest birth → id). Computed, not stored, so it tracks the data. From any person
   you can still open their own ancestors/descendants; the clan view is the shared landing.
-- **Layout** reuses `descendant_graph` + `unions` at a generous fixed depth (`CLAN_DEPTH`),
+- **Layout** reuses `Person::TreeGraph` (descendants) + `unions` at a generous fixed depth (`CLAN_DEPTH`),
   so couples and married-in spouses render exactly as in the descendants view.
 - **Trade-offs (deliberate v1 scope):** only the largest line from the top progenitor is
   shown — disconnected components and in-law branches aren't merged into one picture; a manual
