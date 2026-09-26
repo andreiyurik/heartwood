@@ -1,37 +1,51 @@
-/* Tree view */
-.tree-page { container-type: inline-size; display: flex; flex-direction: column; flex: 1; min-height: 0; }
-.tree-hint { color: var(--color-muted); font-size: 0.8rem; margin: -0.5rem 0 0.75rem; }
+.tree-page {
+  container-type: inline-size;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-block-size: 0;
+}
 
-
+.tree-hint {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  margin: -0.5rem 0 0.75rem;
+}
 
 .tree-canvas {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  flex: 1;
-  min-height: 400px;
-  background: var(--color-bg);
+  background-color: var(--color-bg);
   border: 1px solid var(--color-border-dark);
   border-radius: var(--radius);
   cursor: grab;
-  user-select: none;
+  flex: 1;
+  inline-size: 100%;
+  min-block-size: 400px;
+  overflow: hidden;
+  position: relative;
   touch-action: none;
+  user-select: none;
 
-  &:active { cursor: grabbing; }
+  &:active {
+    cursor: grabbing;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-selected-dark);
+    outline-offset: -2px;
+  }
 }
 
-.tree-inner {
+.tree-inner,
+.tree-edges,
+.tree-toggles {
+  inset-block-start: 0;
+  inset-inline-start: 0;
   position: absolute;
-  top: 0;
-  left: 0;
 }
 
 .tree-edges {
-  position: absolute;
-  top: 0;
-  left: 0;
-  pointer-events: none;
   overflow: visible;
+  pointer-events: none;
 }
 
 .tree-edge {
@@ -40,321 +54,447 @@
   stroke-width: 1.5;
 }
 
-/* Marriage bond between the two cards of a couple — thicker than descent edges. */
-.tree-edge--bond { stroke-width: 2.5; }
+.tree-edge--bond {
+  stroke-width: 2.5;
+}
 
-/* ♥ between the partner cards, on a surface-coloured disc that breaks the bond line. */
-.tree-heart-bg { fill: var(--color-surface); stroke: var(--color-border-darker); stroke-width: 1.5; }
+.tree-heart-bg {
+  fill: var(--color-surface);
+  stroke: var(--color-border-darker);
+  stroke-width: 1.5;
+}
+
 .tree-heart {
+  dominant-baseline: central;
   fill: var(--color-female);
   font-size: 12px;
   text-anchor: middle;
-  dominant-baseline: central;
 }
 
-.tree-nodes-layer { position: relative; }
+.tree-nodes-layer {
+  position: relative;
+}
 
-/* Nodes come in two shapes (sizes stay in sync with tree_controller.js): couple
-   members are banded cards (CARD_W × CARD_H), singles are circles (CIRC_D). */
+/* Node sizes must match CARD_W, CARD_H and CIRC_D in tree_controller.js */
 .tree-node {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: var(--color-surface);
+  background-color: var(--color-surface);
   border: 1px solid var(--color-border-dark);
-  overflow: hidden;
   box-shadow: 0 1px 3px oklch(var(--lch-always-black) / 0.06);
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  overflow: hidden;
+  position: absolute;
 
   a {
-    display: block;
+    block-size: 100%;
     color: inherit;
-    height: 100%;
+    display: block;
 
-    &:hover { background: var(--color-bg); text-decoration: none; }
+    &:hover {
+      background-color: var(--color-bg);
+      text-decoration: none;
+    }
   }
 }
 
 .tree-node--card {
-  width: 210px;    /* CARD_W */
-  height: 100px;   /* CARD_H */
+  block-size: 100px;
   border-radius: 10px;
-}
-
-/* Coloured band across the card top — surname now, kinship label later. */
-.node-band {
-  display: block;
-  height: 22px;
-  line-height: 22px;
-  padding: 0 0.5rem;
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-align: center;
-  color: var(--color-always-white);
-  background: var(--color-border-dark);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.node-body {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  height: calc(100% - 22px);
-  padding: 0 0.75rem;
+  inline-size: 210px;
 }
 
 .tree-node--circle {
-  width: 160px;    /* CIRC_D */
-  height: 160px;
+  block-size: 160px;
   border-radius: 50%;
   border-width: 2px;
+  inline-size: 160px;
   text-align: center;
 
   a {
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
     gap: 0.3rem;
+    justify-content: center;
     padding: 0 1rem;
+  }
+
+  .node-avatar {
+    block-size: 2.5rem;
+    inline-size: 2.5rem;
+  }
+
+  .node-name,
+  .node-surname {
+    font-size: 0.8rem;
+  }
+
+  .node-name {
+    -webkit-line-clamp: 3;
+  }
+
+  /* The round outline clips text, so wrap the surname instead of ellipsis */
+  .node-surname {
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+    white-space: normal;
   }
 }
 
-/* Avatar inside a tree node — photo, or an outline silhouette tinted by sex. */
+.node-band {
+  background-color: var(--color-border-dark);
+  block-size: 22px;
+  color: var(--color-always-white);
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 22px;
+  overflow: hidden;
+  padding: 0 0.5rem;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.node-body {
+  align-items: center;
+  block-size: calc(100% - 22px);
+  display: flex;
+  gap: 0.6rem;
+  padding: 0 0.75rem;
+}
+
 .node-avatar {
-  flex: 0 0 auto;
-  width: 2.75rem;
-  height: 2.75rem;
+  block-size: 2.75rem;
   border-radius: 50%;
+  flex: 0 0 auto;
+  inline-size: 2.75rem;
   object-fit: cover;
 }
-.tree-node--circle .node-avatar { width: 2.5rem; height: 2.5rem; }
+
 .node-avatar--silhouette {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  background: var(--color-bg);
+  background-color: var(--color-bg);
   color: var(--color-muted);
+  display: flex;
+  justify-content: center;
+
+  svg {
+    block-size: 72%;
+    inline-size: 72%;
+  }
 }
-.node-avatar--silhouette svg { width: 72%; height: 72%; }
-.tree-node--m .node-avatar--silhouette { color: var(--color-male); }
-.tree-node--f .node-avatar--silhouette { color: var(--color-female); }
-.node-text { min-width: 0; }
 
-/* Sex tones: the card band and the circle ring pick up the colour. */
-.tree-node--m.tree-node--card .node-band { background: var(--color-male); }
-.tree-node--f.tree-node--card .node-band { background: var(--color-female); }
-.tree-node--m.tree-node--circle { border-color: var(--color-male); }
-.tree-node--f.tree-node--circle { border-color: var(--color-female); }
-.tree-node--living { background: var(--color-bg); }
+.tree-node--m .node-avatar--silhouette {
+  color: var(--color-male);
+}
 
-/* After the sex tones so the accent ring wins on the focus node. */
+.tree-node--f .node-avatar--silhouette {
+  color: var(--color-female);
+}
+
+.node-text {
+  min-inline-size: 0;
+}
+
+.tree-node--m.tree-node--card .node-band {
+  background-color: var(--color-male);
+}
+
+.tree-node--f.tree-node--card .node-band {
+  background-color: var(--color-female);
+}
+
+.tree-node--m.tree-node--circle {
+  border-color: var(--color-male);
+}
+
+.tree-node--f.tree-node--circle {
+  border-color: var(--color-female);
+}
+
+.tree-node--living {
+  background-color: var(--color-bg);
+}
+
+/* After the sex tones so the accent ring wins on the focus node */
 .tree-node.tree-node--focus {
   border-color: var(--color-selected-dark);
   border-width: 2px;
   box-shadow: 0 0 0 3px var(--color-selected);
 }
 
-/* Ghost add-relative slots — dashed invitations at the tree's growth frontier. */
 .tree-node--ghost {
-  border-style: dashed;
-  border-color: var(--color-border-darker);
   background: transparent;
+  border-color: var(--color-border-darker);
+  border-style: dashed;
   box-shadow: none;
 
+  &:hover {
+    border-color: var(--color-selected-dark);
+  }
+
   a {
-    display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
     color: var(--color-muted);
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
     padding: 0 0.75rem;
 
-    &:hover { background: transparent; color: var(--color-link); }
+    &:hover {
+      background: transparent;
+      color: var(--color-link);
+    }
+  }
+
+  &.tree-node--circle a {
+    flex-direction: column;
+    gap: 0.35rem;
   }
 }
-.tree-node--ghost.tree-node--circle a { flex-direction: column; gap: 0.35rem; }
-.tree-node--ghost:hover { border-color: var(--color-selected-dark); }
-.ghost-icon svg { display: block; width: 2.4rem; height: 2.4rem; }
-.ghost-label { font-size: 0.78rem; font-weight: 600; text-align: center; }
+
+.ghost-icon svg {
+  block-size: 2.4rem;
+  display: block;
+  inline-size: 2.4rem;
+}
+
+.ghost-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: center;
+}
 
 .node-name--living {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  height: 100%;
+  block-size: 100%;
   color: var(--color-muted);
+  display: flex;
   font-style: italic;
-  padding: 0.5rem 0.75rem;
+  justify-content: center;
   margin: 0;
+  padding: 0.5rem 0.75rem;
   text-align: center;
 }
 
-/* Circles clip text with their round outline, so let the surname wrap instead
-   of ellipsis-clipping (the card band keeps single-line ellipsis), and give the
-   given names a smaller size + a third line — patronymics are long. */
-.tree-node--circle .node-name,
-.tree-node--circle .node-surname { font-size: 0.8rem; }
-.tree-node--circle .node-name { -webkit-line-clamp: 3; }
-.tree-node--circle .node-surname {
-  white-space: normal;
-  overflow-wrap: anywhere;
-  text-overflow: clip;
-}
-
-/* Depth controls */
 .depth-controls {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: 0.25rem;
 }
+
 .depth-label {
-  min-width: 1.5rem;
-  text-align: center;
+  color: var(--color-text);
   font-size: 0.9rem;
   font-weight: 600;
-  color: var(--color-text);
+  min-inline-size: 1.5rem;
+  text-align: center;
 }
 
 .node-name,
 .node-surname {
-  font-weight: 600;
   font-size: 0.875rem;
+  font-weight: 600;
   line-height: 1.25;
   margin: 0;
   overflow: hidden;
 }
 
-/* Given names carry the patronymic ("Александр Сергеевич") and routinely outrun the
-   card width, so this line wraps to at most two lines instead of being clipped. */
+/* Patronymics make given names long: wrap to two lines rather than clip */
 .node-name {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
   overflow-wrap: anywhere;
 }
 
-/* A surname is a single token — clip it rather than let it wrap the card open. */
 .node-surname {
-  white-space: nowrap;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .node-dates {
+  color: var(--color-muted);
   font-size: 0.75rem;
   line-height: 1.2;
-  color: var(--color-muted);
   margin: 0.1rem 0 0;
 }
 
-/* Collapse/expand toggles — small pills at a unit's growth-facing edge. */
-.tree-toggles { position: absolute; top: 0; left: 0; }
 .tree-toggle {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  min-width: 1.3rem;
-  height: 1.3rem;
-  padding: 0 0.35rem;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  font-weight: 600;
-  line-height: 1;
-  color: var(--color-link);
-  background: var(--color-surface);
+  background-color: var(--color-surface);
+  block-size: 1.3rem;
   border: 1px solid var(--color-border-dark);
   border-radius: 999px;
-  cursor: pointer;
   box-shadow: 0 1px 2px oklch(var(--lch-always-black) / 0.06);
-}
-.tree-toggle:hover { background: var(--color-selected); border-color: var(--color-selected-dark); }
-.tree-toggle--collapsed { border-color: var(--color-selected-dark); }
-
-/* Search-to-fly box — floats over the canvas, fixed (does not pan/zoom). */
-.tree-search {
+  color: var(--color-link);
+  cursor: pointer;
+  display: flex;
+  font-size: 0.7rem;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1;
+  min-inline-size: 1.3rem;
+  padding: 0 0.35rem;
   position: absolute;
-  top: 0.75rem;
-  left: 0.75rem;
-  z-index: 3;
-  width: min(15rem, 60%);
+  transform: translate(-50%, -50%);
+
+  &:hover {
+    background-color: var(--color-selected);
+    border-color: var(--color-selected-dark);
+  }
 }
+
+.tree-toggle--collapsed {
+  border-color: var(--color-selected-dark);
+}
+
+.tree-search {
+  inline-size: min(15rem, 60%);
+  inset-block-start: 0.75rem;
+  inset-inline-start: 0.75rem;
+  position: absolute;
+  z-index: 3;
+}
+
 .tree-search-input {
-  width: 100%;
-  padding: 0.45rem 0.6rem;
-  font-size: 0.85rem;
-  color: var(--color-text);
-  background: var(--color-surface);
+  background-color: var(--color-surface);
   border: 1px solid var(--color-border-dark);
   border-radius: var(--radius);
-  cursor: text;
   box-shadow: 0 1px 3px oklch(var(--lch-always-black) / 0.06);
+  color: var(--color-text);
+  cursor: text;
+  font-size: 0.85rem;
+  inline-size: 100%;
+  padding: 0.45rem 0.6rem;
+
+  &:focus {
+    border-color: var(--color-selected-dark);
+    outline: none;
+  }
 }
-.tree-search-input:focus { outline: none; border-color: var(--color-selected-dark); }
+
 .tree-search-results {
-  list-style: none;
-  margin: 0.25rem 0 0;
-  padding: 0.25rem;
-  background: var(--color-surface);
+  background-color: var(--color-surface);
   border: 1px solid var(--color-border-dark);
   border-radius: var(--radius);
   box-shadow: 0 6px 24px oklch(var(--lch-always-black) / 0.08);
-  max-height: 14rem;
+  list-style: none;
+  margin: 0.25rem 0 0;
+  max-block-size: 14rem;
   overflow: auto;
+  padding: 0.25rem;
+
+  li {
+    align-items: baseline;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    font-size: 0.85rem;
+    gap: 0.75rem;
+    justify-content: space-between;
+    overflow: hidden;
+    padding: 0.35rem 0.5rem;
+    white-space: nowrap;
+
+    &:hover,
+    &:focus {
+      background-color: var(--color-selected);
+      outline: none;
+    }
+  }
+
+  li span:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
-.tree-search-results li {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.75rem;
-  padding: 0.35rem 0.5rem;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
+
+.tree-search-years {
+  color: var(--color-muted);
+  flex: 0 0 auto;
+  font-size: 0.75rem;
 }
-.tree-search-results li span:first-child { overflow: hidden; text-overflow: ellipsis; }
-.tree-search-years { flex: 0 0 auto; color: var(--color-muted); font-size: 0.75rem; }
 
-/* Live search: non-matching people fade back so matches pop on the canvas. */
-.tree-node--dim { opacity: 0.25; transition: opacity 0.2s ease; }
+.tree-node--dim {
+  opacity: 0.25;
+  transition: opacity 0.2s ease;
+}
 
-/* Keyboard navigation: the walked node, and a visible focus ring on the canvas. */
-.tree-node--kb { outline: 2px dashed var(--color-selected-dark); outline-offset: 3px; }
-.tree-canvas:focus-visible { outline: 2px solid var(--color-selected-dark); outline-offset: -2px; }
-.tree-search-results li:hover,
-.tree-search-results li:focus { background: var(--color-selected); outline: none; }
+.tree-node--kb {
+  outline: 2px dashed var(--color-selected-dark);
+  outline-offset: 3px;
+}
 
-/* Brief pulse when the search camera lands on a person. */
-.tree-node--found { animation: tree-found 1.6s ease; }
+.tree-node--found {
+  animation: tree-found 1.6s ease;
+}
+
 @keyframes tree-found {
   0%, 100% { box-shadow: 0 1px 3px oklch(var(--lch-always-black) / 0.06); }
   25%, 60% { box-shadow: 0 0 0 3px var(--color-selected-dark); }
 }
 
-/* Mini map — thumbnail with a viewport rectangle, only while the tree overflows. */
 .tree-minimap {
-  position: absolute;
-  left: 0.75rem;
-  bottom: 0.75rem;
-  z-index: 3;
-  width: 11rem;
-  height: 8rem;
-  background: var(--color-surface);
+  background-color: var(--color-surface);
+  block-size: 8rem;
   border: 1px solid var(--color-border-dark);
   border-radius: 8px;
   box-shadow: 0 1px 3px oklch(var(--lch-always-black) / 0.06);
-  opacity: 0.95;
   cursor: pointer;
+  inline-size: 11rem;
+  inset-block-end: 0.75rem;
+  inset-inline-start: 0.75rem;
+  opacity: 0.95;
+  position: absolute;
+  z-index: 3;
 }
-.tree-minimap--hidden { display: none; }
 
-/* Print: only the tree itself, scaled to the page width (tree#print sets the
-   camera and --print-h before calling window.print). */
+.tree-minimap--hidden {
+  display: none;
+}
+
+.tree-zoom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  inset-block-end: 0.75rem;
+  inset-inline-end: 0.75rem;
+  position: absolute;
+  z-index: 3;
+
+  button {
+    align-items: center;
+    background-color: var(--color-surface);
+    block-size: 2.1rem;
+    border: 1px solid var(--color-border-dark);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px oklch(var(--lch-always-black) / 0.06);
+    color: var(--color-link);
+    cursor: pointer;
+    display: flex;
+    font-size: 1.05rem;
+    inline-size: 2.1rem;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+
+    &:hover {
+      background-color: var(--color-selected);
+      border-color: var(--color-selected-dark);
+    }
+
+    svg {
+      block-size: 1.05rem;
+      inline-size: 1.05rem;
+    }
+  }
+}
+
+/* tree#print sets the camera and --print-h before calling window.print() */
 @media print {
   .site-header,
   .page-head .actions,
@@ -363,41 +503,17 @@
   .tree-zoom,
   .tree-minimap,
   .tree-toggles,
-  .tree-drawer { display: none !important; }
+  .tree-drawer {
+    display: none !important;
+  }
 
   .tree-canvas {
-    overflow: visible;
     border: none;
-    min-height: 0;
+    min-block-size: 0;
+    overflow: visible;
   }
-  .tree-canvas--print { height: var(--print-h, auto); }
-}
 
-/* Zoom buttons — bottom-right of the canvas, under the fingers on touch. */
-.tree-zoom {
-  position: absolute;
-  right: 0.75rem;
-  bottom: 0.75rem;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  .tree-canvas--print {
+    block-size: var(--print-h, auto);
+  }
 }
-.tree-zoom button {
-  width: 2.1rem;
-  height: 2.1rem;
-  padding: 0;   /* the global button padding would squeeze the svg icon */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.05rem;
-  line-height: 1;
-  color: var(--color-link);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border-dark);
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow: 0 1px 3px oklch(var(--lch-always-black) / 0.06);
-}
-.tree-zoom button:hover { background: var(--color-selected); border-color: var(--color-selected-dark); }
-.tree-zoom button svg { width: 1.05rem; height: 1.05rem; }

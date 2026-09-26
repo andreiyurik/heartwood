@@ -1,10 +1,15 @@
 .flash {
-  max-width: var(--maxw);
-  margin: 1rem auto 0;
-  padding: 0.6rem 1rem;
-  background: var(--color-selected);
+  background-color: var(--color-selected);
   border: 1px solid var(--color-selected-dark);
   border-radius: var(--radius);
   color: var(--color-link);
+  margin: 1rem auto 0;
+  max-inline-size: var(--maxw);
+  padding: 0.6rem 1rem;
 }
-.flash--alert { background: var(--color-negative-light); border-color: var(--color-negative); color: var(--color-negative); }
+
+.flash--alert {
+  background-color: var(--color-negative-light);
+  border-color: var(--color-negative);
+  color: var(--color-negative);
+}

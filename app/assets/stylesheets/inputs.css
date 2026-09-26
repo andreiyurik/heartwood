@@ -1,9 +1,3 @@
-/*
- * .input — canonical pill text input.
- * .input--actor — wraps a label around an icon + a borderless .input, so the
- * *label* is the visible pill and the icon sits flush inside it (the
- * icon-prefixed field look from once-campfire/writebook profile & auth forms).
- */
 .input {
   background-color: var(--input-background, var(--color-bg));
   border-radius: var(--input-border-radius, 0.5em);

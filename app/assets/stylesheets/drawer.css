@@ -1,100 +1,148 @@
-/* Slide-over person panel — opens over the canvas when a node is clicked
-   (drawer_controller.js + people/panel.html.erb). */
 .tree-drawer {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: min(21rem, 92%);
-  z-index: 4;
-  background: var(--color-surface);
-  border-left: 1px solid var(--color-border-dark);
+  background-color: var(--color-surface);
+  border-inline-start: 1px solid var(--color-border-dark);
   box-shadow: -10px 0 28px oklch(var(--lch-always-black) / 0.12);
+  cursor: default;
+  inline-size: min(21rem, 92%);
+  inset-block: 0;
+  inset-inline-end: 0;
+  overflow-y: auto;
+  position: absolute;
   transform: translateX(105%);
   transition: transform 0.28s ease;
-  overflow-y: auto;
-  cursor: default;
   user-select: text;
+  z-index: 4;
+
+  .relative-picker {
+    padding: 1rem;
+  }
 }
-.tree-drawer--open { transform: none; }
+
+.tree-drawer--open {
+  transform: none;
+}
 
 .person-panel-head {
-  position: relative;
-  padding: 1.5rem 1rem 1.25rem;
-  text-align: center;
+  background-color: var(--color-border-dark);
   color: var(--color-always-white);
-  background: var(--color-border-dark);
+  padding: 1.5rem 1rem 1.25rem;
+  position: relative;
+  text-align: center;
 }
-.person-panel-head--m { background: var(--color-male); }
-.person-panel-head--f { background: var(--color-female); }
+
+.person-panel-head--m {
+  background-color: var(--color-male);
+
+  .person-panel-avatar--silhouette {
+    color: var(--color-male);
+  }
+}
+
+.person-panel-head--f {
+  background-color: var(--color-female);
+
+  .person-panel-avatar--silhouette {
+    color: var(--color-female);
+  }
+}
 
 .person-panel-close {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.6rem;
-  border: 0;
   background: none;
+  border: 0;
   color: inherit;
-  font-size: 1.5rem;
-  line-height: 1;
   cursor: pointer;
+  font-size: 1.5rem;
+  inset-block-start: 0.5rem;
+  inset-inline-end: 0.6rem;
+  line-height: 1;
   opacity: 0.85;
+  position: absolute;
+
+  &:hover {
+    opacity: 1;
+  }
 }
-.person-panel-close:hover { opacity: 1; }
 
 .person-panel-avatar {
-  display: block;
-  width: 6rem;
-  height: 6rem;
+  block-size: 6rem;
   border-radius: 50%;
-  object-fit: cover;
   box-shadow: 0 0 0 4px oklch(var(--lch-always-white) / 0.85);
+  display: block;
+  inline-size: 6rem;
   margin: 0 auto 0.75rem;
+  object-fit: cover;
 }
-.person-panel-avatar--silhouette {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-surface);
-  color: var(--color-muted);
-}
-.person-panel-avatar--silhouette svg { width: 64%; height: 64%; }
-.person-panel-head--m .person-panel-avatar--silhouette { color: var(--color-male); }
-.person-panel-head--f .person-panel-avatar--silhouette { color: var(--color-female); }
 
-.person-panel-name  { margin: 0; font-size: 1.15rem; }
-.person-panel-years { margin: 0.25rem 0 0; font-size: 0.85rem; opacity: 0.9; }
+.person-panel-avatar--silhouette {
+  align-items: center;
+  background-color: var(--color-surface);
+  color: var(--color-muted);
+  display: flex;
+  justify-content: center;
+
+  svg {
+    block-size: 64%;
+    inline-size: 64%;
+  }
+}
+
+.person-panel-name {
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.person-panel-years {
+  font-size: 0.85rem;
+  margin: 0.25rem 0 0;
+  opacity: 0.9;
+}
 
 .person-panel-actions {
+  border-block-end: 1px solid var(--color-border-dark);
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: 0.5rem;
+  justify-content: center;
   padding: 1rem;
-  border-bottom: 1px solid var(--color-border-dark);
 }
 
 .person-panel-add {
+  align-items: baseline;
+  border-block-end: 1px solid var(--color-border-dark);
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  font-size: 0.85rem;
   gap: 0.35rem 0.75rem;
   padding: 0.75rem 1rem;
-  font-size: 0.85rem;
-  border-bottom: 1px solid var(--color-border-dark);
 }
-.person-panel-add-label { color: var(--color-muted); }
 
-/* The add-relative picker rendered inside the tree drawer. */
-.tree-drawer .relative-picker { padding: 1rem; }
-.relative-picker-for { margin: -0.25rem 0 0.75rem; font-size: 0.85rem; }
-
-.person-panel-fields { margin: 0; padding: 1rem; display: grid; gap: 0.9rem; }
-.person-panel-field dt {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+.person-panel-add-label {
   color: var(--color-muted);
-  margin-bottom: 0.15rem;
 }
-.person-panel-field dd { margin: 0; font-size: 0.9rem; }
+
+.relative-picker-for {
+  font-size: 0.85rem;
+  margin: -0.25rem 0 0.75rem;
+}
+
+.person-panel-fields {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 1rem;
+}
+
+.person-panel-field {
+  dt {
+    color: var(--color-muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    margin-block-end: 0.15rem;
+    text-transform: uppercase;
+  }
+
+  dd {
+    font-size: 0.9rem;
+    margin: 0;
+  }
+}
