@@ -1,10 +1,11 @@
-<% content_for :title, t("trees.title", name: @person.display_name) %>
+<% page_title @person.display_name %>
+<% back_link person_path(@person) %>
+<% full_bleed %>
 
-<div class="tree-page">
-  <header class="page-head">
-    <h1><%= @person.display_name %></h1>
-    <div class="actions">
-      <%# Mode toggle — always show both; active one is reversed (solid), other is plain %>
+<% content_for :header do %>
+  <details class="tree-options" data-controller="collapse-on-mobile" open>
+    <summary class="btn"><%= t("trees.options") %></summary>
+    <div class="tree-options__body">
       <%= link_to t("trees.ancestors"),
             person_tree_path(@person, mode: "ancestors", depth: @depth),
             class: "btn #{"btn--reversed" if @mode == "ancestors"}",
@@ -14,7 +15,6 @@
             class: "btn #{"btn--reversed" if @mode == "descendants"}",
             aria: { current: @mode == "descendants" ? "true" : nil } %>
 
-      <%# Depth controls %>
       <div class="depth-controls">
         <%= @depth > 1 ?
               link_to("−", person_tree_path(@person, mode: @mode, depth: @depth - 1), class: "btn btn--circle") :
@@ -24,13 +24,11 @@
               link_to("+", person_tree_path(@person, mode: @mode, depth: @depth + 1), class: "btn btn--circle") :
               tag.span("+", class: "btn btn--circle", aria: { disabled: true }) %>
       </div>
-
-      <%= link_to t("trees.clan_link"), clan_tree_path, class: "btn" %>
-      <%= link_to t("maps.tree_link"), tree_map_path, class: "btn" %>
-      <%= link_to t("people.profile"), person_path(@person), class: "btn btn--plain" %>
     </div>
-  </header>
+  </details>
+<% end %>
 
+<div class="tree-page">
   <p class="tree-hint"><%= t("trees.hint") %></p>
 
   <%= render "trees/canvas", graph: @graph, mode: @mode, depth: @depth, focus_id: @person.id %>

@@ -1,12 +1,7 @@
-<% content_for :title, t("maps.tree_title") %>
+<% page_title t("nav.map") %>
+<% full_bleed %>
 
 <div class="map-page">
-  <header class="page-head">
-    <h1><%= t("maps.tree_title") %></h1>
-    <div class="actions">
-      <%= link_to t("nav.all_people"), people_path, class: "btn btn--plain" %>
-    </div>
-  </header>
 
   <div class="map-canvas map-canvas--full"
        data-controller="map"

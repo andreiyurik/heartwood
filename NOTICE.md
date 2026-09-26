@@ -1,14 +1,18 @@
 # Third-party notices
 
 Heartwood is AGPL-3.0 (see `LICENSE`). Some files are adapted from
-[37signals/once-campfire](https://github.com/basecamp/once-campfire), used under the MIT
+[37signals/once-campfire](https://github.com/basecamp/once-campfire) and
+[37signals/writebook](https://github.com/basecamp/writebook), used under the MIT
 license below:
 
 - `app/assets/stylesheets/_reset.css` (itself based on Andy Bell's Modern CSS Reset)
 - `app/assets/stylesheets/utilities.css`
 - `app/assets/stylesheets/base.css` (control reset), `animation.css`, and `.btn--success`
   in `buttons.css`, `.skip-navigation` in `nav.css`
-- `app/javascript/controllers/copy_to_clipboard_controller.js`, `app/helpers/clipboard_helper.rb`
+- `app/javascript/controllers/copy_to_clipboard_controller.js`, `app/helpers/clipboard_helper.rb`,
+  `app/javascript/controllers/element_removal_controller.js`
+- `app/assets/stylesheets/layout.css` (the `#header`/`#toolbar`/`#main` grid, from Writebook) and
+  `flash.css` (the toast, from Campfire)
 - Icons listed in `app/assets/images/NOTICE.md`
 
 ```

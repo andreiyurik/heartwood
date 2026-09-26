@@ -1,8 +1,5 @@
-<% content_for :title, t("tree_memberships.title") %>
-
-<div class="page-head">
-  <h1><%= t("tree_memberships.title") %></h1>
-</div>
+<% page_title t("tree_memberships.title") %>
+<% back_link root_path %>
 
 <% if Current.membership.owner? %>
   <% url = join_url(Current.tree.join_code) %>

@@ -9,13 +9,35 @@
 .tree-hint {
   color: var(--color-muted);
   font-size: 0.8rem;
-  margin: -0.5rem 0 0.75rem;
+  margin: var(--block-space-half) var(--inline-space-double);
+}
+
+.tree-options {
+  summary {
+    cursor: pointer;
+    list-style: none;
+
+    @media (min-width: 40rem) {
+      display: none;
+    }
+  }
+}
+
+.tree-options__body {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--inline-space);
+
+  @media (max-width: 40rem) {
+    margin-block-start: var(--block-space-half);
+  }
 }
 
 .tree-canvas {
   background-color: var(--color-bg);
   border: 1px solid var(--color-border-dark);
-  border-radius: var(--radius);
+  border-radius: var(--border-radius);
   cursor: grab;
   flex: 1;
   inline-size: 100%;
@@ -363,7 +385,7 @@
 .tree-search-input {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border-dark);
-  border-radius: var(--radius);
+  border-radius: var(--border-radius);
   box-shadow: 0 1px 3px oklch(var(--lch-always-black) / 0.06);
   color: var(--color-text);
   cursor: text;
@@ -380,7 +402,7 @@
 .tree-search-results {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border-dark);
-  border-radius: var(--radius);
+  border-radius: var(--border-radius);
   box-shadow: 0 6px 24px oklch(var(--lch-always-black) / 0.08);
   list-style: none;
   margin: 0.25rem 0 0;
@@ -496,8 +518,6 @@
 
 /* tree#print sets the camera and --print-h before calling window.print() */
 @media print {
-  .site-header,
-  .page-head .actions,
   .tree-hint,
   .tree-search,
   .tree-zoom,

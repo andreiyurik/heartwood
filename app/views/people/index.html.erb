@@ -1,16 +1,13 @@
-<% content_for :title, t("people.title") %>
+<% page_title t("people.title") %>
 
-<div class="page-head">
-  <h1><%= t("people.title") %></h1>
-  <div class="page-head-actions">
-    <% if can_edit? %>
-      <%= link_to t("people.add"), new_person_path, class: "btn btn--reversed" %>
+<% content_for :header do %>
+  <% if can_edit? %>
+    <%= link_to new_person_path, class: "btn btn--reversed" do %>
+      <%= icon_tag "add" %> <%= t("people.add") %>
     <% end %>
-    <%= link_to t("trees.clan_link"), clan_tree_path, class: "btn" %>
-    <%= link_to t("maps.tree_link"), tree_map_path, class: "btn" %>
-    <%= button_to t("exports.create"), export_path, method: :post, class: "btn" %>
-  </div>
-</div>
+  <% end %>
+  <%= icon_button_to "download", t("exports.create"), export_path, method: :post %>
+<% end %>
 
 <%= form_with url: people_path, method: :get,
       data: { controller: "search", turbo_action: "advance" },
