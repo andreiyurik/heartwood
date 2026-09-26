@@ -3,7 +3,7 @@
   background: var(--color-surface);
   block-size: 420px;
   border: 1px solid var(--color-border-dark);
-  border-radius: var(--radius);
+  border-radius: var(--border-radius);
   overflow: hidden;
 }
 
