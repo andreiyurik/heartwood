@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_02_031014) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_26_182854) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -131,6 +131,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_02_031014) do
     t.index ["tree_id"], name: "index_family_partners_on_tree_id"
   end
 
+  create_table "imports", force: :cascade do |t|
+    t.integer "tree_id", null: false
+    t.integer "user_id", null: false
+    t.string "status", default: "pending", null: false
+    t.integer "people_count", default: 0, null: false
+    t.integer "families_count", default: 0, null: false
+    t.json "warnings", default: [], null: false
+    t.string "error"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tree_id"], name: "index_imports_on_tree_id"
+    t.index ["user_id"], name: "index_imports_on_user_id"
+  end
+
   create_table "payments", force: :cascade do |t|
     t.integer "amount_cents", null: false
     t.datetime "created_at", null: false
@@ -242,6 +256,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_02_031014) do
   add_foreign_key "family_partners", "families"
   add_foreign_key "family_partners", "people"
   add_foreign_key "family_partners", "trees"
+  add_foreign_key "imports", "trees"
+  add_foreign_key "imports", "users"
   add_foreign_key "payments", "trees"
   add_foreign_key "people", "trees"
   add_foreign_key "places", "trees"
