@@ -1,0 +1,8 @@
+<div class="errors">
+  <p><%= t("forms.errors", count: record.errors.count) %></p>
+  <ul>
+    <% record.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>

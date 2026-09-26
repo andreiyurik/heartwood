@@ -5,18 +5,14 @@
     <h1><%= t("registrations.title") %></h1>
     <p class="auth-lede"><%= t("registrations.lede") %></p>
 
-    <% if @user.errors.any? %>
-      <div class="errors">
-        <p><%= t("forms.errors", count: @user.errors.count) %></p>
-        <ul>
-          <% @user.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+    <%= render "shared/errors", record: @user if @user.errors.any? %>
 
     <%= form_with model: @user, url: registration_path, class: "auth-form" do |form| %>
+      <label class="input--actor">
+        <%= text_field_tag :tree_name, params[:tree_name], class: "input", maxlength: 240,
+              placeholder: t("registrations.tree_name_placeholder") %>
+        <%= icon_tag "people" %>
+      </label>
       <label class="input--actor">
         <%= form.text_field :name, class: "input", required: true, autofocus: true, autocomplete: "name",
               placeholder: t("registrations.name_placeholder") %>

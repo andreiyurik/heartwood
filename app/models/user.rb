@@ -11,4 +11,16 @@ class User < ApplicationRecord
             format: { with: URI::MailTo::EMAIL_REGEXP }
   # Minimum strength on new/changed passwords; skipped for records loaded without one.
   validates :password, length: { minimum: 8 }, allow_nil: true
+
+  def self.sign_up!(attributes, tree_name: nil, join: nil)
+    transaction do
+      create!(attributes).tap do |user|
+        if join
+          user.tree_memberships.create!(tree: join, role: "editor")
+        else
+          user.tree_memberships.create!(tree: Tree.create!(name: tree_name.presence || I18n.t("trees.default_name")), role: "owner")
+        end
+      end
+    end
+  end
 end
