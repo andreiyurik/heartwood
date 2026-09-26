@@ -178,4 +178,42 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     get person_url(@person)
     assert_response :success
   end
+
+  test "an empty tree shows one blank slate with two ways to begin" do
+    @tree.people.destroy_all
+    get people_url
+    assert_select ".blank-slate" do
+      assert_select "a[href=?]", new_person_path(yourself: true)
+      assert_select "a[href=?]", new_import_path
+    end
+    assert_select "form.search-form", count: 0
+    assert_select "#header form[action=?]", export_path, count: 0
+    assert_select "nav.sections", count: 0
+  end
+
+  test "a tree with people keeps search, export and navigation" do
+    get people_url
+    assert_select ".blank-slate", count: 0
+    assert_select "form.search-form"
+    assert_select "#header form[action=?]", export_path
+    assert_select "nav.sections a", count: 3
+  end
+
+  test "a viewer of an empty tree is told to wait, not offered actions" do
+    @tree.people.destroy_all
+    viewer = User.create!(name: "Vi", email_address: "vi@example.com", password: "password")
+    TreeMembership.create!(user: viewer, tree: @tree, role: "viewer")
+    sign_out
+    sign_in_as viewer
+    get people_url
+    assert_select ".blank-slate a", count: 0
+    assert_select ".blank-slate", text: /#{I18n.t("people.empty_viewer")}/
+  end
+
+  test "adding yourself prefills the form from your name" do
+    users(:one).update!(name: "Anna Maria Karenina")
+    get new_person_url(yourself: true)
+    assert_select "input[name='person[given_names]'][value=?]", "Anna Maria"
+    assert_select "input[name='person[surname]'][value=?]", "Karenina"
+  end
 end

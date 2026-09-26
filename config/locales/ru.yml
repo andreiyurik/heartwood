@@ -69,8 +69,12 @@ ru:
     profile: Профиль
     tree: Дерево
     edit_button: Редактировать
-    empty: Нет ни одной записи.
-    add_first: Добавить первого
+    empty_viewer: В этом дереве пока никого нет.
+    blank:
+      title: Дерево пока пустое
+      lede: Начните с себя или загрузите уже готовое дерево.
+      add_yourself: Добавить себя
+      import: Импорт GEDCOM
     unknown_name: Неизвестный
     living: Живёт
     tabs_label: Разделы профиля
@@ -302,7 +306,6 @@ ru:
     close_panel: Закрыть панель
     depth_label: Поколения
     default_name: Моё дерево
-    clan_empty: В этом дереве пока нет людей.
     search_placeholder: Найти человека…
     expand: Развернуть ветвь
     collapse: Свернуть ветвь
