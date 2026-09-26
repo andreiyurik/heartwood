@@ -2,10 +2,10 @@ require "test_helper"
 
 class CitationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @tree   = trees(:alpha)
-    @person = Person.create!(given_names: "Ada", sex: "F", tree: @tree)
-    @event  = Event.create!(kind: "BIRT", eventable: @person, tree: @tree)
-    sign_in_as users(:one)
+    @tree   = trees(:bach)
+    @person = people(:johann_sebastian)
+    @event  = events(:sebastian_death)
+    sign_in_as users(:bach)
     Current.tree = @tree
   end
 

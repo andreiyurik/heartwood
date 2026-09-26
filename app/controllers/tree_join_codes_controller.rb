@@ -1,4 +1,3 @@
-# Regenerating the tree's invite link revokes the old one — see Tree#reset_join_code!.
 class TreeJoinCodesController < ApplicationController
   before_action :require_owner
 

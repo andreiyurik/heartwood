@@ -7,3 +7,8 @@ two_beta:
   user: two
   tree: beta
   role: owner
+
+bach_owner:
+  user: bach
+  tree: bach
+  role: owner

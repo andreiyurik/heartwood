@@ -15,9 +15,7 @@ module TenantScoping
     Current.membership = membership
   end
 
-  # The session remembers which tree was last active (see ActiveTreeController) so a
-  # user who belongs to several keeps browsing the one they picked across requests.
-  # Falls back to their oldest membership, then bootstraps one if they have none yet.
+  # Falls back to the oldest membership, then bootstraps a tree if there is none.
   def resolve_membership
     if (tree_id = Current.session.current_tree_id)
       membership = Current.user.tree_memberships.find_by(tree_id: tree_id)

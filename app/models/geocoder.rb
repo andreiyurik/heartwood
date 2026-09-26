@@ -1,11 +1,6 @@
 require "net/http"
 
-# Thin wrapper over OpenStreetMap Nominatim — free, no API key. Returns candidate
-# locations for a free-text place query. Best-effort: any failure yields []. Used
-# both by the on-demand place picker and the background PlaceGeocodeJob.
-#
-# Called once per explicit user action (or per imported place), never per
-# keystroke — that would breach Nominatim's usage policy.
+# Called once per explicit user action, never per keystroke: Nominatim's usage policy.
 class Geocoder
   ENDPOINT   = "https://nominatim.openstreetmap.org/search".freeze
   USER_AGENT = "Heartwood/0.1 (open-source family tree)".freeze
@@ -14,7 +9,6 @@ class Geocoder
     new.search(query, limit:)
   end
 
-  # [{ name:, display_name:, lat:, lng: }], closest match first.
   def search(query, limit: 5)
     query = query.to_s.strip
     return [] if query.blank?
@@ -41,8 +35,7 @@ class Geocoder
     get = Net::HTTP::Get.new(uri)
     get["User-Agent"] = USER_AGENT
 
-    # Short timeouts: the on-demand picker runs this inside a request, so a slow
-    # Nominatim must not pin a web thread. Nominatim normally answers well under 1s.
+    # Short timeouts: a slow Nominatim must not pin a web thread.
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true,
       open_timeout: 3, read_timeout: 3) { |http| http.request(get) }
     return unless response.is_a?(Net::HTTPSuccess)

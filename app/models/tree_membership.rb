@@ -2,9 +2,6 @@ class TreeMembership < ApplicationRecord
   belongs_to :tree
   belongs_to :user
 
-  # owner: created the tree, sole admin (invite/remove members, delete the tree).
-  # editor: full read/write on the tree's data.
-  # viewer: read-only. See [[collaboration]].
   ROLES = %w[owner editor viewer].freeze
 
   validates :role, inclusion: { in: ROLES }

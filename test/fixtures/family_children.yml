@@ -1,0 +1,19 @@
+sebastian_child_of_parents:
+  tree: bach
+  family: bach_parents
+  person: johann_sebastian
+
+friedemann_child_of_first:
+  tree: bach
+  family: first_marriage
+  person: wilhelm_friedemann
+
+emanuel_child_of_first:
+  tree: bach
+  family: first_marriage
+  person: carl_philipp_emanuel
+
+christian_child_of_second:
+  tree: bach
+  family: second_marriage
+  person: johann_christian

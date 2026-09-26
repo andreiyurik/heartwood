@@ -1,5 +1,3 @@
-# Smart hints — the review queue of suggested duplicate people. The user decides:
-# dismiss here, merge later (v2). We only ever suggest. See DuplicateFinder.
 class HintsController < ApplicationController
   before_action :set_hint, only: :dismiss
   before_action :require_can_edit, only: %i[scan dismiss]
@@ -10,7 +8,6 @@ class HintsController < ApplicationController
                     .order(score: :desc, id: :asc)
   end
 
-  # Kick off a rescan by hand (imports do this automatically).
   def scan
     DuplicateScanJob.perform_later(Current.tree)
     redirect_to hints_path, notice: t("hints.flash.scanning")

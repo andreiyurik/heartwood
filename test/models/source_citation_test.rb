@@ -2,9 +2,9 @@ require "test_helper"
 
 class SourceCitationTest < ActiveSupport::TestCase
   setup do
-    @tree   = trees(:alpha)
-    @person = Person.create!(sex: "U", tree: @tree)
-    @event  = Event.create!(kind: "BIRT", eventable: @person, tree: @tree)
+    @tree   = trees(:bach)
+    @person = people(:johann_sebastian)
+    @event  = events(:sebastian_death)
   end
 
   test "source requires title" do

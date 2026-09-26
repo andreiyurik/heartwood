@@ -1,6 +1,3 @@
-# Rescans a tree for likely duplicates and refreshes its pending hints. Runs
-# after a GEDCOM import and on demand. Pairs a user already dismissed or confirmed
-# are left alone, so they don't keep resurfacing. See DuplicateFinder.
 class DuplicateScanJob < ApplicationJob
   queue_as :default
 

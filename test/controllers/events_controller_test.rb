@@ -4,9 +4,9 @@ require "test_helper"
 # docs/features/person-profile.md.
 class EventsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @tree   = trees(:alpha)
-    @person = Person.create!(given_names: "Ada", surname: "Lovelace", sex: "F", tree: @tree)
-    sign_in_as users(:one)
+    @tree   = trees(:bach)
+    @person = people(:wilhelm_friedemann)
+    sign_in_as users(:bach)
     Current.tree = @tree
   end
 

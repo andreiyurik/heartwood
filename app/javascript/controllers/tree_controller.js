@@ -1,20 +1,9 @@
 import { Controller } from "@hotwired/stimulus"
 
-// A vertical tidy tree (Reingold–Tilford in spirit, written by hand — no d3/dagre).
-// Generations are horizontal rows; within a row, X comes from a post-order pass so
-// parents sit centred over their children and sibling subtrees never overlap.
-//
-// The layout works on *units*: a couple (two cards joined by a bond line with a
-// ♥) or a lone person (a circle). Without `unions` every unit is a singleton, so
-// this is a plain tidy tree; with `unions`, couples lay out as one block of two.
-//
-// On top of the layout: collapse/expand of branches and a search box that flies the
-// camera to a person (expanding the path to them first). Units are built once; a
-// collapse/expand only re-runs the cheap positioning pass.
+// Tidy-tree layout written by hand (no d3/dagre): a post-order pass centres parents over children.
+// It works on *units*: a couple (two cards joined by a bond) or a lone person (a circle).
 
-// Nodes come in two shapes (keep sizes in sync with application.css): couple
-// members are rectangular cards, singles are circles. Units therefore have
-// per-shape widths and heights; rows take the height of their tallest unit.
+// Sizes must match tree.css (.tree-node--card and .tree-node--circle).
 const CARD_W      = 210   // .tree-node--card width
 const CARD_H      = 100   // .tree-node--card height (band + name + dates)
 const CIRC_D      = 160   // .tree-node--circle diameter
@@ -25,10 +14,9 @@ const ROW_GAP     = 70    // vertical gap between generation rows
 const PAD         = 60    // breathing room around the laid-out tree
 const SVG_NS      = "http://www.w3.org/2000/svg"
 
-// Above this many people the far branches load folded (see _autoCollapse):
-// a huge род opens readable around the focus instead of as confetti.
+// Above this many people the far branches load folded, so a huge род opens readable.
 const AUTO_COLLAPSE_MIN = 60
-const AUTO_ROWS         = 3   // rows from the focus that stay expanded
+const AUTO_ROWS         = 3
 
 export default class extends Controller {
   static targets = ["inner", "svg", "node", "searchInput", "searchResults", "minimap"]
@@ -72,11 +60,7 @@ export default class extends Controller {
     window.removeEventListener("pointercancel", this._boundUp)
   }
 
-  // --- View memory (camera + folded branches, per focus/mode/depth) -----------
-
-  // Units are keyed by their members' ids — stable across page loads, and a
-  // saved state is dropped wholesale when the graph itself changed (someone
-  // was added), so a stale view never hides fresh data.
+  // A saved view is dropped when the graph changed, so a stale view never hides fresh data.
   _stateKey() {
     return `heartwood:tree:${this.graphValue.focus_id}:${this.modeValue}:${this.depthValue}`
   }
@@ -98,9 +82,6 @@ export default class extends Controller {
     for (const k of keys) if (byKey.has(k)) this._collapsed.add(byKey.get(k))
   }
 
-  // First load of a big tree: keep AUTO_ROWS rows around the focus expanded and
-  // fold everything branchable beyond them behind "+N" badges. Expanding once
-  // persists, so this only shapes the very first impression.
   _autoCollapse() {
     const people = this.graphValue.nodes.filter(n => !n.ghost).length
     if (people <= AUTO_COLLAPSE_MIN) return
@@ -127,8 +108,6 @@ export default class extends Controller {
     }, 300)
   }
 
-  // --- Build the unit tree (once) ---------------------------------------------
-
   _build() {
     const { nodes, edges, focus_id } = this.graphValue
     const unions = this.graphValue.unions || []
@@ -144,9 +123,7 @@ export default class extends Controller {
     for (const u of units) this._countSubtree(u)
   }
 
-  // Group people into units. A union with two visible partners becomes a couple;
-  // everyone else is a singleton. Partners are ordered male-left for a calm,
-  // conventional read; ties fall back to id so layout is deterministic.
+  // Partners are ordered male-left; ties fall back to id so the layout is deterministic.
   _buildUnits(nodes, unions) {
     const nodeById = new Map(nodes.map(n => [n.id, n]))
     const unitOf   = new Map()
@@ -170,9 +147,7 @@ export default class extends Controller {
     return { units, unitOf, nodeById }
   }
 
-  // Lift the person edges (from = layout-parent, to = layout-child, in both modes)
-  // onto units. First edge into a unit wins, so a person reached twice via pedigree
-  // collapse is placed once. Children are ordered by the server's `order`.
+  // First edge into a unit wins, so a person reached twice via pedigree collapse is placed once.
   _linkUnits(units, unitOf, edges, nodeById) {
     for (const e of edges) {
       const pu = unitOf.get(e.from_id)
@@ -185,7 +160,6 @@ export default class extends Controller {
     for (const u of units) u.children.sort((a, b) => orderOf(a) - orderOf(b))
   }
 
-  // People strictly below a unit — shown on its collapsed badge ("+N").
   // Ghost add-relative slots don't count: they aren't people.
   _countSubtree(u) {
     if (u.subtreeCount != null) return u.subtreeCount
@@ -195,8 +169,6 @@ export default class extends Controller {
     }
     return u.subtreeCount = n
   }
-
-  // --- Positioning (re-run on every collapse/expand) --------------------------
 
   _relayout() {
     this._markVisible()
@@ -210,8 +182,6 @@ export default class extends Controller {
     this._drawMiniMap()
   }
 
-  // A unit is visible if every ancestor is expanded; a collapsed unit is itself
-  // visible (it carries the "+N" badge) but its descendants are not.
   _markVisible() {
     for (const u of this._units) u.visible = false
     const walk = (u) => {
@@ -222,10 +192,7 @@ export default class extends Controller {
     walk(this._root)
   }
 
-  // Post-order X: leaves take successive slots; a parent is centred over its
-  // children. A collapsed unit is treated as a leaf. When a parent is wider than
-  // its children's span (a couple over a single child), shift the children to keep
-  // the block centred and nothing overlapping. Correct first, tidy second.
+  // A collapsed unit is a leaf. A parent wider than its children's span shifts them to stay centred.
   _assignX(root) {
     const place = (u, left) => {
       const w    = this._unitWidth(u)
@@ -249,10 +216,6 @@ export default class extends Controller {
     for (const c of children) { c.cx += dx; this._shift(c.children, dx) }
   }
 
-  // Rows from generation, over the visible units only — folding a deep branch
-  // compacts the tree vertically. Descendants grow down, ancestors grow up.
-  // Rows are as tall as their tallest unit (cards and circles mix freely);
-  // shorter units are centred vertically within their row.
   _assignY() {
     const vis    = this._units.filter(u => u.visible)
     const maxGen = Math.max(...vis.map(u => this._gen(u)))
@@ -279,9 +242,6 @@ export default class extends Controller {
   _unitWidth(u)  { return u.members.length === 2 ? CARD_W * 2 + PAIR_GAP : CIRC_D }
   _unitHeight(u) { return u.members.length === 2 ? CARD_H : CIRC_D }
 
-  // Resolve visible units into per-node positions (with each node's own size),
-  // then normalise so the tree starts at (PAD, PAD) — unit centres can go
-  // negative after shifts.
   _placeCards() {
     const pos = {}
     const vis = this._units.filter(u => u.visible)
@@ -322,12 +282,10 @@ export default class extends Controller {
         el.style.display   = ""
         el.style.transform = `translate(${pos.x}px, ${pos.y}px)`
       } else {
-        el.style.display = "none"   // inside a folded branch
+        el.style.display = "none"
       }
     }
   }
-
-  // --- Edges & toggles --------------------------------------------------------
 
   _drawEdges() {
     this.svgTarget.innerHTML = ""
@@ -339,8 +297,6 @@ export default class extends Controller {
     }
   }
 
-  // Short horizontal line joining the two partner cards of a couple, with a ♥
-  // marker in the gap between them — marriage reads differently from descent.
   _connector(u) {
     const [a, b] = u.members
     const x1 = this._pos[a].cx + this._pos[a].w / 2
@@ -364,17 +320,14 @@ export default class extends Controller {
     this.svgTarget.append(bg, glyph)
   }
 
-  // Orthogonal elbow from a parent unit to a child unit, in the growth direction.
-  // A couple's line starts at the bond midpoint and runs through the gap between
-  // the partner cards; a single's line starts at the circle's edge.
   _link(parent, child) {
     const px = parent.cx, cx = child.cx
     const py = parent.y + parent.h / 2, cy = child.y + child.h / 2
     const dir  = Math.sign(cy - py) || 1
-    const edge = py + dir * parent.h / 2            // parent's growth-facing edge
+    const edge = py + dir * parent.h / 2
     const y1   = parent.members.length === 2 ? py : edge
     const y2   = cy - dir * child.h / 2
-    const my   = (edge + y2) / 2                    // bus line sits between the rows
+    const my   = (edge + y2) / 2
     this._path(`M${px},${y1} L${px},${my} L${cx},${my} L${cx},${y2}`)
   }
 
@@ -385,14 +338,12 @@ export default class extends Controller {
     this.svgTarget.appendChild(path)
   }
 
-  // A small button at each branchable unit's growth-facing edge: "−" to fold,
-  // "+N" (N = hidden people) to unfold.
   _drawToggles() {
     this._toggleLayer.innerHTML = ""
     const dir = this.modeValue === "ancestors" ? -1 : 1
 
     for (const u of this._units) {
-      // No toggle when the only things below are ghost slots — nothing to fold.
+      // No toggle when only ghost slots are below.
       if (!u.visible || !u.children.length || !this._countSubtree(u)) continue
       const collapsed = this._collapsed.has(u.id)
 
@@ -410,8 +361,7 @@ export default class extends Controller {
     }
   }
 
-  // Fold/unfold a branch, keeping the focus card pinned on screen so the view
-  // doesn't jump as the tree re-flows.
+  // Keeps the focus card pinned on screen so the view doesn't jump on re-flow.
   _toggle(id) {
     const anchor = this._anchorScreen()
     this._collapsed.has(id) ? this._collapsed.delete(id) : this._collapsed.add(id)
@@ -419,8 +369,6 @@ export default class extends Controller {
     this._restoreAnchor(anchor)
     this._applyTransform()
   }
-
-  // --- Search & fly-to --------------------------------------------------------
 
   search() {
     if (!this.hasSearchResultsTarget) return
@@ -433,8 +381,6 @@ export default class extends Controller {
           .filter(n => !n.living && !n.ghost && n.name && n.name.toLowerCase().includes(q))
       : []
 
-    // While a query is live, everyone who doesn't match fades back — the
-    // matches stay bright on the canvas (Balkan's .match/.no-match idea).
     this._dimExcept(q ? new Set(found.map(n => n.id)) : null)
 
     const matches = found.slice(0, 8)
@@ -458,7 +404,6 @@ export default class extends Controller {
     list.hidden = false
   }
 
-  // Fade every node not in `matchIds`; null restores everyone.
   _dimExcept(matchIds) {
     for (const el of this.nodeTargets) {
       const id = +el.dataset.treeNodeId
@@ -476,7 +421,7 @@ export default class extends Controller {
   }
 
   _flyTo(id) {
-    this._reveal(id)            // unfold the path so the person is on screen
+    this._reveal(id)
     this._relayout()
     this._scale = 1
     const p = this._pos[id]
@@ -485,8 +430,6 @@ export default class extends Controller {
     this._clearSearch()
   }
 
-  // Expand every ancestor of the person's unit (the unit itself may stay folded —
-  // the person is still one of its visible cards).
   _reveal(id) {
     let u = this._unitOf.get(id)?.parent
     while (u) { this._collapsed.delete(u.id); u = u.parent }
@@ -509,10 +452,6 @@ export default class extends Controller {
 
   _sexRank(node) { return node?.sex === "M" ? 0 : node?.sex === "F" ? 1 : 2 }
 
-  // --- Print --------------------------------------------------------------------
-
-  // Scale the whole tree to the printable page width, print, then restore the
-  // camera. The print stylesheet hides every control and unclips the canvas.
   print() {
     const restore = { pan: { ...this._pan }, scale: this._scale }
     const after = () => {
@@ -525,7 +464,7 @@ export default class extends Controller {
     window.addEventListener("afterprint", after)
 
     this.element.classList.add("tree-canvas--print")
-    const pageWidth = 720   // ≈ 190mm printable width at 96dpi
+    const pageWidth = 720
     this._scale = Math.min(1, pageWidth / this.innerTarget.offsetWidth)
     this._pan   = { x: 0, y: 0 }
     this._applyTransform()
@@ -533,11 +472,6 @@ export default class extends Controller {
     window.print()
   }
 
-  // --- Keyboard navigation ------------------------------------------------------
-
-  // Arrows walk the family (left/right: partner or sibling; up/down: across
-  // generations, spatially), Enter opens the highlighted person's panel,
-  // +/− zoom. The canvas div carries tabindex=0 (see trees/_canvas).
   keydown(e) {
     if (e.target.closest("input, textarea, select, [contenteditable]")) return
     if (e.key === "+" || e.key === "=") { e.preventDefault(); return this.zoomIn() }
@@ -594,7 +528,6 @@ export default class extends Controller {
     if (!el) return
     el.classList.add("tree-node--kb")
 
-    // Follow with the camera when the highlight leaves the viewport.
     const id = this._kb.u.members[this._kb.m]
     const p  = this._pos[id]
     if (!p) return
@@ -606,11 +539,7 @@ export default class extends Controller {
     }
   }
 
-  // --- Camera (pan & zoom) ----------------------------------------------------
-
-  // Initial camera: zoom out (never in) until the whole tree fits the canvas,
-  // floored at MIN_FIT. If even that can't contain it, fall back to centring the
-  // focus card — panning beats a confetti-scale overview.
+  // Falls back to centring the focus card when even MIN_FIT can't contain the tree.
   _fitToView() {
     const vw  = this.element.clientWidth,     vh = this.element.clientHeight
     const w   = this.innerTarget.offsetWidth, h  = this.innerTarget.offsetHeight
@@ -629,7 +558,6 @@ export default class extends Controller {
     if (p) this._panTo(p.cx, p.y + p.h / 2, animate)
   }
 
-  // Place a tree-space point at the centre of the viewport.
   _panTo(cx, cy, animate = false) {
     this._pan = {
       x: this.element.clientWidth  / 2 - cx * this._scale,
@@ -638,7 +566,6 @@ export default class extends Controller {
     this._applyTransform(animate)
   }
 
-  // Screen position of the focus card, captured before a re-flow so we can pin it.
   _anchorScreen() {
     const p = this._pos[this.graphValue.focus_id]
     if (!p) return null
@@ -662,9 +589,8 @@ export default class extends Controller {
     window.addEventListener("pointercancel",     this._boundUp)
   }
 
-  // One pointer drags the camera; a second pointer switches to pinch-zoom.
   _onDown(e) {
-    if (e.target.closest("a, button, .tree-search, .tree-drawer, .tree-minimap")) return   // let controls through
+    if (e.target.closest("a, button, .tree-search, .tree-drawer, .tree-minimap")) return
     e.preventDefault()
     this._pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
     if (this._pointers.size === 2) {
@@ -680,8 +606,7 @@ export default class extends Controller {
     this._pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
 
     if (this._pinch && this._pointers.size >= 2) {
-      // Keep the tree-space point grabbed at pinch start pinned to the moving
-      // midpoint, scaling by the change in finger distance.
+      // Keep the point grabbed at pinch start pinned to the moving midpoint.
       const { dist, mid } = this._pinchNow()
       const next = this._clampScale(this._pinch.scale0 * dist / this._pinch.dist0)
       this._scale = next
@@ -724,7 +649,6 @@ export default class extends Controller {
     }
   }
 
-  // Zoom anchored at the cursor: the tree-space point under the pointer stays put.
   _onWheel(e) {
     e.preventDefault()
     const rect = this.element.getBoundingClientRect()
@@ -732,7 +656,6 @@ export default class extends Controller {
                  this._scale * (e.deltaY < 0 ? 1.1 : 0.9))
   }
 
-  // On-canvas zoom buttons (see trees/_canvas).
   zoomIn()  { this._zoomBy(1.2) }
   zoomOut() { this._zoomBy(1 / 1.2) }
   zoomFit() { this._fitToView() }
@@ -741,7 +664,6 @@ export default class extends Controller {
     this._zoomAt(this.element.clientWidth / 2, this.element.clientHeight / 2, this._scale * k)
   }
 
-  // Rescale so the tree-space point at canvas coordinates (mx, my) stays put.
   _zoomAt(mx, my, scale) {
     const next = this._clampScale(scale)
     const k    = next / this._scale
@@ -763,11 +685,7 @@ export default class extends Controller {
     this._drawMiniMap()
   }
 
-  // --- Mini map ----------------------------------------------------------------
-
-  // A thumbnail of the whole layout with a viewport rectangle, bottom-left.
-  // Only shown while the tree overflows the canvas — when everything is on
-  // screen it would just repeat the picture.
+  // Only shown while the tree overflows the canvas; otherwise it would repeat the picture.
   _drawMiniMap() {
     if (!this.hasMinimapTarget || !this._pos || !this._pan) return
     const mm = this.minimapTarget
@@ -805,7 +723,6 @@ export default class extends Controller {
                    vw / this._scale * k, vh / this._scale * k)
   }
 
-  // Click on the mini map → centre the camera on that spot of the tree.
   minimapJump(e) {
     if (!this._mmScale) return
     const rect = this.minimapTarget.getBoundingClientRect()

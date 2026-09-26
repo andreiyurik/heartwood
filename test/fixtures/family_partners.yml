@@ -1,0 +1,29 @@
+ambrosius_in_parents:
+  tree: bach
+  family: bach_parents
+  person: ambrosius
+
+elisabeth_in_parents:
+  tree: bach
+  family: bach_parents
+  person: elisabeth
+
+sebastian_in_first:
+  tree: bach
+  family: first_marriage
+  person: johann_sebastian
+
+barbara_in_first:
+  tree: bach
+  family: first_marriage
+  person: maria_barbara
+
+sebastian_in_second:
+  tree: bach
+  family: second_marriage
+  person: johann_sebastian
+
+magdalena_in_second:
+  tree: bach
+  family: second_marriage
+  person: anna_magdalena

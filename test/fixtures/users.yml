@@ -9,3 +9,8 @@ two:
   name: User Two
   email_address: two@example.com
   password_digest: <%= password_digest %>
+
+bach:
+  name: Johann Bach
+  email_address: bach@example.com
+  password_digest: <%= password_digest %>
