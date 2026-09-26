@@ -83,3 +83,7 @@
     margin: 0 0 0.75rem;
   }
 }
+
+.settings-links {
+  margin-block-start: var(--block-space);
+}
