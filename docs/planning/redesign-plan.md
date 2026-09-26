@@ -94,5 +94,6 @@ Reference: campfire/writebook `app/models`, `app/controllers/concerns`, `config/
 - [ ] Stimulus: `#private` members, shared `timing_helpers.js` debounce, generic
       `auto_submit`/`autocomplete`/`toggle_class`; delete `hello_controller.js`.
 
-## Open decision
-- Product name — decide before Phase 2 (header, logo, copy) — see [[positioning]].
+## Decisions
+- Product name stays **Heartwood** (decided 2026-09-26); open source and community go in
+  the tagline, not the name — see [[positioning]].
