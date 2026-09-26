@@ -90,7 +90,9 @@ for r in once-campfire writebook fizzy; do git clone --depth 1 https://github.co
   tokens, the member-row + invite-link shape — all adapted directly from these two.
 - **fizzy** — style/technique reference only (e.g. the mask-image icon approach). Its license
   has a SaaS non-compete clause, so no literal fizzy assets or code ship in this repo — MIT
-  icons come from campfire instead (see `app/assets/images/NOTICE.md`).
+  icons come from campfire instead (see `NOTICE.md`).
+- When you copy or closely adapt a file or rule from campfire/writebook, list it in
+  `NOTICE.md` (their MIT license requires the attribution).
 
 Full detail and the "what to take from what" map: [[prior-art]].
 

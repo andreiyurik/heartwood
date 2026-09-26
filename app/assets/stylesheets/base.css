@@ -2,43 +2,72 @@
   --font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --hover-color: var(--color-border-darker);
   --hover-size: 0.15em;
+  --hover-filter: brightness(1);
   --radius: 10px;
   --maxw: 60rem;
 }
 
-* { box-sizing: border-box; }
-
 html, body {
+  -webkit-text-size-adjust: none;
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-family);
   line-height: 1.55;
-  margin: 0;
+  overflow: initial;
+  text-size-adjust: none;
 }
 
-/* min-height, not height — every other page still grows past the viewport and
-   scrolls normally. Only a flex-filling descendant (the tree canvas) notices. */
-body { display: flex; flex-direction: column; min-height: 100dvh; }
+body {
+  display: flex;
+  flex-direction: column;
+}
 
-a { color: var(--color-link); text-decoration: none; }
-a:hover { text-decoration: underline; }
+a {
+  color: var(--color-link);
+  text-decoration: none;
 
-turbo-frame,
-turbo-cable-stream-source { display: contents; }
+  &:hover {
+    text-decoration: underline;
+  }
+}
 
-/* New-primitive interaction feedback — scoped to .btn/.input so it doesn't reach
-   into unmigrated screens that still manage their own hover/focus styling. */
-:where(.btn, .input) {
-  transition: box-shadow 150ms ease, filter 150ms ease, background-color 150ms ease;
+/* Checkboxes, radios and file pickers keep their native look */
+:where(button, input:not([type=checkbox], [type=radio], [type=file]), textarea, summary, .input, .btn) {
+  --outline-size: min(0.2em, 2px);
+
+  appearance: none;
+  border: none;
+  background-color: transparent;
+  font: inherit;
+  line-height: inherit;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: box-shadow 150ms ease, outline-offset 150ms ease, background-color 150ms ease, opacity 150ms ease, filter 150ms ease;
 
   @media (any-hover: hover) {
     &:where(:not(:active):hover) {
+      filter: var(--hover-filter);
       box-shadow: 0 0 0 var(--hover-size) var(--hover-color);
     }
   }
 
   &:where(:not(:active)):focus-visible {
-    outline: 2px solid var(--color-selected-dark);
-    outline-offset: 2px;
+    outline-width: var(--outline-size);
+    outline-color: var(--outline-color, var(--color-selected-dark));
+    outline-offset: var(--outline-offset, calc(var(--outline-size) * 2));
   }
+
+  &:focus:not(:focus-visible) {
+    --outline-offset: 0;
+  }
+
+  &:where([disabled]):not(:hover):not(:active) {
+    cursor: not-allowed;
+    filter: brightness(0.75);
+  }
+}
+
+turbo-frame,
+turbo-cable-stream-source {
+  display: contents;
 }
