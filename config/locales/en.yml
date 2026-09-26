@@ -19,6 +19,7 @@ en:
 
   tree_memberships:
     title: Members
+    invite_label: Share this link to invite your family
     copy_link: Copy invite link
     reset_link: Generate a new link
     reset_confirm: This will invalidate the current invite link. Continue?

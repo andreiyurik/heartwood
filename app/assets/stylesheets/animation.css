@@ -1,0 +1,8 @@
+@keyframes success {
+  0%  { background-color: var(--color-border-darker); scale: 0.8; }
+  20% { background-color: var(--color-border-darker); scale: 1; }
+}
+
+@keyframes zoom-fade {
+  100% { transform: translateY(-2em); opacity: 0; }
+}
