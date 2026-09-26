@@ -9,6 +9,19 @@ class CitationsControllerTest < ActionDispatch::IntegrationTest
     Current.tree = @tree
   end
 
+  test "citations answer with a see-other redirect, so Turbo morphs the page" do
+    post person_event_citations_url(@person, @event), params: { source: { title: "Register" } }
+    assert_response :see_other
+
+    delete person_event_citation_url(@person, @event, @event.citations.last)
+    assert_response :see_other
+  end
+
+  test "the citation form submits to the whole page" do
+    get new_person_event_citation_url(@person, @event)
+    assert_select "form[data-turbo-frame=_top]"
+  end
+
   test "GET new renders citation form in turbo frame" do
     get new_person_event_citation_url(@person, @event)
     assert_response :success

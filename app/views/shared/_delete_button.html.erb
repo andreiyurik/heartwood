@@ -3,6 +3,6 @@
     (defaults to the subtle inline delete-link; pass "danger" for the heavy one). %>
 <%= button_to url, method: :delete,
       class: local_assigns.fetch(:class, "delete-link"),
-      form: { data: { turbo_confirm: local_assigns[:confirm] } } do %>
+      form: { data: { turbo_confirm: local_assigns[:confirm], turbo_frame: "_top" } } do %>
   <%= icon_tag "trash" %> <%= label %>
 <% end %>

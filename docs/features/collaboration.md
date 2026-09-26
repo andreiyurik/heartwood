@@ -12,6 +12,9 @@ collaborative model (see [[prior-art]]), the invite-link mechanic from once-camp
 trees rather than one account per install).
 
 ## Shipped
+- **Live editing**: when anyone changes the tree, every open list, profile, tree and map page
+  refreshes itself (a Turbo page refresh over Solid Cable, no data in the message; each client
+  re-fetches with its own permissions). Open inline forms are left alone.
 - **Invite links**: each tree has a `join_code` (`Tree#reset_join_code!` to revoke and reissue).
   `GET/POST /join/:join_code` — a guest sees the tree's name and a sign-up form; one request
   creates the user and an editor `TreeMembership` (`User.sign_up!(join:)`). "Already have an

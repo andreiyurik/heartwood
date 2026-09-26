@@ -62,12 +62,15 @@ class RelativesControllerTest < ActionDispatch::IntegrationTest
     assert_select "input[name=relation][value=child]"
   end
 
-  test "create via turbo_stream replaces the family box" do
-    post person_relatives_url(@person),
-      params: { relation: "child", person: { given_names: "Kim", sex: "U" } },
-      as: :turbo_stream
-    assert_response :success
-    assert_select "turbo-stream[action=replace][target=family]"
+  test "create answers with a see-other redirect, so Turbo morphs the page" do
+    post person_relatives_url(@person), params: { relation: "child", person: { given_names: "Kim", sex: "U" } }
+    assert_redirected_to person_url(@person)
+    assert_response :see_other
+  end
+
+  test "the new-relative form submits to the whole page" do
+    get new_person_relative_url(@person, relation: "child")
+    assert_select "form[action=?][data-turbo-frame=_top]", person_relatives_path(@person)
   end
 
   test "rejects an unknown relation without creating anyone" do

@@ -43,9 +43,6 @@ class EventsController < ApplicationController
   end
 
   def respond_to_change(key)
-    respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to @person, notice: t("events.flash.#{key}") }
-    end
+    redirect_back_or_to @person, status: :see_other, notice: t("events.flash.#{key}")
   end
 end

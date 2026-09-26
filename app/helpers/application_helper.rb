@@ -45,6 +45,12 @@ module ApplicationHelper
     turbo_stream_from Current.tree
   end
 
+  # A turbo frame that a page refresh leaves alone while a form is open in it.
+  def preserved_frame_tag(id, &block)
+    turbo_frame_tag id, data: { controller: "preserve-form",
+                                action: "turbo:frame-load->preserve-form#sync turbo:submit-end->preserve-form#release" }, &block
+  end
+
   def full_bleed
     content_for :body_class, "full-bleed"
   end

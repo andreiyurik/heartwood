@@ -1,7 +1,7 @@
 <%= turbo_frame_tag dom_id(@event, :citation_form) do %>
   <%= form_with model: [@person, @event, @citation],
         url: person_event_citations_path(@person, @event),
-        class: "form form--inline" do |f| %>
+        class: "form form--inline", data: { turbo_frame: "_top" } do |f| %>
     <p class="inline-title"><%= t("citations.add_title", event: @event.kind_label) %></p>
 
     <%= fields_for :source, @source do |sf| %>

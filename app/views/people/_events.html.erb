@@ -10,7 +10,7 @@
   <% end %>
 
   <% if can_edit? %>
-    <%= turbo_frame_tag "add_event", data: { controller: "preserve-form", action: "turbo:frame-load->preserve-form#sync" } do %>
+    <%= preserved_frame_tag "add_event" do %>
       <div class="event-add-actions">
         <%= link_to new_person_event_path(person), class: "btn btn--plain add-relative" do %>
           <%= icon_tag "add" %> <%= t("events.add") %>
