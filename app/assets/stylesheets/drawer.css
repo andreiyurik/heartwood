@@ -1,0 +1,100 @@
+/* Slide-over person panel — opens over the canvas when a node is clicked
+   (drawer_controller.js + people/panel.html.erb). */
+.tree-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(21rem, 92%);
+  z-index: 4;
+  background: var(--surface);
+  border-left: 1px solid var(--line);
+  box-shadow: -10px 0 28px rgba(0,0,0,.12);
+  transform: translateX(105%);
+  transition: transform 0.28s ease;
+  overflow-y: auto;
+  cursor: default;
+  user-select: text;
+}
+.tree-drawer--open { transform: none; }
+
+.person-panel-head {
+  position: relative;
+  padding: 1.5rem 1rem 1.25rem;
+  text-align: center;
+  color: #fff;
+  background: var(--line);
+}
+.person-panel-head--m { background: #6b9fb8; }
+.person-panel-head--f { background: #b87ca0; }
+
+.person-panel-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.6rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.85;
+}
+.person-panel-close:hover { opacity: 1; }
+
+.person-panel-avatar {
+  display: block;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 4px rgba(255,255,255,.85);
+  margin: 0 auto 0.75rem;
+}
+.person-panel-avatar--silhouette {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: var(--muted);
+}
+.person-panel-avatar--silhouette svg { width: 64%; height: 64%; }
+.person-panel-head--m .person-panel-avatar--silhouette { color: #6b9fb8; }
+.person-panel-head--f .person-panel-avatar--silhouette { color: #b87ca0; }
+
+.person-panel-name  { margin: 0; font-size: 1.15rem; }
+.person-panel-years { margin: 0.25rem 0 0; font-size: 0.85rem; opacity: 0.9; }
+
+.person-panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.person-panel-add {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--line);
+}
+.person-panel-add-label { color: var(--muted); }
+
+/* The add-relative picker rendered inside the tree drawer. */
+.tree-drawer .relative-picker { padding: 1rem; }
+.relative-picker-for { margin: -0.25rem 0 0.75rem; font-size: 0.85rem; }
+
+.person-panel-fields { margin: 0; padding: 1rem; display: grid; gap: 0.9rem; }
+.person-panel-field dt {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 0.15rem;
+}
+.person-panel-field dd { margin: 0; font-size: 0.9rem; }

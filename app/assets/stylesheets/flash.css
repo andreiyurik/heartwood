@@ -1,0 +1,10 @@
+.flash {
+  max-width: var(--maxw);
+  margin: 1rem auto 0;
+  padding: 0.6rem 1rem;
+  background: #eaf2e6;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  color: var(--accent-ink);
+}
+.flash--alert { background: #f7e7e3; border-color: var(--danger); color: var(--danger); }
