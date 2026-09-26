@@ -7,9 +7,9 @@
   bottom: 0;
   width: min(21rem, 92%);
   z-index: 4;
-  background: var(--surface);
-  border-left: 1px solid var(--line);
-  box-shadow: -10px 0 28px rgba(0,0,0,.12);
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-border-dark);
+  box-shadow: -10px 0 28px oklch(var(--lch-always-black) / 0.12);
   transform: translateX(105%);
   transition: transform 0.28s ease;
   overflow-y: auto;
@@ -22,11 +22,11 @@
   position: relative;
   padding: 1.5rem 1rem 1.25rem;
   text-align: center;
-  color: #fff;
-  background: var(--line);
+  color: var(--color-always-white);
+  background: var(--color-border-dark);
 }
-.person-panel-head--m { background: #6b9fb8; }
-.person-panel-head--f { background: #b87ca0; }
+.person-panel-head--m { background: var(--color-male); }
+.person-panel-head--f { background: var(--color-female); }
 
 .person-panel-close {
   position: absolute;
@@ -48,19 +48,19 @@
   height: 6rem;
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 0 0 4px rgba(255,255,255,.85);
+  box-shadow: 0 0 0 4px oklch(var(--lch-always-white) / 0.85);
   margin: 0 auto 0.75rem;
 }
 .person-panel-avatar--silhouette {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
-  color: var(--muted);
+  background: var(--color-surface);
+  color: var(--color-muted);
 }
 .person-panel-avatar--silhouette svg { width: 64%; height: 64%; }
-.person-panel-head--m .person-panel-avatar--silhouette { color: #6b9fb8; }
-.person-panel-head--f .person-panel-avatar--silhouette { color: #b87ca0; }
+.person-panel-head--m .person-panel-avatar--silhouette { color: var(--color-male); }
+.person-panel-head--f .person-panel-avatar--silhouette { color: var(--color-female); }
 
 .person-panel-name  { margin: 0; font-size: 1.15rem; }
 .person-panel-years { margin: 0.25rem 0 0; font-size: 0.85rem; opacity: 0.9; }
@@ -71,7 +71,7 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 1rem;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--color-border-dark);
 }
 
 .person-panel-add {
@@ -81,9 +81,9 @@
   gap: 0.35rem 0.75rem;
   padding: 0.75rem 1rem;
   font-size: 0.85rem;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--color-border-dark);
 }
-.person-panel-add-label { color: var(--muted); }
+.person-panel-add-label { color: var(--color-muted); }
 
 /* The add-relative picker rendered inside the tree drawer. */
 .tree-drawer .relative-picker { padding: 1rem; }
@@ -94,7 +94,7 @@
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--muted);
+  color: var(--color-muted);
   margin-bottom: 0.15rem;
 }
 .person-panel-field dd { margin: 0; font-size: 0.9rem; }

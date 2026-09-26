@@ -3,10 +3,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 1.25rem;
-  background: var(--surface);
-  border-bottom: 1px solid var(--line);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border-dark);
 
-  .brand { font-weight: 700; font-size: 1.15rem; color: var(--ink); }
+  .brand { font-weight: 700; font-size: 1.15rem; color: var(--color-text); }
 }
 
 .site-header__right {
@@ -18,7 +18,7 @@
 .locale-switcher {
   display: flex;
   gap: 2px;
-  background: var(--line);
+  background: var(--color-border-dark);
   border-radius: 6px;
   padding: 2px;
 }
@@ -27,18 +27,18 @@
   padding: 0.2rem 0.55rem;
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--muted);
+  color: var(--color-muted);
   border-radius: 4px;
   text-decoration: none;
   transition: background 0.1s, color 0.1s;
 
-  &:hover { color: var(--ink); text-decoration: none; }
+  &:hover { color: var(--color-text); text-decoration: none; }
 }
 
 .locale-switcher__btn--active {
-  background: var(--surface);
-  color: var(--ink);
-  box-shadow: 0 1px 2px rgba(0,0,0,.08);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 0 1px 2px oklch(var(--lch-always-black) / 0.08);
 }
 
 /* Tree switcher — a plain <details> disclosure, only rendered when a user
@@ -62,10 +62,10 @@
   padding: 0.5rem;
   min-width: 12rem;
   list-style: none;
-  background: var(--surface);
-  border: 1px solid var(--line);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-dark);
   border-radius: var(--radius);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 18px oklch(var(--lch-always-black) / 0.08);
 
   li { margin: 0; }
   .btn { width: 100%; justify-content: flex-start; }

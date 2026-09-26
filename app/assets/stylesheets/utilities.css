@@ -1,5 +1,5 @@
 :where(.muted) {
-  color: var(--muted);
+  color: var(--color-muted);
   margin: 0;
 }
 

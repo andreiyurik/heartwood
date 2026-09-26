@@ -5,7 +5,7 @@
   cursor: pointer;
   padding: 0 0.4rem;
   font-size: 0.85rem;
-  color: var(--danger);
+  color: var(--color-negative);
 }
 .delete-link:hover { text-decoration: underline; }
 
@@ -13,25 +13,25 @@
 .danger-zone {
   margin-top: 2rem;
   padding: 1rem 1.25rem;
-  border: 1px solid var(--danger-line);
+  border: 1px solid var(--color-negative-border);
   border-radius: var(--radius);
-  background: var(--danger-wash);
+  background: var(--color-negative-light);
 }
-.danger-zone h2 { margin: 0 0 0.25rem; font-size: 1rem; color: var(--danger); }
+.danger-zone h2 { margin: 0 0 0.25rem; font-size: 1rem; color: var(--color-negative); }
 .danger-zone p { margin: 0 0 0.75rem; font-size: 0.9rem; }
 
-.field-hint { font-size: 0.8rem; color: var(--muted); }
+.field-hint { font-size: 0.8rem; color: var(--color-muted); }
 
 /* Forms */
-.form { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; max-width: 32rem; }
+.form { background: var(--color-surface); border: 1px solid var(--color-border-dark); border-radius: var(--radius); padding: 1.5rem; max-width: 32rem; }
 .field { display: flex; flex-direction: column; margin-bottom: 0.85rem;
-  label { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.2rem; }
+  label { font-size: 0.85rem; color: var(--color-muted); margin-bottom: 0.2rem; }
 
   /* :not(.input) so fields already migrated to the canonical .input primitive
      (inputs.css) aren't double-styled by this legacy rule. */
-  input:not(:where(.input)), select:not(:where(.input)) { padding: 0.5rem; border: 1px solid var(--line); border-radius: 8px; font: inherit; background: #fff; }
+  input:not(:where(.input)), select:not(:where(.input)) { padding: 0.5rem; border: 1px solid var(--color-border-dark); border-radius: 8px; font: inherit; background: var(--color-surface); }
 }
 .form .actions { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
-.errors { background: #f7e7e3; border: 1px solid var(--danger); color: var(--danger); border-radius: var(--radius); padding: 0.75rem 1rem; margin-bottom: 1rem;
+.errors { background: var(--color-negative-light); border: 1px solid var(--color-negative); color: var(--color-negative); border-radius: var(--radius); padding: 0.75rem 1rem; margin-bottom: 1rem;
   ul { margin: 0.25rem 0 0; }
 }

@@ -2,7 +2,7 @@
 /* Search inputs: an inset icon wherever a field means "look something up" —
    the people list, the relationship calculator, the tree canvas. */
 .search-field { position: relative; display: flex; align-items: center; }
-.search-field .icon--search { position: absolute; left: 0.6rem; color: var(--muted); }
+.search-field .icon--search { position: absolute; left: 0.6rem; color: var(--color-muted); }
 .search-field input { padding-left: 1.9rem; width: 100%; }
 
 .search-form { margin-bottom: 1rem; }
@@ -16,19 +16,19 @@
 
   input[type="search"] {
     padding: 0.5rem 0.75rem 0.5rem 1.9rem;
-    border: 1px solid var(--line);
+    border: 1px solid var(--color-border-dark);
     border-radius: var(--radius);
     font: inherit;
-    background: var(--surface);
+    background: var(--color-surface);
   }
-  input[type="search"]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  input[type="search"]:focus { outline: 2px solid var(--color-selected-dark); outline-offset: 1px; }
 }
 .search-filter {
   padding: 0.5rem 0.5rem;
-  border: 1px solid var(--line);
+  border: 1px solid var(--color-border-dark);
   border-radius: var(--radius);
   font: inherit;
-  background: var(--surface);
-  color: var(--ink);
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 .search-clear { font-size: 0.85rem; white-space: nowrap; }
