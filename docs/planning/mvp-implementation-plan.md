@@ -191,7 +191,7 @@ Mirror of the existing importer. **Self-contained, no schema change — good fir
 - [x] `Person.search(query, user:)` scope (tree- and visibility-scoped via chain)
       → `app/models/person.rb`
 - [x] Search UI: debounced Stimulus input → morph refresh results
-      → `app/javascript/controllers/search_controller.js`,
+      → `app/javascript/controllers/autocomplete_controller.js`,
       `app/views/people/index.html.erb`
 - [x] Filters (sex) as query params, preserved in the URL → `PeopleController#index`
 - [x] Honor 0.1 (tree scope) and 0.2 (hide living from non-members)

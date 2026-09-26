@@ -10,7 +10,7 @@ license below:
 - `app/assets/stylesheets/base.css` (control reset), `animation.css`, and `.btn--success`
   in `buttons.css`, `.skip-navigation` in `nav.css`
 - `app/javascript/controllers/copy_to_clipboard_controller.js`, `app/helpers/clipboard_helper.rb`,
-  `app/javascript/controllers/element_removal_controller.js`
+  `app/javascript/controllers/element_removal_controller.js`, `app/javascript/helpers/timing_helpers.js`
 - `app/assets/stylesheets/layout.css` (the `#header`/`#toolbar`/`#main` grid, from Writebook) and
   `flash.css` (the toast, from Campfire)
 - Icons listed in `app/assets/images/NOTICE.md`

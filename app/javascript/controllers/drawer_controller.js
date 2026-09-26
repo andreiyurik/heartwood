@@ -4,13 +4,15 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["frame"]
 
+  #onLoad
+
   connect() {
-    this._onLoad = () => this.open()
-    this.frameTarget.addEventListener("turbo:frame-load", this._onLoad)
+    this.#onLoad = () => this.open()
+    this.frameTarget.addEventListener("turbo:frame-load", this.#onLoad)
   }
 
   disconnect() {
-    this.frameTarget.removeEventListener("turbo:frame-load", this._onLoad)
+    this.frameTarget.removeEventListener("turbo:frame-load", this.#onLoad)
   }
 
   open() {

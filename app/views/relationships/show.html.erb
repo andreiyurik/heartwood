@@ -4,7 +4,7 @@
 <%= turbo_frame_tag "relationship" do %>
   <div class="relationship">
     <%= form_with url: autocompletable_people_path, method: :get,
-          data: { controller: "search", turbo_frame: "relationship_candidates" },
+          data: { controller: "autocomplete", turbo_frame: "relationship_candidates" },
           class: "combobox" do %>
       <div class="search-field">
         <%= icon_tag "search" %>
@@ -13,7 +13,7 @@
               placeholder: t("relationships.search_placeholder"),
               aria: { label: t("relationships.search_placeholder") },
               autocomplete: "off",
-              data: { search_target: "input", action: "input->search#debounce" } %>
+              data: { action: "input->autocomplete#search" } %>
       </div>
     <% end %>
     <%= turbo_frame_tag "relationship_candidates" %>

@@ -14,7 +14,7 @@
   <% end %>
 
   <%= form_with url: people_path, method: :get,
-        data: { controller: "search", turbo_action: "advance" },
+        data: { controller: "autocomplete auto-submit", turbo_action: "advance" },
         class: "search-form" do |f| %>
     <div class="search-bar">
       <div class="search-field">
@@ -23,18 +23,18 @@
               placeholder: t("people.search_placeholder"),
                 aria: { label: t("people.search_placeholder") },
               autocomplete: "off",
-              data: { search_target: "input", action: "input->search#debounce" } %>
+              data: { action: "input->autocomplete#search" } %>
       </div>
       <%= f.select :sex,
             Person::SEXES.map { |s| [t("people.sex.#{s}"), s] },
             { include_blank: t("people.sex_filter_all"), selected: @sex },
             class: "search-filter",
-            data: { action: "change->search#submit" } %>
+            data: { action: "change->auto-submit#submit" } %>
       <%= f.select :sort,
             Person::SORT_OPTIONS.map { |key| [t("people.sort.#{key}"), key] },
             { selected: @sort },
             class: "search-filter",
-            data: { action: "change->search#submit" } %>
+            data: { action: "change->auto-submit#submit" } %>
       <% if @q.present? || @sex.present? || @sort != Person::SORT_OPTIONS.first %>
         <%= link_to t("people.search_clear"), people_path, class: "btn btn--plain search-clear" %>
       <% end %>

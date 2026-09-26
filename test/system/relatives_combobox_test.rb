@@ -1,6 +1,6 @@
 require "application_system_test_case"
 
-# The add-relative combobox: a debounced search field (search_controller.js) that submits
+# The add-relative combobox: a debounced search field (autocomplete_controller.js) that submits
 # into a nested Turbo Frame of candidates, then links the chosen existing person. None of
 # the debounce → frame-update → pick chain is provable by server rendering alone.
 class RelativesComboboxTest < ApplicationSystemTestCase
@@ -21,7 +21,7 @@ class RelativesComboboxTest < ApplicationSystemTestCase
     # its Stimulus controller to connect before typing (otherwise the debounced search
     # never fires and no candidate appears).
     find_field("q", wait: 10)
-    wait_for_stimulus("search", "form.combobox")
+    wait_for_stimulus("autocomplete", "form.combobox")
     fill_in "q", with: "Grace"
 
     # click_on waits for the candidate button to render in the relative_candidates frame.

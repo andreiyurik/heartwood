@@ -13,7 +13,7 @@
     <%# 1) Find and link an existing person. Typing debounce-submits to #search,
         which renders matches into the nested "relative_candidates" frame. %>
     <%= form_with url: autocompletable_people_path, method: :get,
-          data: { controller: "search", turbo_frame: "relative_candidates" },
+          data: { controller: "autocomplete", turbo_frame: "relative_candidates" },
           class: "combobox" do %>
       <%= hidden_field_tag :person_id, @person.id %>
       <%= hidden_field_tag :for, "relative" %>
@@ -24,7 +24,7 @@
             placeholder: t("family.combobox.placeholder"),
             aria: { label: t("family.combobox.placeholder") },
             autocomplete: "off",
-            data: { search_target: "input", action: "input->search#debounce" } %>
+            data: { action: "input->autocomplete#search" } %>
     <% end %>
     <%= turbo_frame_tag "relative_candidates" %>
 

@@ -28,110 +28,128 @@ export default class extends Controller {
     collapseLabel: String
   }
 
+  #boundMove
+  #boundUp
+  #collapsed
+  #drag
+  #kb
+  #mmScale
+  #nodeById
+  #pan
+  #persistT
+  #pinch
+  #pointers
+  #pos
+  #root
+  #scale
+  #toggleLayer
+  #unitOf
+  #units
+
   connect() {
-    this._scale     = 1
-    this._collapsed = new Set()   // ids of units whose children are folded away
-    this._pointers  = new Map()   // active pointers, for one-finger pan / two-finger pinch
-    this._build()
-    if (!this._units.length) return
+    this.#scale     = 1
+    this.#collapsed = new Set()   // ids of units whose children are folded away
+    this.#pointers  = new Map()   // active pointers, for one-finger pan / two-finger pinch
+    this.#build()
+    if (!this.#units.length) return
 
-    this._toggleLayer = document.createElement("div")
-    this._toggleLayer.className = "tree-toggles"
-    this.innerTarget.appendChild(this._toggleLayer)
+    this.#toggleLayer = document.createElement("div")
+    this.#toggleLayer.className = "tree-toggles"
+    this.innerTarget.appendChild(this.#toggleLayer)
 
-    const saved = this._loadState()
-    if (saved) this._restoreCollapsed(saved.collapsed)
-    else       this._autoCollapse()
-    this._relayout()
+    const saved = this.#loadState()
+    if (saved) this.#restoreCollapsed(saved.collapsed)
+    else       this.#autoCollapse()
+    this.#relayout()
     if (saved?.camera) {
-      this._scale = saved.camera.scale
-      this._pan   = { x: saved.camera.x, y: saved.camera.y }
-      this._applyTransform()
+      this.#scale = saved.camera.scale
+      this.#pan   = { x: saved.camera.x, y: saved.camera.y }
+      this.#applyTransform()
     } else {
-      this._fitToView()
+      this.#fitToView()
     }
-    this._bindPanZoom()
+    this.#bindPanZoom()
   }
 
   disconnect() {
-    clearTimeout(this._persistT)
-    window.removeEventListener("pointermove",   this._boundMove)
-    window.removeEventListener("pointerup",     this._boundUp)
-    window.removeEventListener("pointercancel", this._boundUp)
+    clearTimeout(this.#persistT)
+    window.removeEventListener("pointermove",   this.#boundMove)
+    window.removeEventListener("pointerup",     this.#boundUp)
+    window.removeEventListener("pointercancel", this.#boundUp)
   }
 
   // A saved view is dropped when the graph changed, so a stale view never hides fresh data.
-  _stateKey() {
+  #stateKey() {
     return `heartwood:tree:${this.graphValue.focus_id}:${this.modeValue}:${this.depthValue}`
   }
 
-  _unitKey(u) { return u.members.slice().sort((a, b) => a - b).join("+") }
+  #unitKey(u) { return u.members.slice().sort((a, b) => a - b).join("+") }
 
-  _loadState() {
+  #loadState() {
     try {
-      const raw = localStorage.getItem(this._stateKey())
+      const raw = localStorage.getItem(this.#stateKey())
       if (!raw) return null
       const state = JSON.parse(raw)
       return state.n === this.graphValue.nodes.length ? state : null
     } catch { return null }
   }
 
-  _restoreCollapsed(keys) {
+  #restoreCollapsed(keys) {
     if (!keys?.length) return
-    const byKey = new Map(this._units.map(u => [ this._unitKey(u), u.id ]))
-    for (const k of keys) if (byKey.has(k)) this._collapsed.add(byKey.get(k))
+    const byKey = new Map(this.#units.map(u => [ this.#unitKey(u), u.id ]))
+    for (const k of keys) if (byKey.has(k)) this.#collapsed.add(byKey.get(k))
   }
 
-  _autoCollapse() {
+  #autoCollapse() {
     const people = this.graphValue.nodes.filter(n => !n.ghost).length
     if (people <= AUTO_COLLAPSE_MIN) return
     const walk = (u, row) => {
-      if (row >= AUTO_ROWS && u.children.length && this._countSubtree(u)) {
-        this._collapsed.add(u.id)
+      if (row >= AUTO_ROWS && u.children.length && this.#countSubtree(u)) {
+        this.#collapsed.add(u.id)
         return
       }
       for (const c of u.children) walk(c, row + 1)
     }
-    walk(this._root, 0)
+    walk(this.#root, 0)
   }
 
-  _persist() {
-    clearTimeout(this._persistT)
-    this._persistT = setTimeout(() => {
+  #persist() {
+    clearTimeout(this.#persistT)
+    this.#persistT = setTimeout(() => {
       try {
-        localStorage.setItem(this._stateKey(), JSON.stringify({
+        localStorage.setItem(this.#stateKey(), JSON.stringify({
           n:         this.graphValue.nodes.length,
-          collapsed: [ ...this._collapsed ].map(id => this._unitKey(this._units[id])),
-          camera:    { x: this._pan.x, y: this._pan.y, scale: this._scale }
+          collapsed: [ ...this.#collapsed ].map(id => this.#unitKey(this.#units[id])),
+          camera:    { x: this.#pan.x, y: this.#pan.y, scale: this.#scale }
         }))
       } catch {}   // storage full or unavailable — the view just won't be remembered
     }, 300)
   }
 
-  _build() {
+  #build() {
     const { nodes, edges, focus_id } = this.graphValue
     const unions = this.graphValue.unions || []
-    if (!nodes.length) { this._units = []; return }
+    if (!nodes.length) { this.#units = []; return }
 
-    const { units, unitOf, nodeById } = this._buildUnits(nodes, unions)
-    this._linkUnits(units, unitOf, edges, nodeById)
+    const { units, unitOf, nodeById } = this.#buildUnits(nodes, unions)
+    this.#linkUnits(units, unitOf, edges, nodeById)
 
-    this._units    = units
-    this._unitOf   = unitOf
-    this._nodeById = nodeById
-    this._root     = unitOf.get(focus_id)
-    for (const u of units) this._countSubtree(u)
+    this.#units    = units
+    this.#unitOf   = unitOf
+    this.#nodeById = nodeById
+    this.#root     = unitOf.get(focus_id)
+    for (const u of units) this.#countSubtree(u)
   }
 
   // Partners are ordered male-left; ties fall back to id so the layout is deterministic.
-  _buildUnits(nodes, unions) {
+  #buildUnits(nodes, unions) {
     const nodeById = new Map(nodes.map(n => [n.id, n]))
     const unitOf   = new Map()
     const units    = []
 
     const make = (memberIds) => {
       const members = memberIds.slice().sort((a, b) =>
-        this._sexRank(nodeById.get(a)) - this._sexRank(nodeById.get(b)) || a - b)
+        this.#sexRank(nodeById.get(a)) - this.#sexRank(nodeById.get(b)) || a - b)
       const unit = { id: units.length, members, children: [], parent: null, cx: 0, y: 0 }
       units.push(unit)
       members.forEach(id => unitOf.set(id, unit))
@@ -148,7 +166,7 @@ export default class extends Controller {
   }
 
   // First edge into a unit wins, so a person reached twice via pedigree collapse is placed once.
-  _linkUnits(units, unitOf, edges, nodeById) {
+  #linkUnits(units, unitOf, edges, nodeById) {
     for (const e of edges) {
       const pu = unitOf.get(e.from_id)
       const cu = unitOf.get(e.to_id)
@@ -161,42 +179,42 @@ export default class extends Controller {
   }
 
   // Ghost add-relative slots don't count: they aren't people.
-  _countSubtree(u) {
+  #countSubtree(u) {
     if (u.subtreeCount != null) return u.subtreeCount
     let n = 0
     for (const c of u.children) {
-      n += c.members.filter(id => !this._nodeById.get(id).ghost).length + this._countSubtree(c)
+      n += c.members.filter(id => !this.#nodeById.get(id).ghost).length + this.#countSubtree(c)
     }
     return u.subtreeCount = n
   }
 
-  _relayout() {
-    this._markVisible()
-    this._assignX(this._root)
-    this._assignY()
-    this._pos = this._placeCards()
-    this._resize()
-    this._placeNodes()
-    this._drawEdges()
-    this._drawToggles()
-    this._drawMiniMap()
+  #relayout() {
+    this.#markVisible()
+    this.#assignX(this.#root)
+    this.#assignY()
+    this.#pos = this.#placeCards()
+    this.#resize()
+    this.#placeNodes()
+    this.#drawEdges()
+    this.#drawToggles()
+    this.#drawMiniMap()
   }
 
-  _markVisible() {
-    for (const u of this._units) u.visible = false
+  #markVisible() {
+    for (const u of this.#units) u.visible = false
     const walk = (u) => {
       u.visible = true
-      if (this._collapsed.has(u.id)) return
+      if (this.#collapsed.has(u.id)) return
       for (const c of u.children) walk(c)
     }
-    walk(this._root)
+    walk(this.#root)
   }
 
   // A collapsed unit is a leaf. A parent wider than its children's span shifts them to stay centred.
-  _assignX(root) {
+  #assignX(root) {
     const place = (u, left) => {
-      const w    = this._unitWidth(u)
-      const kids = this._collapsed.has(u.id) ? [] : u.children
+      const w    = this.#unitWidth(u)
+      const kids = this.#collapsed.has(u.id) ? [] : u.children
       if (!kids.length) { u.cx = left + w / 2; return w }
 
       let cursor = left
@@ -205,25 +223,25 @@ export default class extends Controller {
       const center    = (kids[0].cx + kids[kids.length - 1].cx) / 2
 
       if (childrenW >= w) { u.cx = center; return childrenW }
-      this._shift(kids, (w - childrenW) / 2)
+      this.#shift(kids, (w - childrenW) / 2)
       u.cx = left + w / 2
       return w
     }
     place(root, 0)
   }
 
-  _shift(children, dx) {
-    for (const c of children) { c.cx += dx; this._shift(c.children, dx) }
+  #shift(children, dx) {
+    for (const c of children) { c.cx += dx; this.#shift(c.children, dx) }
   }
 
-  _assignY() {
-    const vis    = this._units.filter(u => u.visible)
-    const maxGen = Math.max(...vis.map(u => this._gen(u)))
-    const rowOf  = u => this.modeValue === "ancestors" ? maxGen - this._gen(u) : this._gen(u)
+  #assignY() {
+    const vis    = this.#units.filter(u => u.visible)
+    const maxGen = Math.max(...vis.map(u => this.#gen(u)))
+    const rowOf  = u => this.modeValue === "ancestors" ? maxGen - this.#gen(u) : this.#gen(u)
 
     const rowH = []
     for (const u of vis) {
-      u.h = this._unitHeight(u)
+      u.h = this.#unitHeight(u)
       const r = rowOf(u)
       rowH[r] = Math.max(rowH[r] || 0, u.h)
     }
@@ -238,13 +256,13 @@ export default class extends Controller {
     }
   }
 
-  _gen(u)        { return this._nodeById.get(u.members[0]).generation }
-  _unitWidth(u)  { return u.members.length === 2 ? CARD_W * 2 + PAIR_GAP : CIRC_D }
-  _unitHeight(u) { return u.members.length === 2 ? CARD_H : CIRC_D }
+  #gen(u)        { return this.#nodeById.get(u.members[0]).generation }
+  #unitWidth(u)  { return u.members.length === 2 ? CARD_W * 2 + PAIR_GAP : CIRC_D }
+  #unitHeight(u) { return u.members.length === 2 ? CARD_H : CIRC_D }
 
-  _placeCards() {
+  #placeCards() {
     const pos = {}
-    const vis = this._units.filter(u => u.visible)
+    const vis = this.#units.filter(u => u.visible)
     for (const u of vis) {
       if (u.members.length === 2) {
         const off = (CARD_W + PAIR_GAP) / 2
@@ -264,10 +282,10 @@ export default class extends Controller {
     return pos
   }
 
-  _resize() {
-    const cards = Object.values(this._pos)
+  #resize() {
+    const cards = Object.values(this.#pos)
     const maxX  = Math.max(...cards.map(p => p.x + p.w))
-    const maxY  = Math.max(...this._units.filter(u => u.visible).map(u => u.y + u.h))
+    const maxY  = Math.max(...this.#units.filter(u => u.visible).map(u => u.y + u.h))
     const w = maxX + PAD, h = maxY + PAD
     this.innerTarget.style.width  = `${w}px`
     this.innerTarget.style.height = `${h}px`
@@ -275,9 +293,9 @@ export default class extends Controller {
     this.svgTarget.setAttribute("height", h)
   }
 
-  _placeNodes() {
+  #placeNodes() {
     for (const el of this.nodeTargets) {
-      const pos = this._pos[+el.dataset.treeNodeId]
+      const pos = this.#pos[+el.dataset.treeNodeId]
       if (pos) {
         el.style.display   = ""
         el.style.transform = `translate(${pos.x}px, ${pos.y}px)`
@@ -287,26 +305,26 @@ export default class extends Controller {
     }
   }
 
-  _drawEdges() {
+  #drawEdges() {
     this.svgTarget.innerHTML = ""
-    for (const u of this._units) {
+    for (const u of this.#units) {
       if (!u.visible) continue
-      if (u.members.length === 2) this._connector(u)
-      if (this._collapsed.has(u.id)) continue
-      for (const c of u.children) this._link(u, c)
+      if (u.members.length === 2) this.#connector(u)
+      if (this.#collapsed.has(u.id)) continue
+      for (const c of u.children) this.#link(u, c)
     }
   }
 
-  _connector(u) {
+  #connector(u) {
     const [a, b] = u.members
-    const x1 = this._pos[a].cx + this._pos[a].w / 2
-    const x2 = this._pos[b].cx - this._pos[b].w / 2
+    const x1 = this.#pos[a].cx + this.#pos[a].w / 2
+    const x2 = this.#pos[b].cx - this.#pos[b].w / 2
     const y  = u.y + u.h / 2
-    this._path(`M${x1},${y} L${x2},${y}`, "tree-edge tree-edge--bond")
-    this._heart(u.cx, y)
+    this.#path(`M${x1},${y} L${x2},${y}`, "tree-edge tree-edge--bond")
+    this.#heart(u.cx, y)
   }
 
-  _heart(x, y) {
+  #heart(x, y) {
     const bg = document.createElementNS(SVG_NS, "circle")
     bg.setAttribute("cx", x)
     bg.setAttribute("cy", y)
@@ -320,7 +338,7 @@ export default class extends Controller {
     this.svgTarget.append(bg, glyph)
   }
 
-  _link(parent, child) {
+  #link(parent, child) {
     const px = parent.cx, cx = child.cx
     const py = parent.y + parent.h / 2, cy = child.y + child.h / 2
     const dir  = Math.sign(cy - py) || 1
@@ -328,24 +346,24 @@ export default class extends Controller {
     const y1   = parent.members.length === 2 ? py : edge
     const y2   = cy - dir * child.h / 2
     const my   = (edge + y2) / 2
-    this._path(`M${px},${y1} L${px},${my} L${cx},${my} L${cx},${y2}`)
+    this.#path(`M${px},${y1} L${px},${my} L${cx},${my} L${cx},${y2}`)
   }
 
-  _path(d, cls = "tree-edge") {
+  #path(d, cls = "tree-edge") {
     const path = document.createElementNS(SVG_NS, "path")
     path.setAttribute("d", d)
     path.setAttribute("class", cls)
     this.svgTarget.appendChild(path)
   }
 
-  _drawToggles() {
-    this._toggleLayer.innerHTML = ""
+  #drawToggles() {
+    this.#toggleLayer.innerHTML = ""
     const dir = this.modeValue === "ancestors" ? -1 : 1
 
-    for (const u of this._units) {
+    for (const u of this.#units) {
       // No toggle when only ghost slots are below.
-      if (!u.visible || !u.children.length || !this._countSubtree(u)) continue
-      const collapsed = this._collapsed.has(u.id)
+      if (!u.visible || !u.children.length || !this.#countSubtree(u)) continue
+      const collapsed = this.#collapsed.has(u.id)
 
       const btn = document.createElement("button")
       btn.type      = "button"
@@ -356,18 +374,18 @@ export default class extends Controller {
       btn.title = label
       btn.style.left = `${u.cx}px`
       btn.style.top  = `${u.y + u.h / 2 + dir * (u.h / 2 + 14)}px`
-      btn.addEventListener("click", (e) => { e.stopPropagation(); this._toggle(u.id) })
-      this._toggleLayer.appendChild(btn)
+      btn.addEventListener("click", (e) => { e.stopPropagation(); this.#toggle(u.id) })
+      this.#toggleLayer.appendChild(btn)
     }
   }
 
   // Keeps the focus card pinned on screen so the view doesn't jump on re-flow.
-  _toggle(id) {
-    const anchor = this._anchorScreen()
-    this._collapsed.has(id) ? this._collapsed.delete(id) : this._collapsed.add(id)
-    this._relayout()
-    this._restoreAnchor(anchor)
-    this._applyTransform()
+  #toggle(id) {
+    const anchor = this.#anchorScreen()
+    this.#collapsed.has(id) ? this.#collapsed.delete(id) : this.#collapsed.add(id)
+    this.#relayout()
+    this.#restoreAnchor(anchor)
+    this.#applyTransform()
   }
 
   search() {
@@ -381,7 +399,7 @@ export default class extends Controller {
           .filter(n => !n.living && !n.ghost && n.name && n.name.toLowerCase().includes(q))
       : []
 
-    this._dimExcept(q ? new Set(found.map(n => n.id)) : null)
+    this.#dimExcept(q ? new Set(found.map(n => n.id)) : null)
 
     const matches = found.slice(0, 8)
     if (!matches.length) { list.hidden = true; return }
@@ -397,14 +415,14 @@ export default class extends Controller {
         li.appendChild(years)
       }
       li.tabIndex = 0
-      li.addEventListener("click", () => this._flyTo(m.id))
-      li.addEventListener("keydown", (e) => { if (e.key === "Enter") this._flyTo(m.id) })
+      li.addEventListener("click", () => this.#flyTo(m.id))
+      li.addEventListener("keydown", (e) => { if (e.key === "Enter") this.#flyTo(m.id) })
       list.appendChild(li)
     }
     list.hidden = false
   }
 
-  _dimExcept(matchIds) {
+  #dimExcept(matchIds) {
     for (const el of this.nodeTargets) {
       const id = +el.dataset.treeNodeId
       el.classList.toggle("tree-node--dim", !!matchIds && !matchIds.has(id))
@@ -416,59 +434,59 @@ export default class extends Controller {
       e.preventDefault()
       this.searchResultsTarget.querySelector("li")?.click()
     } else if (e.key === "Escape") {
-      this._clearSearch()
+      this.#clearSearch()
     }
   }
 
-  _flyTo(id) {
-    this._reveal(id)
-    this._relayout()
-    this._scale = 1
-    const p = this._pos[id]
-    if (p) this._panTo(p.cx, p.y + p.h / 2, true)
-    this._flash(id)
-    this._clearSearch()
+  #flyTo(id) {
+    this.#reveal(id)
+    this.#relayout()
+    this.#scale = 1
+    const p = this.#pos[id]
+    if (p) this.#panTo(p.cx, p.y + p.h / 2, true)
+    this.#flash(id)
+    this.#clearSearch()
   }
 
-  _reveal(id) {
-    let u = this._unitOf.get(id)?.parent
-    while (u) { this._collapsed.delete(u.id); u = u.parent }
+  #reveal(id) {
+    let u = this.#unitOf.get(id)?.parent
+    while (u) { this.#collapsed.delete(u.id); u = u.parent }
   }
 
-  _flash(id) {
+  #flash(id) {
     const el = this.nodeTargets.find(e => +e.dataset.treeNodeId === id)
     if (!el) return
     el.classList.add("tree-node--found")
     setTimeout(() => el.classList.remove("tree-node--found"), 1600)
   }
 
-  _clearSearch() {
+  #clearSearch() {
     if (!this.hasSearchInputTarget) return
     this.searchInputTarget.value = ""
     this.searchResultsTarget.hidden = true
     this.searchResultsTarget.innerHTML = ""
-    this._dimExcept(null)
+    this.#dimExcept(null)
   }
 
-  _sexRank(node) { return node?.sex === "M" ? 0 : node?.sex === "F" ? 1 : 2 }
+  #sexRank(node) { return node?.sex === "M" ? 0 : node?.sex === "F" ? 1 : 2 }
 
   print() {
-    const restore = { pan: { ...this._pan }, scale: this._scale }
+    const restore = { pan: { ...this.#pan }, scale: this.#scale }
     const after = () => {
       window.removeEventListener("afterprint", after)
       this.element.classList.remove("tree-canvas--print")
-      this._pan   = restore.pan
-      this._scale = restore.scale
-      this._applyTransform()
+      this.#pan   = restore.pan
+      this.#scale = restore.scale
+      this.#applyTransform()
     }
     window.addEventListener("afterprint", after)
 
     this.element.classList.add("tree-canvas--print")
     const pageWidth = 720
-    this._scale = Math.min(1, pageWidth / this.innerTarget.offsetWidth)
-    this._pan   = { x: 0, y: 0 }
-    this._applyTransform()
-    this.element.style.setProperty("--print-h", `${this.innerTarget.offsetHeight * this._scale}px`)
+    this.#scale = Math.min(1, pageWidth / this.innerTarget.offsetWidth)
+    this.#pan   = { x: 0, y: 0 }
+    this.#applyTransform()
+    this.element.style.setProperty("--print-h", `${this.innerTarget.offsetHeight * this.#scale}px`)
     window.print()
   }
 
@@ -479,26 +497,26 @@ export default class extends Controller {
     if (![ "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter" ].includes(e.key)) return
     e.preventDefault()
 
-    if (!this._kb) this._kb = this._kbStart()
-    if (e.key === "Enter") { this._kbEl()?.querySelector("a")?.click(); return }
+    if (!this.#kb) this.#kb = this.#kbStart()
+    if (e.key === "Enter") { this.#kbEl()?.querySelector("a")?.click(); return }
 
-    const next = this._kbNext(e.key)
-    if (next) this._kb = next
-    this._kbHighlight()
+    const next = this.#kbNext(e.key)
+    if (next) this.#kb = next
+    this.#kbHighlight()
   }
 
-  _kbStart() {
-    const u = this._unitOf.get(this.graphValue.focus_id) || this._root
+  #kbStart() {
+    const u = this.#unitOf.get(this.graphValue.focus_id) || this.#root
     return { u, m: Math.max(0, u.members.indexOf(this.graphValue.focus_id)) }
   }
 
   // Spatially honest steps: in ancestors mode the layout's "children" sit above.
-  _kbNext(key) {
-    const { u, m } = this._kb
+  #kbNext(key) {
+    const { u, m } = this.#kb
     const upIsChild = this.modeValue === "ancestors"
     const toParent  = () => u.parent?.visible ? { u: u.parent, m: 0 } : null
     const toChild   = () => {
-      if (this._collapsed.has(u.id)) return null
+      if (this.#collapsed.has(u.id)) return null
       const c = u.children.find(c => c.visible)
       return c ? { u: c, m: 0 } : null
     }
@@ -517,131 +535,131 @@ export default class extends Controller {
     }
   }
 
-  _kbEl() {
-    const id = this._kb.u.members[this._kb.m]
+  #kbEl() {
+    const id = this.#kb.u.members[this.#kb.m]
     return this.nodeTargets.find(el => +el.dataset.treeNodeId === id)
   }
 
-  _kbHighlight() {
+  #kbHighlight() {
     for (const el of this.nodeTargets) el.classList.remove("tree-node--kb")
-    const el = this._kbEl()
+    const el = this.#kbEl()
     if (!el) return
     el.classList.add("tree-node--kb")
 
-    const id = this._kb.u.members[this._kb.m]
-    const p  = this._pos[id]
+    const id = this.#kb.u.members[this.#kb.m]
+    const p  = this.#pos[id]
     if (!p) return
-    const sx = this._pan.x + p.cx * this._scale
-    const sy = this._pan.y + (p.y + p.h / 2) * this._scale
+    const sx = this.#pan.x + p.cx * this.#scale
+    const sy = this.#pan.y + (p.y + p.h / 2) * this.#scale
     const vw = this.element.clientWidth, vh = this.element.clientHeight
     if (sx < 60 || sx > vw - 60 || sy < 60 || sy > vh - 60) {
-      this._panTo(p.cx, p.y + p.h / 2, true)
+      this.#panTo(p.cx, p.y + p.h / 2, true)
     }
   }
 
   // Falls back to centring the focus card when even MIN_FIT can't contain the tree.
-  _fitToView() {
+  #fitToView() {
     const vw  = this.element.clientWidth,     vh = this.element.clientHeight
     const w   = this.innerTarget.offsetWidth, h  = this.innerTarget.offsetHeight
     const fit = Math.min(vw / w, vh / h, 1)
-    this._scale = Math.max(fit, MIN_FIT)
+    this.#scale = Math.max(fit, MIN_FIT)
     if (fit >= MIN_FIT) {
-      this._pan = { x: (vw - w * this._scale) / 2, y: (vh - h * this._scale) / 2 }
-      this._applyTransform()
+      this.#pan = { x: (vw - w * this.#scale) / 2, y: (vh - h * this.#scale) / 2 }
+      this.#applyTransform()
     } else {
-      this._centerOn(this.graphValue.focus_id)
+      this.#centerOn(this.graphValue.focus_id)
     }
   }
 
-  _centerOn(focusId, animate = false) {
-    const p = this._pos[focusId]
-    if (p) this._panTo(p.cx, p.y + p.h / 2, animate)
+  #centerOn(focusId, animate = false) {
+    const p = this.#pos[focusId]
+    if (p) this.#panTo(p.cx, p.y + p.h / 2, animate)
   }
 
-  _panTo(cx, cy, animate = false) {
-    this._pan = {
-      x: this.element.clientWidth  / 2 - cx * this._scale,
-      y: this.element.clientHeight / 2 - cy * this._scale
+  #panTo(cx, cy, animate = false) {
+    this.#pan = {
+      x: this.element.clientWidth  / 2 - cx * this.#scale,
+      y: this.element.clientHeight / 2 - cy * this.#scale
     }
-    this._applyTransform(animate)
+    this.#applyTransform(animate)
   }
 
-  _anchorScreen() {
-    const p = this._pos[this.graphValue.focus_id]
+  #anchorScreen() {
+    const p = this.#pos[this.graphValue.focus_id]
     if (!p) return null
-    return { sx: this._pan.x + p.cx * this._scale, sy: this._pan.y + (p.y + p.h / 2) * this._scale }
+    return { sx: this.#pan.x + p.cx * this.#scale, sy: this.#pan.y + (p.y + p.h / 2) * this.#scale }
   }
 
-  _restoreAnchor(a) {
+  #restoreAnchor(a) {
     if (!a) return
-    const p = this._pos[this.graphValue.focus_id]
+    const p = this.#pos[this.graphValue.focus_id]
     if (!p) return
-    this._pan = { x: a.sx - p.cx * this._scale, y: a.sy - (p.y + p.h / 2) * this._scale }
+    this.#pan = { x: a.sx - p.cx * this.#scale, y: a.sy - (p.y + p.h / 2) * this.#scale }
   }
 
-  _bindPanZoom() {
-    this._boundMove = this._onMove.bind(this)
-    this._boundUp   = this._onUp.bind(this)
-    this.element.addEventListener("pointerdown", this._onDown.bind(this))
-    this.element.addEventListener("wheel",       this._onWheel.bind(this), { passive: false })
-    window.addEventListener("pointermove",       this._boundMove)
-    window.addEventListener("pointerup",         this._boundUp)
-    window.addEventListener("pointercancel",     this._boundUp)
+  #bindPanZoom() {
+    this.#boundMove = this.#onMove.bind(this)
+    this.#boundUp   = this.#onUp.bind(this)
+    this.element.addEventListener("pointerdown", this.#onDown.bind(this))
+    this.element.addEventListener("wheel",       this.#onWheel.bind(this), { passive: false })
+    window.addEventListener("pointermove",       this.#boundMove)
+    window.addEventListener("pointerup",         this.#boundUp)
+    window.addEventListener("pointercancel",     this.#boundUp)
   }
 
-  _onDown(e) {
+  #onDown(e) {
     if (e.target.closest("a, button, .tree-search, .tree-drawer, .tree-minimap")) return
     e.preventDefault()
-    this._pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
-    if (this._pointers.size === 2) {
-      this._drag  = null
-      this._pinch = this._pinchStart()
-    } else if (this._pointers.size === 1) {
-      this._drag = { x0: e.clientX - this._pan.x, y0: e.clientY - this._pan.y }
+    this.#pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+    if (this.#pointers.size === 2) {
+      this.#drag  = null
+      this.#pinch = this.#pinchStart()
+    } else if (this.#pointers.size === 1) {
+      this.#drag = { x0: e.clientX - this.#pan.x, y0: e.clientY - this.#pan.y }
     }
   }
 
-  _onMove(e) {
-    if (!this._pointers.has(e.pointerId)) return
-    this._pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+  #onMove(e) {
+    if (!this.#pointers.has(e.pointerId)) return
+    this.#pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
 
-    if (this._pinch && this._pointers.size >= 2) {
+    if (this.#pinch && this.#pointers.size >= 2) {
       // Keep the point grabbed at pinch start pinned to the moving midpoint.
-      const { dist, mid } = this._pinchNow()
-      const next = this._clampScale(this._pinch.scale0 * dist / this._pinch.dist0)
-      this._scale = next
-      this._pan   = { x: mid.x - this._pinch.p0.x * next, y: mid.y - this._pinch.p0.y * next }
-      this._applyTransform()
-    } else if (this._drag) {
-      this._pan.x = e.clientX - this._drag.x0
-      this._pan.y = e.clientY - this._drag.y0
-      this._applyTransform()
+      const { dist, mid } = this.#pinchNow()
+      const next = this.#clampScale(this.#pinch.scale0 * dist / this.#pinch.dist0)
+      this.#scale = next
+      this.#pan   = { x: mid.x - this.#pinch.p0.x * next, y: mid.y - this.#pinch.p0.y * next }
+      this.#applyTransform()
+    } else if (this.#drag) {
+      this.#pan.x = e.clientX - this.#drag.x0
+      this.#pan.y = e.clientY - this.#drag.y0
+      this.#applyTransform()
     }
   }
 
-  _onUp(e) {
-    this._pointers.delete(e.pointerId)
-    if (this._pointers.size < 2) this._pinch = null
-    if (this._pointers.size === 1) {
+  #onUp(e) {
+    this.#pointers.delete(e.pointerId)
+    if (this.#pointers.size < 2) this.#pinch = null
+    if (this.#pointers.size === 1) {
       // Hand the camera to the remaining finger without a jump.
-      const p = this._pointers.values().next().value
-      this._drag = { x0: p.x - this._pan.x, y0: p.y - this._pan.y }
-    } else if (!this._pointers.size) {
-      this._drag = null
+      const p = this.#pointers.values().next().value
+      this.#drag = { x0: p.x - this.#pan.x, y0: p.y - this.#pan.y }
+    } else if (!this.#pointers.size) {
+      this.#drag = null
     }
   }
 
-  _pinchStart() {
-    const { dist, mid } = this._pinchNow()
+  #pinchStart() {
+    const { dist, mid } = this.#pinchNow()
     return {
       dist0:  dist,
-      scale0: this._scale,
-      p0:     { x: (mid.x - this._pan.x) / this._scale, y: (mid.y - this._pan.y) / this._scale }
+      scale0: this.#scale,
+      p0:     { x: (mid.x - this.#pan.x) / this.#scale, y: (mid.y - this.#pan.y) / this.#scale }
     }
   }
 
-  _pinchNow() {
-    const [ a, b ] = [ ...this._pointers.values() ]
+  #pinchNow() {
+    const [ a, b ] = [ ...this.#pointers.values() ]
     const rect = this.element.getBoundingClientRect()
     return {
       dist: Math.hypot(a.x - b.x, a.y - b.y) || 1,
@@ -649,49 +667,49 @@ export default class extends Controller {
     }
   }
 
-  _onWheel(e) {
+  #onWheel(e) {
     e.preventDefault()
     const rect = this.element.getBoundingClientRect()
-    this._zoomAt(e.clientX - rect.left, e.clientY - rect.top,
-                 this._scale * (e.deltaY < 0 ? 1.1 : 0.9))
+    this.#zoomAt(e.clientX - rect.left, e.clientY - rect.top,
+                 this.#scale * (e.deltaY < 0 ? 1.1 : 0.9))
   }
 
-  zoomIn()  { this._zoomBy(1.2) }
-  zoomOut() { this._zoomBy(1 / 1.2) }
-  zoomFit() { this._fitToView() }
+  zoomIn()  { this.#zoomBy(1.2) }
+  zoomOut() { this.#zoomBy(1 / 1.2) }
+  zoomFit() { this.#fitToView() }
 
-  _zoomBy(k) {
-    this._zoomAt(this.element.clientWidth / 2, this.element.clientHeight / 2, this._scale * k)
+  #zoomBy(k) {
+    this.#zoomAt(this.element.clientWidth / 2, this.element.clientHeight / 2, this.#scale * k)
   }
 
-  _zoomAt(mx, my, scale) {
-    const next = this._clampScale(scale)
-    const k    = next / this._scale
-    this._pan.x = mx - (mx - this._pan.x) * k
-    this._pan.y = my - (my - this._pan.y) * k
-    this._scale = next
-    this._applyTransform()
+  #zoomAt(mx, my, scale) {
+    const next = this.#clampScale(scale)
+    const k    = next / this.#scale
+    this.#pan.x = mx - (mx - this.#pan.x) * k
+    this.#pan.y = my - (my - this.#pan.y) * k
+    this.#scale = next
+    this.#applyTransform()
   }
 
-  _clampScale(s) { return Math.max(0.2, Math.min(4, s)) }
+  #clampScale(s) { return Math.max(0.2, Math.min(4, s)) }
 
-  _applyTransform(animate = false) {
+  #applyTransform(animate = false) {
     const inner = this.innerTarget
     inner.style.transformOrigin = "0 0"
     inner.style.transition = animate ? "transform .45s ease" : ""
     inner.style.transform =
-      `translate(${this._pan.x}px, ${this._pan.y}px) scale(${this._scale})`
-    this._persist()
-    this._drawMiniMap()
+      `translate(${this.#pan.x}px, ${this.#pan.y}px) scale(${this.#scale})`
+    this.#persist()
+    this.#drawMiniMap()
   }
 
   // Only shown while the tree overflows the canvas; otherwise it would repeat the picture.
-  _drawMiniMap() {
-    if (!this.hasMinimapTarget || !this._pos || !this._pan) return
+  #drawMiniMap() {
+    if (!this.hasMinimapTarget || !this.#pos || !this.#pan) return
     const mm = this.minimapTarget
     const vw = this.element.clientWidth,     vh = this.element.clientHeight
     const tw = this.innerTarget.offsetWidth, th = this.innerTarget.offsetHeight
-    const fits = tw * this._scale <= vw + 1 && th * this._scale <= vh + 1
+    const fits = tw * this.#scale <= vw + 1 && th * this.#scale <= vh + 1
     mm.classList.toggle("tree-minimap--hidden", fits)
     if (fits) return
 
@@ -704,14 +722,14 @@ export default class extends Controller {
     ctx.clearRect(0, 0, cssW, cssH)
 
     const k = Math.min(cssW / tw, cssH / th)
-    this._mmScale = k
+    this.#mmScale = k
 
     const rootStyle = getComputedStyle(document.documentElement)
     const inkEdge   = rootStyle.getPropertyValue("--tree-edge").trim() || "#b3a695"
     const inkAccent = rootStyle.getPropertyValue("--accent").trim()    || "#5a7d4f"
 
-    for (const [ id, p ] of Object.entries(this._pos)) {
-      const node = this._nodeById.get(+id)
+    for (const [ id, p ] of Object.entries(this.#pos)) {
+      const node = this.#nodeById.get(+id)
       if (node?.ghost) continue
       ctx.fillStyle = +id === this.graphValue.focus_id ? inkAccent : inkEdge
       ctx.fillRect(p.x * k, p.y * k, Math.max(p.w * k, 2), Math.max(p.h * k, 2))
@@ -719,14 +737,14 @@ export default class extends Controller {
 
     ctx.strokeStyle = inkAccent
     ctx.lineWidth   = 1.5
-    ctx.strokeRect(-this._pan.x / this._scale * k, -this._pan.y / this._scale * k,
-                   vw / this._scale * k, vh / this._scale * k)
+    ctx.strokeRect(-this.#pan.x / this.#scale * k, -this.#pan.y / this.#scale * k,
+                   vw / this.#scale * k, vh / this.#scale * k)
   }
 
   minimapJump(e) {
-    if (!this._mmScale) return
+    if (!this.#mmScale) return
     const rect = this.minimapTarget.getBoundingClientRect()
-    this._panTo((e.clientX - rect.left) / this._mmScale,
-                (e.clientY - rect.top)  / this._mmScale)
+    this.#panTo((e.clientX - rect.left) / this.#mmScale,
+                (e.clientY - rect.top)  / this.#mmScale)
   }
 }

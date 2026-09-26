@@ -119,8 +119,9 @@ Reference: campfire/writebook `app/models`, `app/controllers/concerns`, `config/
       out by JavaScript). Forms never subscribe. `preserve-form` keeps an open inline form through a
       refresh. All hand-written `*.turbo_stream.erb` are gone: changes redirect with 303 and Turbo
       morphs the page. A GEDCOM import refreshes once, not per record.
-- [ ] Stimulus: `#private` members, shared `timing_helpers.js` debounce, generic
-      `auto_submit`/`autocomplete`/`toggle_class`; delete `hello_controller.js`.
+- [x] Stimulus: `#private` members (tree, place, drawer controllers), a shared debounce in
+      `helpers/timing_helpers.js` (with `cancel`), generic `auto_submit` and `autocomplete`
+      (the old `search`), `hello_controller.js` deleted. No `toggle_class`: nothing would use it yet.
 
 ## Decisions
 - Product name stays **Heartwood** (decided 2026-09-26); open source and community go in

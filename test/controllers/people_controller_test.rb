@@ -94,7 +94,7 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
 
   test "index renders search form" do
     get people_url
-    assert_select "form[data-controller='search']"
+    assert_select "form[data-controller='autocomplete auto-submit']"
     assert_select "input[type='search']"
   end
 
