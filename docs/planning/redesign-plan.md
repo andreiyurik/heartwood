@@ -95,8 +95,10 @@ Reference: campfire/writebook `app/models`, `app/controllers/concerns`, `config/
       relatives, citations and the event/citation model tests use it. The graph, privacy, search
       and Gedcom tests still build their own records on purpose (they need bespoke topologies);
       `create!` calls in tests: 327 → 316.
-- [ ] Split `Person` (423 lines) into concerns: `Searchable`, `Living`, `Relatives`, `Kin`,
-      `Avatar`; tree-graph builder as a PORO without `Current`/URL building.
+- [x] `Person` split (371 → 48 lines) into `Person::Avatar`, `Kin`, `Living`, `Relatives`, `Searchable`;
+      the tree-graph builder is the PORO `Person::TreeGraph` — it takes the viewer and an
+      `avatar_url` callable, so it reads no `Current` and builds no URLs
+      (`TreeGraphs` controller concern supplies both).
 - [x] `PersonScoped` controller concern: one `set_person`, always through `visible_to`
       (was 5 copies with two different visibility rules).
 - [x] Custom actions → noun resources: `Hints::ScansController`, `Hints::DismissalsController`,
