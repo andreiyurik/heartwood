@@ -1,4 +1,4 @@
-<%= turbo_frame_tag dom_id(event, :citation_form) do %>
+<%= turbo_frame_tag dom_id(event, :citation_form), data: { controller: "preserve-form", action: "turbo:frame-load->preserve-form#sync" } do %>
   <%= link_to new_person_event_citation_path(person, event), class: "btn btn--plain citation-add" do %>
     <%= icon_tag "add" %> <%= t("citations.add") %>
   <% end %>
