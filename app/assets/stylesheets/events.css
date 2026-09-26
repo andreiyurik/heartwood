@@ -1,13 +1,13 @@
 /* Events */
-.events { border-top: 1px solid var(--line); padding-top: 1rem; margin-top: 1rem; }
+.events { border-top: 1px solid var(--color-border-dark); padding-top: 1rem; margin-top: 1rem; }
 .events h2 { font-size: 1.2rem; }
 .event-list { list-style: none; padding: 0; margin: 0 0 0.5rem; }
-.event-row { padding: 0.35rem 0; border-bottom: 1px solid var(--line); }
+.event-row { padding: 0.35rem 0; border-bottom: 1px solid var(--color-border-dark); }
 .event-row turbo-frame { display: flex; align-items: baseline; gap: 0.75rem; }
 .event-kind { font-weight: 600; min-width: 7rem; }
-.event-summary { color: var(--ink); flex: 1; }
+.event-summary { color: var(--color-text); flex: 1; }
 .event-actions { display: flex; gap: 0.25rem; }
-.sourced-badge { font-size: 0.75rem; color: var(--accent-ink); font-weight: 700; margin-left: 0.2rem; }
+.sourced-badge { font-size: 0.75rem; color: var(--color-link); font-weight: 700; margin-left: 0.2rem; }
 .sourced-badge--very_low, .sourced-badge--low { opacity: 0.55; }
 .sourced-badge--normal { opacity: 0.8; }
-.citation-add:hover { color: var(--accent-ink); }
+.citation-add:hover { color: var(--color-link); }
