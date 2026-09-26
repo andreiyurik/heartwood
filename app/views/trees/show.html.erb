@@ -1,6 +1,7 @@
 <% page_title @person.display_name %>
 <% back_link person_path(@person) %>
 <% full_bleed %>
+<%= live_updates refresh: "replace" %>
 
 <% content_for :header do %>
   <details class="tree-options" data-controller="collapse-on-mobile" open>

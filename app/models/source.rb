@@ -1,5 +1,5 @@
 class Source < ApplicationRecord
-  include BelongsToTree
+  include BelongsToTree, LiveUpdates
 
   validates :title, presence: true
 

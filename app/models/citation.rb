@@ -2,6 +2,8 @@ class Citation < ApplicationRecord
   belongs_to :source
   belongs_to :citable, polymorphic: true
 
+  broadcasts_refreshes_to ->(citation) { citation.citable.tree }
+
   # Gramps' 5-level qualitative confidence scale — richer than GEDCOM's own 4-level
   # QUAY, so we keep it verbatim and collapse to QUAY only on GEDCOM export (not yet
   # built — see docs/domain/source-citation.md).

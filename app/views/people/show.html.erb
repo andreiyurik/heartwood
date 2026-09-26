@@ -1,5 +1,6 @@
 <% page_title @person.display_name %>
 <% back_link people_path %>
+<%= live_updates %>
 
 <% content_for :header do %>
   <%= link_to t("people.tree"), person_tree_path(@person), class: "btn" %>

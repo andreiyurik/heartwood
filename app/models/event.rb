@@ -1,4 +1,6 @@
 class Event < ApplicationRecord
+  include LiveUpdates
+
   KINDS = {
     "BIRT" => "Birth", "DEAT" => "Death", "BAPM" => "Baptism", "BURI" => "Burial",
     "MARR" => "Marriage", "DIV" => "Divorce",
