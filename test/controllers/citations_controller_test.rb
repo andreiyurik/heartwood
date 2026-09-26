@@ -101,4 +101,18 @@ class CitationsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to root_url
   end
+
+  test "the citation form asks for source, page and confidence first" do
+    get new_person_event_citation_url(@person, @event)
+    assert_select "form > .field input[name='source[title]']"
+    assert_select "form > .field input[name='citation[page]']"
+    assert_select "form > .field select[name='citation[confidence]']"
+    assert_select "form details.more-fields" do
+      assert_select "input[name='source[url]']"
+      assert_select "input[name='source[author]']"
+      assert_select "input[name='source[repository]']"
+      assert_select "textarea[name='citation[text]']"
+    end
+    assert_select "form > .field input[name='source[url]']", count: 0
+  end
 end

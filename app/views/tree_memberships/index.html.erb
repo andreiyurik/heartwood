@@ -9,6 +9,13 @@
     <div class="invite-box__actions">
       <input type="text" class="input" value="<%= url %>" aria-labelledby="invite_label" readonly>
 
+      <button type="button" class="btn btn--circle" hidden
+              data-controller="share" data-action="share#share"
+              data-share-url-value="<%= url %>" data-share-title-value="<%= Current.tree.name %>">
+        <%= icon_tag "share" %>
+        <span class="for-screen-reader"><%= t("tree_memberships.share") %></span>
+      </button>
+
       <%= button_to_copy_to_clipboard(url) do %>
         <%= icon_tag "copy-paste" %>
         <span class="for-screen-reader"><%= t("tree_memberships.copy_link") %></span>
@@ -34,23 +41,19 @@
 
       <% if membership.owner? %>
         <span class="years"><%= icon_tag "crown" %> <%= t("tree_memberships.roles.owner") %></span>
+      <% elsif Current.membership.owner? %>
+        <%= form_with model: membership, url: tree_membership_path(membership), method: :patch,
+              data: { controller: "auto-submit" } do |form| %>
+          <%= form.select :role,
+                %w[editor viewer].map { |role| [ t("tree_memberships.roles.#{role}"), role ] }, {},
+                class: "input", aria: { label: t("tree_memberships.role_label", name: membership.user.name) },
+                data: { action: "change->auto-submit#submit" } %>
+        <% end %>
+        <%= icon_button_to "minus", t("tree_memberships.remove"), tree_membership_path(membership),
+              method: :delete, class: "btn--negative",
+              data: { turbo_confirm: t("tree_memberships.remove_confirm", name: membership.user.name) } %>
       <% else %>
         <span class="years"><%= t("tree_memberships.roles.#{membership.role}") %></span>
-
-        <% if Current.membership.owner? %>
-          <%= button_to tree_membership_path(membership), method: :patch,
-                params: { tree_membership: { role: membership.editor? ? "viewer" : "editor" } },
-                class: "btn btn--circle #{"btn--reversed" if membership.editor?}",
-                title: t("tree_memberships.role_toggle_title") do %>
-            <%= icon_tag "crown" %>
-          <% end %>
-          <%= button_to tree_membership_path(membership), method: :delete,
-                class: "btn btn--circle btn--negative",
-                title: t("tree_memberships.remove"),
-                data: { turbo_confirm: t("tree_memberships.remove_confirm", name: membership.user.name) } do %>
-            <%= icon_tag "minus" %>
-          <% end %>
-        <% end %>
       <% end %>
     </li>
   <% end %>

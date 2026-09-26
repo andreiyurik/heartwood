@@ -75,14 +75,16 @@ Reference: campfire `users/new` via join code, `first_runs`; writebook blank sla
   (see [[import-export]]); re-importing a Gramps round trip adds duplicates for the duplicate
   scan to flag.
 
-## Phase 4 — Person page, forms, members
+## Phase 4 — Person page, forms, members ✅
 Progressive disclosure: the common fields first, depth one click away.
-- [ ] Person form: given names, surname, sex visible; the rest in `<details>`; avatar uploads
-      from the profile header on change.
-- [ ] Citation form: source, page, confidence first; the rest in `<details>`.
-- [ ] Members page: labelled editor/viewer switch that submits on change; Web Share button;
-      decide whether editors may share the invite ([[collaboration]]).
-- [ ] `aria-label` on every search input.
+- [x] Person form: given names, surname, sex visible; prefix, suffix, nickname and biography in
+      `<details>` (open when filled or on errors). The photo changes from the profile header
+      on file selection (`auto-submit`), no longer inside the form.
+- [x] Citation form: source title, page, confidence first; the rest in `<details>`.
+- [x] Members page: labelled editor/viewer select that submits on change; Web Share button
+      (hidden where `navigator.share` is missing). Decision: the invite link stays owner-only —
+      it grants an editing seat, so who may add editors stays the owner's call ([[collaboration]]).
+- [x] `aria-label` on every search input.
 
 ## Phase 5 — Code canon (do each item when touching that area; comments + fixtures early)
 Reference: campfire/writebook `app/models`, `app/controllers/concerns`, `config/routes.rb`.

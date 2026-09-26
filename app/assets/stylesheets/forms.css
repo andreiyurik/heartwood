@@ -87,3 +87,13 @@
 .settings-links {
   margin-block-start: var(--block-space);
 }
+
+.more-fields {
+  margin-block-end: var(--block-space);
+
+  summary {
+    color: var(--color-muted);
+    cursor: pointer;
+    margin-block-end: var(--block-space-half);
+  }
+}

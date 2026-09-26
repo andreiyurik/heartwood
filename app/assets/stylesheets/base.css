@@ -73,3 +73,7 @@ turbo-frame,
 turbo-cable-stream-source {
   display: contents;
 }
+
+[hidden] {
+  display: none !important;
+}

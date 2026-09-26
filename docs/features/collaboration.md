@@ -17,6 +17,8 @@ trees rather than one account per install).
   creates the user and an editor `TreeMembership` (`User.sign_up!(join:)`). "Already have an
   account?" signs in and returns to the confirm page. Self sign-up (`/registration`) names the
   tree and creates user, tree and owner membership together; the owner renames it in `/settings`.
+- **Sharing the link is owner-only.** The link grants an editor seat, so only the owner sees it
+  (copy, Web Share, regenerate); editors can't hand out editing rights.
 - **Roles**: owner (created the tree, sole admin) / editor (full read-write) / viewer
   (read-only), on `TreeMembership#role`. Enforced at the controller level
   (`TreeAuthorization#require_can_edit`/`#require_owner`) on every mutating action across

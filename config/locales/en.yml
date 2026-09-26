@@ -60,7 +60,8 @@ en:
     copy_link: Copy invite link
     reset_link: Generate a new link
     reset_confirm: This will invalidate the current invite link. Continue?
-    role_toggle_title: Toggle editor/viewer
+    role_label: "Role of %{name}"
+    share: Share invite link
     remove: Remove
     remove_confirm: "Remove %{name} from this tree?"
     roles:
@@ -374,6 +375,7 @@ en:
       welcome: "Welcome to Heartwood, %{name}! 🌳"
 
   forms:
+    more: More details
     cancel: Cancel
     save: Save
     errors:

@@ -98,6 +98,10 @@ class Person < ApplicationRecord
     birth_year.nil? || birth_year > Date.current.year - LIVING_CUTOFF_YEARS
   end
 
+  def more_fields_filled?
+    name_prefix.present? || name_suffix.present? || nickname.present? || biography.present?
+  end
+
   def self.named_like(user)
     *given, surname = user.name.split
     given.empty? ? new(given_names: surname) : new(given_names: given.join(" "), surname: surname)
