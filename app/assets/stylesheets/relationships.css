@@ -1,0 +1,17 @@
+/* Relationship calculator — a labelled tool block on the profile */
+.relationship-tool {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+.relationship-tool h2 { margin: 0 0 0.25rem; font-size: 1.1rem; }
+.relationship-lede { margin: 0 0 0.85rem; font-size: 0.9rem; }
+.relationship { margin-top: 0.5rem; }
+.relationship-result {
+  margin: 0.75rem 0 0;
+  padding: 0.6rem 0.8rem;
+  font-weight: 600;
+  background: var(--accent-wash);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
