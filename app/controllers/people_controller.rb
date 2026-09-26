@@ -25,7 +25,7 @@ class PeopleController < ApplicationController
   end
 
   def new
-    @person = Person.new
+    @person = params[:yourself] ? Person.named_like(Current.user) : Person.new
   end
 
   def edit

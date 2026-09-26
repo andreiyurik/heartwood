@@ -35,6 +35,10 @@ module ApplicationHelper
     end
   end
 
+  def blank_tree?
+    Current.tree.people.none?
+  end
+
   def full_bleed
     content_for :body_class, "full-bleed"
   end

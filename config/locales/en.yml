@@ -69,8 +69,12 @@ en:
     profile: Profile
     tree: Tree
     edit_button: Edit
-    empty: No people yet.
-    add_first: Add the first one
+    empty_viewer: Nobody has been added to this tree yet.
+    blank:
+      title: Your tree is empty
+      lede: Start with yourself, or bring in a tree you already have.
+      add_yourself: Add yourself
+      import: Import GEDCOM
     unknown_name: Unknown
     living: Living
     tabs_label: Profile sections
@@ -305,7 +309,6 @@ en:
     close_panel: Close panel
     depth_label: Generations
     default_name: My Tree
-    clan_empty: This tree has no people yet.
     search_placeholder: Find a person…
     expand: Expand branch
     collapse: Collapse branch
