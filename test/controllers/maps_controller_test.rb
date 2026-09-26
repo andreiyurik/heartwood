@@ -1,15 +1,7 @@
 require "test_helper"
 
 class MapsControllerTest < ActionDispatch::IntegrationTest
-  setup do
-    @tree = trees(:alpha)
-    Current.tree = @tree
-    @person = Person.create!(given_names: "Pat", surname: "Root", sex: "M", tree: @tree)
-    @place  = Place.create!(name: "Boston", latitude: 42.36, longitude: -71.05, tree: @tree)
-    sign_in_as users(:one)
-  end
-
-  teardown { Current.reset }
+  setup { sign_in_as users(:bach) }
 
   test "requires authentication" do
     sign_out
@@ -24,30 +16,29 @@ class MapsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "person map json lists only geolocated events" do
-    @person.events.create!(kind: "BIRT", date_raw: "1900", place: @place)
-    @person.events.create!(kind: "DEAT", date_raw: "1980") # no place → off the map
+    people(:wilhelm_friedemann).events.create!(kind: "BIRT", date_raw: "1710", place: places(:leipzig))
+    people(:wilhelm_friedemann).events.create!(kind: "DEAT", date_raw: "1784")
 
-    get map_person_url(@person, format: :json)
+    get map_person_url(people(:wilhelm_friedemann), format: :json)
     assert_response :success
 
     data = JSON.parse(@response.body)
     assert_equal 1, data.size
-    assert_equal "Boston", data.first["place"]
-    assert_in_delta 42.36, data.first["lat"], 0.001
-    assert_equal "Pat Root", data.first.dig("person", "name")
+    assert_equal "Leipzig, Saxony", data.first["place"]
+    assert_in_delta 51.3397, data.first["lat"], 0.001
+    assert_equal "Wilhelm Friedemann Bach", data.first.dig("person", "name")
   end
 
   test "places without coordinates are left off the map" do
-    bare = Place.create!(name: "Nowhere", tree: @tree)
-    @person.events.create!(kind: "RESI", place: bare)
+    bare = Place.create!(name: "Nowhere", tree: trees(:bach))
+    people(:wilhelm_friedemann).events.create!(kind: "RESI", place: bare)
 
-    get map_person_url(@person, format: :json)
+    get map_person_url(people(:wilhelm_friedemann), format: :json)
     assert_response :success
     assert_equal [], JSON.parse(@response.body)
   end
 
   test "tree map data is scoped to the current tree" do
-    @person.events.create!(kind: "RESI", place: @place)
     foreign_place  = Place.create!(name: "Foreign", latitude: 1, longitude: 1, tree: trees(:beta))
     foreign_person = Person.create!(given_names: "Outsider", sex: "U", tree: trees(:beta))
     foreign_person.events.create!(kind: "BIRT", place: foreign_place)
@@ -56,6 +47,6 @@ class MapsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     data = JSON.parse(@response.body)
-    assert_equal [ "Boston" ], data.map { |m| m["place"] }
+    assert_equal [ "Eisenach, Thuringia", "Leipzig, Saxony" ], data.map { |m| m["place"] }.sort
   end
 end

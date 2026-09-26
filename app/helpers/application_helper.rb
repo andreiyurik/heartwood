@@ -48,9 +48,7 @@ module ApplicationHelper
     link_to t("nav.#{section}"), path, aria: { current: ("page" if current) }
   end
 
-  # Whether the current membership can add/edit/delete tree data — viewers can't.
-  # See [[collaboration]]. Controller-level require_can_edit is the actual
-  # security boundary; this just keeps pointless affordances out of the view.
+  # Controllers enforce edit rights; this only hides pointless affordances.
   def can_edit?
     Current.membership&.can_edit?
   end

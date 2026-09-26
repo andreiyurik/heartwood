@@ -88,10 +88,13 @@ Progressive disclosure: the common fields first, depth one click away.
 
 ## Phase 5 — Code canon (do each item when touching that area; comments + fixtures early)
 Reference: campfire/writebook `app/models`, `app/controllers/concerns`, `config/routes.rb`.
-- [ ] **Comments**: ~13% of Ruby lines vs ~0.7% in campfire. Strip per the CLAUDE.md rule —
-      worst: `person.rb`, `tree_controller.js`, `event.rb`, `tree.rb`, `relatives_controller.rb`.
-- [ ] **Fixtures** for people/families/events/places/sources/citations (a named family),
-      replacing most of the 327 `create!` calls in tests.
+- [x] **Comments**: Ruby in `app/` went from 14% comment lines (273/1931) to 2% (33/1691);
+      `tree_controller.js` from 90 comment lines to 28. Only "why" lines stay.
+- [~] **Fixtures**: the Bach family (`bach` tree, 8 people, 3 families, events, places, a source
+      and a citation; sign in as `users(:bach)`). Maps, exports, clan tree, trees, events,
+      relatives, citations and the event/citation model tests use it. The graph, privacy, search
+      and Gedcom tests still build their own records on purpose (they need bespoke topologies);
+      `create!` calls in tests: 327 → 316.
 - [ ] Split `Person` (423 lines) into concerns: `Searchable`, `Living`, `Relatives`, `Kin`,
       `Avatar`; tree-graph builder as a PORO without `Current`/URL building.
 - [ ] `PersonScoped` controller concern (one `set_person` + one visibility rule; today 5 copies).

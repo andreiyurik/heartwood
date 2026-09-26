@@ -1,5 +1,3 @@
-# A suggested duplicate pair surfaced by DuplicateFinder. Stays "pending" until a
-# user either dismisses it or (a v2 feature) merges. We never act on it ourselves.
 class DuplicateHint < ApplicationRecord
   include BelongsToTree
 

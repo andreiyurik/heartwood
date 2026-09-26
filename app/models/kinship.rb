@@ -1,12 +1,6 @@
-# Names the blood relationship between two people from their distances up and
-# down from a common ancestor. Pure i18n string building — the graph traversal
-# that produces `up`/`down` lives in Person#relationship_to. See relationship.md.
-#
-#   up   = generations from the focus person up to the common ancestor
-#   down = generations from the other person up to the common ancestor
-#   sex  = the *other* person's sex, so we say "mother" not just "parent"
+# up: generations from the focus person to the common ancestor; down: the same for the other person;
+# sex: the other person's, so we say "mother", not "parent".
 class Kinship
-  # Marriage isn't an ancestor relationship, so it's named on its own.
   def self.spouse(sex)
     I18n.t("relationships.spouse.#{normalize_sex(sex)}")
   end
@@ -33,16 +27,14 @@ class Kinship
     return term("child")                if descendant? && down == 1
     return greats(down - 2, "grandchild") if descendant?
     return term("sibling")              if up == 1 && down == 1
-    return greats(up - 2, "aunt_uncle") if down == 1   # up >= 2
-    return greats(down - 2, "niece_nephew") if up == 1 # down >= 2
+    return greats(up - 2, "aunt_uncle") if down == 1
+    return greats(down - 2, "niece_nephew") if up == 1
     cousin
   end
 
   def ancestor?   = down.zero?
   def descendant? = up.zero?
 
-  # "great-" repeated `count` times, prefixed onto a base term: great-grandmother,
-  # great-great-aunt. Russian composes the same way with "пра".
   def greats(count, key)
     I18n.t("relationships.great_prefix") * count + term(key)
   end

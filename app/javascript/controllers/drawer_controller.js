@@ -1,9 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Slide-over panel over the tree canvas. A node link loads people#panel into the
-// frame; the drawer opens when the frame finishes loading and closes on the ✕
-// button or Escape. Closing also empties the frame so re-clicking the same
-// person triggers a fresh load (a frame keeps its src otherwise).
+// Closing empties the frame so re-clicking the same person reloads it (a frame keeps its src).
 export default class extends Controller {
   static targets = ["frame"]
 

@@ -1,0 +1,47 @@
+ambrosius:
+  tree: bach
+  given_names: Johann Ambrosius
+  surname: Bach
+  sex: M
+
+elisabeth:
+  tree: bach
+  given_names: Maria Elisabeth
+  surname: Lämmerhirt
+  sex: F
+
+johann_sebastian:
+  tree: bach
+  given_names: Johann Sebastian
+  surname: Bach
+  sex: M
+
+maria_barbara:
+  tree: bach
+  given_names: Maria Barbara
+  surname: Bach
+  sex: F
+
+anna_magdalena:
+  tree: bach
+  given_names: Anna Magdalena
+  surname: Wilcke
+  sex: F
+
+wilhelm_friedemann:
+  tree: bach
+  given_names: Wilhelm Friedemann
+  surname: Bach
+  sex: M
+
+carl_philipp_emanuel:
+  tree: bach
+  given_names: Carl Philipp Emanuel
+  surname: Bach
+  sex: M
+
+johann_christian:
+  tree: bach
+  given_names: Johann Christian
+  surname: Bach
+  sex: M

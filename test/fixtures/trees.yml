@@ -5,3 +5,7 @@ alpha:
 beta:
   name: Beta Tree
   join_code: BETA-0002-JOIN
+
+bach:
+  name: Bach family
+  join_code: BACH-0003-JOIN

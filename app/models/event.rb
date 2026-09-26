@@ -1,18 +1,12 @@
-# Event & Fact (EVEN) — anything that happened (birth, death, marriage) or any
-# attribute that holds (occupation). Attached polymorphically to a Person or Family.
-# `kind` is the GEDCOM tag (BIRT, DEAT, MARR, OCCU, ...). Dates keep the raw GEDCOM
-# string plus a parsed range. See docs/domain/event.md.
 class Event < ApplicationRecord
   include BelongsToTree
 
-  # GEDCOM tag => human label. Extend freely; import preserves unknown tags.
   KINDS = {
     "BIRT" => "Birth", "DEAT" => "Death", "BAPM" => "Baptism", "BURI" => "Burial",
     "MARR" => "Marriage", "DIV" => "Divorce",
     "OCCU" => "Occupation", "RESI" => "Residence", "EDUC" => "Education"
   }.freeze
 
-  # Kinds offered when adding an event to a Person (marriage/divorce belong to a Family).
   PERSON_KINDS = %w[BIRT DEAT BAPM BURI OCCU RESI EDUC].freeze
 
   belongs_to :eventable, polymorphic: true
@@ -30,29 +24,22 @@ class Event < ApplicationRecord
     I18n.t("events.kinds.#{kind}", default: KINDS.fetch(kind, kind))
   end
 
-  # The strongest confidence among this event's citations, or nil if unsourced —
-  # what the .sourced-badge shows (see docs/features/sources-evidence.md).
   def best_citation_confidence
     order = Citation.confidences.keys
     citations.max_by { |c| order.index(c.confidence) }&.confidence
   end
 
-  # What to show next to the label: the date for events, the value for facts.
   def summary
     date_raw.presence || value.presence
   end
 
-  # The place as free text — what the form edits. Reading falls back to the typed
-  # name before the record is resolved; writing finds-or-creates a tree Place so
-  # the same town typed twice collapses to one row (and earns one map pin).
+  # Writing finds or creates a tree Place, so the same town typed twice is one row (and one map pin).
   def place_name = @place_name || place&.name
 
   def place_name=(value)
     @place_name = value.to_s.strip
   end
 
-  # Coordinates the user confirmed on the map picker. Optional — without them the
-  # place is geocoded in the background instead (see PlaceGeocodeJob).
   attr_accessor :place_latitude, :place_longitude
 
   private
@@ -69,9 +56,8 @@ class Event < ApplicationRecord
       return
     end
 
-    # A Place is shared by name across the tree, so we only fill in coordinates
-    # we don't already have — picking a spot for one event never moves the pin
-    # for everyone else's events at the same place.
+    # Places are shared by name across the tree: fill in coordinates only if missing,
+    # so one event's pin never moves the others.
     found = tree.places.find_or_initialize_by(name: @place_name)
     if picked_coordinates? && !found.geocoded?
       found.latitude  = place_latitude

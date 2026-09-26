@@ -1,9 +1,3 @@
-# Joining a tree via its shareable invite link — once-campfire's join-code
-# mechanic, adapted per-tree. Deliberately requires authentication like any
-# other controller (no allow_unauthenticated_access): an unauthenticated
-# visitor is bounced through the existing sign-in-or-register flow and lands
-# back here afterward via Authentication#after_authentication_url. See
-# [[collaboration]].
 class JoinsController < ApplicationController
   allow_unauthenticated_access
   before_action :set_tree

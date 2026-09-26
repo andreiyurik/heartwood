@@ -1,5 +1,3 @@
-# A Person's life events (birth, death, occupation, ...). Polymorphic Event rows;
-# this controller scopes them to a Person. See docs/domain/event.md.
 class EventsController < ApplicationController
   before_action :set_person
   before_action :set_event, only: %i[edit update destroy]
@@ -48,7 +46,6 @@ class EventsController < ApplicationController
     params.expect(event: %i[kind date_raw value place_name place_latitude place_longitude])
   end
 
-  # Both create/update/destroy refresh the events box (turbo) or redirect (html).
   def respond_to_change(key)
     respond_to do |format|
       format.turbo_stream

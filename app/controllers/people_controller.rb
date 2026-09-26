@@ -1,5 +1,3 @@
-# People — the first CRUD slice over the Person (INDI) domain model.
-# Authentication is required via the Authentication concern in ApplicationController.
 class PeopleController < ApplicationController
   TABS = %w[details sources memories timeline map].freeze
 
@@ -20,7 +18,6 @@ class PeopleController < ApplicationController
     @tab = TABS.include?(params[:tab]) ? params[:tab] : "details"
   end
 
-  # Compact person card for the tree's slide-over panel (loaded into a turbo-frame).
   def panel
   end
 
