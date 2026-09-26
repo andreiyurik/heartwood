@@ -3,12 +3,19 @@ en:
     sign_out: Sign out
     members: Members
     skip_to_content: Skip to main content
+    settings: Settings
     back: Back
     sections: Sections
     breadcrumbs: You are here
     people: People
     tree: Tree
     map: Map
+
+  settings:
+    title: Settings
+    tree_name: Tree name
+    flash:
+      saved: Saved.
 
   active_tree:
     flash:
