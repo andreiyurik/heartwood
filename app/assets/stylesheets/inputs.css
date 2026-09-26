@@ -44,3 +44,7 @@ select.input {
   flex: 0 0 auto;
   color: var(--color-muted);
 }
+
+.input--actor:has([aria-invalid=true]) {
+  border-color: var(--color-negative);
+}

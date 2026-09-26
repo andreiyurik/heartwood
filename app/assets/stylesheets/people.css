@@ -124,3 +124,32 @@
   flex-wrap: wrap;
   gap: 1rem;
 }
+
+.blank-slate {
+  display: grid;
+  gap: var(--block-space);
+  justify-items: center;
+  padding-block: var(--block-space-double);
+  text-align: center;
+
+  h2,
+  p {
+    margin: 0;
+  }
+
+  p {
+    color: var(--color-muted);
+  }
+}
+
+.blank-slate__actions,
+.import-report {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--inline-space);
+}
+
+.import-report {
+  align-items: flex-start;
+  flex-direction: column;
+}
