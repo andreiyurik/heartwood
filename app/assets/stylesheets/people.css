@@ -1,45 +1,119 @@
-.profile-identity { display: flex; align-items: center; gap: 1rem; }
+.people-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
-/* People list — canonical member-row shape: avatar, name, flexible separator
-   pushing trailing meta to the edge (see once-campfire/writebook member rows). */
-.people-list { list-style: none; padding: 0; margin: 0; }
 .person-row {
   align-items: center;
-  border-bottom: 1px solid var(--color-border);
+  border-block-end: 1px solid var(--color-border);
   display: flex;
   gap: 0.75rem;
   padding: 0.6rem 0.25rem;
 
-  a { font-weight: 600; font-size: 1.05rem; }
-  .years { color: var(--color-muted); font-size: 0.9rem; white-space: nowrap; }
+  &:last-child {
+    border-block-end: none;
+  }
+
+  a {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .years {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .separator {
+    border: none;
+    border-block-start: 1px dotted var(--color-border-darker);
+    flex: 1;
+    margin: 0;
+  }
 }
-.person-row:last-child { border-bottom: none; }
-.person-row .separator {
-  border: none;
-  border-top: 1px dotted var(--color-border-darker);
-  flex: 1;
-  margin: 0;
+
+.empty {
+  color: var(--color-muted);
 }
-.empty { color: var(--color-muted); }
 
-/* Person show */
-.person { background: var(--color-surface); border: 1px solid var(--color-border-dark); border-radius: var(--radius); padding: 1.5rem; }
-.facts { display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1rem; margin: 1rem 0 1.5rem; }
-.facts dt { color: var(--color-muted); }
-.facts dd { margin: 0; }
-
-.relations { border-top: 1px solid var(--color-border-dark); padding-top: 1rem; }
-.relations h2 { font-size: 1.2rem; margin-block: 0.83em; }
-.relation-group { margin-bottom: 1rem;
-  h3 { margin: 0 0 0.25rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-muted); }
-  ul { margin: 0; padding-left: 1.1rem; }
+.person {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-dark);
+  border-radius: var(--radius);
+  padding: 1.5rem;
 }
-.add-relative { margin-top: 0.25rem; }
 
-/* Biography (Action Text + Lexxy) */
-.biography-section { border-top: 1px solid var(--color-border-dark); padding-top: 1rem; margin-top: 1rem; }
-.biography-section h2 { font-size: 1.2rem; margin-block: 0.83em; }
-.biography.lexxy-content { max-width: 40rem; line-height: 1.6; }
-.field--biography lexxy-editor { display: block; min-height: 8rem; }
+.profile-identity {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+}
 
-.memories-gallery { display: flex; gap: 1rem; flex-wrap: wrap; }
+.facts {
+  display: grid;
+  gap: 0.35rem 1rem;
+  grid-template-columns: max-content 1fr;
+  margin: 1rem 0 1.5rem;
+
+  dt {
+    color: var(--color-muted);
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+.relations,
+.biography-section {
+  border-block-start: 1px solid var(--color-border-dark);
+  padding-block-start: 1rem;
+
+  h2 {
+    font-size: 1.2rem;
+    margin-block: 0.83em;
+  }
+}
+
+.biography-section {
+  margin-block-start: 1rem;
+}
+
+.relation-group {
+  margin-block-end: 1rem;
+
+  h3 {
+    color: var(--color-muted);
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.25rem;
+    text-transform: uppercase;
+  }
+
+  ul {
+    margin: 0;
+    padding-inline-start: 1.1rem;
+  }
+}
+
+.add-relative {
+  margin-block-start: 0.25rem;
+}
+
+.biography.lexxy-content {
+  line-height: 1.6;
+  max-inline-size: 40rem;
+}
+
+.field--biography lexxy-editor {
+  display: block;
+  min-block-size: 8rem;
+}
+
+.memories-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}

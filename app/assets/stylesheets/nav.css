@@ -1,74 +1,91 @@
 .site-header {
-  display: flex;
   align-items: center;
+  background-color: var(--color-surface);
+  border-block-end: 1px solid var(--color-border-dark);
+  display: flex;
   justify-content: space-between;
   padding: 0.75rem 1.25rem;
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border-dark);
 
-  .brand { font-weight: 700; font-size: 1.15rem; color: var(--color-text); }
+  .brand {
+    color: var(--color-text);
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
 }
 
 .site-header__right {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: 0.75rem;
 }
 
 .locale-switcher {
+  background-color: var(--color-border-dark);
+  border-radius: 6px;
   display: flex;
   gap: 2px;
-  background: var(--color-border-dark);
-  border-radius: 6px;
   padding: 2px;
 }
 
 .locale-switcher__btn {
-  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  color: var(--color-muted);
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--color-muted);
-  border-radius: 4px;
+  padding: 0.2rem 0.55rem;
   text-decoration: none;
   transition: background 0.1s, color 0.1s;
 
-  &:hover { color: var(--color-text); text-decoration: none; }
+  &:hover {
+    color: var(--color-text);
+    text-decoration: none;
+  }
 }
 
 .locale-switcher__btn--active {
-  background: var(--color-surface);
-  color: var(--color-text);
+  background-color: var(--color-surface);
   box-shadow: 0 1px 2px oklch(var(--lch-always-black) / 0.08);
+  color: var(--color-text);
 }
 
-/* Tree switcher — a plain <details> disclosure, only rendered when a user
-   belongs to more than one tree (see [[collaboration]]). */
 .tree-switcher {
   position: relative;
 
-  summary { list-style: none; cursor: pointer; }
-  summary::-webkit-details-marker { display: none; }
+  summary {
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
 }
 
 .tree-switcher__menu {
-  position: absolute;
-  top: calc(100% + 0.35rem);
-  right: 0;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  margin: 0;
-  padding: 0.5rem;
-  min-width: 12rem;
-  list-style: none;
-  background: var(--color-surface);
+  background-color: var(--color-surface);
   border: 1px solid var(--color-border-dark);
   border-radius: var(--radius);
   box-shadow: 0 6px 18px oklch(var(--lch-always-black) / 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  inset-block-start: calc(100% + 0.35rem);
+  inset-inline-end: 0;
+  list-style: none;
+  margin: 0;
+  min-inline-size: 12rem;
+  padding: 0.5rem;
+  position: absolute;
+  z-index: 5;
 
-  li { margin: 0; }
-  .btn { width: 100%; justify-content: flex-start; }
+  li {
+    margin: 0;
+  }
+
+  .btn {
+    inline-size: 100%;
+    justify-content: flex-start;
+  }
 }
 
 .skip-navigation {

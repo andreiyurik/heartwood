@@ -1,34 +1,59 @@
-/* Search */
-/* Search inputs: an inset icon wherever a field means "look something up" —
-   the people list, the relationship calculator, the tree canvas. */
-.search-field { position: relative; display: flex; align-items: center; }
-.search-field .icon--search { position: absolute; left: 0.6rem; color: var(--color-muted); }
-.search-field input { padding-left: 1.9rem; width: 100%; }
-
-.search-form { margin-bottom: 1rem; }
-.search-bar {
-  display: flex;
-  gap: 0.5rem;
+.search-field {
   align-items: center;
-  flex-wrap: wrap;
+  display: flex;
+  position: relative;
 
-  .search-field { flex: 1; min-width: 12rem; }
+  .icon--search {
+    color: var(--color-muted);
+    inset-inline-start: 0.6rem;
+    position: absolute;
+  }
+
+  input {
+    inline-size: 100%;
+    padding-inline-start: 1.9rem;
+  }
+}
+
+.search-form {
+  margin-block-end: 1rem;
+}
+
+.search-bar {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  .search-field {
+    flex: 1;
+    min-inline-size: 12rem;
+  }
 
   input[type="search"] {
-    padding: 0.5rem 0.75rem 0.5rem 1.9rem;
+    background-color: var(--color-surface);
     border: 1px solid var(--color-border-dark);
     border-radius: var(--radius);
     font: inherit;
-    background: var(--color-surface);
+    padding: 0.5rem 0.75rem 0.5rem 1.9rem;
+
+    &:focus {
+      outline: 2px solid var(--color-selected-dark);
+      outline-offset: 1px;
+    }
   }
-  input[type="search"]:focus { outline: 2px solid var(--color-selected-dark); outline-offset: 1px; }
 }
+
 .search-filter {
-  padding: 0.5rem 0.5rem;
+  background-color: var(--color-surface);
   border: 1px solid var(--color-border-dark);
   border-radius: var(--radius);
-  font: inherit;
-  background: var(--color-surface);
   color: var(--color-text);
+  font: inherit;
+  padding: 0.5rem;
 }
-.search-clear { font-size: 0.85rem; white-space: nowrap; }
+
+.search-clear {
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
