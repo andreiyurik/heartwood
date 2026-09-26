@@ -20,6 +20,7 @@
         <%= icon_tag "search" %>
         <%= f.search_field :q, value: @q,
               placeholder: t("people.search_placeholder"),
+                aria: { label: t("people.search_placeholder") },
               autocomplete: "off",
               data: { search_target: "input", action: "input->search#debounce" } %>
       </div>

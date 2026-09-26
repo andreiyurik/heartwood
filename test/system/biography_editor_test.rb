@@ -12,6 +12,7 @@ class BiographyEditorTest < ApplicationSystemTestCase
 
   test "the Lexxy editor mounts and saves a biography" do
     visit edit_person_path(@person)
+    find("summary", text: I18n.t("forms.more")).click
 
     # The custom element upgrades into an editable surface only when the JS mounts.
     editor = find("lexxy-editor [contenteditable='true']", wait: 10)

@@ -82,4 +82,30 @@ class TreeMembershipsControllerTest < ActionDispatch::IntegrationTest
     patch tree_membership_url(@membership), params: { tree_membership: { role: "owner" } }
     assert_equal "editor", @membership.reload.role # invalid value falls back, doesn't become owner
   end
+
+  test "the owner switches a role with a labelled control that submits on change" do
+    post session_url, params: { email_address: @owner.email_address, password: "password" }
+    get tree_memberships_url
+    assert_select "form[action=?][data-controller=auto-submit]", tree_membership_path(@membership) do
+      assert_select "select[name='tree_membership[role]'][data-action='change->auto-submit#submit'][aria-label=?]",
+        I18n.t("tree_memberships.role_label", name: @editor_user.name) do
+        assert_select "option[selected][value=editor]"
+        assert_select "option[value=viewer]"
+      end
+    end
+  end
+
+  test "non-owners see roles as plain text" do
+    post session_url, params: { email_address: @editor_user.email_address, password: "password" }
+    get tree_memberships_url
+    assert_select "select", count: 0
+    assert_select ".person-row", text: /#{I18n.t("tree_memberships.roles.editor")}/
+  end
+
+  test "the invite box offers the native share sheet" do
+    post session_url, params: { email_address: @owner.email_address, password: "password" }
+    get tree_memberships_url
+    assert_select ".invite-box button[data-controller=share][data-share-url-value=?][data-share-title-value=?]",
+      join_url(@tree.join_code), @tree.name
+  end
 end

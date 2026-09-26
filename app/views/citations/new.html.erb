@@ -9,31 +9,6 @@
         <%= sf.label :title, t("citations.source_title_label") %>
         <%= sf.text_field :title, class: "input", required: true %>
       </div>
-      <div class="field">
-        <%= sf.label :url, t("citations.source_url_label") %>
-        <%= sf.url_field :url, class: "input", placeholder: "https://…" %>
-      </div>
-      <div class="field">
-        <%= sf.label :author, t("citations.source_author_label") %>
-        <%= sf.text_field :author, class: "input" %>
-      </div>
-      <div class="field">
-        <%= sf.label :repository, t("citations.source_repository_label") %>
-        <%= sf.text_field :repository, class: "input" %>
-      </div>
-      <div class="field">
-        <%= sf.label :source_type, t("citations.source_type_label") %>
-        <%= sf.text_field :source_type, class: "input", list: "source-type-suggestions" %>
-        <datalist id="source-type-suggestions">
-          <% %w[census certificate book website oral_history other].each do |type| %>
-            <option value="<%= type %>"><%= t("citations.source_types.#{type}") %></option>
-          <% end %>
-        </datalist>
-      </div>
-      <div class="field">
-        <%= sf.label :citation_text, t("citations.citation_text_label") %>
-        <%= sf.text_area :citation_text, class: "input", rows: 2, placeholder: t("citations.citation_text_placeholder") %>
-      </div>
     <% end %>
 
     <%= fields_for :citation, @citation do |cf| %>
@@ -42,20 +17,55 @@
         <%= cf.text_field :page, class: "input" %>
       </div>
       <div class="field">
-        <%= cf.label :text, t("citations.text_label") %>
-        <%= cf.text_area :text, class: "input", rows: 2, placeholder: t("citations.text_placeholder") %>
-      </div>
-      <div class="field">
-        <%= cf.label :date, t("citations.date_label") %>
-        <%= cf.date_field :date, class: "input" %>
-      </div>
-      <div class="field">
         <%= cf.label :confidence, t("citations.confidence_label") %>
         <%= cf.select :confidence,
               Citation.confidences.keys.map { |c| [t("citations.confidence.#{c}"), c] },
               {}, class: "input" %>
       </div>
     <% end %>
+
+    <details class="more-fields">
+      <summary><%= t("forms.more") %></summary>
+
+      <%= fields_for :source, @source do |sf| %>
+        <div class="field">
+          <%= sf.label :url, t("citations.source_url_label") %>
+          <%= sf.url_field :url, class: "input", placeholder: "https://…" %>
+        </div>
+        <div class="field">
+          <%= sf.label :author, t("citations.source_author_label") %>
+          <%= sf.text_field :author, class: "input" %>
+        </div>
+        <div class="field">
+          <%= sf.label :repository, t("citations.source_repository_label") %>
+          <%= sf.text_field :repository, class: "input" %>
+        </div>
+        <div class="field">
+          <%= sf.label :source_type, t("citations.source_type_label") %>
+          <%= sf.text_field :source_type, class: "input", list: "source-type-suggestions" %>
+          <datalist id="source-type-suggestions">
+            <% %w[census certificate book website oral_history other].each do |type| %>
+              <option value="<%= type %>"><%= t("citations.source_types.#{type}") %></option>
+            <% end %>
+          </datalist>
+        </div>
+        <div class="field">
+          <%= sf.label :citation_text, t("citations.citation_text_label") %>
+          <%= sf.text_area :citation_text, class: "input", rows: 2, placeholder: t("citations.citation_text_placeholder") %>
+        </div>
+      <% end %>
+
+      <%= fields_for :citation, @citation do |cf| %>
+        <div class="field">
+          <%= cf.label :text, t("citations.text_label") %>
+          <%= cf.text_area :text, class: "input", rows: 2, placeholder: t("citations.text_placeholder") %>
+        </div>
+        <div class="field">
+          <%= cf.label :date, t("citations.date_label") %>
+          <%= cf.date_field :date, class: "input" %>
+        </div>
+      <% end %>
+    </details>
 
     <div class="actions">
       <%= f.submit t("citations.submit_add"), class: "btn btn--reversed" %>

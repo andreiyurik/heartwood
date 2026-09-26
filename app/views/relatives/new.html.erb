@@ -20,6 +20,7 @@
       <%= search_field_tag :q, nil,
             class: "input",
             placeholder: t("family.combobox.placeholder"),
+            aria: { label: t("family.combobox.placeholder") },
             autocomplete: "off",
             data: { search_target: "input", action: "input->search#debounce" } %>
     <% end %>

@@ -216,4 +216,56 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     assert_select "input[name='person[given_names]'][value=?]", "Anna Maria"
     assert_select "input[name='person[surname]'][value=?]", "Karenina"
   end
+
+  test "the person form shows the essentials and tucks the rest into details" do
+    get new_person_url
+    assert_select "form.form > .field input[name='person[given_names]']"
+    assert_select "form.form > .field input[name='person[surname]']"
+    assert_select "form.form > .field select[name='person[sex]']"
+    assert_select "form.form details.more-fields" do
+      assert_select "input[name='person[name_prefix]']"
+      assert_select "input[name='person[name_suffix]']"
+      assert_select "input[name='person[nickname]']"
+    end
+    assert_select "form.form > .field input[name='person[nickname]']", count: 0
+  end
+
+  test "the form keeps details open when a hidden field has an error or a value" do
+    @person.update!(nickname: "Countess")
+    get edit_person_url(@person)
+    assert_select "details.more-fields[open]"
+  end
+
+  test "an editor changes the photo from the profile header on file change" do
+    get person_url(@person)
+    assert_select "form.avatar-form[action=?][data-controller=auto-submit]", person_path(@person) do
+      assert_select "input[type=file][name='person[avatar]'][data-action='change->auto-submit#submit']"
+    end
+  end
+
+  test "a viewer cannot change the photo from the profile" do
+    viewer = User.create!(name: "Vi", email_address: "vi@example.com", password: "password")
+    TreeMembership.create!(user: viewer, tree: @tree, role: "viewer")
+    sign_out
+    sign_in_as viewer
+    get person_url(@person)
+    assert_select "form.avatar-form", count: 0
+  end
+
+  test "updating with only a photo keeps the rest" do
+    png = Rack::Test::UploadedFile.new(StringIO.new("\x89PNG\r\n\x1a\n" + "\x00" * 100), "image/png", original_filename: "a.png")
+    patch person_url(@person), params: { person: { avatar: png } }
+    assert_redirected_to person_url(@person)
+    assert @person.reload.avatar.attached?
+    assert_equal "Ada", @person.given_names
+  end
+
+  test "search fields are labelled" do
+    get people_url
+    assert_select "input[type=search][name=q][aria-label=?]", I18n.t("people.search_placeholder")
+    get new_person_relative_url(@person, relation: "parent")
+    assert_select "input[type=search][name=q][aria-label]"
+    get person_relationship_url(@person)
+    assert_select "input[type=search][name=q][aria-label]"
+  end
 end

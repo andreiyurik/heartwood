@@ -10,12 +10,18 @@
 
 <article class="person">
   <div class="profile-identity">
-    <% if @person.avatar.attached? %>
-      <%= image_tag @person.avatar, class: "avatar avatar--large", alt: @person.display_name %>
+    <% if can_edit? %>
+      <%= form_with model: @person, class: "avatar-form", data: { controller: "auto-submit" } do |form| %>
+        <label class="avatar-upload" title="<%= t("people.avatar_hint") %>">
+          <%= render "people/avatar", person: @person %>
+          <%= icon_tag "camera", class: "avatar-upload__badge" %>
+          <%= form.file_field :avatar, accept: Person::AVATAR_CONTENT_TYPES.join(","), class: "for-screen-reader",
+                data: { action: "change->auto-submit#submit" } %>
+          <span class="for-screen-reader"><%= t("people.avatar_label") %></span>
+        </label>
+      <% end %>
     <% else %>
-      <div class="avatar avatar--large avatar--initials" aria-hidden="true">
-        <%= @person.display_name.split.map(&:first).first(2).join.upcase %>
-      </div>
+      <%= render "people/avatar", person: @person %>
     <% end %>
     <p><%= @person.life_years %></p>
   </div>
