@@ -43,16 +43,22 @@ computed styles on 22 pages (light + dark) before and after.
       small `.txt-*` scale as each screen is redesigned (a visual change, not a refactor);
       rename `--maxw`/`--radius` with the new `layout.css`.
 
-## Phase 2 — Page frame and navigation
+## Phase 2 — Page frame and navigation ✅
 Reference: writebook `layout.css` + `content_for :header`; campfire flash toast.
-- [ ] Grid `layout.css` with `#header`/`#main`; full-bleed tree/map via a body class, not `:has()`.
-- [ ] Shared header: tree name ▸ page breadcrumb, back button, one consistent
-      People / Tree / Map nav, members/settings icon. Pages `content_for :header` actions
-      instead of each building its own button row.
-- [ ] Icon buttons with screen-reader labels; wrapping toolbars; tree toolbar collapses on
-      phones. Real mobile layout (today there are no responsive media queries).
-- [ ] Flash as a self-removing toast (campfire `element-removal`).
-- [ ] `page_title` helper: "Person · Tree · Heartwood".
+- [x] Grid `layout.css` with `#header`/`#toolbar`/`#main`; full-bleed tree/map via
+      `content_for :body_class` (`full_bleed` helper) → `body.full-bleed`, not `:has()`.
+      `--maxw`/`--radius` are now `--main-width`/`--border-radius`.
+- [x] Shared header: 🌳 tree name (a switcher when there are several) ▸ page as breadcrumbs,
+      back button (`back_link`), People / Tree / Map in `#toolbar`, members and sign-out icons.
+      Pages pass actions through `content_for :header`. No settings icon yet — there is no
+      settings screen until the tree can be renamed (Phase 3).
+- [x] Icon buttons (`icon_link_to`/`icon_button_to`) with screen-reader labels; the header wraps;
+      the tree toolbar collapses into `<details>` on phones (`collapse-on-mobile`).
+- [x] Flash as a self-removing toast (`element-removal`, adapted from campfire; keeps the text).
+- [x] `page_title` helper: "Person · Tree · Heartwood" (also feeds the header breadcrumb).
+- [x] Branded, bilingual `public/404.html`.
+- [ ] Still open: spacing on the remaining screens moves to `--block-space`/`--inline-space` as
+      each is redesigned in Phases 3–4.
 
 ## Phase 3 — New-user journey
 Reference: campfire `users/new` via join code, `first_runs`; writebook blank slate.
