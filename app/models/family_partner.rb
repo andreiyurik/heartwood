@@ -1,4 +1,6 @@
 class FamilyPartner < ApplicationRecord
+  include LiveUpdates
+
   belongs_to :family
   belongs_to :person
   belongs_to :tree

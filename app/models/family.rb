@@ -1,5 +1,5 @@
 class Family < ApplicationRecord
-  include BelongsToTree
+  include BelongsToTree, LiveUpdates
 
   has_many :partner_memberships, class_name: "FamilyPartner", dependent: :destroy
   has_many :partners, through: :partner_memberships, source: :person

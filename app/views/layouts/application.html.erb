@@ -8,7 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
 
     <%# SPA-like page refreshes: morph the DOM in place and preserve scroll (see docs/architecture/rails8-features.md) %>
-    <meta name="turbo-refresh-method" content="morph">
+    <meta name="turbo-refresh-method" content="<%= content_for(:refresh_method).presence || "morph" %>">
     <meta name="turbo-refresh-scroll" content="preserve">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
