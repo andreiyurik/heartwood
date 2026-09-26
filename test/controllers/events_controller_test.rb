@@ -60,6 +60,19 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-stream[action=replace][target=events]"
   end
 
+  test "a viewer sees no event or citation controls on the person page" do
+    viewer = User.create!(name: "Viewer", email_address: "viewer@example.com", password: "password")
+    TreeMembership.create!(user: viewer, tree: @tree, role: "viewer")
+    event = @person.events.create!(kind: "BIRT", date_raw: "1815")
+    sign_out
+    sign_in_as viewer
+
+    get person_url(@person)
+    assert_select "a[href=?]", edit_person_event_path(@person, event), count: 0
+    assert_select "form[action=?]", person_event_path(@person, event), count: 0
+    assert_select "a[href=?]", new_person_event_citation_path(@person, event), count: 0
+  end
+
   test "a viewer cannot add, edit, or remove events" do
     viewer = User.create!(name: "Viewer", email_address: "viewer@example.com", password: "password")
     TreeMembership.create!(user: viewer, tree: @tree, role: "viewer")
