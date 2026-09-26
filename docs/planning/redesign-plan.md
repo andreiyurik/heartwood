@@ -105,9 +105,12 @@ Reference: campfire/writebook `app/models`, `app/controllers/concerns`, `config/
       candidates from `Person#relative_candidates`), `resource :locale` via PATCH.
 - [ ] `app/services/gedcom` → `app/models/gedcom`; `DuplicateFinder` → `tree.scan_for_duplicates`;
       jobs become one-liners calling model methods.
-- [ ] `enum :role` on `TreeMembership`; `belongs_to :tree, default: -> { Current.tree }`.
-- [ ] Controllers thin: `Event#cite`, `Person#relative_candidates`, `params.expect` everywhere;
-      authorization answers `403`.
+- [x] `enum :role` on `TreeMembership` (`validate: true`, so a bad role is an error, not an
+      exception); `belongs_to :tree, default: -> { Current.tree }` in `BelongsToTree` (Event takes its
+      tree from its eventable instead; `Person` methods use their own tree, not `Current`).
+- [x] Controllers thin: `Event#cite`, `Person#relative_candidates`, `params.expect` in the
+      resource controllers (sessions/passwords keep `permit` on top-level scalars); authorization
+      answers `403` with an empty body — the UI hides what a role can't do.
 - [ ] Live collaboration: `broadcasts_refreshes` + morphing, so relatives see each other's
       edits; drop most hand-written `*.turbo_stream.erb`.
 - [ ] Stimulus: `#private` members, shared `timing_helpers.js` debounce, generic

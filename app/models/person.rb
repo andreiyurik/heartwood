@@ -305,7 +305,7 @@ class Person < ApplicationRecord
 
   def resolve_person(relative)
     return relative if relative.is_a?(Person)
-    Person.create!(relative.merge(tree: Current.tree))
+    Person.create!(relative.merge(tree: tree))
   end
 
   # Only reached for visible people, so a living person's photo never leaks.
@@ -340,18 +340,18 @@ class Person < ApplicationRecord
   end
 
   def add_parent(relative)
-    family = families_as_child.first || Family.create!(tree: Current.tree).tap { |f| f.children << self }
+    family = families_as_child.first || Family.create!(tree: tree).tap { |f| f.children << self }
     resolve_person(relative).tap { |parent| family.partners << parent }
   end
 
   def add_child(relative)
-    family = families_as_partner.first || Family.create!(tree: Current.tree).tap { |f| f.partners << self }
+    family = families_as_partner.first || Family.create!(tree: tree).tap { |f| f.partners << self }
     resolve_person(relative).tap { |child| family.children << child }
   end
 
   def add_partner(relative)
     resolve_person(relative).tap do |partner|
-      Family.create!(tree: Current.tree).partners << [ self, partner ]
+      Family.create!(tree: tree).partners << [ self, partner ]
     end
   end
 

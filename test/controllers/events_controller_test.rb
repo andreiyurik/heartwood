@@ -83,11 +83,11 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference "@person.events.count" do
       post person_events_url(@person), params: { event: { kind: "BIRT", date_raw: "1815" } }
     end
-    assert_redirected_to root_url
+    assert_response :forbidden
 
     event = @person.events.create!(kind: "BIRT", date_raw: "1815")
     patch person_event_url(@person, event), params: { event: { date_raw: "1900" } }
-    assert_redirected_to root_url
+    assert_response :forbidden
     assert_equal "1815", event.reload.date_raw
 
     assert_no_difference "Event.count" do

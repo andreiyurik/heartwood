@@ -92,14 +92,14 @@ class CitationsControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference "Citation.count" do
       post person_event_citations_url(@person, @event), params: { source: { title: "Parish register" } }
     end
-    assert_redirected_to root_url
+    assert_response :forbidden
 
     source   = Source.create!(title: "Vital record", tree: @tree)
     citation = Citation.create!(source: source, citable: @event)
     assert_no_difference "Citation.count" do
       delete person_event_citation_url(@person, @event, citation)
     end
-    assert_redirected_to root_url
+    assert_response :forbidden
   end
 
   test "the citation form asks for source, page and confidence first" do

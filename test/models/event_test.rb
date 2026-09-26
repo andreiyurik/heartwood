@@ -75,4 +75,38 @@ class EventTest < ActiveSupport::TestCase
     assert_equal "10 DEC 1815", Event.new(kind: "BIRT", date_raw: "10 DEC 1815").summary
     assert_equal "Engineer", Event.new(kind: "OCCU", value: "Engineer").summary
   end
+
+  test "an event takes its tree from what it belongs to, not from Current" do
+    Current.tree = trees(:beta)
+    assert_equal trees(:bach), @person.events.create!(kind: "OCCU").tree
+  ensure
+    Current.reset
+  end
+
+  test "cite finds or creates the source and cites it" do
+    event = events(:sebastian_death)
+
+    assert_difference [ "Source.count", "Citation.count" ], 1 do
+      event.cite({ title: "Leipzig burial register", author: "", repository: "Stadtarchiv" }, { page: "p. 4" })
+    end
+
+    citation = event.citations.sole
+    assert_equal "Leipzig burial register", citation.source.title
+    assert_equal "Stadtarchiv", citation.source.repository
+    assert_nil citation.source.author
+    assert_equal "p. 4", citation.page
+  end
+
+  test "cite reuses a source with the same title" do
+    event = events(:sebastian_death)
+
+    assert_no_difference "Source.count" do
+      event.cite({ title: " #{sources(:eisenach_baptisms).title} " })
+    end
+    assert_equal sources(:eisenach_baptisms), event.citations.sole.source
+  end
+
+  test "cite raises when the source has no title" do
+    assert_raises(ActiveRecord::RecordInvalid) { events(:sebastian_death).cite({ title: "" }) }
+  end
 end
