@@ -329,6 +329,7 @@ en:
   registrations:
     title: Create your Heartwood
     lede: Start your family tree — it's free and yours to keep.
+    tree_name_placeholder: "Name your family tree (e.g. Pushkin family)"
     name_placeholder: Your name
     password_placeholder: Choose a password
     password_hint: At least 8 characters.

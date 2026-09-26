@@ -5,6 +5,35 @@
     <h1><%= t("joins.heading", tree: @tree.name) %></h1>
     <p class="auth-lede"><%= t("joins.lede") %></p>
 
-    <%= button_to t("joins.submit"), join_path(@tree.join_code), class: "btn btn--reversed" %>
+    <% if Current.user %>
+      <%= button_to t("joins.submit"), join_path(@tree.join_code), class: "btn btn--reversed" %>
+    <% else %>
+      <%= render "shared/errors", record: @user if @user.errors.any? %>
+
+      <%= form_with model: @user, url: join_path(@tree.join_code), class: "auth-form" do |form| %>
+        <label class="input--actor">
+          <%= form.text_field :name, class: "input", required: true, autofocus: true, autocomplete: "name",
+                placeholder: t("registrations.name_placeholder") %>
+          <%= icon_tag "person" %>
+        </label>
+        <label class="input--actor">
+          <%= form.email_field :email_address, class: "input", required: true, autocomplete: "username",
+                placeholder: t("auth.email_placeholder") %>
+          <%= icon_tag "email" %>
+        </label>
+        <label class="input--actor">
+          <%= form.password_field :password, class: "input", required: true, autocomplete: "new-password",
+                minlength: 8, maxlength: 72, placeholder: t("registrations.password_placeholder") %>
+          <%= icon_tag "password" %>
+        </label>
+        <p class="auth-hint"><%= t("registrations.password_hint") %></p>
+        <%= form.submit t("joins.submit"), class: "btn btn--reversed" %>
+      <% end %>
+
+      <p class="auth-alt">
+        <%= t("registrations.have_account") %>
+        <%= link_to t("auth.sign_in_submit"), new_session_path %>
+      </p>
+    <% end %>
   </div>
 </div>

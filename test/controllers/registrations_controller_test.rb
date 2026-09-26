@@ -10,9 +10,28 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_select "input[name='user[name]']"
     assert_select "input[name='user[email_address]']"
     assert_select "input[name='user[password]']"
+    assert_select "input[name=tree_name]"
   end
 
-  test "create registers a user, signs them in, and bootstraps their owner tree" do
+  test "create makes the user and their named tree in one request" do
+    assert_difference [ "User.count", "Tree.count" ], 1 do
+      post registration_path, params: { tree_name: "Lovelace family", user: {
+        name: "Ada Lovelace", email_address: "ada@example.com", password: "secret123" } }
+    end
+
+    tree = User.find_by!(email_address: "ada@example.com").trees.sole
+    assert_equal "Lovelace family", tree.name
+    assert TreeMembership.find_by!(tree: tree).owner?
+  end
+
+  test "create names the tree by default when none is given" do
+    post registration_path, params: { user: {
+      name: "Ada Lovelace", email_address: "ada@example.com", password: "secret123" } }
+
+    assert_equal I18n.t("trees.default_name"), User.find_by!(email_address: "ada@example.com").trees.sole.name
+  end
+
+  test "create registers a user, signs them in, and owns a tree" do
     assert_difference "User.count", 1 do
       post registration_path, params: { user: {
         name: "Ada Lovelace", email_address: "ada@example.com", password: "secret123" } }
@@ -24,9 +43,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     user = User.find_by(email_address: "ada@example.com")
     assert_equal "Ada Lovelace", user.name
 
-    follow_redirect!  # first authenticated request bootstraps the tree
-    assert_response :success
-    assert user.reload.trees.exists?, "a tree should be bootstrapped for the new owner"
+    assert user.trees.exists?
   end
 
   test "create sends a welcome email" do
@@ -37,7 +54,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "create with invalid params re-renders the form (422) and creates nothing" do
-    assert_no_difference "User.count" do
+    assert_no_difference [ "User.count", "Tree.count" ] do
       post registration_path, params: { user: {
         name: "", email_address: "not-an-email", password: "short" } }
     end

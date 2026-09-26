@@ -13,14 +13,13 @@ class RegistrationsController < ApplicationController
   end
 
   def create
-    @user = User.new(registration_params)
-    if @user.save
-      start_new_session_for @user
-      RegistrationMailer.with(locale: I18n.locale).welcome(@user).deliver_later
-      redirect_to after_authentication_url, notice: t("registrations.flash.welcome", name: @user.name)
-    else
-      render :new, status: :unprocessable_entity
-    end
+    user = User.sign_up!(registration_params, tree_name: params[:tree_name])
+    start_new_session_for user
+    RegistrationMailer.with(locale: I18n.locale).welcome(user).deliver_later
+    redirect_to after_authentication_url, notice: t("registrations.flash.welcome", name: user.name)
+  rescue ActiveRecord::RecordInvalid => error
+    @user = error.record
+    render :new, status: :unprocessable_entity
   end
 
   private
