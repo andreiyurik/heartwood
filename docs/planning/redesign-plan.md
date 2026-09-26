@@ -113,8 +113,12 @@ Reference: campfire/writebook `app/models`, `app/controllers/concerns`, `config/
 - [x] Controllers thin: `Event#cite`, `Person#relative_candidates`, `params.expect` in the
       resource controllers (sessions/passwords keep `permit` on top-level scalars); authorization
       answers `403` with an empty body — the UI hides what a role can't do.
-- [ ] Live collaboration: `broadcasts_refreshes` + morphing, so relatives see each other's
-      edits; drop most hand-written `*.turbo_stream.erb`.
+- [x] Live collaboration: `LiveUpdates` (`broadcasts_refreshes_to :tree`) on Person, Event, Family,
+      FamilyPartner, FamilyChild, Source, Citation; open list/profile/tree/map pages subscribe with
+      `live_updates` and refresh. Profile and list morph; tree and map *replace* (their canvas is laid
+      out by JavaScript). Forms never subscribe. `preserve-form` keeps an open inline form through a
+      refresh. All hand-written `*.turbo_stream.erb` are gone: changes redirect with 303 and Turbo
+      morphs the page. A GEDCOM import refreshes once, not per record.
 - [ ] Stimulus: `#private` members, shared `timing_helpers.js` debounce, generic
       `auto_submit`/`autocomplete`/`toggle_class`; delete `hello_controller.js`.
 

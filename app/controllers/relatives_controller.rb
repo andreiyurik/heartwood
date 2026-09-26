@@ -15,16 +15,8 @@ class RelativesController < ApplicationController
   end
 
   def create
-    @relative = @person.public_send(RELATION_METHODS.fetch(@relation), relative_source)
-    # From the tree's panel, land back on the tree page; url_from rejects foreign hosts.
-    if (return_url = url_from(params[:return_to]))
-      redirect_to return_url, notice: t("family.flash.#{@relation}_added")
-    else
-      respond_to do |format|
-        format.turbo_stream
-        format.html { redirect_to @person, notice: t("family.flash.#{@relation}_added") }
-      end
-    end
+    @person.public_send(RELATION_METHODS.fetch(@relation), relative_source)
+    redirect_to url_from(params[:return_to]) || @person, status: :see_other, notice: t("family.flash.#{@relation}_added")
   end
 
   private

@@ -53,11 +53,29 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_select "select[name=?]", "event[kind]"
   end
 
-  test "create via turbo_stream replaces the events box" do
-    post person_events_url(@person),
-      params: { event: { kind: "BIRT", date_raw: "1815" } }, as: :turbo_stream
-    assert_response :success
-    assert_select "turbo-stream[action=replace][target=events]"
+  test "changes answer with a see-other redirect, so Turbo morphs the page" do
+    post person_events_url(@person), params: { event: { kind: "BIRT", date_raw: "1815" } }
+    assert_response :see_other
+
+    event = @person.events.find_by!(kind: "BIRT")
+    patch person_event_url(@person, event), params: { event: { date_raw: "1816" } }
+    assert_response :see_other
+
+    delete person_event_url(@person, event)
+    assert_response :see_other
+  end
+
+  test "the event forms and the delete button submit to the whole page" do
+    get new_person_event_url(@person)
+    assert_select "form[data-turbo-frame=_top]"
+
+    event = events(:sebastian_birth)
+    get edit_person_event_url(people(:johann_sebastian), event)
+    assert_select "form[data-turbo-frame=_top]"
+
+    occupation = @person.events.create!(kind: "OCCU")
+    get person_url(@person)
+    assert_select "form[action=?][data-turbo-frame=_top]", person_event_path(@person, occupation)
   end
 
   test "a viewer sees no event or citation controls on the person page" do
