@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resource :session
   resource :registration, only: %i[new create]
   resource :export, only: :create
+  resource :settings, only: %i[show update]
   resources :passwords, param: :token
 
   # Collaboration: joining a tree via invite link, switching which tree is

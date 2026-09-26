@@ -3,12 +3,19 @@ ru:
     sign_out: Выйти
     members: Участники
     skip_to_content: Перейти к содержимому
+    settings: Настройки
     back: Назад
     sections: Разделы
     breadcrumbs: Вы здесь
     people: Люди
     tree: Дерево
     map: Карта
+
+  settings:
+    title: Настройки
+    tree_name: Название дерева
+    flash:
+      saved: Сохранено.
 
   active_tree:
     flash:
