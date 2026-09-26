@@ -1,10 +1,35 @@
-.site-header {
+#header {
   align-items: center;
   background-color: var(--color-surface);
   border-block-end: 1px solid var(--color-border-dark);
+  column-gap: var(--inline-space-double);
   display: flex;
-  justify-content: space-between;
-  padding: 0.75rem 1.25rem;
+  flex-wrap: wrap;
+  padding: var(--block-space-half) var(--inline-space-double);
+  row-gap: var(--block-space-half);
+}
+
+.breadcrumbs {
+  align-items: center;
+  display: flex;
+  flex: 1 1 14rem;
+  gap: var(--inline-space);
+  min-inline-size: 0;
+
+  h1 {
+    font-size: 1.15rem;
+    line-height: 1.25;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .brand,
+  .tree-name,
+  .tree-switcher summary {
+    color: var(--color-muted);
+    font-weight: 600;
+    white-space: nowrap;
+  }
 
   .brand {
     color: var(--color-text);
@@ -13,10 +38,63 @@
   }
 }
 
-.site-header__right {
+.breadcrumbs__separator {
+  color: var(--color-muted);
+}
+
+.header-actions,
+.header-account {
   align-items: center;
   display: flex;
-  gap: 0.75rem;
+  flex-wrap: wrap;
+  gap: var(--inline-space);
+}
+
+.header-account {
+  margin-inline-start: auto;
+}
+
+@media (max-width: 40rem) {
+  .tree-name span {
+    display: none;
+  }
+
+  .header-account {
+    order: 2;
+  }
+
+  .header-actions {
+    flex-basis: 100%;
+    order: 3;
+  }
+}
+
+.sections {
+  background-color: var(--color-surface);
+  border-block-end: 1px solid var(--color-border-dark);
+  display: flex;
+  gap: var(--inline-space);
+  grid-area: toolbar;
+  padding-inline: var(--inline-space-double);
+
+  a {
+    border-block-end: 2px solid transparent;
+    color: var(--color-muted);
+    font-weight: 500;
+    margin-block-end: -1px;
+    padding: var(--block-space-half) var(--inline-space-double);
+
+    &:hover {
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    &[aria-current=page] {
+      border-block-end-color: var(--color-selected-dark);
+      color: var(--color-link);
+      font-weight: 600;
+    }
+  }
 }
 
 .locale-switcher {
@@ -64,7 +142,7 @@
 .tree-switcher__menu {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border-dark);
-  border-radius: var(--radius);
+  border-radius: var(--border-radius);
   box-shadow: 0 6px 18px oklch(var(--lch-always-black) / 0.08);
   display: flex;
   flex-direction: column;

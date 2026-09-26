@@ -1,11 +1,9 @@
-<% content_for :title, t("hints.title") %>
+<% page_title t("hints.title") %>
+<% back_link root_path %>
 
-<div class="page-head">
-  <h1><%= t("hints.title") %></h1>
-  <div class="page-head-actions">
-    <%= button_to t("hints.scan"), scan_hints_path, method: :post, class: "btn" %>
-  </div>
-</div>
+<% content_for :header do %>
+  <%= button_to t("hints.scan"), scan_hints_path, method: :post, class: "btn" %>
+<% end %>
 
 <p class="muted hints-lede"><%= t("hints.lede") %></p>
 

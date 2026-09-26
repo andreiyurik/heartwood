@@ -1,27 +1,24 @@
-<% content_for :title, @person.display_name %>
+<% page_title @person.display_name %>
+<% back_link people_path %>
+
+<% content_for :header do %>
+  <%= link_to t("people.tree"), person_tree_path(@person), class: "btn" %>
+  <% if can_edit? %>
+    <%= icon_link_to "pencil", t("people.edit_button"), edit_person_path(@person), class: "btn--reversed" %>
+  <% end %>
+<% end %>
 
 <article class="person">
-  <header class="page-head">
-    <div class="profile-identity">
-      <% if @person.avatar.attached? %>
-        <%= image_tag @person.avatar, class: "avatar avatar--large", alt: @person.display_name %>
-      <% else %>
-        <div class="avatar avatar--large avatar--initials" aria-hidden="true">
-          <%= @person.display_name.split.map(&:first).first(2).join.upcase %>
-        </div>
-      <% end %>
-      <h1><%= @person.display_name %></h1>
-    </div>
-    <div class="actions">
-      <%= link_to t("people.tree"), person_tree_path(@person), class: "btn" %>
-      <% if can_edit? %>
-        <%= link_to edit_person_path(@person), class: "btn btn--reversed" do %>
-          <%= icon_tag "pencil" %> <%= t("people.edit_button") %>
-        <% end %>
-      <% end %>
-      <%= link_to t("nav.all_people"), people_path, class: "btn btn--plain" %>
-    </div>
-  </header>
+  <div class="profile-identity">
+    <% if @person.avatar.attached? %>
+      <%= image_tag @person.avatar, class: "avatar avatar--large", alt: @person.display_name %>
+    <% else %>
+      <div class="avatar avatar--large avatar--initials" aria-hidden="true">
+        <%= @person.display_name.split.map(&:first).first(2).join.upcase %>
+      </div>
+    <% end %>
+    <p><%= @person.life_years %></p>
+  </div>
 
   <nav class="profile-tabs" aria-label="<%= t("people.tabs_label") %>">
     <% PeopleController::TABS.each do |tab| %>

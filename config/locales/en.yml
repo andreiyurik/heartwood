@@ -1,9 +1,14 @@
 en:
   nav:
     sign_out: Sign out
-    all_people: All people
     members: Members
     skip_to_content: Skip to main content
+    back: Back
+    sections: Sections
+    breadcrumbs: You are here
+    people: People
+    tree: Tree
+    map: Map
 
   active_tree:
     flash:
@@ -186,8 +191,6 @@ en:
     no_match: We couldn't find that place. You can still save the name, or drag the pin after a closer search.
 
   maps:
-    tree_title: Family map
-    tree_link: Map view
     person_note: Places with coordinates appear here; events without a located place aren't shown.
     unavailable: The map library couldn't be loaded. Check your connection and refresh.
 
@@ -287,7 +290,7 @@ en:
     create: Export GEDCOM
 
   trees:
-    title: "%{name} — Family Tree"
+    options: Tree options
     ancestors: Ancestors
     descendants: Descendants
     hint: "Scroll to zoom · drag to pan · click a person for details · arrow keys to navigate"
@@ -295,8 +298,6 @@ en:
     close_panel: Close panel
     depth_label: Generations
     default_name: My Tree
-    clan_link: Family tree
-    clan_title: "Family tree — %{name}"
     clan_empty: This tree has no people yet.
     search_placeholder: Find a person…
     expand: Expand branch

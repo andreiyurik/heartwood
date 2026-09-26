@@ -1,13 +1,7 @@
-<% content_for :title, t("trees.clan_title", name: Current.tree.name) %>
+<% page_title t("nav.tree") %>
+<% full_bleed %>
 
 <div class="tree-page">
-  <header class="page-head">
-    <h1><%= t("trees.clan_title", name: Current.tree.name) %></h1>
-    <div class="actions">
-      <%= link_to t("maps.tree_link"), tree_map_path, class: "btn" %>
-      <%= link_to t("people.title"), root_path, class: "btn btn--plain" %>
-    </div>
-  </header>
 
   <% if @root %>
     <p class="tree-hint"><%= t("trees.hint") %></p>

@@ -1,36 +1,35 @@
-/* An explicit width, not auto: an auto-width flex item with auto margins shrinks to fit */
-main {
-  flex: 1;
-  inline-size: 100%;
-  margin: 2rem auto;
-  max-inline-size: var(--maxw);
-  min-block-size: 0;
-  padding: 0 1.25rem;
+body {
+  display: grid;
+  grid-template-areas:
+    "header"
+    "toolbar"
+    "main";
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto 1fr;
 }
 
-main:has(.tree-page, .map-page) {
+#header {
+  grid-area: header;
+}
+
+#main {
+  grid-area: main;
+  inline-size: min(var(--main-width), 100%);
+  margin-inline: auto;
+  min-block-size: 0;
+  padding: var(--block-space-double) var(--inline-space-double);
+}
+
+.full-bleed #main {
   display: flex;
   flex-direction: column;
-  margin: 2rem 0;
-  max-inline-size: none;
-  min-block-size: 0;
+  inline-size: 100%;
+  padding: 0;
 }
 
-.page-head {
-  align-items: center;
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
-  margin-block-end: 1.25rem;
-
-  h1 {
-    font-size: 1.6rem;
-    margin: 0;
+@media print {
+  #header,
+  #toolbar {
+    display: none;
   }
-}
-
-.page-head-actions {
-  align-items: center;
-  display: flex;
-  gap: 0.5rem;
 }

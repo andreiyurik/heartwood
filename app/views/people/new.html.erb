@@ -1,4 +1,4 @@
-<% content_for :title, t("people.add") %>
+<% page_title t("people.add") %>
+<% back_link people_path %>
 
-<div class="page-head"><h1><%= t("people.add") %></h1></div>
 <%= render "form", person: @person %>
