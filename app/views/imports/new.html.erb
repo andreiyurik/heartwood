@@ -1,0 +1,17 @@
+<% page_title t("imports.title") %>
+<% back_link root_path %>
+
+<%= form_with model: @import, url: import_path, class: "form" do |form| %>
+  <%= render "shared/errors", record: @import if @import.errors.any? %>
+
+  <p><%= t("imports.lede") %></p>
+
+  <div class="field">
+    <%= form.label :file, t("imports.file") %>
+    <%= form.file_field :file, accept: ".ged,text/plain", required: true, class: "input" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit t("imports.submit"), class: "btn btn--reversed" %>
+  </div>
+<% end %>
