@@ -36,7 +36,7 @@
 .avatar--gallery {
   --avatar-size: 200px;
 
-  border-radius: var(--radius);
+  border-radius: var(--border-radius);
   font-size: 2.5rem;
 }
 

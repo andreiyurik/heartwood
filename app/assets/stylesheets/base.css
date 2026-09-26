@@ -5,8 +5,8 @@
   --hover-color: var(--color-border-darker);
   --hover-size: 0.15em;
   --hover-filter: brightness(1);
-  --radius: 10px;
-  --maxw: 60rem;
+  --border-radius: 10px;
+  --main-width: 60rem;
 }
 
 html, body {
