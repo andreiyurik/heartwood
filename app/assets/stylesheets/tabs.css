@@ -1,0 +1,29 @@
+/* Profile tabs */
+.profile-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--line);
+  margin: 0 0 1.25rem;
+}
+
+.profile-tab {
+  padding: 0.55rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.1s, border-color 0.1s;
+
+  &:hover { color: var(--ink); text-decoration: none; }
+}
+
+.profile-tab--active {
+  color: var(--accent-ink);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+.tab-panel { min-height: 6rem; }
+.tab-stub { padding: 1.5rem 0; font-style: italic; }

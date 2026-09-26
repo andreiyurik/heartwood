@@ -1,0 +1,45 @@
+.profile-identity { display: flex; align-items: center; gap: 1rem; }
+
+/* People list — canonical member-row shape: avatar, name, flexible separator
+   pushing trailing meta to the edge (see once-campfire/writebook member rows). */
+.people-list { list-style: none; padding: 0; margin: 0; }
+.person-row {
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.6rem 0.25rem;
+
+  a { font-weight: 600; font-size: 1.05rem; }
+  .years { color: var(--color-muted); font-size: 0.9rem; white-space: nowrap; }
+}
+.person-row:last-child { border-bottom: none; }
+.person-row .separator {
+  border: none;
+  border-top: 1px dotted var(--color-border-darker);
+  flex: 1;
+  margin: 0;
+}
+.empty { color: var(--muted); }
+
+/* Person show */
+.person { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; }
+.facts { display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1rem; margin: 1rem 0 1.5rem; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; }
+
+.relations { border-top: 1px solid var(--line); padding-top: 1rem; }
+.relations h2 { font-size: 1.2rem; }
+.relation-group { margin-bottom: 1rem;
+  h3 { margin: 0 0 0.25rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+  ul { margin: 0; padding-left: 1.1rem; }
+}
+.add-relative { margin-top: 0.25rem; }
+
+/* Biography (Action Text + Lexxy) */
+.biography-section { border-top: 1px solid var(--line); padding-top: 1rem; margin-top: 1rem; }
+.biography-section h2 { font-size: 1.2rem; }
+.biography.lexxy-content { max-width: 40rem; line-height: 1.6; }
+.field--biography lexxy-editor { display: block; min-height: 8rem; }
+
+.memories-gallery { display: flex; gap: 1rem; flex-wrap: wrap; }

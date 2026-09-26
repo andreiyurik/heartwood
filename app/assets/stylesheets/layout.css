@@ -1,0 +1,36 @@
+/* `width: 100%` matters here, not just cosmetic: `main` is a flex item of `body`
+   (below), and an *auto*-valued cross-size on a flex item with auto side margins
+   shrinks-to-fit its content's own preferred width instead of stretching — for
+   text-heavy pages that happens to look right anyway (paragraphs/nav rows are
+   "wide" enough on their own), but a near-empty page (e.g. the map, before the
+   `:has()` rule below even applies) collapses to a sliver. An explicit width
+   sidesteps the shrink-to-fit path entirely, so this can't silently break again. */
+main { width: 100%; max-width: var(--maxw); margin: 2rem auto; padding: 0 1.25rem; flex: 1; min-height: 0; }
+
+/* The tree/map canvases are graphs and maps, not prose — they benefit from the
+   full viewport width and height instead of the readable-text max-width / fixed
+   vh every other page uses. `main` becomes the flex-filling ancestor only on
+   these pages; `.tree-page`/`.map-page` and their canvas (below) pass that fill
+   down to the canvas itself. */
+main:has(.tree-page, .map-page) {
+  max-width: none;
+  /* Auto side margins make a column-flex item shrink-to-fit instead of stretching
+     (auto margins win over the default stretch alignment) — drop them now that
+     there's no max-width left to center within. */
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+
+  h1 { margin: 0; font-size: 1.6rem; }
+}
+
+.page-head-actions { display: flex; gap: 0.5rem; align-items: center; }

@@ -1,0 +1,38 @@
+/* Place autocomplete on the event form */
+.place-field { position: relative; }
+.place-suggestions { position: relative; }
+.place-suggestions .combobox-options {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  right: 0;
+  margin: 0.2rem 0 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+.event-place { color: var(--muted); font-size: 0.85rem; }
+.place-input-row { display: flex; gap: 0.5rem; align-items: stretch; }
+.place-input-row input[type="text"] { flex: 1; }
+.event-add-actions { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; }
+.place-candidates { display: grid; gap: 0.25rem; margin: 0.5rem 0 0; }
+.place-candidate {
+  display: flex;
+  gap: 0.5rem;
+  align-items: start;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.place-candidate:has(input:checked) { border-color: var(--accent); background: var(--accent-wash); }
+.place-no-match { margin: 0.5rem 0 0; font-size: 0.85rem; }
+.place-map {
+  height: 240px;
+  margin-top: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
