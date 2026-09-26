@@ -1,35 +1,29 @@
-/*
- * Design tokens, canonical-Rails-house-style shape: named OKLCH swatches → abstracted
- * --color-* roles. See docs/references/prior-art.md for the once-campfire/writebook/
- * fizzy source of this pattern.
- *
- * Heartwood keeps ONE brand hue — the sage green — as its link/selected/focus color;
- * everything else (bg, text, borders) is black/white/gray, canonical-style — but warmed
- * a few points off pure neutral (same hue family as --ink/--bg below) so the primitives
- * don't read as stark against the rest of the app. No dark-mode block: only .btn/.input/
- * icons would respond to it while the (still-legacy) page chrome stayed light, which is
- * a worse, half-inverted look than no dark mode at all — revisit once the whole app
- * shares one token system.
- */
 :root {
   /* Named color values */
-  --lch-black: 16% 0.018 55;   /* warm near-black, not pure #000 */
-  --lch-white: 97.98% 0.005 78.3;   /* warm off-white, matches --bg's hue */
+  --lch-black: 16% 0.018 55;
+  --lch-white: 97.98% 0.005 78.3;
+  --lch-paper: 100% 0 0;
   --lch-gray: 96% 0.005 96;
   --lch-gray-dark: 92% 0.005 96;
   --lch-gray-darker: 75% 0.005 96;
-  --lch-green: 61% 0.082 137.63;        /* heartwood — the one accent */
+  --lch-taupe: 60.7% 0.015 53.21;
+  --lch-green: 61% 0.082 137.63;
   --lch-green-dark: 43.58% 0.066 138.12;
   --lch-green-light: 95.76% 0.014 128.63;
   --lch-red: 56.01% 0.131 33.15;
   --lch-red-light: 96.98% 0.009 34.3;
   --lch-orange: 70% 0.2 44;
+  --lch-blue: 67.52% 0.066 229.68;
+  --lch-pink: 65.88% 0.088 343.07;
+  --lch-always-black: 0% 0 0;
+  --lch-always-white: 100% 0 0;
 
   /* Abstractions */
   --color-bg: oklch(var(--lch-white));
+  --color-surface: oklch(var(--lch-paper));
   --color-text: oklch(var(--lch-black));
   --color-text-reversed: oklch(var(--lch-white));
-  --color-muted: oklch(60.7% 0.015 53.21);
+  --color-muted: oklch(var(--lch-taupe));
   --color-link: oklch(var(--lch-green-dark));
   --color-border: oklch(var(--lch-gray));
   --color-border-dark: oklch(var(--lch-gray-dark));
@@ -38,29 +32,10 @@
   --color-selected-dark: oklch(var(--lch-green));
   --color-negative: oklch(var(--lch-red));
   --color-negative-light: oklch(var(--lch-red-light));
+  --color-negative-border: color-mix(in oklch, var(--color-negative) 35%, var(--color-bg));
   --color-positive: oklch(var(--lch-green));
   --color-alert: oklch(var(--lch-orange));
-
-  /*
-   * Legacy aliases for screens not yet migrated to the token system above (tree
-   * canvas, drawer, auth-screen card chrome, relationship calculator, place
-   * autocomplete, maps, hints, sources). Pinned to their original literal values
-   * — NOT derived from the redefinable --lch-* tokens above — so those screens
-   * render byte-identical to before and don't pick up dark mode until they're
-   * migrated on purpose.
-   */
-  --bg: #faf8f5;
-  --surface: #ffffff;
-  --ink: #2c2622;
-  --muted: #8a807a;
-  --line: #e7e1da;
-  --accent: #6b8f5e;
-  --accent-ink: #3f5a36;
-  --accent-wash: #eef3e9;
-  --tree-edge: #b3a695;
-  --danger: #b4533f;
-  --danger-wash: #fbf3f1;
-  --danger-line: #e6c9c2;
-  --radius: 10px;
-  --maxw: 60rem;
+  --color-male: oklch(var(--lch-blue));
+  --color-female: oklch(var(--lch-pink));
+  --color-always-white: oklch(var(--lch-always-white));
 }

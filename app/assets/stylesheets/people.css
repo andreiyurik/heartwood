@@ -20,24 +20,24 @@
   flex: 1;
   margin: 0;
 }
-.empty { color: var(--muted); }
+.empty { color: var(--color-muted); }
 
 /* Person show */
-.person { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.5rem; }
+.person { background: var(--color-surface); border: 1px solid var(--color-border-dark); border-radius: var(--radius); padding: 1.5rem; }
 .facts { display: grid; grid-template-columns: max-content 1fr; gap: 0.35rem 1rem; margin: 1rem 0 1.5rem; }
-.facts dt { color: var(--muted); }
+.facts dt { color: var(--color-muted); }
 .facts dd { margin: 0; }
 
-.relations { border-top: 1px solid var(--line); padding-top: 1rem; }
+.relations { border-top: 1px solid var(--color-border-dark); padding-top: 1rem; }
 .relations h2 { font-size: 1.2rem; }
 .relation-group { margin-bottom: 1rem;
-  h3 { margin: 0 0 0.25rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+  h3 { margin: 0 0 0.25rem; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-muted); }
   ul { margin: 0; padding-left: 1.1rem; }
 }
 .add-relative { margin-top: 0.25rem; }
 
 /* Biography (Action Text + Lexxy) */
-.biography-section { border-top: 1px solid var(--line); padding-top: 1rem; margin-top: 1rem; }
+.biography-section { border-top: 1px solid var(--color-border-dark); padding-top: 1rem; margin-top: 1rem; }
 .biography-section h2 { font-size: 1.2rem; }
 .biography.lexxy-content { max-width: 40rem; line-height: 1.6; }
 .field--biography lexxy-editor { display: block; min-height: 8rem; }

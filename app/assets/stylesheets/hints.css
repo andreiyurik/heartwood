@@ -7,13 +7,13 @@
   align-items: center;
   gap: 0.75rem 1.25rem;
   padding: 0.85rem 1rem;
-  background: var(--surface);
-  border: 1px solid var(--line);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-dark);
   border-radius: var(--radius);
   margin-bottom: 0.6rem;
 }
 .hint-pair { font-weight: 600; }
-.hint-vs { color: var(--muted); font-weight: 400; margin: 0 0.35rem; }
+.hint-vs { color: var(--color-muted); font-weight: 400; margin: 0 0.35rem; }
 .hint-meta { display: flex; align-items: center; gap: 0.6rem; margin-left: auto; }
 .hint-score {
   display: inline-grid;
@@ -21,12 +21,12 @@
   min-width: 2.1rem;
   padding: 0.15rem 0.4rem;
   font-weight: 700;
-  color: var(--accent-ink);
-  background: var(--accent-wash);
+  color: var(--color-link);
+  background: var(--color-selected);
   border-radius: 999px;
 }
 .hint-reasons { list-style: none; display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0; padding: 0; }
-.hint-reasons li { font-size: 0.78rem; color: var(--muted); background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 0.1rem 0.5rem; }
+.hint-reasons li { font-size: 0.78rem; color: var(--color-muted); background: var(--color-bg); border: 1px solid var(--color-border-dark); border-radius: 999px; padding: 0.1rem 0.5rem; }
 .hint-actions { display: flex; align-items: center; gap: 0.5rem; }
 
 /* Nav badge */
@@ -38,7 +38,7 @@
   min-width: 1.25rem;
   padding: 0 0.3rem;
   font-size: 0.75rem;
-  color: #fff;
-  background: var(--danger);
+  color: var(--color-always-white);
+  background: var(--color-negative);
   border-radius: 999px;
 }

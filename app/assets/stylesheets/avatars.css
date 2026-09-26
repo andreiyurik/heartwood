@@ -1,19 +1,10 @@
-/*
- * .avatar — general-purpose person avatar (photo or initials), applied directly
- * to the <img> or the initials <div>, no wrapper. Scoped to people list/show/form
- * only — the tree canvas has its own .node-avatar / .person-panel-avatar systems
- * (application.css) and is intentionally left alone by this pass.
- *
- * Relocated verbatim from application.css (same pixel sizes, same legacy
- * --accent/--radius tokens) — a file move, not a visual change.
- */
 .avatar {
   --avatar-size: 32px;
 
   align-items: center;
-  background: var(--accent);
+  background: var(--color-selected-dark);
   border-radius: 50%;
-  color: #fff;
+  color: var(--color-always-white);
   display: inline-flex;
   flex-shrink: 0;
   font-weight: 700;
