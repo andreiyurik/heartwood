@@ -1,15 +1,21 @@
 .flash {
-  background-color: var(--color-selected);
-  border: 1px solid var(--color-selected-dark);
-  border-radius: var(--radius);
-  color: var(--color-link);
-  margin: 1rem auto 0;
-  max-inline-size: var(--maxw);
-  padding: 0.6rem 1rem;
+  align-items: center;
+  animation: appear-then-fade 5s 300ms both;
+  background-color: var(--color-positive);
+  border-radius: var(--border-radius);
+  box-shadow: 0 6px 18px oklch(var(--lch-always-black) / 0.2);
+  color: var(--color-always-white);
+  display: flex;
+  gap: var(--inline-space);
+  inset-block-start: var(--block-space);
+  inset-inline-start: 50%;
+  max-inline-size: calc(100vw - var(--inline-space-double));
+  padding: var(--block-space-half) var(--inline-space-double);
+  position: fixed;
+  transform: translate(-50%);
+  z-index: 6;
 }
 
 .flash--alert {
-  background-color: var(--color-negative-light);
-  border-color: var(--color-negative);
-  color: var(--color-negative);
+  background-color: var(--color-negative);
 }

@@ -41,14 +41,21 @@
 .person {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border-dark);
-  border-radius: var(--radius);
+  border-radius: var(--border-radius);
   padding: 1.5rem;
 }
 
 .profile-identity {
   align-items: center;
   display: flex;
-  gap: 1rem;
+  gap: var(--inline-space-double);
+  margin-block-end: var(--block-space);
+
+  p {
+    color: var(--color-muted);
+    font-size: 1rem;
+    margin: 0;
+  }
 }
 
 .facts {

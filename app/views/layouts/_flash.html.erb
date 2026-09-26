@@ -1,0 +1,7 @@
+<% if (message = flash[:notice] || flash[:alert]) %>
+  <div class="flash <%= "flash--alert" if flash[:alert] %>" role="<%= flash[:alert] ? "alert" : "status" %>"
+       data-controller="element-removal" data-action="animationend->element-removal#remove">
+    <%= icon_tag flash[:alert] ? "alert" : "check" %>
+    <%= message %>
+  </div>
+<% end %>
