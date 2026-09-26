@@ -26,7 +26,7 @@ Red → Green → Refactor. If you catch yourself writing production code withou
 in front of it, stop and go back to step 2. Minitest only — **no RSpec** (see constraints below).
 
 ```bash
-export PATH=~/.local/share/mise/installs/ruby/4.0.5/bin:$PATH
+export PATH=~/.local/share/mise/installs/ruby/4.0.7/bin:$PATH
 bin/rails test                         # full suite
 bin/rails test test/models/person_test.rb   # one file
 bin/rails test test/models/person_test.rb:42 # one test by line
@@ -121,7 +121,7 @@ Ruby is installed via **mise** but its shims are **not** on PATH in non-interact
 Prepend the bin dir in every command:
 
 ```bash
-export PATH=~/.local/share/mise/installs/ruby/4.0.5/bin:$PATH
+export PATH=~/.local/share/mise/installs/ruby/4.0.7/bin:$PATH
 bin/rails server      # or: bin/rails test, bin/rails console, etc.
 ```
 
