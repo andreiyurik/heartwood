@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import { loadLeaflet, osmTiles, escapeHtml } from "maps"
+import { debounce } from "helpers/timing_helpers"
 
 // Leaflet is imported lazily so a blocked CDN never stops autocomplete and the button from working.
 let groupId = 0
@@ -8,21 +9,23 @@ export default class extends Controller {
   static targets = ["input", "suggestions", "candidates", "map", "lat", "lng"]
   static values = { searchUrl: String, geocodeUrl: String, noMatch: String }
 
+  #group
+  #map
+  #marker
+
+  initialize() {
+    this.search = debounce(() => this.suggest(), 250)
+  }
+
   connect() {
-    this._timer = null
-    this._map = null
-    this._marker = null
-    this._group = `place-candidate-${++groupId}`
+    this.#map = null
+    this.#marker = null
+    this.#group = `place-candidate-${++groupId}`
   }
 
   disconnect() {
-    clearTimeout(this._timer)
-    this._map?.remove()
-  }
-
-  search() {
-    clearTimeout(this._timer)
-    this._timer = setTimeout(() => this.suggest(), 250)
+    this.search.cancel()
+    this.#map?.remove()
   }
 
   async suggest() {
@@ -48,7 +51,7 @@ export default class extends Controller {
     const query = this.inputTarget.value.trim()
     if (!query) return
 
-    clearTimeout(this._timer)
+    this.search.cancel()
     this.suggestionsTarget.innerHTML = ""
     this.candidatesTarget.innerHTML = ""
 
@@ -75,7 +78,7 @@ export default class extends Controller {
     this.candidatesTarget.innerHTML = candidates
       .map((c, i) => `
         <label class="place-candidate">
-          <input type="radio" name="${this._group}" value="${i}" ${i === 0 ? "checked" : ""}>
+          <input type="radio" name="${this.#group}" value="${i}" ${i === 0 ? "checked" : ""}>
           <span>${escapeHtml(c.display_name)}</span>
         </label>`)
       .join("")
@@ -96,21 +99,21 @@ export default class extends Controller {
 
     this.mapTarget.hidden = false
 
-    if (!this._map) {
-      this._map = L.map(this.mapTarget).setView([lat, lng], 11)
-      osmTiles(L, this._map)
+    if (!this.#map) {
+      this.#map = L.map(this.mapTarget).setView([lat, lng], 11)
+      osmTiles(L, this.#map)
 
-      this._marker = L.marker([lat, lng], { draggable: true }).addTo(this._map)
-      this._marker.on("dragend", () => {
-        const point = this._marker.getLatLng()
+      this.#marker = L.marker([lat, lng], { draggable: true }).addTo(this.#map)
+      this.#marker.on("dragend", () => {
+        const point = this.#marker.getLatLng()
         this.setCoords(point.lat, point.lng)
       })
       // The container was hidden until now; Leaflet must recompute its size.
-      setTimeout(() => this._map.invalidateSize(), 0)
+      setTimeout(() => this.#map.invalidateSize(), 0)
     } else {
-      this._map.setView([lat, lng], 11)
-      this._marker.setLatLng([lat, lng])
-      this._map.invalidateSize()
+      this.#map.setView([lat, lng], 11)
+      this.#marker.setLatLng([lat, lng])
+      this.#map.invalidateSize()
     }
   }
 
