@@ -39,6 +39,12 @@ module ApplicationHelper
     Current.tree.people.none?
   end
 
+  # Pages whose canvas JavaScript lays out must replace, not morph, on a refresh.
+  def live_updates(refresh: "morph")
+    content_for :refresh_method, refresh
+    turbo_stream_from Current.tree
+  end
+
   def full_bleed
     content_for :body_class, "full-bleed"
   end

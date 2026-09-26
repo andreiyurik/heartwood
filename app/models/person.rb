@@ -1,5 +1,5 @@
 class Person < ApplicationRecord
-  include BelongsToTree, Avatar, Kin, Living, Relatives, Searchable
+  include BelongsToTree, LiveUpdates, Avatar, Kin, Living, Relatives, Searchable
 
   SEXES = %w[M F U X].freeze
 

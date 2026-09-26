@@ -14,7 +14,8 @@ class Import < ApplicationRecord
     records = Gedcom::Parser.new(file.download).parse
     return failed_with("no_records") if records[:records].none?
 
-    result = Gedcom::Mapper.new(records[:records], tree: tree).import!
+    result = LiveUpdates.suppressing { Gedcom::Mapper.new(records[:records], tree: tree).import! }
+    broadcast_refresh_later_to tree
     update!(status: "completed", people_count: result[:people].size, families_count: result[:families].size,
             warnings: records[:warnings] + result[:warnings])
   rescue ActiveRecord::RecordInvalid => error

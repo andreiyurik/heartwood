@@ -23,7 +23,7 @@ class PlaceGeocodeJobTest < ActiveJob::TestCase
 
   test "coordinates picked on the map skip background geocoding" do
     person = Person.create!(given_names: "P", sex: "U", tree: Current.tree)
-    assert_no_enqueued_jobs do
+    assert_no_enqueued_jobs only: PlaceGeocodeJob do
       person.events.create!(kind: "BIRT", place_name: "Boston",
                             place_latitude: "42.36", place_longitude: "-71.05")
     end
