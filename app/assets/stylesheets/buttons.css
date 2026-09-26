@@ -65,3 +65,11 @@
   opacity: 0.5;
   pointer-events: none;
 }
+
+.btn--success {
+  animation: success 1s ease-out;
+
+  .icon {
+    animation: zoom-fade 300ms ease-out;
+  }
+}

@@ -1,0 +1,21 @@
+.invite-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-block-end: 2rem;
+}
+
+.invite-box__actions {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+
+  .input {
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  form {
+    display: contents;
+  }
+}
