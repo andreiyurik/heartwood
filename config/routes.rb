@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  get "/locale/:locale" => "locales#update", as: :set_locale,
-      constraints: { locale: /en|ru/ }
+  resource :locale, only: :update
 
   resource :session
   resource :registration, only: %i[new create]
@@ -17,33 +16,42 @@ Rails.application.routes.draw do
   resources :tree_memberships, only: %i[index update destroy]
   resource  :tree_join_code, only: :create
 
-  get "places/search",  to: "places#search",  as: :search_places
-  get "places/geocode", to: "places#geocode", as: :geocode_places
+  namespace :places do
+    resource :search,  only: :show
+    resource :geocode, only: :show
+  end
 
-  get "tree",       to: "clan_trees#show", as: :clan_tree
+  resource :tree, only: :show, controller: "clan_trees", as: :clan_tree
 
-  get "map",        to: "maps#show",   as: :tree_map
-  get "map/events", to: "maps#events", as: :tree_map_events
+  resource :map, only: :show do
+    scope module: :maps do
+      resources :events, only: :index
+    end
+  end
 
   resources :hints, only: :index do
-    collection { post :scan }
-    member     { patch :dismiss }
+    scope module: :hints do
+      resource :dismissal, only: :create
+    end
+  end
+  namespace :hints do
+    resource :scan, only: :create
+  end
+
+  namespace :autocompletable do
+    resources :people, only: :index
   end
 
   resources :people do
-    resource  :tree,     only: :show
-    resource  :relationship, only: :show do
-      get :search, on: :member
-    end
-    resources :relatives, only: %i[new create] do
-      get :search, on: :collection
-    end
-    resources :events,    only: %i[new create edit update destroy] do
+    resource :tree, only: :show
+    resource :relationship, only: :show
+    resources :relatives, only: %i[new create]
+    resources :events, only: %i[new create edit update destroy] do
       resources :citations, only: %i[new create destroy]
     end
-    member do
-      get :map, to: "maps#person"
-      get :panel
+    scope module: :people do
+      resource :panel, only: :show
+      resource :map,   only: :show
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

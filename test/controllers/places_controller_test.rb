@@ -11,40 +11,40 @@ class PlacesControllerTest < ActionDispatch::IntegrationTest
 
   test "requires authentication" do
     sign_out
-    get search_places_url(q: "Bos")
+    get places_search_url(q: "Bos")
     assert_redirected_to new_session_url
   end
 
   test "search lists matching places in the tree as options" do
     Place.create!(name: "Boston", tree: @tree)
-    get search_places_url(q: "Bos")
+    get places_search_url(q: "Bos")
     assert_response :success
     assert_select "button[data-place-name=?]", "Boston"
   end
 
   test "search is scoped to the current tree" do
     Place.create!(name: "Foreignville", tree: trees(:beta))
-    get search_places_url(q: "Foreign")
+    get places_search_url(q: "Foreign")
     assert_response :success
     assert_no_match(/Foreignville/, @response.body)
   end
 
   test "search returns a bare fragment, never the page layout" do
-    get search_places_url(q: "Nowhere")
+    get places_search_url(q: "Nowhere")
     assert_response :success
     assert_no_match(/<html/, @response.body)
     assert_select "header", false
   end
 
   test "geocode responds with a json array (empty for a blank query, no network)" do
-    get geocode_places_url(q: "")
+    get places_geocode_url(q: "")
     assert_response :success
     assert_equal [], JSON.parse(@response.body)
   end
 
   test "geocode requires authentication" do
     sign_out
-    get geocode_places_url(q: "Boston")
+    get places_geocode_url(q: "Boston")
     assert_redirected_to new_session_url
   end
 end

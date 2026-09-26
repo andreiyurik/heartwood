@@ -29,7 +29,7 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
   test "panel renders the compact card inside the person-panel frame" do
     Event.create!(kind: "BIRT", eventable: @person, tree: @tree, date_raw: "1815",
                   date_start: Date.new(1815, 12, 10), place_name: "London")
-    get panel_person_url(@person)
+    get person_panel_url(@person)
     assert_response :success
     assert_select "turbo-frame#person-panel" do
       assert_select ".person-panel-name", text: "Ada Lovelace"

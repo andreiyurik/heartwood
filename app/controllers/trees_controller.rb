@@ -1,5 +1,5 @@
 class TreesController < ApplicationController
-  before_action :find_person
+  include PersonScoped
 
   def show
     @depth  = depth_param
@@ -12,10 +12,6 @@ class TreesController < ApplicationController
   end
 
   private
-
-  def find_person
-    @person = Current.tree.people.find(params[:person_id])
-  end
 
   def depth_param
     [ [ params.fetch(:depth, 4).to_i, 0 ].max, 6 ].min

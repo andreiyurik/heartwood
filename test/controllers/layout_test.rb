@@ -10,7 +10,7 @@ class LayoutTest < ActionDispatch::IntegrationTest
     get people_url
     assert_select "html[lang=en]"
 
-    get set_locale_url(locale: "ru")
+    patch locale_url, params: { locale: "ru" }
     get people_url
     assert_select "html[lang=ru]"
   end
@@ -21,8 +21,13 @@ class LayoutTest < ActionDispatch::IntegrationTest
     assert_select "main#main"
   end
 
+  test "the language switcher submits a PATCH to the locale resource" do
+    get people_url
+    assert_select "nav.locale-switcher form[action=?][method=post] input[name=_method][value=patch]", locale_path, minimum: 2
+  end
+
   test "labels the language switcher in the current locale" do
-    get set_locale_url(locale: "ru")
+    patch locale_url, params: { locale: "ru" }
     get people_url
     assert_select "nav.locale-switcher[aria-label=?]", I18n.t("locale.switcher", locale: :ru)
   end
@@ -52,7 +57,7 @@ class LayoutTest < ActionDispatch::IntegrationTest
       assert_select "a", count: 3
       assert_select "a[aria-current=page]", text: I18n.t("nav.tree")
       assert_select "a[href=?]", root_path, text: I18n.t("nav.people")
-      assert_select "a[href=?]", tree_map_path, text: I18n.t("nav.map")
+      assert_select "a[href=?]", map_path, text: I18n.t("nav.map")
     end
   end
 
@@ -70,7 +75,7 @@ class LayoutTest < ActionDispatch::IntegrationTest
   test "tree and map are full-bleed through a class on the body" do
     get clan_tree_url
     assert_select "body.full-bleed"
-    get tree_map_url
+    get map_url
     assert_select "body.full-bleed"
     get people_url
     assert_select "body.full-bleed", count: 0

@@ -35,13 +35,13 @@ class HintsControllerTest < ActionDispatch::IntegrationTest
 
   test "scan enqueues a duplicate scan" do
     assert_enqueued_with(job: DuplicateScanJob) do
-      post scan_hints_url
+      post hints_scan_url
     end
     assert_redirected_to hints_url
   end
 
   test "dismiss marks the hint and removes its row via turbo stream" do
-    patch dismiss_hint_url(@hint), as: :turbo_stream
+    post hint_dismissal_url(@hint), as: :turbo_stream
     assert_response :success
     assert_equal "dismissed", @hint.reload.status
     assert_select "turbo-stream[action=remove][target=?]", "duplicate_hint_#{@hint.id}"
@@ -53,7 +53,7 @@ class HintsControllerTest < ActionDispatch::IntegrationTest
       person_b: Person.create!(sex: "U", tree: trees(:beta)),
       score: 80, reasons: []
     )
-    patch dismiss_hint_url(other)
+    post hint_dismissal_url(other)
     assert_response :not_found
   end
 
@@ -64,11 +64,11 @@ class HintsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as viewer
     Current.tree = @tree
 
-    patch dismiss_hint_url(@hint)
+    post hint_dismissal_url(@hint)
     assert_redirected_to root_url
     assert_equal "pending", @hint.reload.status
 
-    post scan_hints_url
+    post hints_scan_url
     assert_redirected_to root_url
   end
 end

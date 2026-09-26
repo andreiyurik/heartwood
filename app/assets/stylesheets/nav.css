@@ -105,11 +105,16 @@
   padding: 2px;
 }
 
+.locale-switcher form {
+  display: contents;
+}
+
 .locale-switcher__btn {
   border-radius: 4px;
   color: var(--color-muted);
   font-size: 0.8rem;
   font-weight: 600;
+  cursor: pointer;
   padding: 0.2rem 0.55rem;
   text-decoration: none;
   transition: background 0.1s, color 0.1s;

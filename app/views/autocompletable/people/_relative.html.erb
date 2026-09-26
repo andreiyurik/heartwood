@@ -1,11 +1,10 @@
-<%# Candidate list for the add-relative combobox. Updates the inner frame only. %>
 <%= turbo_frame_tag "relative_candidates" do %>
-  <% if @matches.any? %>
+  <% if matches.any? %>
     <ul class="combobox-options" role="listbox">
-      <% @matches.each do |candidate| %>
+      <% matches.each do |candidate| %>
         <li role="option">
-          <%= button_to person_relatives_path(@person),
-                params: { relation: @relation, existing_person_id: candidate.id,
+          <%= button_to person_relatives_path(person),
+                params: { relation: params[:relation], existing_person_id: candidate.id,
                           return_to: params[:return_to] },
                 class: "combobox-option",
                 form: { data: { turbo_frame: "_top" } } do %>
