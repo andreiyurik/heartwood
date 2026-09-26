@@ -1,0 +1,15 @@
+<% page_title t("settings.title") %>
+<% back_link root_path %>
+
+<%= form_with model: Current.tree, url: settings_path, method: :patch, scope: :tree, class: "form" do |form| %>
+  <%= render "shared/errors", record: Current.tree if Current.tree.errors.any? %>
+
+  <div class="field">
+    <%= form.label :name, t("settings.tree_name") %>
+    <%= form.text_field :name, class: "input", required: true, maxlength: 240 %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit t("forms.save"), class: "btn btn--reversed" %>
+  </div>
+<% end %>

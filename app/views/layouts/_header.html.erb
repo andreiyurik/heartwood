@@ -28,6 +28,9 @@
     <% if Current.tree %>
       <%= turbo_stream_from Current.tree, :hints %>
       <%= render "hints/badge", count: Current.tree.duplicate_hints.pending.count %>
+      <% if Current.membership.owner? %>
+        <%= icon_link_to "settings", t("nav.settings"), settings_path, class: "btn--plain" %>
+      <% end %>
       <%= icon_link_to "people", t("nav.members"), tree_memberships_path, class: "btn--plain" %>
       <%= icon_button_to "logout", t("nav.sign_out"), session_path, method: :delete, class: "btn--plain" %>
     <% end %>
