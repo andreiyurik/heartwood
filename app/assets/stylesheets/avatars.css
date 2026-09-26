@@ -21,12 +21,6 @@
   font-size: 0.65rem;
 }
 
-.avatar--medium {
-  --avatar-size: 72px;
-
-  font-size: 1.2rem;
-}
-
 .avatar--large {
   --avatar-size: 96px;
 
@@ -44,6 +38,27 @@
   letter-spacing: 0.02em;
 }
 
-.avatar-preview {
-  margin: 0.5rem 0;
+.avatar-upload {
+  cursor: pointer;
+  display: inline-grid;
+
+  > * {
+    grid-area: 1 / 1;
+  }
+
+  &:has(input:focus-visible) {
+    outline: 2px solid var(--color-selected-dark);
+    outline-offset: 2px;
+  }
+}
+
+.avatar-upload__badge {
+  --icon-size: 1.4rem;
+
+  align-self: end;
+  background-color: var(--color-surface);
+  border-radius: 50%;
+  justify-self: end;
+  padding: 0.3rem;
+  box-sizing: content-box;
 }

@@ -66,7 +66,8 @@ ru:
     copy_link: Скопировать ссылку
     reset_link: Создать новую ссылку
     reset_confirm: Старая пригласительная ссылка перестанет работать. Продолжить?
-    role_toggle_title: Переключить редактор/читатель
+    role_label: "Роль: %{name}"
+    share: Поделиться ссылкой-приглашением
     remove: Удалить
     remove_confirm: "Удалить %{name} из этого дерева?"
     roles:
@@ -377,6 +378,7 @@ ru:
       welcome: "Добро пожаловать в Heartwood, %{name}! 🌳"
 
   forms:
+    more: Ещё
     cancel: Отмена
     save: Сохранить
     errors:

@@ -11,6 +11,7 @@
         <%= search_field_tag :q, nil,
               class: "input",
               placeholder: t("relationships.search_placeholder"),
+              aria: { label: t("relationships.search_placeholder") },
               autocomplete: "off",
               data: { search_target: "input", action: "input->search#debounce" } %>
       </div>
