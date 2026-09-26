@@ -22,8 +22,7 @@ class JoinsController < ApplicationController
 
   private
     def set_tree
-      @tree = Tree.find_by(join_code: params[:join_code])
-      head :not_found unless @tree
+      @tree = Tree.find_by!(join_code: params[:join_code])
     end
 
     def switch_to(tree)
