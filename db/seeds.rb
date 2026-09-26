@@ -7,7 +7,7 @@
 #  tolstoy@example.ru    / heartwood123  — владелец Рода Толстых
 # ────────────────────────────────────────────────────────────────
 
-return unless Rails.env.local?
+return unless Rails.env.development?
 
 puts "\n=== Seeds: исторические данные ==="
 
