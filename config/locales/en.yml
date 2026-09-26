@@ -3,6 +3,7 @@ en:
     sign_out: Sign out
     all_people: All people
     members: Members
+    skip_to_content: Skip to main content
 
   active_tree:
     flash:
@@ -36,6 +37,7 @@ en:
   locale:
     en: EN
     ru: RU
+    switcher: Language
 
   helpers:
     submit:

@@ -1,0 +1,22 @@
+.for-screen-reader {
+  block-size: 1px;
+  clip-path: inset(50%);
+  inline-size: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
+
+.skip-navigation {
+  --left-offset: -999em;
+
+  inset-block-start: 4rem;
+  inset-inline-start: var(--left-offset);
+  position: absolute;
+  white-space: nowrap;
+  z-index: 11;
+
+  &:focus {
+    --left-offset: 1rem;
+  }
+}

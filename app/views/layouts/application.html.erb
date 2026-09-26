@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>">
   <head>
     <title><%= content_for(:title) || "Heartwood" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -22,20 +22,18 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%# Lexxy editor styles (shipped by the lexxy gem) %>
     <%= stylesheet_link_tag "lexxy", "data-turbo-track": "reload" %>
-    <%# Leaflet map styles (self-hosted, MIT) — only used on the place/map views %>
-    <%= stylesheet_link_tag "leaflet" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
+    <a href="#main-content" class="skip-navigation btn"><%= t("nav.skip_to_content") %></a>
+
     <header class="site-header">
       <a href="<%= root_path %>" class="brand">🌳 Heartwood</a>
       <div class="site-header__right">
-        <nav class="locale-switcher" aria-label="Language">
+        <nav class="locale-switcher" aria-label="<%= t("locale.switcher") %>">
           <% I18n.available_locales.each do |loc| %>
             <%= link_to t("locale.#{loc}"), set_locale_path(loc),
                   class: "locale-switcher__btn #{"locale-switcher__btn--active" if I18n.locale == loc}",
@@ -67,7 +65,7 @@
     <% if notice %><div class="flash" role="status"><%= notice %></div><% end %>
     <% if alert %><div class="flash flash--alert" role="alert"><%= alert %></div><% end %>
 
-    <main>
+    <main id="main-content">
       <%= yield %>
     </main>
   </body>
