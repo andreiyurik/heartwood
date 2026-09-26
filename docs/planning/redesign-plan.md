@@ -60,15 +60,20 @@ Reference: writebook `layout.css` + `content_for :header`; campfire flash toast.
 - [ ] Still open: spacing on the remaining screens moves to `--block-space`/`--inline-space` as
       each is redesigned in Phases 3–4.
 
-## Phase 3 — New-user journey
+## Phase 3 — New-user journey ✅
 Reference: campfire `users/new` via join code, `first_runs`; writebook blank slate.
-- [ ] Invite link → signup form that names the tree; create user + membership in one request.
-- [ ] Empty tree = one focused blank slate: "Add yourself" / "Import GEDCOM" (hide search,
-      filters, map, export until there are people).
-- [ ] **GEDCOM import UI** — parser/mapper exist but have no route/controller/view, while the
-      welcome email promises import. `resource :import` + upload form ([[import-export]]).
-- [ ] Name/rename the tree (today silently "My Tree").
-- [ ] Failed sign-in: shake/invalid state on the auth card.
+- [x] Invite link → signup form showing the tree; user and membership in one request
+      (`User.sign_up!`). Self sign-up asks for the tree name and creates the tree with it.
+- [x] Empty tree = one blank slate: "Add yourself" (prefilled from the account name) /
+      "Import GEDCOM". Search, filters, export and the Tree/Map navigation appear once there are people.
+- [x] **GEDCOM import UI** — `resource :import`, `Import` model (Active Storage file, status,
+      counts, warnings), `ImportJob`, live status through `broadcasts_refreshes`.
+      Failures (no people, plan limit) import nothing.
+- [x] Name/rename the tree: `resource :settings` (owner only), settings icon in the header.
+- [x] Failed sign-in: the card shakes, the fields turn red, the email is kept.
+- Not done: the import has no preview/dry-run step and does not merge with existing people
+  (see [[import-export]]); re-importing a Gramps round trip adds duplicates for the duplicate
+  scan to flag.
 
 ## Phase 4 — Person page, forms, members
 Progressive disclosure: the common fields first, depth one click away.
