@@ -4,30 +4,46 @@ require "test_helper"
 class JoinsControllerTest < ActionDispatch::IntegrationTest
   setup { @tree = trees(:beta) }
 
-  test "unauthenticated visitor is bounced to sign-in and lands back on the join page" do
+  test "a guest sees the tree name and a sign-up form" do
     get join_url(@tree.join_code)
-    assert_redirected_to new_session_url
-
-    user = User.create!(name: "Newcomer", email_address: "newcomer@example.com", password: "password")
-    post session_url, params: { email_address: user.email_address, password: "password" }
-    follow_redirect!
     assert_response :success
-    assert_match(@tree.name, @response.body)
+    assert_select "h1", /#{@tree.name}/
+    assert_select "form[action=?]", join_path(@tree.join_code) do
+      assert_select "input[name='user[name]']"
+      assert_select "input[name='user[email_address]']"
+      assert_select "input[name='user[password]']"
+    end
+    assert_select "a[href=?]", new_session_path
   end
 
-  test "a brand-new visitor can register through the join link and gets added as editor" do
-    get join_url(@tree.join_code)
-    post registration_url, params: {
-      user: { name: "Fresh Signup", email_address: "fresh@example.com", password: "password123" }
-    }
-    follow_redirect!
-    assert_response :success
-
-    post join_path(@tree.join_code)
+  test "a guest signing up through the link gets an account and an editor seat in one request" do
+    assert_difference [ "User.count", "TreeMembership.count" ], 1 do
+      assert_no_difference "Tree.count" do
+        post join_path(@tree.join_code), params: {
+          user: { name: "Fresh Signup", email_address: "fresh@example.com", password: "password123" } }
+      end
+    end
     assert_redirected_to root_url
 
-    user = User.find_by(email_address: "fresh@example.com")
+    user = User.find_by!(email_address: "fresh@example.com")
     assert user.tree_memberships.exists?(tree: @tree, role: "editor")
+
+    follow_redirect!
+    assert_select "#header", /#{@tree.name}/
+  end
+
+  test "a guest with invalid details sees the form again and joins nothing" do
+    assert_no_difference [ "User.count", "TreeMembership.count" ] do
+      post join_path(@tree.join_code), params: { user: { name: "", email_address: "nope", password: "x" } }
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test "a guest who signs in instead lands back on the join page" do
+    get join_url(@tree.join_code)
+    user = User.create!(name: "Newcomer", email_address: "newcomer@example.com", password: "password")
+    post session_url, params: { email_address: user.email_address, password: "password" }
+    assert_redirected_to join_url(@tree.join_code)
   end
 
   test "an existing user with their own tree can sign in and join a second one" do

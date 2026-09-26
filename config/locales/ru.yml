@@ -326,6 +326,7 @@ ru:
   registrations:
     title: Создайте свой Heartwood
     lede: Начните семейное древо — это бесплатно и навсегда ваше.
+    tree_name_placeholder: "Название дерева (например, Род Пушкиных)"
     name_placeholder: Ваше имя
     password_placeholder: Придумайте пароль
     password_hint: Минимум 8 символов.
