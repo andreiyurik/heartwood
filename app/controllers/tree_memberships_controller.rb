@@ -23,6 +23,6 @@ class TreeMembershipsController < ApplicationController
     end
 
     def role_param
-      params.require(:tree_membership)[:role].presence_in(%w[editor viewer]) || "editor"
+      params.expect(tree_membership: :role)[:role].presence_in(%w[editor viewer]) || "editor"
     end
 end

@@ -20,7 +20,7 @@ trees rather than one account per install).
 - **Sharing the link is owner-only.** The link grants an editor seat, so only the owner sees it
   (copy, Web Share, regenerate); editors can't hand out editing rights.
 - **Roles**: owner (created the tree, sole admin) / editor (full read-write) / viewer
-  (read-only), on `TreeMembership#role`. Enforced at the controller level
+  (read-only), on `TreeMembership#role`. Enforced at the controller level (a denied request gets `403`)
   (`TreeAuthorization#require_can_edit`/`#require_owner`) on every mutating action across
   People/Events/Citations/Relatives/Hints, not just hidden in views.
 - **Member management**: `/tree_memberships` — owner-only role toggle and removal, visible

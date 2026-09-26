@@ -143,6 +143,6 @@ class RelativesControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference "Person.count" do
       post person_relatives_url(@person), params: { relation: "parent", person: { given_names: "Mary" } }
     end
-    assert_redirected_to root_url
+    assert_response :forbidden
   end
 end

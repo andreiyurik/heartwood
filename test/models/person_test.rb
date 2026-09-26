@@ -63,4 +63,12 @@ class PersonTest < ActiveSupport::TestCase
     end
     assert Family.exists?(family.id), "the family itself must not be destroyed"
   end
+
+  test "a new person belongs to the current tree unless told otherwise" do
+    Current.tree = trees(:alpha)
+    assert_equal trees(:alpha), Person.create!(sex: "U").tree
+    assert_equal trees(:beta), Person.create!(sex: "U", tree: trees(:beta)).tree
+  ensure
+    Current.reset
+  end
 end

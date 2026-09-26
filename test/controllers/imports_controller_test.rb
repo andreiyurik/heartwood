@@ -73,7 +73,7 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as viewer
 
     get new_import_url
-    assert_redirected_to root_url
+    assert_response :forbidden
     assert_no_difference -> { Import.count } do
       post import_url, params: { import: { file: upload } }
     end

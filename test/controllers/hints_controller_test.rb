@@ -65,10 +65,10 @@ class HintsControllerTest < ActionDispatch::IntegrationTest
     Current.tree = @tree
 
     post hint_dismissal_url(@hint)
-    assert_redirected_to root_url
+    assert_response :forbidden
     assert_equal "pending", @hint.reload.status
 
     post hints_scan_url
-    assert_redirected_to root_url
+    assert_response :forbidden
   end
 end

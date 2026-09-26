@@ -55,7 +55,7 @@ class TreeMembershipsControllerTest < ActionDispatch::IntegrationTest
     post session_url, params: { email_address: @editor_user.email_address, password: "password" }
 
     patch tree_membership_url(@membership), params: { tree_membership: { role: "viewer" } }
-    assert_redirected_to root_url
+    assert_response :forbidden
     assert_equal "editor", @membership.reload.role
 
     assert_no_difference "TreeMembership.count" do

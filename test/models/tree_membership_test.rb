@@ -44,4 +44,16 @@ class TreeMembershipTest < ActiveSupport::TestCase
     assert TreeMembership.new(role: "editor").can_edit?
     assert_not TreeMembership.new(role: "viewer").can_edit?
   end
+
+  test "roles come with predicates and scopes" do
+    membership = tree_memberships(:one_alpha)
+    assert membership.owner?
+    assert_not membership.viewer?
+    assert_includes TreeMembership.owner, membership
+    assert_not_includes TreeMembership.viewer, membership
+
+    membership.viewer!
+    assert membership.viewer?
+    assert_not membership.can_edit?
+  end
 end
