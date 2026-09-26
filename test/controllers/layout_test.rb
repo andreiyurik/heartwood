@@ -1,7 +1,10 @@
 require "test_helper"
 
 class LayoutTest < ActionDispatch::IntegrationTest
-  setup { sign_in_as users(:one) }
+  setup do
+    Person.create!(given_names: "Ada", surname: "Lovelace", sex: "F", tree: trees(:alpha))
+    sign_in_as users(:one)
+  end
 
   test "declares the page language" do
     get people_url

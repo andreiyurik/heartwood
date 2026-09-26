@@ -37,7 +37,7 @@ class ClanTreesControllerTest < ActionDispatch::IntegrationTest
     get clan_tree_url
     assert_response :success
     assert_select ".tree-canvas", count: 0
-    assert_select "p.empty"
+    assert_select ".blank-slate"
   end
 
   test "GET show requires authentication" do

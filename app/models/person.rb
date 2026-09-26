@@ -98,6 +98,11 @@ class Person < ApplicationRecord
     birth_year.nil? || birth_year > Date.current.year - LIVING_CUTOFF_YEARS
   end
 
+  def self.named_like(user)
+    *given, surname = user.name.split
+    given.empty? ? new(given_names: surname) : new(given_names: given.join(" "), surname: surname)
+  end
+
   # Tree members see everyone; outsiders and guests only see verifiably non-living, non-private people.
   def visible_to?(user)
     return true if user && tree.users.exists?(user.id)

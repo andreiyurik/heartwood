@@ -7,8 +7,6 @@
     <p class="tree-hint"><%= t("trees.hint") %></p>
     <%= render "trees/canvas", graph: @graph, mode: @mode, depth: @depth, focus_id: @root.id %>
   <% else %>
-    <p class="empty">
-      <%= t("trees.clan_empty") %> <%= link_to t("people.add_first"), new_person_path %>.
-    </p>
+    <%= render "people/blank_slate" %>
   <% end %>
 </div>

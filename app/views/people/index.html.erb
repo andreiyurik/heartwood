@@ -1,53 +1,49 @@
 <% page_title t("people.title") %>
 
-<% content_for :header do %>
-  <% if can_edit? %>
-    <%= link_to new_person_path, class: "btn btn--reversed" do %>
-      <%= icon_tag "add" %> <%= t("people.add") %>
-    <% end %>
-  <% end %>
-  <%= icon_button_to "download", t("exports.create"), export_path, method: :post %>
-<% end %>
-
-<%= form_with url: people_path, method: :get,
-      data: { controller: "search", turbo_action: "advance" },
-      class: "search-form" do |f| %>
-  <div class="search-bar">
-    <div class="search-field">
-      <%= icon_tag "search" %>
-      <%= f.search_field :q, value: @q,
-            placeholder: t("people.search_placeholder"),
-            autocomplete: "off",
-            data: { search_target: "input", action: "input->search#debounce" } %>
-    </div>
-    <%= f.select :sex,
-          Person::SEXES.map { |s| [t("people.sex.#{s}"), s] },
-          { include_blank: t("people.sex_filter_all"), selected: @sex },
-          class: "search-filter",
-          data: { action: "change->search#submit" } %>
-    <%= f.select :sort,
-          Person::SORT_OPTIONS.map { |key| [t("people.sort.#{key}"), key] },
-          { selected: @sort },
-          class: "search-filter",
-          data: { action: "change->search#submit" } %>
-    <% if @q.present? || @sex.present? || @sort != Person::SORT_OPTIONS.first %>
-      <%= link_to t("people.search_clear"), people_path, class: "btn btn--plain search-clear" %>
-    <% end %>
-  </div>
-<% end %>
-
-<% if @people.any? %>
-  <ul class="people-list">
-    <%= render @people %>
-  </ul>
+<% if blank_tree? %>
+  <%= render "people/blank_slate" %>
 <% else %>
-  <p class="empty">
-    <% if @q.present? || @sex.present? %>
-      <%= t("people.search_empty") %>
-    <% elsif can_edit? %>
-      <%= t("people.empty") %> <%= link_to t("people.add_first"), new_person_path %>.
-    <% else %>
-      <%= t("people.empty") %>
+  <% content_for :header do %>
+    <% if can_edit? %>
+      <%= link_to new_person_path, class: "btn btn--reversed" do %>
+        <%= icon_tag "add" %> <%= t("people.add") %>
+      <% end %>
     <% end %>
-  </p>
+    <%= icon_button_to "download", t("exports.create"), export_path, method: :post %>
+  <% end %>
+
+  <%= form_with url: people_path, method: :get,
+        data: { controller: "search", turbo_action: "advance" },
+        class: "search-form" do |f| %>
+    <div class="search-bar">
+      <div class="search-field">
+        <%= icon_tag "search" %>
+        <%= f.search_field :q, value: @q,
+              placeholder: t("people.search_placeholder"),
+              autocomplete: "off",
+              data: { search_target: "input", action: "input->search#debounce" } %>
+      </div>
+      <%= f.select :sex,
+            Person::SEXES.map { |s| [t("people.sex.#{s}"), s] },
+            { include_blank: t("people.sex_filter_all"), selected: @sex },
+            class: "search-filter",
+            data: { action: "change->search#submit" } %>
+      <%= f.select :sort,
+            Person::SORT_OPTIONS.map { |key| [t("people.sort.#{key}"), key] },
+            { selected: @sort },
+            class: "search-filter",
+            data: { action: "change->search#submit" } %>
+      <% if @q.present? || @sex.present? || @sort != Person::SORT_OPTIONS.first %>
+        <%= link_to t("people.search_clear"), people_path, class: "btn btn--plain search-clear" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @people.any? %>
+    <ul class="people-list">
+      <%= render @people %>
+    </ul>
+  <% else %>
+    <p class="empty"><%= t("people.search_empty") %></p>
+  <% end %>
 <% end %>

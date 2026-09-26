@@ -32,7 +32,7 @@
 
     <%= render "layouts/header" %>
 
-    <% if Current.tree %>
+    <% if Current.tree && !blank_tree? %>
       <nav id="toolbar" class="sections" aria-label="<%= t("nav.sections") %>">
         <%= section_link "people", root_path %>
         <%= section_link "tree", clan_tree_path %>

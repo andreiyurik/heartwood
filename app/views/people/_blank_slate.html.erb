@@ -1,0 +1,16 @@
+<section class="blank-slate">
+  <h2><%= t("people.blank.title") %></h2>
+  <% if can_edit? %>
+    <p><%= t("people.blank.lede") %></p>
+    <div class="blank-slate__actions">
+      <%= link_to new_person_path(yourself: true), class: "btn btn--reversed" do %>
+        <%= icon_tag "person" %> <%= t("people.blank.add_yourself") %>
+      <% end %>
+      <%= link_to new_import_path, class: "btn" do %>
+        <%= icon_tag "download" %> <%= t("people.blank.import") %>
+      <% end %>
+    </div>
+  <% else %>
+    <p><%= t("people.empty_viewer") %></p>
+  <% end %>
+</section>
