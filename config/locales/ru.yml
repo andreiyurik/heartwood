@@ -3,6 +3,7 @@ ru:
     sign_out: Выйти
     all_people: Все люди
     members: Участники
+    skip_to_content: Перейти к содержимому
 
   active_tree:
     flash:
@@ -36,6 +37,7 @@ ru:
   locale:
     en: EN
     ru: RU
+    switcher: Язык
 
   helpers:
     submit:
