@@ -15,6 +15,10 @@
   padding: var(--input-padding, 0.5em 0.8em);
 }
 
+select.input {
+  appearance: auto;
+}
+
 .input:focus {
   --input-border-color: var(--color-selected-dark);
 

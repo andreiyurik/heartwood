@@ -38,4 +38,22 @@
   --color-male: oklch(var(--lch-blue));
   --color-female: oklch(var(--lch-pink));
   --color-always-white: oklch(var(--lch-always-white));
+
+  /* Redefine named color values for dark mode */
+  @media (prefers-color-scheme: dark) {
+    --lch-black: 94% 0.008 78;
+    --lch-white: 18% 0.008 55;
+    --lch-paper: 22% 0.008 55;
+    --lch-gray: 26% 0.006 60;
+    --lch-gray-dark: 31% 0.006 60;
+    --lch-gray-darker: 45% 0.006 60;
+    --lch-taupe: 68% 0.015 60;
+    --lch-green: 70% 0.09 137.63;
+    --lch-green-dark: 78% 0.08 138.12;
+    --lch-green-light: 30% 0.03 135;
+    --lch-red: 70% 0.14 30;
+    --lch-red-light: 28% 0.04 30;
+    --lch-blue: 58% 0.07 229.68;
+    --lch-pink: 58% 0.09 343.07;
+  }
 }
