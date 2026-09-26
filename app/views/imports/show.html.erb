@@ -1,0 +1,30 @@
+<% page_title t("imports.title") %>
+<% back_link root_path %>
+
+<%= turbo_stream_from @import %>
+
+<section class="import-report">
+  <% if @import.completed? %>
+    <h2><%= t("imports.show.completed", count: @import.people_count) %></h2>
+    <p><%= t("imports.show.families", count: @import.families_count) %></p>
+
+    <% if @import.warnings.any? %>
+      <details>
+        <summary><%= t("imports.show.warnings", count: @import.warnings.size) %></summary>
+        <ul>
+          <% @import.warnings.first(50).each do |warning| %>
+            <li><%= warning %></li>
+          <% end %>
+        </ul>
+      </details>
+    <% end %>
+
+    <%= link_to t("imports.show.done"), root_path, class: "btn btn--reversed" %>
+  <% elsif @import.failed? %>
+    <h2><%= t("imports.show.failed.title") %></h2>
+    <p><%= t("imports.show.failed.#{@import.error}") %></p>
+    <%= link_to t("imports.show.retry"), new_import_path, class: "btn btn--reversed" %>
+  <% else %>
+    <h2><%= t("imports.show.running") %></h2>
+  <% end %>
+</section>

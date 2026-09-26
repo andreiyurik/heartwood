@@ -17,6 +17,36 @@ ru:
     flash:
       saved: Сохранено.
 
+  imports:
+    title: Импорт GEDCOM
+    lede: Загрузите файл .ged из Gramps или другой программы. Всё, что в нём есть, добавится в это дерево.
+    file: Файл GEDCOM
+    submit: Импортировать
+    show:
+      running: Загружаем ваше дерево…
+      completed:
+        one: "Загружен %{count} человек"
+        few: "Загружено %{count} человека"
+        many: "Загружено %{count} человек"
+        other: "Загружено %{count} человека"
+      families:
+        one: "%{count} семья"
+        few: "%{count} семьи"
+        many: "%{count} семей"
+        other: "%{count} семьи"
+      warnings:
+        one: "%{count} замечание"
+        few: "%{count} замечания"
+        many: "%{count} замечаний"
+        other: "%{count} замечания"
+      done: Открыть дерево
+      retry: Попробовать другой файл
+      failed:
+        title: Импорт не завершился
+        no_records: В этом файле не нашлось людей. Это точно файл GEDCOM (.ged)?
+        tree_full: В файле больше людей, чем помещается в бесплатном тарифе. Ничего не загружено.
+        invalid: Часть записей в файле не удалось прочитать. Ничего не загружено.
+
   active_tree:
     flash:
       not_a_member: Вы не участник этого дерева.
@@ -468,6 +498,11 @@ ru:
         avatar: Фото
     errors:
       models:
+        import:
+          attributes:
+            file:
+              blank: Выберите файл для импорта
+              invalid: должен быть файлом .ged
         person:
           attributes:
             base:

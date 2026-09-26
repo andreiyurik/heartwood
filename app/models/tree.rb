@@ -15,6 +15,7 @@ class Tree < ApplicationRecord
   has_many :sources, dependent: :destroy
   has_many :places, dependent: :destroy
   has_many :duplicate_hints, dependent: :destroy
+  has_many :imports, dependent: :destroy
 
   validates :name, presence: true
   validates :plan, inclusion: { in: PLANS.keys }

@@ -17,6 +17,30 @@ en:
     flash:
       saved: Saved.
 
+  imports:
+    title: Import GEDCOM
+    lede: Upload a .ged file exported from Gramps or another program. Everything in it is added to this tree.
+    file: GEDCOM file
+    submit: Import
+    show:
+      running: Importing your tree…
+      completed:
+        one: "Imported 1 person"
+        other: "Imported %{count} people"
+      families:
+        one: "1 family"
+        other: "%{count} families"
+      warnings:
+        one: "1 thing to check"
+        other: "%{count} things to check"
+      done: Open the tree
+      retry: Try another file
+      failed:
+        title: The import did not finish
+        no_records: We found no people in that file. Is it a GEDCOM (.ged) file?
+        tree_full: That file has more people than the free plan holds. Nothing was imported.
+        invalid: Some records in that file could not be read. Nothing was imported.
+
   active_tree:
     flash:
       not_a_member: You're not a member of that tree.
@@ -406,6 +430,11 @@ en:
         avatar: Photo
     errors:
       models:
+        import:
+          attributes:
+            file:
+              blank: Choose a file to import
+              invalid: must be a .ged file
         person:
           attributes:
             base:
