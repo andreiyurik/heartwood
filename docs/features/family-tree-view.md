@@ -97,7 +97,7 @@ sibling subtrees never overlap.
   bond line** (`.tree-edge--bond`) with a **♥ marker** in the gap between the cards, so marriage
   reads differently from descent; their children's line drops from the bond midpoint through
   that gap.
-- **Person panel.** Clicking a node loads `people#panel` into the `person-panel` turbo-frame
+- **Person panel.** Clicking a node loads `People::PanelsController#show` into the `person-panel` turbo-frame
   inside a slide-over drawer (`drawer_controller.js`): avatar, name, lifespan, birth/death
   details, add-relative shortcuts, and buttons to refocus the tree on that person, open the
   profile, or edit. Node clicks never navigate away from the canvas.

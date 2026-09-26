@@ -5,12 +5,12 @@ class MapsControllerTest < ActionDispatch::IntegrationTest
 
   test "requires authentication" do
     sign_out
-    get tree_map_url
+    get map_url
     assert_redirected_to new_session_url
   end
 
   test "tree map page mounts the map controller" do
-    get tree_map_url
+    get map_url
     assert_response :success
     assert_select "[data-controller=map]"
   end
@@ -19,7 +19,7 @@ class MapsControllerTest < ActionDispatch::IntegrationTest
     people(:wilhelm_friedemann).events.create!(kind: "BIRT", date_raw: "1710", place: places(:leipzig))
     people(:wilhelm_friedemann).events.create!(kind: "DEAT", date_raw: "1784")
 
-    get map_person_url(people(:wilhelm_friedemann), format: :json)
+    get person_map_url(people(:wilhelm_friedemann), format: :json)
     assert_response :success
 
     data = JSON.parse(@response.body)
@@ -33,7 +33,7 @@ class MapsControllerTest < ActionDispatch::IntegrationTest
     bare = Place.create!(name: "Nowhere", tree: trees(:bach))
     people(:wilhelm_friedemann).events.create!(kind: "RESI", place: bare)
 
-    get map_person_url(people(:wilhelm_friedemann), format: :json)
+    get person_map_url(people(:wilhelm_friedemann), format: :json)
     assert_response :success
     assert_equal [], JSON.parse(@response.body)
   end
@@ -43,7 +43,7 @@ class MapsControllerTest < ActionDispatch::IntegrationTest
     foreign_person = Person.create!(given_names: "Outsider", sex: "U", tree: trees(:beta))
     foreign_person.events.create!(kind: "BIRT", place: foreign_place)
 
-    get tree_map_events_url(format: :json)
+    get map_events_url(format: :json)
     assert_response :success
 
     data = JSON.parse(@response.body)

@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_action :set_person
+  include PersonScoped
   before_action :set_event, only: %i[edit update destroy]
   before_action :require_can_edit, only: %i[new create edit update destroy]
 
@@ -33,10 +33,6 @@ class EventsController < ApplicationController
   end
 
   private
-
-  def set_person
-    @person = Current.tree.people.find(params[:person_id])
-  end
 
   def set_event
     @event = @person.events.find(params[:id])

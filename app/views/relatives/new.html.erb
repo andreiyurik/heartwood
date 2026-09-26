@@ -12,9 +12,11 @@
 
     <%# 1) Find and link an existing person. Typing debounce-submits to #search,
         which renders matches into the nested "relative_candidates" frame. %>
-    <%= form_with url: search_person_relatives_path(@person), method: :get,
+    <%= form_with url: autocompletable_people_path, method: :get,
           data: { controller: "search", turbo_frame: "relative_candidates" },
           class: "combobox" do %>
+      <%= hidden_field_tag :person_id, @person.id %>
+      <%= hidden_field_tag :for, "relative" %>
       <%= hidden_field_tag :relation, @relation %>
       <%= hidden_field_tag :return_to, params[:return_to] %>
       <%= search_field_tag :q, nil,
@@ -31,6 +33,8 @@
     <%# 2) Or create a brand-new person. %>
     <%= form_with model: @relative, url: person_relatives_path(@person), class: "form form--inline",
           data: (panel ? { turbo_frame: "_top" } : {}) do |f| %>
+      <%= hidden_field_tag :person_id, @person.id %>
+      <%= hidden_field_tag :for, "relative" %>
       <%= hidden_field_tag :relation, @relation %>
       <%= hidden_field_tag :return_to, params[:return_to] %>
       <div class="field"><%= f.label :given_names %><%= f.text_field :given_names, class: "input" %></div>
@@ -42,7 +46,7 @@
       <div class="actions">
         <%= f.submit t("people.add"), class: "btn btn--reversed" %>
         <% if panel %>
-          <%= link_to t("forms.cancel"), panel_person_path(@person, return_to: params[:return_to]),
+          <%= link_to t("forms.cancel"), person_panel_path(@person, return_to: params[:return_to]),
                 class: "btn btn--plain", data: { turbo_frame: "person-panel" } %>
         <% else %>
           <%= link_to t("forms.cancel"), person_path(@person), class: "btn btn--plain", data: { turbo_frame: "_top" } %>

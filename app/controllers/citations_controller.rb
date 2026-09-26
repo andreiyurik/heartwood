@@ -1,5 +1,6 @@
 class CitationsController < ApplicationController
-  before_action :set_person_and_event
+  include PersonScoped
+  before_action :set_event
   before_action :require_can_edit, only: %i[new create destroy]
 
   def new
@@ -44,9 +45,8 @@ class CitationsController < ApplicationController
 
   private
 
-  def set_person_and_event
-    @person = Current.tree.people.find(params[:person_id])
-    @event  = @person.events.find(params[:event_id])
+  def set_event
+    @event = @person.events.find(params[:event_id])
   end
 
   def source_params

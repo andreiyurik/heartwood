@@ -294,6 +294,15 @@ class Person < ApplicationRecord
     event&.date_start&.year || event&.date_raw.presence
   end
 
+  def people_in(relation)
+    case relation
+    when "parent"  then parents
+    when "child"   then children
+    when "partner" then partners
+    else []
+    end
+  end
+
   def resolve_person(relative)
     return relative if relative.is_a?(Person)
     Person.create!(relative.merge(tree: Current.tree))
@@ -320,6 +329,15 @@ class Person < ApplicationRecord
   end
 
   public
+
+  def relative_candidates(query, user:, relation: nil)
+    return Person.none if query.to_s.strip.blank?
+
+    tree.people.search(query, user: user)
+        .where.not(id: [ id, *people_in(relation).map(&:id) ])
+        .order(:surname, :given_names)
+        .limit(8)
+  end
 
   def add_parent(relative)
     family = families_as_child.first || Family.create!(tree: Current.tree).tap { |f| f.children << self }

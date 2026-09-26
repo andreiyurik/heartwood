@@ -106,7 +106,7 @@ class RelativesControllerTest < ActionDispatch::IntegrationTest
 
   test "search lists matching tree people as linkable options" do
     Person.create!(given_names: "Findme", surname: "X", sex: "U", tree: @tree)
-    get search_person_relatives_url(@person, relation: "parent", q: "Findme")
+    get autocompletable_people_url(person_id: @person.id, for: "relative", relation: "parent", q: "Findme")
     assert_response :success
     assert_select "button", text: /Findme X/
   end
@@ -114,21 +114,21 @@ class RelativesControllerTest < ActionDispatch::IntegrationTest
   test "search excludes the focus person and already-linked relatives" do
     linked = Person.create!(given_names: "Findme", surname: "Linked", sex: "F", tree: @tree)
     @person.add_parent(linked)
-    get search_person_relatives_url(@person, relation: "parent", q: "Findme")
+    get autocompletable_people_url(person_id: @person.id, for: "relative", relation: "parent", q: "Findme")
     assert_response :success
     assert_no_match(/Findme Linked/, @response.body)
   end
 
   test "search is scoped to the current tree" do
     Person.create!(given_names: "Foreigner", sex: "U", tree: trees(:beta))
-    get search_person_relatives_url(@person, relation: "parent", q: "Foreigner")
+    get autocompletable_people_url(person_id: @person.id, for: "relative", relation: "parent", q: "Foreigner")
     assert_response :success
     assert_no_match(/Foreigner/, @response.body)
   end
 
   test "search with a blank query lists nothing" do
     Person.create!(given_names: "Somebody", sex: "U", tree: @tree)
-    get search_person_relatives_url(@person, relation: "parent", q: "")
+    get autocompletable_people_url(person_id: @person.id, for: "relative", relation: "parent", q: "")
     assert_response :success
     assert_select "#relative_candidates button", count: 0
   end

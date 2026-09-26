@@ -1,7 +1,8 @@
 class PeopleController < ApplicationController
   TABS = %w[details sources memories timeline map].freeze
 
-  before_action :set_person, only: %i[show panel edit update destroy]
+  include PersonScoped
+  skip_before_action :set_person, only: %i[index new create]
   before_action :require_can_edit, only: %i[new create edit update destroy]
 
   def index
@@ -16,9 +17,6 @@ class PeopleController < ApplicationController
 
   def show
     @tab = TABS.include?(params[:tab]) ? params[:tab] : "details"
-  end
-
-  def panel
   end
 
   def new
@@ -51,10 +49,6 @@ class PeopleController < ApplicationController
   end
 
   private
-
-  def set_person
-    @person = Current.tree.people.visible_to(Current.user).find(params[:id])
-  end
 
   def person_params
     params.expect(person: %i[given_names surname name_prefix name_suffix nickname sex avatar biography])

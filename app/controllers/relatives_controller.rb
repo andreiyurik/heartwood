@@ -6,16 +6,12 @@ class RelativesController < ApplicationController
     "partner" => :add_partner
   }.freeze
 
-  before_action :set_person
+  include PersonScoped
   before_action :set_relation
   before_action :require_can_edit, only: %i[new create]
 
   def new
     @relative = Person.new
-  end
-
-  def search
-    @matches = candidate_people
   end
 
   def create
@@ -33,10 +29,6 @@ class RelativesController < ApplicationController
 
   private
 
-  def set_person
-    @person = Current.tree.people.find(params[:person_id])
-  end
-
   def relative_source
     if params[:existing_person_id].present?
       Current.tree.people.find(params[:existing_person_id])
@@ -52,26 +44,5 @@ class RelativesController < ApplicationController
 
   def relative_params
     params.expect(person: %i[given_names surname name_prefix name_suffix nickname sex])
-  end
-
-  def candidate_people
-    query = params[:q].to_s.strip
-    return Person.none if query.blank?
-
-    Current.tree.people
-           .search(query, user: Current.user)
-           .where.not(id: excluded_ids)
-           .order(:surname, :given_names)
-           .limit(8)
-  end
-
-  def excluded_ids
-    already = case @relation
-    when "parent"  then @person.parents
-    when "child"   then @person.children
-    when "partner" then @person.partners
-    else []
-    end
-    [ @person.id, *already.map(&:id) ]
   end
 end
