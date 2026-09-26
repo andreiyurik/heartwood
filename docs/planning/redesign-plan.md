@@ -16,14 +16,15 @@ One phase ≈ one PR (or a few small ones). TDD throughout; system tests must st
 Order: bugs → CSS foundation → frame/nav → the new-user journey → code canon.
 
 ## Phase 0 — Bugs found by the audit
-- [ ] Invite "copy link" does nothing: `data-clipboard-target` input sits outside the
+- [x] Invite "copy link" does nothing: `data-clipboard-target` input sits outside the
       `data-controller="clipboard"` button (`tree_memberships/index.html.erb`). Put the
       controller on the wrapper; add a visible label.
-- [ ] Viewers see Edit/Remove on events and "add citation" (`events/_event.html.erb`,
+- [x] Viewers see Edit/Remove on events and "add citation" (`events/_event.html.erb`,
       `citations/_add_link.html.erb`) — gate on `can_edit?`.
-- [ ] Leaflet CSS linked twice (`stylesheet_link_tag :app` already includes it).
-- [ ] `<html lang>` missing, no skip link / `id` on `<main>`, hardcoded `aria-label="Language"`.
-- [ ] Bad join code renders a blank 404 — render a friendly, translated "link expired" page.
+- [x] Leaflet CSS linked twice (`stylesheet_link_tag :app` already includes it).
+- [x] `<html lang>` missing, no skip link / `id` on `<main>`, hardcoded `aria-label="Language"`.
+- [x] Bad join code renders a blank 404 — now raises `RecordNotFound` → the standard 404 page,
+      as campfire does (a branded 404 comes with Phase 2).
 
 ## Phase 1 — CSS foundation (no visual redesign yet, just the right base)
 Reference: campfire/writebook `app/assets/stylesheets/`.
