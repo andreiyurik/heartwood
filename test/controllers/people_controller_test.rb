@@ -161,16 +161,16 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference "Person.count" do
       post people_url, params: { person: { given_names: "New", surname: "Guy", sex: "U" } }
     end
-    assert_redirected_to root_url
+    assert_response :forbidden
 
     patch person_url(@person), params: { person: { nickname: "Sneaky" } }
-    assert_redirected_to root_url
+    assert_response :forbidden
     assert_nil @person.reload.nickname
 
     assert_no_difference "Person.count" do
       delete person_url(@person)
     end
-    assert_redirected_to root_url
+    assert_response :forbidden
 
     # reads still work
     get people_url

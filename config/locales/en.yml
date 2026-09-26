@@ -389,8 +389,6 @@ en:
     password_instructions: "Password reset instructions sent (if user with that email address exists)."
     passwords_mismatch: Passwords did not match.
     invalid_token: Password reset link is invalid or has expired.
-    read_only: You have read-only access to this tree.
-    owners_only: Only the tree's owner can do that.
 
   mailer:
     password_reset:

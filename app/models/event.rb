@@ -1,6 +1,4 @@
 class Event < ApplicationRecord
-  include BelongsToTree
-
   KINDS = {
     "BIRT" => "Birth", "DEAT" => "Death", "BAPM" => "Baptism", "BURI" => "Burial",
     "MARR" => "Marriage", "DIV" => "Divorce",
@@ -9,6 +7,7 @@ class Event < ApplicationRecord
 
   PERSON_KINDS = %w[BIRT DEAT BAPM BURI OCCU RESI EDUC].freeze
 
+  belongs_to :tree, default: -> { eventable&.tree }
   belongs_to :eventable, polymorphic: true
   belongs_to :place, optional: true
 
@@ -17,8 +16,14 @@ class Event < ApplicationRecord
 
   validates :kind, presence: true
 
-  before_validation :inherit_tree_from_eventable
   before_validation :assign_place
+
+  def cite(source_attributes, citation_attributes = {})
+    source = tree.sources.find_or_create_by!(title: source_attributes[:title].to_s.strip) do |new_source|
+      new_source.assign_attributes(source_attributes.to_h.symbolize_keys.except(:title).compact_blank)
+    end
+    citations.create!(citation_attributes.to_h.merge(source: source))
+  end
 
   def kind_label
     I18n.t("events.kinds.#{kind}", default: KINDS.fetch(kind, kind))
@@ -43,10 +48,6 @@ class Event < ApplicationRecord
   attr_accessor :place_latitude, :place_longitude
 
   private
-
-  def inherit_tree_from_eventable
-    self.tree ||= eventable&.tree
-  end
 
   def assign_place
     return if @place_name.nil?

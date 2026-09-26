@@ -30,7 +30,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     sign_in_as editor
 
     get settings_url
-    assert_redirected_to root_url
+    assert_response :forbidden
     patch settings_url, params: { tree: { name: "Hijacked" } }
     assert_equal "Alpha Tree", @tree.reload.name
   end
