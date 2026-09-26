@@ -17,6 +17,7 @@ agent, also read [`CLAUDE.md`](../CLAUDE.md) at the repo root.
 - [[vision]] — why Heartwood exists, the principles, the bet
 - [[glossary]] — domain vocabulary (GEDCOM-aligned)
 - [[roadmap]] — what we build, in what order
+- [[redesign-plan]] — current redesign: phased plan from the audit against the reference apps
 
 ## The four pillars
 
