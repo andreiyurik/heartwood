@@ -26,17 +26,22 @@ Order: bugs → CSS foundation → frame/nav → the new-user journey → code c
 - [x] Bad join code renders a blank 404 — now raises `RecordNotFound` → the standard 404 page,
       as campfire does (a branded 404 comes with Phase 2).
 
-## Phase 1 — CSS foundation (no visual redesign yet, just the right base)
-Reference: campfire/writebook `app/assets/stylesheets/`.
-- [ ] Add `_reset.css` and `utilities.css` (`--inline-space`, `--block-space`, `.txt-*`,
-      `.flex`, `.gap`, `.margin-block-*`, `.for-screen-reader`, `.hide`).
-- [ ] One token system: replace the ~170 legacy hex aliases (`--line`, `--muted`,
-      `--surface`, `--accent`…) with `--color-*` roles; move all 19 hex literals and ad-hoc
-      shadows into `colors.css` (incl. `--color-male`/`--color-female`).
-- [ ] Dark mode: redefine only `--lch-*` under `prefers-color-scheme: dark`, as the references do.
-- [ ] Split the 1006-line `application.css` into one file per component (`layout`, `nav`,
-      `flash`, `forms`, `people`, `events`, `tree`, `drawer`, `auth`, `maps`, `hints`…).
-      While moving: nested blocks, logical properties, `:where()` defaults, merge duplicates.
+## Phase 1 — CSS foundation (no visual redesign yet, just the right base) ✅
+Reference: campfire/writebook `app/assets/stylesheets/`. Each step was verified by diffing
+computed styles on 22 pages (light + dark) before and after.
+- [x] `_reset.css` (campfire's) and `utilities.css` (`--inline-space`, `--block-space`,
+      `.txt-*`, `.flex`, `.gap`, `.margin-*`, `.pad-*`, `.for-screen-reader`, `.shadow`).
+      Campfire's control base in `base.css`: one hover halo + focus ring for every
+      button/input (checkboxes, radios, file pickers and selects keep the native look).
+- [x] One token system: legacy aliases and all hex/rgba literals gone; `--color-surface`,
+      `--color-male`/`--color-female`, `--color-negative-border`, `--color-always-white`.
+- [x] Dark mode: only `--lch-*` redefined under `prefers-color-scheme: dark`; Lexxy reads our
+      roles (`rich_text.css`). Map tiles stay light (OSM has no dark tiles).
+- [x] `application.css` split into one file per component and rewritten in campfire style
+      (nested blocks, logical properties, merged duplicates, why-only comments).
+- [ ] Deferred to phases 2–4: re-express spacing with `--block-space`/`--inline-space` and a
+      small `.txt-*` scale as each screen is redesigned (a visual change, not a refactor);
+      rename `--maxw`/`--radius` with the new `layout.css`.
 
 ## Phase 2 — Page frame and navigation
 Reference: writebook `layout.css` + `content_for :header`; campfire flash toast.
