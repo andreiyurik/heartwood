@@ -1,7 +1,6 @@
 require "test_helper"
 
 # Open sign-up: create an account, get signed in immediately, and own a fresh tree.
-# Styled after fizzy's signup, but password-based to fit Heartwood's self-host auth.
 class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   test "new renders the sign-up form without requiring authentication" do
     get new_registration_path

@@ -45,6 +45,11 @@ class TreeMembershipTest < ActiveSupport::TestCase
     assert_not TreeMembership.new(role: "viewer").can_edit?
   end
 
+  test "defaults to the least privileged role" do
+    membership = TreeMembership.new
+    assert membership.viewer?
+  end
+
   test "roles come with predicates and scopes" do
     membership = tree_memberships(:one_alpha)
     assert membership.owner?
