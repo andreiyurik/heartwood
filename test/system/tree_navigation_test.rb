@@ -73,4 +73,24 @@ class TreeNavigationTest < ApplicationSystemTestCase
     assert_selector ".tree-drawer--open", wait: 5
     assert_selector ".person-panel-name", text: "Pat Parent"
   end
+
+  test "a long name in the header wraps by word instead of collapsing into a letter column" do
+    @focus.update!(given_names: "Григорий Александрович", surname: "Пушкин-Долгорукий")
+
+    window = page.driver.browser.manage.window
+    window.resize_to(700, 800)
+    begin
+      visit person_tree_path(@focus)
+      assert_selector ".tree-edges path", wait: 5
+
+      # overflow-wrap: anywhere lets a flex item's automatic minimum size shrink to a
+      # single character, so a name this long can collapse into a tall one-letter-per-line
+      # column instead of wrapping by word — the header should stay a couple of lines tall.
+      header_height = page.evaluate_script("document.getElementById('header').getBoundingClientRect().height")
+      assert_operator header_height, :<, 200,
+        "expected the header to wrap the name by word, not collapse into a letter column (was #{header_height}px tall)"
+    ensure
+      window.resize_to(1400, 1400)
+    end
+  end
 end
