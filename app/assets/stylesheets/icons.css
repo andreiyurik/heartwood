@@ -1,14 +1,12 @@
-/* Technique from fizzy, reimplemented (fizzy code must not be copied). Add one .icon--<name> per svg. */
+/* Tinting SVGs via mask-image + currentColor is a generic CSS technique, not
+   fizzy's code; add one .icon--<name> per svg. */
 .icon {
   background-color: currentColor;
   block-size: var(--icon-size, 1em);
   display: inline-block;
   flex-shrink: 0;
   inline-size: var(--icon-size, 1em);
-  mask-image: var(--svg);
-  mask-position: center;
-  mask-repeat: no-repeat;
-  mask-size: var(--icon-size, 1em);
+  mask: center / var(--icon-size, 1em) no-repeat var(--svg);
 }
 
 .icon--person { --svg: url("person.svg"); }
