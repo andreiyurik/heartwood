@@ -16,7 +16,7 @@ gem "turbo-rails"
 gem "stimulus-rails"
 # Rich text editing via Action Text, using the Lexxy editor instead of Trix
 # (37signals' Lexical-based editor) — see docs/architecture/adr/0008-action-text-lexxy.md
-gem "lexxy", "~> 0.9.18"
+gem "lexxy", "~> 0.9.33"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
