@@ -48,7 +48,7 @@ class LiveUpdatesTest < ApplicationSystemTestCase
 
   test "a refresh does not close or wipe a form someone is filling in" do
     visit person_path(@person)
-    click_on I18n.t("events.add")
+    js_click find(:link, I18n.t("events.add"))
     fill_in "event_date_raw", with: "typed but not saved"
 
     @person.events.create!(kind: "BAPM", date_raw: "23 MAR 1685")
@@ -59,7 +59,7 @@ class LiveUpdatesTest < ApplicationSystemTestCase
 
   test "saving an inline form updates the list and closes the form" do
     visit person_path(@person)
-    click_on I18n.t("events.add")
+    js_click find(:link, I18n.t("events.add"))
     select "Residence", from: "event_kind"
     fill_in "event_date_raw", with: "1723"
     find("form.form--inline input[type=submit]").click
@@ -73,16 +73,14 @@ class LiveUpdatesTest < ApplicationSystemTestCase
     visit person_path(@person)
     assert_selector ".event-row", text: "Death"
 
-    find(".event-row", text: "Death").hover
-    accept_confirm { within(".event-row", text: "Death") { click_on I18n.t("events.remove") } }
+    accept_confirm { js_click find(".event-row", text: "Death").find(:button, I18n.t("events.remove"), visible: :all) }
 
     assert_no_selector ".event-row", text: "Death", wait: 10
   end
 
   test "adding a relative from the profile shows them in the family box and closes the form" do
     visit person_path(people(:wilhelm_friedemann))
-    within("#add_child") { click_on I18n.t("family.add", relation: I18n.t("family.relation_singular.child")) }
-    # The first frame fetch on a cold CI runner can take longer than the default wait.
+    js_click find("#add_child").find(:link, I18n.t("family.add", relation: I18n.t("family.relation_singular.child")))
     assert_selector "#add_child form", wait: 10
     within("#add_child") do
       fill_in "person_given_names", with: "Friedemann Junior"
@@ -95,8 +93,7 @@ class LiveUpdatesTest < ApplicationSystemTestCase
 
   test "citing an event refreshes its sourced badge and closes the form" do
     visit person_path(@person)
-    find(".event-row", text: "Death").hover
-    within(".event-row", text: "Death") { click_on I18n.t("citations.add") }
+    js_click find(".event-row", text: "Death").find(:link, I18n.t("citations.add"), visible: :all)
     assert_selector "form.form--inline", wait: 10
     fill_in "source_title", with: "Leipzig burial register"
     find("form.form--inline input[type=submit]").click

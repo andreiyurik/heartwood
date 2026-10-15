@@ -22,7 +22,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # server so the next fetch never leaves the browser.
     options.add_argument("--disable-features=BackForwardCache")
     options.add_argument("--disable-dev-shm-usage")
-    options.add_option("goog:loggingPrefs", { browser: "ALL", performance: "ALL" })
   end
 
   # Absorb Turbo navigation / Stimulus-connect latency under load (default is 2s).
@@ -45,40 +44,12 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     end
   end
 
-  # TEMPORARY CI diagnostics, taken before Capybara resets the session.
-  def before_teardown
-    dump_failure_state unless passed?
-  ensure
-    super
-  end
-
-  def dump_failure_state
-    dir = Rails.root.join("tmp/screenshots"); FileUtils.mkdir_p(dir)
-    File.write(dir.join("#{method_name}.html"), page.html)
-    state = page.evaluate_script(<<~JS)
-      (() => ({
-        url: location.href, ready: document.readyState,
-        preview: document.documentElement.hasAttribute("data-turbo-preview"),
-        frameDefined: !!customElements.get("turbo-frame"),
-        turbo: !!window.Turbo, stimulus: window.Stimulus ? window.Stimulus.controllers.length : null,
-        visit: window.Turbo?.session?.navigator?.currentVisit?.location?.href || null,
-        frames: [...document.querySelectorAll("turbo-frame")].map(f => ({ id: f.id, src: f.getAttribute("src"), complete: f.complete, busy: f.hasAttribute("busy"), disabled: f.disabled, permanent: f.hasAttribute("data-turbo-permanent") })),
-        resources: performance.getEntriesByType("resource").length,
-        signedIn: !!document.querySelector(".account-menu")
-      }))()
-    JS
-    File.write(dir.join("#{method_name}.state.txt"), JSON.pretty_generate(state))
-    File.write(dir.join("#{method_name}.console.txt"), page.driver.browser.logs.get(:browser).map(&:message).join("\n"))
-    events = page.driver.browser.logs.get(:performance).filter_map do |entry|
-      msg = JSON.parse(entry.message)["message"]
-      next unless msg["method"] =~ /Page\.frame(Navigated|ScheduledNavigation|RequestedNavigation)|Network\.requestWillBeSent$|Page\.javascriptDialog|Runtime\.exceptionThrown/
-      params = msg["params"]
-      [ entry.timestamp, msg["method"], params.dig("frame", "url") || params["url"] || params.dig("request", "url"), params.dig("initiator", "type") ].compact.join(" | ")
-    end
-    File.write(dir.join("#{method_name}.nav.txt"), events.last(60).join("\n"))
-    File.write(dir.join("#{method_name}.test.log"), `tail -n 300 #{Rails.root.join("log/test.log")}`)
-  rescue => e
-    File.write(dir.join("#{method_name}.diag-error.txt"), "#{e.class}: #{e.message}")
+  # A click dispatched by script instead of by pointer. Geometric clicks can miss inside
+  # the tree's pan/zoom transform, and on the CI runner one is sometimes lost right after
+  # a page loads; the page then shows no navigation at all (no request, no frame src).
+  def js_click(element)
+    page.execute_script("arguments[0].click()", element)
+    sleep 0.4   # let the Stimulus relayout settle
   end
 
   # Sign in through the real login form (the browser keeps its own cookie session).
