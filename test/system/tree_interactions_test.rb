@@ -94,5 +94,4 @@ class TreeInteractionsTest < ApplicationSystemTestCase
     assert_selector ".tree-edges path", wait: 5
     assert_no_selector ".tree-tip"
   end
-
 end

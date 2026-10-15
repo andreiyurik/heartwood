@@ -120,5 +120,4 @@ class TreesControllerTest < ActionDispatch::IntegrationTest
     assert_select "#header a.back[href=?]", person_path(@person)
     assert_select "#header details.action-menu button[data-controller=print]"
   end
-
 end

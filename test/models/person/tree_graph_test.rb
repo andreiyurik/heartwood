@@ -334,5 +334,4 @@ class Person::TreeGraphTest < ActiveSupport::TestCase
     graph = Person::TreeGraph.new(people(:ambrosius), mode: "descendants", depth: 8, ghosts: false).build
     assert_equal 3, graph[:generations]
   end
-
 end
