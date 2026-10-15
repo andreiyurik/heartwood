@@ -10,6 +10,8 @@
     <%= form_with url: autocompletable_people_path, method: :get,
           data: { controller: "autocomplete", turbo_frame: "relationship_candidates" },
           class: "combobox" do %>
+      <%= hidden_field_tag :person_id, @person.id %>
+      <%= hidden_field_tag :for, "relationship" %>
       <div class="search-field">
         <%= icon_tag "search" %>
         <%= search_field_tag :q, nil,
