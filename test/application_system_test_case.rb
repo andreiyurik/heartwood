@@ -22,7 +22,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # server so the next fetch never leaves the browser.
     options.add_argument("--disable-features=BackForwardCache")
     options.add_argument("--disable-dev-shm-usage")
-    options.add_option("goog:loggingPrefs", { browser: "ALL" })
+    options.add_option("goog:loggingPrefs", { browser: "ALL", performance: "ALL" })
   end
 
   # Absorb Turbo navigation / Stimulus-connect latency under load (default is 2s).
@@ -62,6 +62,17 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
       alert: (page.driver.browser.switch_to.alert.text rescue "none")
     }
     File.write(dir.join("#{method_name}.state.txt"), state.inspect)
+    begin
+      events = page.driver.browser.logs.get(:performance).filter_map do |entry|
+        msg = JSON.parse(entry.message)["message"]
+        next unless msg["method"] =~ /Page\.frame(Navigated|ScheduledNavigation|RequestedNavigation|StartedLoading)|Network\.requestWillBeSent$|Page\.javascriptDialog/
+        p = msg["params"]
+        [ entry.timestamp, msg["method"], p.dig("frame", "url") || p["url"] || p.dig("request", "url"), p["reason"], p["disposition"], p.dig("initiator", "type"), p.dig("initiator", "url") ].compact.join(" | ")
+      end
+      File.write(dir.join("#{method_name}.nav.txt"), events.last(80).join("\n"))
+    rescue => e
+      File.write(dir.join("#{method_name}.nav.txt"), "perf log unavailable: #{e.message}")
+    end
     File.write(dir.join("#{method_name}.test.log"), `tail -n 400 #{Rails.root.join("log/test.log")}`)
   end
 
