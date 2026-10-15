@@ -8,6 +8,7 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     get settings_url
     assert_response :success
     assert_select "form[action=?] input[name='tree[name]'][value=?]", settings_path, @tree.name
+    assert_select "main a[href=?]", new_import_path, count: 0
   end
 
   test "the owner renames the tree" do

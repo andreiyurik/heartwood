@@ -58,8 +58,10 @@
 }
 
 @media (max-width: 40rem) {
-  .tree-name span {
-    display: none;
+  .tree-name {
+    max-inline-size: 11rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .header-account {

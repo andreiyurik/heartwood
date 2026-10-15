@@ -108,4 +108,13 @@ class TreeMembershipsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".invite-box button[data-controller=share][data-share-url-value=?][data-share-title-value=?]",
       join_url(@tree.join_code), @tree.name
   end
+
+  test "the page explains the roles in its metadata line and keeps removal quiet" do
+    post session_url, params: { email_address: @owner.email_address, password: "password" }
+    get tree_memberships_url
+    assert_select "main .page-header__meta", text: I18n.t("tree_memberships.lede")
+    assert_select "form[action=?] button.btn--ghost.btn--round", tree_membership_path(@membership)
+    assert_select "form[action=?] button.btn--negative", tree_membership_path(@membership), count: 0
+  end
+
 end
