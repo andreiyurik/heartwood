@@ -45,35 +45,40 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     end
   end
 
-  # TEMPORARY CI diagnostics: keep the page, the console and the server log of a failed test.
-  teardown do
-    next if passed?
+  # TEMPORARY CI diagnostics, taken before Capybara resets the session.
+  def before_teardown
+    dump_failure_state unless passed?
+  ensure
+    super
+  end
+
+  def dump_failure_state
     dir = Rails.root.join("tmp/screenshots"); FileUtils.mkdir_p(dir)
     File.write(dir.join("#{method_name}.html"), page.html)
-    begin
-      File.write(dir.join("#{method_name}.console.txt"), page.driver.browser.logs.get(:browser).map(&:message).join("\n"))
-    rescue => e
-      File.write(dir.join("#{method_name}.console.txt"), "logs unavailable: #{e.message}")
+    state = page.evaluate_script(<<~JS)
+      (() => ({
+        url: location.href, ready: document.readyState,
+        preview: document.documentElement.hasAttribute("data-turbo-preview"),
+        frameDefined: !!customElements.get("turbo-frame"),
+        turbo: !!window.Turbo, stimulus: window.Stimulus ? window.Stimulus.controllers.length : null,
+        visit: window.Turbo?.session?.navigator?.currentVisit?.location?.href || null,
+        frames: [...document.querySelectorAll("turbo-frame")].map(f => ({ id: f.id, src: f.getAttribute("src"), complete: f.complete, busy: f.hasAttribute("busy"), disabled: f.disabled, permanent: f.hasAttribute("data-turbo-permanent") })),
+        resources: performance.getEntriesByType("resource").length,
+        signedIn: !!document.querySelector(".account-menu")
+      }))()
+    JS
+    File.write(dir.join("#{method_name}.state.txt"), JSON.pretty_generate(state))
+    File.write(dir.join("#{method_name}.console.txt"), page.driver.browser.logs.get(:browser).map(&:message).join("\n"))
+    events = page.driver.browser.logs.get(:performance).filter_map do |entry|
+      msg = JSON.parse(entry.message)["message"]
+      next unless msg["method"] =~ /Page\.frame(Navigated|ScheduledNavigation|RequestedNavigation)|Network\.requestWillBeSent$|Page\.javascriptDialog|Runtime\.exceptionThrown/
+      params = msg["params"]
+      [ entry.timestamp, msg["method"], params.dig("frame", "url") || params["url"] || params.dig("request", "url"), params.dig("initiator", "type") ].compact.join(" | ")
     end
-    state = {
-      url: page.current_url, handles: page.driver.browser.window_handles.size,
-      ready: page.evaluate_script("document.readyState"),
-      body_children: page.evaluate_script("document.body ? document.body.children.length : -1"),
-      alert: (page.driver.browser.switch_to.alert.text rescue "none")
-    }
-    File.write(dir.join("#{method_name}.state.txt"), state.inspect)
-    begin
-      events = page.driver.browser.logs.get(:performance).filter_map do |entry|
-        msg = JSON.parse(entry.message)["message"]
-        next unless msg["method"] =~ /Page\.frame(Navigated|ScheduledNavigation|RequestedNavigation|StartedLoading)|Network\.requestWillBeSent$|Page\.javascriptDialog/
-        p = msg["params"]
-        [ entry.timestamp, msg["method"], p.dig("frame", "url") || p["url"] || p.dig("request", "url"), p["reason"], p["disposition"], p.dig("initiator", "type"), p.dig("initiator", "url") ].compact.join(" | ")
-      end
-      File.write(dir.join("#{method_name}.nav.txt"), events.last(80).join("\n"))
-    rescue => e
-      File.write(dir.join("#{method_name}.nav.txt"), "perf log unavailable: #{e.message}")
-    end
-    File.write(dir.join("#{method_name}.test.log"), `tail -n 400 #{Rails.root.join("log/test.log")}`)
+    File.write(dir.join("#{method_name}.nav.txt"), events.last(60).join("\n"))
+    File.write(dir.join("#{method_name}.test.log"), `tail -n 300 #{Rails.root.join("log/test.log")}`)
+  rescue => e
+    File.write(dir.join("#{method_name}.diag-error.txt"), "#{e.class}: #{e.message}")
   end
 
   # Sign in through the real login form (the browser keeps its own cookie session).
