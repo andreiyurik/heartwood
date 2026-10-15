@@ -38,6 +38,15 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     end
   end
 
+  # TEMPORARY CI diagnostics: keep the page, the console and the server log of a failed test.
+  teardown do
+    next if passed?
+    dir = Rails.root.join("tmp/screenshots"); FileUtils.mkdir_p(dir)
+    File.write(dir.join("#{method_name}.html"), page.html)
+    File.write(dir.join("#{method_name}.console.txt"), page.driver.browser.logs.get(:browser).map(&:message).join("\n")) rescue nil
+    File.write(dir.join("#{method_name}.test.log"), `tail -n 400 #{Rails.root.join("log/test.log")}`)
+  end
+
   # Sign in through the real login form (the browser keeps its own cookie session).
   def sign_in_as(user, password: "password")
     visit new_session_path
