@@ -51,5 +51,4 @@ class ClanTreesControllerTest < ActionDispatch::IntegrationTest
       text: I18n.t("trees.print")
     assert_select ".tree-canvas .tree-tip[data-tree-target=tip]", text: I18n.t("trees.tip")
   end
-
 end
