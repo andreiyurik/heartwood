@@ -19,11 +19,11 @@
       </details>
     <% end %>
 
-    <%= link_to t("imports.show.done"), root_path, class: "btn btn--reversed" %>
+    <%= link_to t("imports.show.done"), root_path, class: "btn btn--primary" %>
   <% elsif @import.failed? %>
     <h2><%= t("imports.show.failed.title") %></h2>
     <p><%= t("imports.show.failed.#{@import.error}") %></p>
-    <%= link_to t("imports.show.retry"), new_import_path, class: "btn btn--reversed" %>
+    <%= link_to t("imports.show.retry"), new_import_path, class: "btn btn--primary" %>
   <% else %>
     <h2><%= t("imports.show.running") %></h2>
   <% end %>

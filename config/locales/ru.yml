@@ -271,8 +271,6 @@ ru:
     detail_placeholder: "напр. Инженер"
     place_label: Место
     place_placeholder: "напр. Бостон, Массачусетс"
-    add_birthplace: Место рождения
-    add_residence: Где жил
     remove_confirm: Удалить это событие?
     edit: Изменить
     remove: Удалить

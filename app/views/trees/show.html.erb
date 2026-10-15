@@ -9,21 +9,21 @@
     <div class="tree-options__body">
       <%= link_to t("trees.ancestors"),
             person_tree_path(@person, mode: "ancestors", depth: @depth),
-            class: "btn #{"btn--reversed" if @mode == "ancestors"}",
+            class: "btn #{"btn--primary" if @mode == "ancestors"}",
             aria: { current: @mode == "ancestors" ? "true" : nil } %>
       <%= link_to t("trees.descendants"),
             person_tree_path(@person, mode: "descendants", depth: @depth),
-            class: "btn #{"btn--reversed" if @mode == "descendants"}",
+            class: "btn #{"btn--primary" if @mode == "descendants"}",
             aria: { current: @mode == "descendants" ? "true" : nil } %>
 
       <div class="depth-controls">
         <%= @depth > 1 ?
-              link_to("−", person_tree_path(@person, mode: @mode, depth: @depth - 1), class: "btn btn--circle") :
-              tag.span("−", class: "btn btn--circle", aria: { disabled: true }) %>
+              link_to("−", person_tree_path(@person, mode: @mode, depth: @depth - 1), class: "btn btn--round") :
+              tag.span("−", class: "btn btn--round", aria: { disabled: true }) %>
         <span class="depth-label" title="<%= t("trees.depth_label") %>"><%= @depth %></span>
         <%= @depth < 6 ?
-              link_to("+", person_tree_path(@person, mode: @mode, depth: @depth + 1), class: "btn btn--circle") :
-              tag.span("+", class: "btn btn--circle", aria: { disabled: true }) %>
+              link_to("+", person_tree_path(@person, mode: @mode, depth: @depth + 1), class: "btn btn--round") :
+              tag.span("+", class: "btn btn--round", aria: { disabled: true }) %>
       </div>
     </div>
   </details>

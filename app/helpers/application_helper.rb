@@ -18,20 +18,20 @@ module ApplicationHelper
 
   def back_link(path)
     content_for :back do
-      link_to path, class: "btn btn--circle back" do
+      link_to path, class: "btn btn--round back" do
         icon_tag("arrow-left") + tag.span(t("nav.back"), class: "for-screen-reader")
       end
     end
   end
 
   def icon_link_to(name, label, path, **options)
-    link_to path, class: class_names("btn btn--circle", options.delete(:class)), **options do
+    link_to path, class: class_names("btn btn--round", options.delete(:class)), **options do
       icon_tag(name) + tag.span(label, class: "for-screen-reader")
     end
   end
 
   def icon_button_to(name, label, path, **options)
-    button_to path, class: class_names("btn btn--circle", options.delete(:class)), **options do
+    button_to path, class: class_names("btn btn--round", options.delete(:class)), **options do
       icon_tag(name) + tag.span(label, class: "for-screen-reader")
     end
   end

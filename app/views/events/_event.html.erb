@@ -18,15 +18,13 @@
     <% end %>
     <% if can_edit? %>
       <span class="event-actions">
-        <%= link_to new_person_event_citation_path(person, event), class: "btn btn--ghost citation-add",
-              data: { turbo_frame: dom_id(event, :citation_form) } do %>
-          <%= icon_tag "add" %> <%= t("citations.add") %>
-        <% end %>
-        <%= link_to edit_person_event_path(person, event), class: "btn btn--ghost" do %>
-          <%= icon_tag "pencil" %> <%= t("events.edit") %>
-        <% end %>
-        <%= render "shared/delete_button", url: person_event_path(person, event),
-              label: t("events.remove"), confirm: t("events.remove_confirm") %>
+        <%= icon_link_to "add", t("citations.add"), new_person_event_citation_path(person, event),
+              class: "btn--ghost citation-add", title: t("citations.add"), data: { turbo_frame: dom_id(event, :citation_form) } %>
+        <%= icon_link_to "pencil", t("events.edit"), edit_person_event_path(person, event),
+              class: "btn--ghost", title: t("events.edit") %>
+        <%= icon_button_to "trash", t("events.remove"), person_event_path(person, event), method: :delete,
+              class: "btn--ghost", title: t("events.remove"),
+              form: { data: { turbo_confirm: t("events.remove_confirm"), turbo_frame: "_top" } } %>
       </span>
     <% end %>
   <% end %>

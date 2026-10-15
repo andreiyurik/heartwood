@@ -38,6 +38,18 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "editors get one add-event link and quiet, labelled row controls" do
+    event = @person.events.create!(kind: "BIRT", date_raw: "1815")
+    get person_url(@person)
+    assert_select ".event-add-actions a", count: 1
+    assert_select ".event-add-actions a[href=?]", new_person_event_path(@person)
+    assert_select ".event-row .event-actions" do
+      assert_select "a.btn--round[href=?][title=?]", edit_person_event_path(@person, event), I18n.t("events.edit")
+      assert_select "a.btn--round[href=?][title=?]", new_person_event_citation_path(@person, event), I18n.t("citations.add")
+      assert_select "button.btn--round[title=?] .for-screen-reader", I18n.t("events.remove"), text: I18n.t("events.remove")
+    end
+  end
+
   test "rejects an event without a kind" do
     assert_no_difference "Event.count" do
       post person_events_url(@person), params: { event: { kind: "", date_raw: "1815" } }

@@ -6,7 +6,7 @@
     <p class="auth-lede"><%= t("joins.lede") %></p>
 
     <% if Current.user %>
-      <%= button_to t("joins.submit"), join_path(@tree.join_code), class: "btn btn--reversed" %>
+      <%= button_to t("joins.submit"), join_path(@tree.join_code), class: "btn btn--primary" %>
     <% else %>
       <%= render "shared/errors", record: @user if @user.errors.any? %>
 
@@ -27,7 +27,7 @@
           <%= icon_tag "password" %>
         </label>
         <p class="auth-hint"><%= t("registrations.password_hint") %></p>
-        <%= form.submit t("joins.submit"), class: "btn btn--reversed" %>
+        <%= form.submit t("joins.submit"), class: "btn btn--primary" %>
       <% end %>
 
       <p class="auth-alt">

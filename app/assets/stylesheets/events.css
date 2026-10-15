@@ -75,11 +75,13 @@
   opacity: 0.8;
 }
 
+/* Row controls stay invisible until the row is hovered or focused (Basecamp), but
+   remain focusable; touch screens, which cannot hover, always see them. */
 .event-actions {
   display: flex;
   gap: 0.25rem;
   margin-inline-start: auto;
-  opacity: 0.6;
+  opacity: 0;
   transition: opacity var(--duration-medium) ease-out;
 
   @media (hover: none) {

@@ -23,7 +23,7 @@
   </details>
 
   <div class="actions">
-    <%= f.submit class: "btn btn--reversed" %>
-    <%= link_to t("forms.cancel"), (person.persisted? ? person : people_path), class: "btn btn--plain" %>
+    <%= f.submit class: "btn btn--primary" %>
+    <%= link_to t("forms.cancel"), (person.persisted? ? person : people_path), class: "btn btn--ghost" %>
   </div>
 <% end %>

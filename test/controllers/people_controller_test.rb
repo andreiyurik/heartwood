@@ -47,15 +47,51 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "the profile shows every section top-down with jump links, no tabs" do
+  test "the profile reads record-first: events and family before the biography, no facts block" do
     get person_url(@person)
     assert_select ".profile-tab", count: 0
-    %w[biography events family sources memories map].each do |section|
+    assert_select ".facts", count: 0
+    assert_select ".relationship-tool", count: 0
+
+    sections = %w[events family biography sources memories map]
+    sections.each do |section|
       assert_select ".profile-nav a[href='##{section}']"
       assert_select "section##{section}"
     end
-    assert_select ".facts"
-    assert_select ".relationship-tool", count: 0
+    positions = sections.map { |section| @response.body.index(%(id="#{section}")) }
+    assert_equal positions.sort, positions, "sections are out of order"
+  end
+
+  test "the metadata line carries nickname, years and sex" do
+    @person.update!(nickname: "Countess")
+    Event.create!(kind: "BIRT", eventable: @person, tree: @tree, date_raw: "1815", date_start: Date.new(1815, 12, 10))
+    get person_url(@person)
+    assert_select ".page-header__meta", text: "Countess · 1815 · Female"
+  end
+
+  test "the metadata line is left out when there is nothing to say" do
+    @person.update!(sex: "U")
+    Event.create!(kind: "DEAT", eventable: @person, tree: @tree, date_raw: "")
+    get person_url(@person)
+    assert_select ".page-header__meta", count: 0
+  end
+
+  test "family lists relatives as people rows and keeps empty groups quiet" do
+    parent = @person.add_parent(given_names: "Anne", surname: "Milbanke", sex: "F")
+    get person_url(@person)
+    assert_select "#family .person-row .person-row__name a[href=?]", person_path(parent), text: "Anne Milbanke"
+    assert_select "#family", text: /#{I18n.t("family.none")}/, count: 0
+    assert_select "#family h3", text: I18n.t("family.siblings"), count: 0
+    assert_select "#family a[href=?]", new_person_relative_path(@person, relation: "child")
+  end
+
+  test "a viewer sees an empty family group named, not an add button" do
+    viewer = User.create!(name: "Viewer Vee", email_address: "vee@example.com", password: "password")
+    TreeMembership.create!(user: viewer, tree: @tree, role: "viewer")
+    sign_in_as viewer
+    get person_url(@person)
+    assert_select "#family", text: /#{I18n.t("family.none")}/
+    assert_select "#family a[href=?]", new_person_relative_path(@person, relation: "child"), count: 0
   end
 
   test "empty sources and memories show a blank slate" do
@@ -84,7 +120,7 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
   test "a stray tab param is ignored" do
     get person_url(@person, tab: "hacker/../../etc")
     assert_response :success
-    assert_select ".facts"
+    assert_select "section#events"
   end
 
   test "index search filters by name" do

@@ -59,19 +59,21 @@ class LiveUpdatesTest < ApplicationSystemTestCase
 
   test "saving an inline form updates the list and closes the form" do
     visit person_path(@person)
-    click_on I18n.t("events.add_residence")
+    click_on I18n.t("events.add")
+    select "Residence", from: "event_kind"
     fill_in "event_date_raw", with: "1723"
     find("form.form--inline input[type=submit]").click
 
     assert_selector ".event-list", text: "1723", wait: 10
     assert_no_field "event_date_raw"
-    assert_link I18n.t("events.add_residence")
+    assert_link I18n.t("events.add")
   end
 
   test "deleting an event removes it from the list at once" do
     visit person_path(@person)
     assert_selector ".event-row", text: "Death"
 
+    find(".event-row", text: "Death").hover
     accept_confirm { within(".event-row", text: "Death") { click_on I18n.t("events.remove") } }
 
     assert_no_selector ".event-row", text: "Death", wait: 10
@@ -91,6 +93,7 @@ class LiveUpdatesTest < ApplicationSystemTestCase
 
   test "citing an event refreshes its sourced badge and closes the form" do
     visit person_path(@person)
+    find(".event-row", text: "Death").hover
     within(".event-row", text: "Death") { click_on I18n.t("citations.add") }
     fill_in "source_title", with: "Leipzig burial register"
     find("form.form--inline input[type=submit]").click

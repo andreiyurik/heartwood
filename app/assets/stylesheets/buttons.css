@@ -1,6 +1,4 @@
-/* One button, varied through custom properties (Basecamp's model). Older names
-   stay as aliases so views and tests need not change: reversed = primary,
-   plain = ghost, circle = round icon. */
+/* One button, varied through custom properties (Basecamp's model) */
 .btn {
   --btn-color: var(--color-text);
   --btn-background: var(--color-surface);
@@ -46,8 +44,7 @@
   font-size: 1rem;
 }
 
-.btn--primary,
-.btn--reversed {
+.btn--primary {
   --btn-color: var(--color-accent);
   --btn-background: var(--btn-color);
   --btn-background-hover: color-mix(in oklch, var(--btn-color), var(--color-text) 8%);
@@ -63,16 +60,13 @@
   --btn-text-color: var(--color-always-white);
 }
 
-.btn--ghost,
-.btn--plain,
-.btn--borderless {
+.btn--ghost {
   --btn-background: transparent;
   --btn-background-hover: var(--tint-ink-8);
   --btn-border-color: transparent;
 }
 
-.btn--round,
-.btn--circle {
+.btn--round {
   --btn-radius: 99rem;
   --btn-padding: 0;
 

@@ -1,18 +1,16 @@
 <div class="relation-group">
   <h3><%= label %></h3>
   <% if people.any? %>
-    <ul>
-      <% people.each do |relative| %>
-        <%= tag.li id: dom_id(relative), class: "relation" do %><%= link_to relative.display_name, relative %><% end %>
-      <% end %>
+    <ul class="people-list">
+      <%= render partial: "people/person", collection: people, as: :person %>
     </ul>
-  <% else %>
+  <% elsif !can_edit? || relation.nil? %>
     <p class="muted"><%= t("family.none") %></p>
   <% end %>
 
-  <% if can_edit? %>
+  <% if relation && can_edit? %>
     <%= preserved_frame_tag "add_#{relation}" do %>
-      <%= link_to new_person_relative_path(person, relation: relation), class: "btn btn--plain add-relative" do %>
+      <%= link_to new_person_relative_path(person, relation: relation), class: "btn btn--ghost add-relative" do %>
         <%= icon_tag "add" %> <%= t("family.add", relation: t("family.relation_singular.#{relation}")) %>
       <% end %>
     <% end %>

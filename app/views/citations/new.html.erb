@@ -68,11 +68,11 @@
     </details>
 
     <div class="actions">
-      <%= f.submit t("citations.submit_add"), class: "btn btn--reversed" %>
+      <%= f.submit t("citations.submit_add"), class: "btn btn--primary" %>
       <%= link_to t("forms.cancel"),
             person_event_citations_path(@person, @event),
             data: { turbo_frame: dom_id(@event, :citation_form) },
-            class: "btn btn--plain" %>
+            class: "btn btn--ghost" %>
     </div>
   <% end %>
 <% end %>

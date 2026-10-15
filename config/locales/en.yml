@@ -268,8 +268,6 @@ en:
     detail_placeholder: "e.g. Engineer (for facts)"
     place_label: Place
     place_placeholder: "e.g. Boston, Massachusetts"
-    add_birthplace: Birthplace
-    add_residence: Where they lived
     remove_confirm: Remove this event?
     edit: Edit
     remove: Remove
