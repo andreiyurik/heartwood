@@ -1,17 +1,17 @@
 import { Controller } from "@hotwired/stimulus"
 
 // Tidy-tree layout written by hand (no d3/dagre): a post-order pass centres parents over children.
-// It works on *units*: a couple (two cards joined by a bond) or a lone person (a circle).
+// It works on *units*: a couple (two cards joined by a bond) or a lone person (one card).
 
-// Sizes must match tree.css (.tree-node--card and .tree-node--circle).
-const CARD_W      = 210   // .tree-node--card width
-const CARD_H      = 100   // .tree-node--card height (band + name + dates)
-const CIRC_D      = 160   // .tree-node--circle diameter
+// Sizes must match tree.css (.tree-node--card).
+const CARD_W      = 220   // .tree-node--card width
+const CARD_H      = 84    // .tree-node--card height (name, surname, dates)
+const ELBOW       = 8     // corner radius of descent edges
 const MIN_FIT     = 0.35  // fit-to-view floor — below this a huge tree is confetti
 const OPEN_MIN    = 0.85  // a tree opens no smaller than this: readable first, whole on request
 const OPEN_PAD    = 48
 const TIP_KEY     = "heartwood:tree:tip"
-const PAIR_GAP    = 26    // gap between the two cards of a couple (fits the ♥)
+const PAIR_GAP    = 16    // gap between the two cards of a couple
 const SIBLING_GAP = 40    // gap between adjacent units in a row
 const ROW_GAP     = 70    // vertical gap between generation rows
 const PAD         = 60    // breathing room around the laid-out tree
@@ -274,8 +274,8 @@ export default class extends Controller {
   }
 
   #gen(u)        { return this.#nodeById.get(u.members[0]).generation }
-  #unitWidth(u)  { return u.members.length === 2 ? CARD_W * 2 + PAIR_GAP : CIRC_D }
-  #unitHeight(u) { return u.members.length === 2 ? CARD_H : CIRC_D }
+  #unitWidth(u)  { return u.members.length === 2 ? CARD_W * 2 + PAIR_GAP : CARD_W }
+  #unitHeight(u) { return CARD_H }
 
   #placeCards() {
     const pos = {}
@@ -286,7 +286,7 @@ export default class extends Controller {
         pos[u.members[0]] = { cx: u.cx - off, y: u.y, w: CARD_W, h: CARD_H }
         pos[u.members[1]] = { cx: u.cx + off, y: u.y, w: CARD_W, h: CARD_H }
       } else {
-        pos[u.members[0]] = { cx: u.cx, y: u.y, w: CIRC_D, h: CIRC_D }
+        pos[u.members[0]] = { cx: u.cx, y: u.y, w: CARD_W, h: CARD_H }
       }
     }
 
@@ -329,7 +329,9 @@ export default class extends Controller {
       if (!u.visible) continue
       if (u.members.length === 2) this.#connector(u)
       if (this.#collapsed.has(u.id)) continue
-      for (const c of u.children) this.#link(u, c)
+      const kids = u.children.filter(c => c.visible)
+      for (const c of kids) this.#link(u, c)
+      if (kids.length) this.#fork(u, kids[0])
     }
   }
 
@@ -339,24 +341,20 @@ export default class extends Controller {
     const x2 = this.#pos[b].cx - this.#pos[b].w / 2
     const y  = u.y + u.h / 2
     this.#path(`M${x1},${y} L${x2},${y}`, "tree-edge tree-edge--bond")
-    this.#heart(u.cx, y)
   }
 
-  #heart(x, y) {
-    const bg = document.createElementNS(SVG_NS, "circle")
-    bg.setAttribute("cx", x)
-    bg.setAttribute("cy", y)
-    bg.setAttribute("r", 10)
-    bg.setAttribute("class", "tree-heart-bg")
-    const glyph = document.createElementNS(SVG_NS, "text")
-    glyph.setAttribute("x", x)
-    glyph.setAttribute("y", y)
-    glyph.setAttribute("class", "tree-heart")
-    glyph.textContent = "♥"
-    this.svgTarget.append(bg, glyph)
+  // Where the descent line leaves the parent and the bus starts: a quiet dot.
+  #fork(parent, child) {
+    const { px, my } = this.#route(parent, child)
+    const dot = document.createElementNS(SVG_NS, "circle")
+    dot.setAttribute("cx", px)
+    dot.setAttribute("cy", my)
+    dot.setAttribute("r", 3)
+    dot.setAttribute("class", "tree-fork")
+    this.svgTarget.appendChild(dot)
   }
 
-  #link(parent, child) {
+  #route(parent, child) {
     const px = parent.cx, cx = child.cx
     const py = parent.y + parent.h / 2, cy = child.y + child.h / 2
     const dir  = Math.sign(cy - py) || 1
@@ -364,7 +362,21 @@ export default class extends Controller {
     const y1   = parent.members.length === 2 ? py : edge
     const y2   = cy - dir * child.h / 2
     const my   = (edge + y2) / 2
-    this.#path(`M${px},${y1} L${px},${my} L${cx},${my} L${cx},${y2}`)
+    return { px, cx, dir, y1, y2, my }
+  }
+
+  // Down, across, down — with rounded elbows when there is room for them.
+  #link(parent, child) {
+    const { px, cx, dir, y1, y2, my } = this.#route(parent, child)
+    const dx = cx - px
+    const r  = Math.min(ELBOW, Math.abs(dx) / 2, Math.abs(y2 - my))
+    if (r < 1) return this.#path(`M${px},${y1} L${px},${my} L${cx},${my} L${cx},${y2}`)
+
+    const sx = Math.sign(dx)
+    this.#path(
+      `M${px},${y1} L${px},${my - dir * r} Q${px},${my} ${px + sx * r},${my} ` +
+      `L${cx - sx * r},${my} Q${cx},${my} ${cx},${my + dir * r} L${cx},${y2}`
+    )
   }
 
   #path(d, cls = "tree-edge") {
@@ -385,7 +397,7 @@ export default class extends Controller {
 
       const btn = document.createElement("button")
       btn.type      = "button"
-      btn.className = `tree-toggle${collapsed ? " tree-toggle--collapsed" : ""}`
+      btn.className = `tree-toggle ${collapsed ? "tree-toggle--collapsed" : "tree-toggle--expanded"}`
       btn.textContent = collapsed ? `+${u.subtreeCount}` : "−"
       const label = collapsed ? this.expandLabelValue : this.collapseLabelValue
       btn.setAttribute("aria-label", label)

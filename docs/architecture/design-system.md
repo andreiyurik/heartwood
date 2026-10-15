@@ -172,10 +172,8 @@ menu), **avatars are coloured by name**, and **empty maps say what to do**.
 - **A project-home "dock"** for the tree: People / Tree / Map / Sources as preview cards.
 - **Dates in the viewer's locale** instead of raw GEDCOM strings ("26 МАЙ 1799") — a
   presenter over `date_start`, see [[domain-model]].
-- **One node shape in the tree**: a 220×72 card for everyone (avatar · name · years), sex
-  as an avatar tint, couples joined by a short connector instead of a heart, hover-revealed
-  collapse toggles, thinner edges with a dot at the fork. The page itself was brought back
-  into the sheet on 2026-10-16 (see [[family-tree-view]] "The page").
+- **The tree's "add relative" shortcuts** (ghost slots, panel buttons) could become one
+  quieter affordance per card once the card design settles.
 
 ## Related
 [[prior-art]] · [[redesign-plan]] · [[design-audit-2026-10-16]] · [[stack]] · [[person-profile]] · [[collaboration]]

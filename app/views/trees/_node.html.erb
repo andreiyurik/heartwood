@@ -1,64 +1,40 @@
 <%# locals: node (graph node hash), focus (bool), mode (string), depth (integer) %>
-<%# Two shapes, decided by the server so they match the JS unit grouping: couple
-    members render as banded cards, everyone else as ringed circles. Clicking a
-    node loads the person into the slide-over panel (see trees/_canvas). %>
-<% shape = node[:partnered] ? "card" : "circle" %>
+<%# Every person is the same card; clicking one loads the person into the slide-over panel. %>
 <% if node[:ghost] %>
-  <%# Dashed "add a relative" slot at the tree's growth frontier — opens the
-      add-relative form in the person panel (relation matches relatives#new). %>
-  <div class="tree-node tree-node--<%= shape %> tree-node--ghost"
+  <div class="tree-node tree-node--card tree-node--ghost"
        data-tree-target="node"
        data-tree-node-id="<%= node[:id] %>">
     <%= link_to new_person_relative_path(node[:ghost_for], relation: node[:ghost], return_to: request.fullpath),
           data: { turbo_frame: "person-panel" } do %>
-      <span class="ghost-icon"><%= render "people/silhouette", sex: nil %></span>
+      <span class="node-avatar node-avatar--silhouette" aria-hidden="true"><%= render "people/silhouette", sex: nil %></span>
       <span class="ghost-label"><%= t("trees.ghost.#{node[:ghost]}") %></span>
     <% end %>
   </div>
 <% else %>
   <% tone = node[:living] ? "living" : (node[:sex]&.downcase || "u") %>
-  <div class="tree-node tree-node--<%= shape %> tree-node--<%= tone %> <%= "tree-node--focus" if focus %>"
+  <div class="tree-node tree-node--card tree-node--<%= tone %> <%= "tree-node--focus" if focus %>"
        data-tree-target="node"
        data-tree-node-id="<%= node[:id] %>">
     <% if node[:living] %>
       <p class="node-name node-name--living"><%= node[:name] %></p>
     <% else %>
       <%= link_to person_panel_path(node[:id], return_to: request.fullpath), data: { turbo_frame: "person-panel" } do %>
-        <% if shape == "card" %>
-          <span class="node-band node-surname"><%= node[:surname] %></span>
-          <div class="node-body">
-            <% if node[:avatar_url].present? %>
-              <%= image_tag node[:avatar_url], class: "node-avatar", alt: node[:name] %>
-            <% else %>
-              <span class="node-avatar node-avatar--silhouette" aria-hidden="true"><%= render "people/silhouette", sex: node[:sex] %></span>
-            <% end %>
-            <div class="node-text">
-              <p class="node-name"><%= node[:given].presence || node[:name] %></p>
-              <% if node[:years].present? %>
-                <p class="node-dates"><%= node[:years] %></p>
-              <% end %>
-            </div>
-          </div>
+        <% if node[:avatar_url].present? %>
+          <%= image_tag node[:avatar_url], class: "node-avatar", alt: node[:name] %>
         <% else %>
-          <% if node[:avatar_url].present? %>
-            <%= image_tag node[:avatar_url], class: "node-avatar", alt: node[:name] %>
-          <% else %>
-            <span class="node-avatar node-avatar--silhouette" aria-hidden="true"><%= render "people/silhouette", sex: node[:sex] %></span>
-          <% end %>
-          <div class="node-text">
-            <%# Given names over surname so full names stay readable inside the
-                circle; single-line display_name when either half is missing. %>
-            <% if node[:given].present? && node[:surname].present? %>
-              <p class="node-name"><%= node[:given] %></p>
-              <p class="node-surname"><%= node[:surname] %></p>
-            <% else %>
-              <p class="node-name"><%= node[:name] %></p>
-            <% end %>
-            <% if node[:years].present? %>
-              <p class="node-dates"><%= node[:years] %></p>
-            <% end %>
-          </div>
+          <span class="node-avatar node-avatar--silhouette" aria-hidden="true"><%= render "people/silhouette", sex: node[:sex] %></span>
         <% end %>
+        <span class="node-text">
+          <% if node[:given].present? && node[:surname].present? %>
+            <span class="node-name"><%= node[:given] %></span>
+            <span class="node-surname"><%= node[:surname] %></span>
+          <% else %>
+            <span class="node-name"><%= node[:name] %></span>
+          <% end %>
+          <% if node[:years].present? %>
+            <span class="node-dates"><%= node[:years] %></span>
+          <% end %>
+        </span>
       <% end %>
     <% end %>
   </div>

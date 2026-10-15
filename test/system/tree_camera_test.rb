@@ -117,11 +117,14 @@ class TreeCameraTest < ApplicationSystemTestCase
   end
 
   test "mini map appears once the tree overflows and a click jumps the camera" do
-    visit person_tree_path(@chain.first, mode: "descendants", depth: 2)
+    visit person_tree_path(@chain.first, mode: "descendants", depth: 3)
     assert_selector ".tree-edges path", wait: 5
-    assert_no_selector ".tree-minimap"   # a short tree fits → no map
+    assert_no_selector ".tree-minimap"   # four cards fit the canvas → no map
 
-    3.times { find(".tree-zoom button[data-action='tree#zoomIn']").click }
+    6.times do
+      break if page.has_selector?(".tree-minimap", wait: 0.2)
+      find(".tree-zoom button[data-action='tree#zoomIn']").click
+    end
     assert_selector ".tree-minimap", wait: 3
 
     moved = page.evaluate_script(<<~JS)

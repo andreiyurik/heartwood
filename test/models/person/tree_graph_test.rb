@@ -79,14 +79,6 @@ class Person::TreeGraphTest < ActiveSupport::TestCase
     assert_equal "Bach",             node[:surname]
   end
 
-  test "nodes carry the partnered flag that picks the card or circle shape" do
-    graph = ancestors_of(@child, depth: 1)
-    by_id = graph[:nodes].index_by { |n| n[:id] }
-    assert by_id[@father.id][:partnered], "couple member should be partnered"
-    assert by_id[@mother.id][:partnered], "couple member should be partnered"
-    assert_not by_id[@child.id][:partnered], "single should not be partnered"
-  end
-
   test "nodes carry a compact lifespan string" do
     dated = Person.create!(given_names: "Dated", sex: "M", tree: @tree)
     Event.create!(kind: "BIRT", eventable: dated, tree: @tree, date_raw: "23 MAY 1767", date_start: Date.new(1767, 5, 23))
@@ -124,7 +116,6 @@ class Person::TreeGraphTest < ActiveSupport::TestCase
     ghosts = graph[:nodes].select { |n| n[:ghost] }
     assert_equal %w[child partner], ghosts.map { |n| n[:ghost] }.sort
     partner_ghost = ghosts.find { |n| n[:ghost] == "partner" }
-    assert partner_ghost[:partnered], "partner ghost should render as the couple's second card"
   end
 
   test "no partner ghost when the focus couple is already shown" do
