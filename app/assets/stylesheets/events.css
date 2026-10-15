@@ -89,6 +89,28 @@
   }
 }
 
+/* On a phone the date sits on its own small line, so the text keeps its width
+   and the controls stay beside it */
+@media (max-width: 40rem) {
+  .event-date {
+    flex-basis: 100%;
+    font-size: 0.8125rem;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .event-body {
+    flex-basis: 8rem;
+    min-inline-size: 0;
+  }
+
+  .event-actions {
+    gap: 0;
+  }
+}
+
 .event-add-actions {
   display: flex;
   flex-wrap: wrap;
