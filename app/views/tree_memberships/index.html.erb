@@ -9,7 +9,7 @@
     <div class="invite-box__actions">
       <input type="text" class="input" value="<%= url %>" aria-labelledby="invite_label" readonly>
 
-      <button type="button" class="btn btn--circle" hidden
+      <button type="button" class="btn btn--round" hidden
               data-controller="share" data-action="share#share"
               data-share-url-value="<%= url %>" data-share-title-value="<%= Current.tree.name %>">
         <%= icon_tag "share" %>
@@ -21,7 +21,7 @@
         <span class="for-screen-reader"><%= t("tree_memberships.copy_link") %></span>
       <% end %>
 
-      <%= button_to tree_join_code_path, class: "btn btn--circle",
+      <%= button_to tree_join_code_path, class: "btn btn--round",
             data: { turbo_confirm: t("tree_memberships.reset_confirm") } do %>
         <%= icon_tag "refresh" %>
         <span class="for-screen-reader"><%= t("tree_memberships.reset_link") %></span>

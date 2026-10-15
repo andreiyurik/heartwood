@@ -6,7 +6,7 @@
 <% else %>
   <% content_for :header do %>
     <% if can_edit? %>
-      <%= link_to new_person_path, class: "btn btn--reversed", title: "#{t("people.add")} (n)",
+      <%= link_to new_person_path, class: "btn btn--primary", title: "#{t("people.add")} (n)",
             data: { controller: "hotkey", hotkey_key_value: "n", action: "keydown@window->hotkey#trigger" } do %>
         <%= icon_tag "add" %> <%= t("people.add") %>
       <% end %>
@@ -39,7 +39,7 @@
             class: "search-filter",
             data: { action: "change->auto-submit#submit" } %>
       <% if @q.present? || @sex.present? || @sort != Person::SORT_OPTIONS.first %>
-        <%= link_to t("people.search_clear"), people_path, class: "btn btn--plain search-clear" %>
+        <%= link_to t("people.search_clear"), people_path, class: "btn btn--ghost search-clear" %>
       <% end %>
     </div>
   <% end %>

@@ -1,4 +1,3 @@
-<%# Re-rendered whole on event create/update/destroy (turbo_stream target id "events"). %>
 <section class="events" id="events">
   <h2><%= t("events.title") %></h2>
   <% if person.events.any? %>
@@ -12,14 +11,8 @@
   <% if can_edit? %>
     <%= preserved_frame_tag "add_event" do %>
       <div class="event-add-actions">
-        <%= link_to new_person_event_path(person), class: "btn btn--plain add-relative" do %>
+        <%= link_to new_person_event_path(person), class: "btn btn--ghost" do %>
           <%= icon_tag "add" %> <%= t("events.add") %>
-        <% end %>
-        <%= link_to new_person_event_path(person, kind: "BIRT"), class: "btn btn--plain" do %>
-          <%= icon_tag "add" %> <%= t("events.add_birthplace") %>
-        <% end %>
-        <%= link_to new_person_event_path(person, kind: "RESI"), class: "btn btn--plain" do %>
-          <%= icon_tag "add" %> <%= t("events.add_residence") %>
         <% end %>
       </div>
     <% end %>

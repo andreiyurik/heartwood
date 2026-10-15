@@ -18,7 +18,7 @@
     </header>
 
     <div class="person-panel-actions">
-      <%= link_to t("people.tree"), person_tree_path(@person), class: "btn btn--reversed" %>
+      <%= link_to t("people.tree"), person_tree_path(@person), class: "btn btn--primary" %>
       <%= link_to t("people.profile"), person_path(@person), class: "btn" %>
       <% if can_edit? %>
         <%= link_to edit_person_path(@person), class: "btn" do %>
@@ -35,7 +35,7 @@
         <% %w[parent partner child].each do |relation| %>
           <%= link_to t("family.relation_singular.#{relation}"),
                 new_person_relative_path(@person, relation: relation, return_to: params[:return_to]),
-                class: "btn btn--plain", data: { turbo_frame: "person-panel" } %>
+                class: "btn btn--ghost", data: { turbo_frame: "person-panel" } %>
         <% end %>
       </div>
     <% end %>

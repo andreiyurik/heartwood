@@ -44,12 +44,12 @@
         <%= f.select :sex, Person::SEXES.map { |v| [t("people.sex.#{v}"), v] }, {}, class: "input" %>
       </div>
       <div class="actions">
-        <%= f.submit t("people.add"), class: "btn btn--reversed" %>
+        <%= f.submit t("people.add"), class: "btn btn--primary" %>
         <% if panel %>
           <%= link_to t("forms.cancel"), person_panel_path(@person, return_to: params[:return_to]),
-                class: "btn btn--plain", data: { turbo_frame: "person-panel" } %>
+                class: "btn btn--ghost", data: { turbo_frame: "person-panel" } %>
         <% else %>
-          <%= link_to t("forms.cancel"), person_path(@person), class: "btn btn--plain", data: { turbo_frame: "_top" } %>
+          <%= link_to t("forms.cancel"), person_path(@person), class: "btn btn--ghost", data: { turbo_frame: "_top" } %>
         <% end %>
       </div>
     <% end %>
