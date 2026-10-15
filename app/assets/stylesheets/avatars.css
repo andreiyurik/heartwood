@@ -35,6 +35,7 @@
 }
 
 .avatar--initials {
+  background-color: var(--color-avatar);
   letter-spacing: 0.02em;
 }
 

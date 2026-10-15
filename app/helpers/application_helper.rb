@@ -68,6 +68,15 @@ module ApplicationHelper
     name.to_s.split.map(&:first).first(2).join.upcase
   end
 
+  def avatar_hue(name)
+    Zlib.crc32(name.to_s) % 360
+  end
+
+  def initials_avatar(name, **options)
+    classes = [ "avatar", "avatar--initials", options.delete(:class) ].compact.join(" ")
+    tag.div initials_for(name), class: classes, style: "--avatar-hue: #{avatar_hue(name)}", "aria-hidden": true, **options
+  end
+
   def section_link(section, path)
     current = SECTIONS.fetch(section).include?(controller_name)
     link_to t("nav.#{section}"), path, aria: { current: ("page" if current) }

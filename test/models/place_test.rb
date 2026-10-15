@@ -22,6 +22,20 @@ class PlaceTest < ActiveSupport::TestCase
     assert_empty Place.search("")
   end
 
+  test "geocoded lists only places with both coordinates" do
+    bare = Place.create!(name: "Nowhere", tree: trees(:bach))
+    assert_includes Place.geocoded, places(:leipzig)
+    assert_not_includes Place.geocoded, bare
+  end
+
+  test "a person's located events are those with a geocoded place" do
+    person = people(:wilhelm_friedemann)
+    bare = Place.create!(name: "Nowhere", tree: trees(:bach))
+    located = person.events.create!(kind: "BIRT", place: places(:leipzig))
+    person.events.create!(kind: "RESI", place: bare)
+    assert_equal [ located ], person.located_events.to_a
+  end
+
   test "geocoded? reflects whether coordinates are present" do
     assert_not Place.new(name: "X").geocoded?
     assert     Place.new(name: "X", latitude: 1, longitude: 2).geocoded?

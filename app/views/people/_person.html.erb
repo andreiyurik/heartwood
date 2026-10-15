@@ -2,7 +2,7 @@
   <% if person.avatar.attached? %>
     <%= image_tag person.avatar, class: "avatar", alt: "" %>
   <% else %>
-    <div class="avatar avatar--initials" aria-hidden="true"><%= initials_for(person.display_name) %></div>
+    <%= initials_avatar person.display_name %>
   <% end %>
   <div class="person-row__body">
     <p class="person-row__name"><%= link_to person.display_name, person %></p>

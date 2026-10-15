@@ -1,7 +1,5 @@
 <% if person.avatar.attached? %>
   <%= image_tag person.avatar, class: "avatar avatar--large", alt: person.display_name %>
 <% else %>
-  <div class="avatar avatar--large avatar--initials" aria-hidden="true">
-    <%= person.display_name.split.map(&:first).first(2).join.upcase %>
-  </div>
+  <%= initials_avatar person.display_name, class: "avatar--large" %>
 <% end %>

@@ -1,11 +1,14 @@
 <% page_title t("nav.map") %>
-<% full_bleed %>
 <%= live_updates refresh: "replace" %>
 
-<div class="map-page">
-
-  <div class="map-canvas map-canvas--full"
-       data-controller="map"
-       data-map-url-value="<%= map_events_path(format: :json) %>"
-       data-map-unavailable-value="<%= t("maps.unavailable") %>"></div>
-</div>
+<% if Current.tree.places.geocoded.exists? %>
+  <% full_bleed %>
+  <div class="map-page">
+    <div class="map-canvas map-canvas--full"
+         data-controller="map"
+         data-map-url-value="<%= map_events_path(format: :json) %>"
+         data-map-unavailable-value="<%= t("maps.unavailable") %>"></div>
+  </div>
+<% else %>
+  <%= render "shared/blank_slate", title: t("maps.blank.title"), lede: t("maps.blank.lede") %>
+<% end %>
