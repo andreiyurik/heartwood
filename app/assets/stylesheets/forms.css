@@ -1,5 +1,5 @@
 .form {
-  max-inline-size: 36rem;
+  max-inline-size: 40rem;
 
   .actions {
     align-items: center;
@@ -84,9 +84,21 @@
 
 @media (min-width: 40rem) {
   .form .actions,
-  .form .more-fields,
+  .form .more-fields > summary,
   .form > .errors {
     margin-inline-start: calc(var(--field-label-width, 9rem) + var(--inline-space-double));
+  }
+}
+
+/* A long field (the biography) takes the whole row, label on top */
+.field--stacked {
+  @media (min-width: 40rem) {
+    display: flex;
+
+    > label {
+      line-height: inherit;
+      text-align: start;
+    }
   }
 }
 
@@ -120,10 +132,6 @@
     background-color: var(--color-negative-light);
     color: var(--color-negative);
   }
-}
-
-.settings-links {
-  margin-block-start: var(--block-space-double);
 }
 
 .more-fields {

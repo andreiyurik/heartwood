@@ -48,6 +48,8 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "the profile reads record-first: events and family before the biography, no facts block" do
+    place = Place.create!(name: "London", latitude: 51.5, longitude: -0.12, tree: @tree)
+    Event.create!(kind: "BIRT", eventable: @person, tree: @tree, place: place)
     get person_url(@person)
     assert_select ".profile-tab", count: 0
     assert_select ".facts", count: 0
@@ -251,8 +253,20 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     get people_url
     assert_select ".blank-slate", count: 0
     assert_select "form.search-form"
-    assert_select "#header form[action=?]", export_path
+    assert_select "#header .header-actions form[action=?]", export_path, count: 0
+    assert_select "#header details.account-menu form[action=?] button", export_path, text: I18n.t("exports.create")
+    assert_select "#header details.account-menu a[href=?]", new_import_path, text: I18n.t("imports.title")
     assert_select "nav.sections a", count: 3
+  end
+
+  test "a viewer gets export but not import in the account menu" do
+    viewer = User.create!(name: "Vi", email_address: "vi@example.com", password: "password")
+    TreeMembership.create!(user: viewer, tree: @tree, role: "viewer")
+    sign_out
+    sign_in_as viewer
+    get people_url
+    assert_select "#header details.account-menu form[action=?]", export_path
+    assert_select "#header details.account-menu a[href=?]", new_import_path, count: 0
   end
 
   test "a viewer of an empty tree is told to wait, not offered actions" do
@@ -324,4 +338,30 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     get person_relationship_url(@person)
     assert_select "input[type=search][name=q][aria-label]"
   end
+
+  test "the person form stacks the biography under its own label, full width" do
+    get edit_person_url(@person)
+    assert_select ".more-fields .field--biography.field--stacked label[for=person_biography]"
+  end
+
+  test "the profile's edit action is labelled, not just an icon" do
+    get person_url(@person)
+    assert_select "#header .header-actions a[href=?]", edit_person_path(@person), text: /#{I18n.t("people.edit_button")}/
+  end
+
+  test "the map section appears only when one of the person's events is located" do
+    get person_url(@person)
+    assert_select "section#map", count: 0
+
+    place = Place.create!(name: "London", latitude: 51.5, longitude: -0.12, tree: @tree)
+    Event.create!(kind: "BIRT", eventable: @person, tree: @tree, place: place)
+    get person_url(@person)
+    assert_select "section#map [data-controller=map]"
+  end
+
+  test "initials avatars take a hue from the name" do
+    get people_url
+    assert_select ".person-row .avatar--initials[style*='--avatar-hue']"
+  end
+
 end
