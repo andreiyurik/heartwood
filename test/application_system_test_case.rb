@@ -16,6 +16,13 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # Selenium Manager ourselves so driver and browser stay a matched pair.
     paths = Selenium::WebDriver::SeleniumManager.binary_paths("--browser", "chrome")
     options.binary = paths["browser_path"] if paths["browser_path"].present?
+
+    # Every page keeps a /cable WebSocket; pages parked in the back-forward cache keep
+    # theirs too, and on a slow runner they can use up Chrome's connections to the test
+    # server so the next fetch never leaves the browser.
+    options.add_argument("--disable-features=BackForwardCache")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_option("goog:loggingPrefs", { browser: "ALL" })
   end
 
   # Absorb Turbo navigation / Stimulus-connect latency under load (default is 2s).
@@ -43,7 +50,18 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     next if passed?
     dir = Rails.root.join("tmp/screenshots"); FileUtils.mkdir_p(dir)
     File.write(dir.join("#{method_name}.html"), page.html)
-    File.write(dir.join("#{method_name}.console.txt"), page.driver.browser.logs.get(:browser).map(&:message).join("\n")) rescue nil
+    begin
+      File.write(dir.join("#{method_name}.console.txt"), page.driver.browser.logs.get(:browser).map(&:message).join("\n"))
+    rescue => e
+      File.write(dir.join("#{method_name}.console.txt"), "logs unavailable: #{e.message}")
+    end
+    state = {
+      url: page.current_url, handles: page.driver.browser.window_handles.size,
+      ready: page.evaluate_script("document.readyState"),
+      body_children: page.evaluate_script("document.body ? document.body.children.length : -1"),
+      alert: (page.driver.browser.switch_to.alert.text rescue "none")
+    }
+    File.write(dir.join("#{method_name}.state.txt"), state.inspect)
     File.write(dir.join("#{method_name}.test.log"), `tail -n 400 #{Rails.root.join("log/test.log")}`)
   end
 
