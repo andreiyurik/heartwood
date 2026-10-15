@@ -68,27 +68,19 @@
   stroke-width: 2.5;
 }
 
-.tree-heart-bg {
-  fill: var(--color-surface);
-  stroke: var(--tint-ink-25);
-  stroke-width: 1.5;
-}
-
-.tree-heart {
-  dominant-baseline: central;
-  fill: var(--color-female);
-  font-size: 12px;
-  text-anchor: middle;
+.tree-fork {
+  fill: var(--tint-ink-50);
 }
 
 .tree-nodes-layer {
   position: relative;
 }
 
-/* Node sizes must match CARD_W, CARD_H and CIRC_D in tree_controller.js */
+/* One card for everyone; its size must match CARD_W and CARD_H in tree_controller.js */
 .tree-node {
   background-color: var(--color-surface);
   border: 1px solid var(--tint-ink-15);
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
   inset-block-start: 0;
   inset-inline-start: 0;
@@ -96,128 +88,88 @@
   position: absolute;
 
   a {
+    align-items: center;
     block-size: 100%;
     color: inherit;
-    display: block;
+    display: flex;
+    gap: 0.6rem;
+    padding: 0 0.75rem;
+    text-decoration: none;
 
     &:hover {
       background-color: var(--color-bg);
-      text-decoration: none;
     }
   }
 }
 
 .tree-node--card {
-  block-size: 100px;
-  border-radius: 10px;
-  inline-size: 210px;
-}
-
-.tree-node--circle {
-  block-size: 160px;
-  border-radius: 50%;
-  border-width: 2px;
-  inline-size: 160px;
-  text-align: center;
-
-  a {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    justify-content: center;
-    padding: 0 1rem;
-  }
-
-  .node-avatar {
-    block-size: 2.5rem;
-    inline-size: 2.5rem;
-  }
-
-  .node-name,
-  .node-surname {
-    font-size: 0.8rem;
-  }
-
-  .node-name {
-    -webkit-line-clamp: 3;
-  }
-
-  /* The round outline clips text, so wrap the surname instead of ellipsis */
-  .node-surname {
-    overflow-wrap: anywhere;
-    text-overflow: clip;
-    white-space: normal;
-  }
-}
-
-.node-band {
-  background-color: var(--tint-ink-5);
-  block-size: 22px;
-  color: var(--color-muted);
-  display: block;
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  line-height: 22px;
-  overflow: hidden;
-  padding: 0 0.5rem;
-  text-align: center;
-  text-overflow: ellipsis;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.node-body {
-  align-items: center;
-  block-size: calc(100% - 22px);
-  display: flex;
-  gap: 0.6rem;
-  padding: 0 0.75rem;
+  block-size: 84px;
+  inline-size: 220px;
 }
 
 .node-avatar {
-  block-size: 2.75rem;
+  block-size: var(--component-base);
   border-radius: 50%;
   flex: 0 0 auto;
-  inline-size: 2.75rem;
+  inline-size: var(--component-base);
   object-fit: cover;
 }
 
+/* Sex is a tint on the silhouette, never a fill */
 .node-avatar--silhouette {
   align-items: center;
-  background-color: var(--color-bg);
+  background-color: var(--tint-ink-5);
   color: var(--color-muted);
   display: flex;
   justify-content: center;
 
   svg {
-    block-size: 72%;
-    inline-size: 72%;
+    block-size: 64%;
+    inline-size: 64%;
   }
 }
 
 .tree-node--m .node-avatar--silhouette {
-  color: var(--color-male);
-}
-
-.tree-node--f .node-avatar--silhouette {
-  color: var(--color-female);
-}
-
-.node-text {
-  min-inline-size: 0;
-}
-
-/* Sex as a tint, never a fill */
-.tree-node--m.tree-node--card .node-band {
   background-color: color-mix(in oklch, transparent, var(--color-male) 18%);
   color: var(--color-male);
 }
 
-.tree-node--f.tree-node--card .node-band {
+.tree-node--f .node-avatar--silhouette {
   background-color: color-mix(in oklch, transparent, var(--color-female) 18%);
   color: var(--color-female);
+}
+
+.node-text {
+  display: grid;
+  min-inline-size: 0;
+}
+
+.node-name,
+.node-surname {
+  font-size: 0.875rem;
+  line-height: 1.2;
+  overflow: hidden;
+}
+
+/* Patronymics make given names long: wrap to two lines rather than clip */
+.node-name {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.node-surname {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.node-dates {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  margin-block-start: 0.1rem;
 }
 
 /* Opening: nodes fade in generation by generation, inside 300ms */
@@ -226,16 +178,20 @@
   animation-delay: min(calc(var(--gen, 0) * 40ms), 150ms);
 }
 
-.tree-node--m.tree-node--circle {
-  border-color: var(--color-male);
-}
-
-.tree-node--f.tree-node--circle {
-  border-color: var(--color-female);
-}
-
 .tree-node--living {
   background-color: var(--color-bg);
+}
+
+.node-name--living {
+  align-items: center;
+  block-size: 100%;
+  color: var(--color-muted);
+  display: flex;
+  font-style: italic;
+  justify-content: center;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  text-align: center;
 }
 
 /* After the sex tones so the accent ring wins on the focus node */
@@ -256,47 +212,18 @@
   }
 
   a {
-    align-items: center;
     color: var(--color-muted);
-    display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-    padding: 0 0.75rem;
 
     &:hover {
       background: transparent;
       color: var(--color-link);
     }
   }
-
-  &.tree-node--circle a {
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-}
-
-.ghost-icon svg {
-  block-size: 2.4rem;
-  display: block;
-  inline-size: 2.4rem;
 }
 
 .ghost-label {
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  text-align: center;
-}
-
-.node-name--living {
-  align-items: center;
-  block-size: 100%;
-  color: var(--color-muted);
-  display: flex;
-  font-style: italic;
-  justify-content: center;
-  margin: 0;
-  padding: 0.5rem 0.75rem;
-  text-align: center;
 }
 
 .depth-controls {
@@ -311,35 +238,6 @@
   font-weight: 600;
   min-inline-size: 1.5rem;
   text-align: center;
-}
-
-.node-name,
-.node-surname {
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.25;
-  margin: 0;
-  overflow: hidden;
-}
-
-/* Patronymics make given names long: wrap to two lines rather than clip */
-.node-name {
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  display: -webkit-box;
-  overflow-wrap: anywhere;
-}
-
-.node-surname {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.node-dates {
-  color: var(--color-muted);
-  font-size: 0.75rem;
-  line-height: 1.2;
-  margin: 0.1rem 0 0;
 }
 
 .tree-toggle {
@@ -369,6 +267,19 @@
 
 .tree-toggle--collapsed {
   border-color: var(--color-selected-dark);
+}
+
+/* The open-branch toggle waits for the pointer; the folded one says people are hidden */
+@media (hover: hover) {
+  .tree-toggle--expanded {
+    opacity: 0;
+    transition: opacity var(--duration-medium) ease-out;
+  }
+
+  .tree-canvas:hover .tree-toggle--expanded,
+  .tree-toggle--expanded:focus-visible {
+    opacity: 1;
+  }
 }
 
 .tree-search-results {

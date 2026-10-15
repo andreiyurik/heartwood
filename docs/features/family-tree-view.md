@@ -94,29 +94,32 @@ sibling subtrees never overlap.
 
 - **Orientation.** Descendants: focus on top, generations grow downward. Ancestors: focus at
   the bottom, generations grow upward (row order flipped via `maxGen − gen`) so the oldest
-  generation is on top — the genealogical "top-down" read. Each row is as tall as its tallest
-  unit (cards and circles mix); shorter units are centred vertically within the row.
+  generation is on top — the genealogical "top-down" read. Every unit is one card high, so
+  rows are even.
 - **Units, not people.** The layout works on *units*: a **couple** (two partner cards joined by
-  a bond line with a ♥) or a **single** person (a circle). The tidy pass treats a unit as one
+  a short bond line) or a **single** person (one card). The tidy pass treats a unit as one
   block. When a parent unit is wider than its children's span (a couple over a lone child), the
   children are shifted to stay centred — correctness (no overlap) first, aesthetics second.
 - **Hierarchy from `edges`, grouping from `unions`.** The parent→child structure is the
   server's `edges` (`from_id` = layout-parent/focus-side, `to_id` = layout-child, in both
   modes) lifted onto units; `unions` only decide which cards sit side-by-side. First edge into
   a unit wins, so a person reached twice via pedigree collapse is placed once (spanning tree).
-- **Two node shapes**, decided server-side (`node[:partnered]`, derived from the same `unions`
-  the JS groups by, so shape and grouping never disagree). Couple members render as **banded
-  cards** (`CARD_W×CARD_H`): a sex-coloured band across the top carries the surname (later: the
-  kinship label), the body holds avatar + given names + lifespan. Singles render as **ringed
-  circles** (`CIRC_D`) with the name and lifespan inside. Sizes live in `tree_controller.js`
-  and are mirrored in `.tree-node--card`/`.tree-node--circle` CSS. Nickname/prefix/suffix are
-  profile-only detail — nodes stay compact.
-- **Edges.** Orthogonal elbows (down, across, down) from a parent unit to each child unit; the
-  horizontal bus sits in the gap between rows. Edges use a dedicated visible stroke
-  (`--tree-edge`), not the faint hairline `--line`. A couple's cards are joined by a **thicker
-  bond line** (`.tree-edge--bond`) with a **♥ marker** in the gap between the cards, so marriage
-  reads differently from descent; their children's line drops from the bond midpoint through
-  that gap.
+- **One node shape** (2026-10-16, [[design-system]]): every person is the same card
+  (`CARD_W×CARD_H`, 220×84): avatar on the left, given names bold over the surname, the
+  lifespan muted underneath. Sex shows only as the avatar's tint (silhouette background and
+  stroke), never as a fill or a band; a photo needs no tint. The focus card wears the accent
+  ring; living people render as a muted, unlinked card; ghost slots are dashed cards. Sizes
+  live in `tree_controller.js` and are mirrored in `.tree-node` CSS. Nickname/prefix/suffix
+  are profile-only detail — nodes stay compact.
+- **Edges.** Orthogonal elbows with rounded corners (down, across, down) from a parent unit to
+  each child unit; the horizontal bus sits in the gap between rows and a small dot
+  (`.tree-fork`) marks where it leaves the parent. Strokes are `--tint-ink-25`, 1.5px. A
+  couple's cards are joined by a **short bond line** (`.tree-edge--bond`) in the gap between
+  them, so marriage reads differently from descent; their children's line drops from the
+  bond's midpoint.
+- **Collapse toggles** are quiet: the `−` of an open branch appears when the pointer is over
+  the canvas (always on touch screens); the `+N` of a folded branch is always visible because
+  it says people are hidden.
 - **Person panel.** Clicking a node loads `People::PanelsController#show` into the `person-panel` turbo-frame
   inside a slide-over drawer (`drawer_controller.js`): avatar, name, lifespan, birth/death
   details, add-relative shortcuts, and buttons to refocus the tree on that person, open the

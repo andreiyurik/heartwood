@@ -15,12 +15,10 @@ class Person::TreeGraph
     @unions = collect_unions
     ghost_nodes = @ghosts ? collect_ghosts : []
 
-    # Banded couple cards vs circles must match the JS unit grouping, so both derive from unions.
-    partnered = @unions.flat_map { |union| union[:partner_ids] }.to_set
     nodes = @persons.values.map do |person|
-      node_data(person, generation: @gens[person.id], order: @orders[person.id], partnered: partnered.include?(person.id))
+      node_data(person, generation: @gens[person.id], order: @orders[person.id])
     end
-    nodes += ghost_nodes.map { |ghost| ghost.merge(partnered: partnered.include?(ghost[:id])) }
+    nodes += ghost_nodes
 
     { nodes:, edges: @edges, unions: @unions, persons: @persons, focus_id: @person.id, mode: @mode,
       generations: @gens.values.max.to_i + 1 }
@@ -131,8 +129,8 @@ class Person::TreeGraph
       partners.each { |partner| place(partner, gen) unless @persons.key?(partner.id) }
     end
 
-    def node_data(person, generation:, order:, partnered:)
-      base = { id: person.id, generation:, order:, partnered: }
+    def node_data(person, generation:, order:)
+      base = { id: person.id, generation:, order: }
       unless person.visible_to?(@viewer)
         return base.merge(name: I18n.t("people.living"), years: nil, sex: nil, living: true)
       end

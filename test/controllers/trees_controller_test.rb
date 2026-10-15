@@ -120,4 +120,15 @@ class TreesControllerTest < ActionDispatch::IntegrationTest
     assert_select "#header a.back[href=?]", person_path(@person)
     assert_select "#header details.action-menu button[data-controller=print]"
   end
+
+  test "every node is the same card: no circles, no surname band, sex only on the avatar" do
+    get person_tree_url(@person, mode: "descendants", depth: 1)
+    assert_select ".tree-node--circle", count: 0
+    assert_select ".node-band", count: 0
+    assert_select ".tree-node--card .node-avatar", minimum: 3
+    assert_select ".tree-node--focus.tree-node--card .node-name", text: "Johann Sebastian"
+    assert_select ".tree-node--focus .node-surname", text: "Bach"
+    assert_select ".tree-node--focus .node-dates", text: /1685/
+    assert_select "[data-tree-graph-value*='partnered']", count: 0
+  end
 end

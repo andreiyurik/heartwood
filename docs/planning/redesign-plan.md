@@ -168,6 +168,15 @@ Reference: [[family-tree-view]] "The page". The tree looked like three stacked w
 - [x] Quieter colour: nodes on `--shadow-sm`, surname bands as 18% sex tints, no canvas border.
 - Next (own PR): one card shape for every node — [[design-system]] §6.
 
+## Phase 9 — One card for every node (2026-10-16) ✅
+Reference: [[family-tree-view]] "One node shape". Couples were banded cards, singles 160px
+circles: two visual languages, saturated sex fills, a ♥ between spouses.
+- [x] Every person is the same 220×84 card: avatar · given names over surname · lifespan; sex only
+      as the avatar's tint; `node[:partnered]` and `.tree-node--circle` are gone.
+- [x] Couples joined by a short bond line, no heart; descent edges with rounded elbows and a dot at
+      the fork.
+- [x] The `−` collapse toggle shows when the pointer is over the canvas; `+N` stays visible.
+
 ## Decisions
 - Product name stays **Heartwood** (decided 2026-09-26); open source and community go in
   the tagline, not the name — see [[positioning]].
