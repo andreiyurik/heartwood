@@ -154,6 +154,20 @@ dark, EN and RU, as owner, fresh owner and invitee.
 - [x] Avatars coloured by name (`initials_avatar`, `--avatar-hue`).
 - Open: [[design-system]] §6.
 
+## Phase 8 — The tree page back in the sheet (2026-10-16) ✅
+Reference: [[family-tree-view]] "The page". The tree looked like three stacked widths
+(sheet, instruction strip, full-bleed canvas) with widgets in every corner.
+- [x] Tree and map are sheet pages: `h1` + metadata line ("7 people · 3 generations · from …",
+      "Ancestors · 3 generations", "5 places on the map"); the canvas bleeds to the sheet's edges
+      (`canvas_page`, no more `full_bleed`).
+- [x] No instruction strip; a one-time gesture tip remembered in `localStorage`.
+- [x] Search in the action row under the title; Ancestors/Descendants and generations beside it;
+      three round `.btn` zoom controls; Print in the `…` menu via a Stimulus outlet.
+- [x] Opening camera: fit with a 48px margin, never below 0.85, focus card against the nearer edge;
+      nodes fade in by generation (`translate` for positions, `transform` free for motion).
+- [x] Quieter colour: nodes on `--shadow-sm`, surname bands as 18% sex tints, no canvas border.
+- Next (own PR): one card shape for every node — [[design-system]] §6.
+
 ## Decisions
 - Product name stays **Heartwood** (decided 2026-09-26); open source and community go in
   the tagline, not the name — see [[positioning]].

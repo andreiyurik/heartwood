@@ -3,10 +3,6 @@
     <% if Current.tree %>
       <%= yield :back %>
       <%= render "layouts/tree_crumb" %>
-      <% if full_bleed? && content_for?(:page) %>
-        <span class="breadcrumbs__separator" aria-hidden="true">‹</span>
-        <span class="breadcrumbs__page"><%= yield :page %></span>
-      <% end %>
     <% else %>
       <%= link_to "🌳 Heartwood", root_path, class: "brand" %>
     <% end %>

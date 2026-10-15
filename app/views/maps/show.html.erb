@@ -1,8 +1,9 @@
 <% page_title t("nav.map") %>
 <%= live_updates refresh: "replace" %>
 
-<% if Current.tree.places.geocoded.exists? %>
-  <% full_bleed %>
+<% if (located = Current.tree.places.geocoded.count).positive? %>
+  <% canvas_page %>
+  <% page_meta t("maps.meta", count: located) %>
   <div class="map-page">
     <div class="map-canvas map-canvas--full"
          data-controller="map"

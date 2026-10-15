@@ -1,13 +1,17 @@
 <% page_title t("nav.tree") %>
-<% full_bleed %>
 <%= live_updates refresh: "replace" %>
 
-<div class="tree-page">
-
-  <% if @root %>
-    <p class="tree-hint"><%= t("trees.hint") %></p>
-    <%= render "trees/canvas", graph: @graph, mode: @mode, depth: @depth, focus_id: @root.id %>
-  <% else %>
-    <%= render "people/blank_slate" %>
+<% if @root %>
+  <% canvas_page %>
+  <% page_meta t("trees.clan_meta",
+       people: t("trees.people", count: @graph[:nodes].count { |node| !node[:ghost] }),
+       generations: t("trees.generations", count: @graph[:generations]),
+       root: @root.display_name) %>
+  <% content_for :header do %>
+    <%= render "trees/menu" %>
   <% end %>
-</div>
+
+  <%= render layout: "trees/canvas", locals: { graph: @graph, mode: @mode, depth: @depth, focus_id: @root.id } do %><% end %>
+<% else %>
+  <%= render "people/blank_slate" %>
+<% end %>

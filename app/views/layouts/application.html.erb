@@ -43,7 +43,7 @@
     <%= render "layouts/flash" %>
 
     <main id="main">
-      <% if content_for?(:page) && !full_bleed? %>
+      <% if content_for?(:page) %>
         <header class="page-header">
           <%= yield :page_avatar %>
           <div class="page-header__text">

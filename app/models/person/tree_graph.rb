@@ -22,7 +22,8 @@ class Person::TreeGraph
     end
     nodes += ghost_nodes.map { |ghost| ghost.merge(partnered: partnered.include?(ghost[:id])) }
 
-    { nodes:, edges: @edges, unions: @unions, persons: @persons, focus_id: @person.id, mode: @mode }
+    { nodes:, edges: @edges, unions: @unions, persons: @persons, focus_id: @person.id, mode: @mode,
+      generations: @gens.values.max.to_i + 1 }
   end
 
   private

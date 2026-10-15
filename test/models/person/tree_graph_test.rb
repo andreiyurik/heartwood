@@ -327,4 +327,12 @@ class Person::TreeGraphTest < ActiveSupport::TestCase
     png = StringIO.new("\x89PNG\r\n\x1a\n" + "\x00" * 100)
     person.avatar.attach(io: png, filename: "a.png", content_type: "image/png")
   end
+
+  test "build counts the generations shown" do
+    graph = Person::TreeGraph.new(people(:johann_sebastian), mode: "ancestors", depth: 4, ghosts: false).build
+    assert_equal 2, graph[:generations]
+    graph = Person::TreeGraph.new(people(:ambrosius), mode: "descendants", depth: 8, ghosts: false).build
+    assert_equal 3, graph[:generations]
+  end
+
 end

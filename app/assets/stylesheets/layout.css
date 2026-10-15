@@ -27,14 +27,28 @@ body {
 }
 
 #main {
+  --sheet-padding-inline: var(--inline-space-double);
+
   grid-area: main;
   box-shadow: var(--shadow-xl);
   min-block-size: 0;
-  padding: var(--block-space-double) var(--inline-space-double) calc(var(--block-space-double) * 2);
+  padding: var(--block-space-double) var(--sheet-padding-inline) calc(var(--block-space-double) * 2);
 
   @media (min-width: 40rem) {
-    padding-inline: 2.5rem;
+    --sheet-padding-inline: 2.5rem;
   }
+}
+
+/* Tree and map: the sheet flexes so the canvas fills it down to the bottom edge */
+.canvas-page #main {
+  display: flex;
+  flex-direction: column;
+  padding-block-end: 0;
+}
+
+.canvas-page .page-header {
+  flex-shrink: 0;
+  margin-block-end: var(--block-space);
 }
 
 @media (min-width: 70rem) {
@@ -65,13 +79,6 @@ body {
 .page-header__meta {
   color: var(--color-muted);
   margin: var(--block-space-half) 0 0;
-}
-
-.full-bleed #main {
-  display: flex;
-  flex-direction: column;
-  inline-size: 100%;
-  padding: 0;
 }
 
 @media print {

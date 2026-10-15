@@ -89,6 +89,10 @@ is pure white. Dark mode: body `hsl(202 42% 7.5%)`, sheet `hsl(200 28% 14.7%)` �
 - **Avatars**: an initials avatar hashes the name into `--avatar-hue` (`initials_avatar`
   helper); lightness and chroma are one token (`--lch-avatar-tone`), so every person gets
   their own colour and both schemes stay consistent.
+- **Canvas pages (tree, map) stay sheets**: title and metadata line like every page, an
+  action row, then a canvas that bleeds to the sheet's edges and takes its bottom corners
+  (`canvas_page`). No permanent instruction text; a one-time tip pill instead. Canvas
+  controls are ordinary round `.btn`s with `--shadow-md`.
 - **Blank states everywhere a view can be empty**: the map with no located place, a person
   with no located event (the map section is simply absent), empty family groups (only the
   add button, no "None recorded." for editors).
@@ -168,8 +172,10 @@ menu), **avatars are coloured by name**, and **empty maps say what to do**.
 - **A project-home "dock"** for the tree: People / Tree / Map / Sources as preview cards.
 - **Dates in the viewer's locale** instead of raw GEDCOM strings ("26 МАЙ 1799") — a
   presenter over `date_start`, see [[domain-model]].
-- **The tree's instruction strip** ("Scroll to zoom · drag to pan …") shown once, not
-  forever.
+- **One node shape in the tree**: a 220×72 card for everyone (avatar · name · years), sex
+  as an avatar tint, couples joined by a short connector instead of a heart, hover-revealed
+  collapse toggles, thinner edges with a dot at the fork. The page itself was brought back
+  into the sheet on 2026-10-16 (see [[family-tree-view]] "The page").
 
 ## Related
 [[prior-art]] · [[redesign-plan]] · [[design-audit-2026-10-16]] · [[stack]] · [[person-profile]] · [[collaboration]]

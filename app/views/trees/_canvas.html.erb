@@ -1,61 +1,74 @@
-<%# locals: graph (graph hash), mode (string), depth (integer), focus_id (id of the highlighted person) %>
-<div class="tree-canvas"
-     tabindex="0"
-     role="application"
-     aria-label="<%= t("trees.canvas_label") %>"
+<%# locals: graph (graph hash), mode (string), depth (integer), focus_id (id of the highlighted person);
+    the block adds view controls to the action row %>
+<div class="tree-page"
      data-controller="tree"
-     data-action="keydown->tree#keydown"
      data-tree-graph-value="<%= graph.to_json %>"
      data-tree-mode-value="<%= mode %>"
      data-tree-depth-value="<%= depth %>"
      data-tree-expand-label-value="<%= t("trees.expand") %>"
      data-tree-collapse-label-value="<%= t("trees.collapse") %>">
-  <div class="tree-search">
-    <div class="search-field">
-      <%= icon_tag "search" %>
-      <input type="search" class="tree-search-input"
-             data-tree-target="searchInput"
-             data-controller="hotkey" data-hotkey-key-value="/"
-             data-action="input->tree#search keydown->tree#searchKeys keydown@window->hotkey#trigger"
-             placeholder="<%= t("trees.search_placeholder") %>"
-             aria-label="<%= t("trees.search_placeholder") %>"
-             autocomplete="off">
+  <div class="search-bar tree-actions">
+    <div class="tree-search">
+      <div class="search-field">
+        <%= icon_tag "search" %>
+        <input type="search" class="tree-search-input"
+               data-tree-target="searchInput"
+               data-controller="hotkey" data-hotkey-key-value="/"
+               data-action="input->tree#search keydown->tree#searchKeys keydown@window->hotkey#trigger"
+               placeholder="<%= t("trees.search_placeholder") %>"
+               aria-label="<%= t("trees.search_placeholder") %>"
+               autocomplete="off">
+        <kbd class="search-field__kbd" aria-hidden="true">/</kbd>
+      </div>
+      <ul class="tree-search-results" data-tree-target="searchResults" hidden></ul>
     </div>
-    <ul class="tree-search-results" data-tree-target="searchResults" hidden></ul>
+    <%= yield %>
   </div>
 
-  <canvas class="tree-minimap tree-minimap--hidden"
-          data-tree-target="minimap"
-          data-action="pointerdown->tree#minimapJump"
-          aria-hidden="true"></canvas>
+  <div class="tree-canvas"
+       tabindex="0"
+       role="application"
+       aria-label="<%= t("trees.canvas_label") %>"
+       data-tree-target="canvas"
+       data-action="keydown->tree#keydown">
+    <canvas class="tree-minimap tree-minimap--hidden"
+            data-tree-target="minimap"
+            data-action="pointerdown->tree#minimapJump"
+            aria-hidden="true"></canvas>
 
-  <div class="tree-zoom">
-    <button type="button" data-action="tree#zoomIn"  aria-label="<%= t("trees.zoom_in") %>"  title="<%= t("trees.zoom_in") %>">+</button>
-    <button type="button" data-action="tree#zoomOut" aria-label="<%= t("trees.zoom_out") %>" title="<%= t("trees.zoom_out") %>">−</button>
-    <button type="button" data-action="tree#zoomFit" aria-label="<%= t("trees.zoom_fit") %>" title="<%= t("trees.zoom_fit") %>">⌂</button>
-    <button type="button" class="tree-print-btn" data-action="tree#print" aria-label="<%= t("trees.print") %>" title="<%= t("trees.print") %>">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="1"/><path d="M7 14h10v6H7z"/></svg>
-    </button>
-  </div>
+    <div class="tree-zoom">
+      <button type="button" class="btn btn--round" data-action="tree#zoomIn" title="<%= t("trees.zoom_in") %>">
+        <%= icon_tag "add" %><span class="for-screen-reader"><%= t("trees.zoom_in") %></span>
+      </button>
+      <button type="button" class="btn btn--round" data-action="tree#zoomOut" title="<%= t("trees.zoom_out") %>">
+        <%= icon_tag "minus" %><span class="for-screen-reader"><%= t("trees.zoom_out") %></span>
+      </button>
+      <button type="button" class="btn btn--round" data-action="tree#zoomFit" title="<%= t("trees.zoom_fit") %>">
+        <%= icon_tag "fit" %><span class="for-screen-reader"><%= t("trees.zoom_fit") %></span>
+      </button>
+    </div>
 
-  <%# Slide-over person panel: node links load people#panel into this frame; the
-      drawer controller opens on frame load and closes on ✕ / Escape. %>
-  <aside class="tree-drawer"
-         data-controller="drawer"
-         data-action="keydown.esc@window->drawer#close">
-    <%= turbo_frame_tag "person-panel", target: "_top", data: { drawer_target: "frame" } %>
-  </aside>
+    <p class="tree-tip" data-tree-target="tip"><%= t("trees.tip") %></p>
 
-  <div class="tree-inner" data-tree-target="inner">
-    <svg class="tree-edges" data-tree-target="svg" aria-hidden="true"></svg>
-    <div class="tree-nodes-layer">
-      <% graph[:nodes].each do |nd| %>
-        <%= render "trees/node",
-              node:  nd,
-              focus: nd[:id] == focus_id,
-              mode:  mode,
-              depth: depth %>
-      <% end %>
+    <%# Slide-over person panel: node links load people#panel into this frame; the
+        drawer controller opens on frame load and closes on ✕ / Escape. %>
+    <aside class="tree-drawer"
+           data-controller="drawer"
+           data-action="keydown.esc@window->drawer#close">
+      <%= turbo_frame_tag "person-panel", target: "_top", data: { drawer_target: "frame" } %>
+    </aside>
+
+    <div class="tree-inner" data-tree-target="inner">
+      <svg class="tree-edges" data-tree-target="svg" aria-hidden="true"></svg>
+      <div class="tree-nodes-layer">
+        <% graph[:nodes].each do |nd| %>
+          <%= render "trees/node",
+                node:  nd,
+                focus: nd[:id] == focus_id,
+                mode:  mode,
+                depth: depth %>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
