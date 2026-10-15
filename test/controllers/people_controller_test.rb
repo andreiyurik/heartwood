@@ -363,5 +363,4 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     get people_url
     assert_select ".person-row .avatar--initials[style*='--avatar-hue']"
   end
-
 end
