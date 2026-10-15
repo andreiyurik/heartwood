@@ -82,6 +82,8 @@ class LiveUpdatesTest < ApplicationSystemTestCase
   test "adding a relative from the profile shows them in the family box and closes the form" do
     visit person_path(people(:wilhelm_friedemann))
     within("#add_child") { click_on I18n.t("family.add", relation: I18n.t("family.relation_singular.child")) }
+    # The first frame fetch on a cold CI runner can take longer than the default wait.
+    assert_selector "#add_child form", wait: 10
     within("#add_child") do
       fill_in "person_given_names", with: "Friedemann Junior"
       find("input[type=submit]").click
@@ -95,6 +97,7 @@ class LiveUpdatesTest < ApplicationSystemTestCase
     visit person_path(@person)
     find(".event-row", text: "Death").hover
     within(".event-row", text: "Death") { click_on I18n.t("citations.add") }
+    assert_selector "form.form--inline", wait: 10
     fill_in "source_title", with: "Leipzig burial register"
     find("form.form--inline input[type=submit]").click
 

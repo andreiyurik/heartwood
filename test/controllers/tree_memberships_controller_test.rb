@@ -116,5 +116,4 @@ class TreeMembershipsControllerTest < ActionDispatch::IntegrationTest
     assert_select "form[action=?] button.btn--ghost.btn--round", tree_membership_path(@membership)
     assert_select "form[action=?] button.btn--negative", tree_membership_path(@membership), count: 0
   end
-
 end
