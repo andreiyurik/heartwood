@@ -46,10 +46,10 @@ module ApplicationHelper
     turbo_stream_from Current.tree
   end
 
-  # A turbo frame that a page refresh leaves alone while a form is open in it.
+  # A turbo frame that a page refresh leaves alone from the moment it starts loading a form.
   def preserved_frame_tag(id, &block)
     turbo_frame_tag id, data: { controller: "preserve-form",
-                                action: "turbo:frame-load->preserve-form#sync turbo:submit-end->preserve-form#release" }, &block
+                                action: "turbo:before-fetch-request->preserve-form#hold turbo:frame-load->preserve-form#sync turbo:submit-end->preserve-form#release" }, &block
   end
 
   def page_meta(text)
