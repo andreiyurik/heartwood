@@ -15,6 +15,8 @@ class Person < ApplicationRecord
     given.empty? ? new(given_names: surname) : new(given_names: given.join(" "), surname: surname)
   end
 
+  def located_events = events.joins(:place).merge(Place.geocoded)
+
   def birth = events.find_by(kind: "BIRT")
   def death = events.find_by(kind: "DEAT")
 

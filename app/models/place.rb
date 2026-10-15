@@ -7,6 +7,7 @@ class Place < ApplicationRecord
 
   after_create_commit :geocode_later
 
+  scope :geocoded, -> { where.not(latitude: nil).where.not(longitude: nil) }
   scope :search, ->(query) {
     q = query.to_s.strip
     next none if q.blank?

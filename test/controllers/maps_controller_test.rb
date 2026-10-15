@@ -13,6 +13,15 @@ class MapsControllerTest < ActionDispatch::IntegrationTest
     get map_url
     assert_response :success
     assert_select "[data-controller=map]"
+    assert_select ".blank-slate", count: 0
+  end
+
+  test "with nothing located the map page says what to do instead of showing a bare planet" do
+    trees(:bach).places.update_all(latitude: nil, longitude: nil)
+    get map_url
+    assert_response :success
+    assert_select "[data-controller=map]", count: 0
+    assert_select ".blank-slate", text: /#{I18n.t("maps.blank.title")}/
   end
 
   test "person map json lists only geolocated events" do

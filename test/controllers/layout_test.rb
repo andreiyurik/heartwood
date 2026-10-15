@@ -102,6 +102,8 @@ class LayoutTest < ActionDispatch::IntegrationTest
   end
 
   test "tree and map are full-bleed through a class on the body" do
+    place = Place.create!(name: "London", latitude: 51.5, longitude: -0.12, tree: trees(:alpha))
+    Event.create!(kind: "BIRT", eventable: Person.last, tree: trees(:alpha), place: place)
     get clan_tree_url
     assert_select "body.full-bleed"
     get map_url

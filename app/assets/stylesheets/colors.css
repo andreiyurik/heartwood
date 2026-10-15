@@ -19,6 +19,8 @@
   --lch-pink: 65.88% 0.088 343.07;
   --lch-always-black: 0% 0 0;
   --lch-always-white: 100% 0 0;
+  /* Initials avatars: one lightness and chroma, the hue hashed from the name (Basecamp) */
+  --lch-avatar: 56% 0.09 var(--avatar-hue, 137.63);
 
   /* Abstractions: the body is a tinted page, the sheet (surface) is lighter than it */
   --color-bg: oklch(var(--lch-white));
@@ -40,6 +42,7 @@
   --color-alert: oklch(var(--lch-orange));
   --color-highlight: oklch(var(--lch-yellow-light));
   --color-highlight-border: oklch(var(--lch-yellow));
+  --color-avatar: oklch(var(--lch-avatar));
   --color-male: oklch(var(--lch-blue));
   --color-female: oklch(var(--lch-pink));
   --color-always-white: oklch(var(--lch-always-white));
@@ -94,6 +97,7 @@
     --lch-yellow-light: 30% 0.04 95;
     --lch-blue: 58% 0.07 229.68;
     --lch-pink: 58% 0.09 343.07;
+    --lch-avatar: 62% 0.1 var(--avatar-hue, 137.63);
 
     --shadow-xl: 0 0 3rem oklch(var(--lch-always-black) / 0.4);
   }
