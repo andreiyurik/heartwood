@@ -18,6 +18,7 @@ agent, also read [`CLAUDE.md`](../CLAUDE.md) at the repo root.
 - [[glossary]] — domain vocabulary (GEDCOM-aligned)
 - [[roadmap]] — what we build, in what order
 - [[redesign-plan]] — current redesign: phased plan from the audit against the reference apps
+- [[design-audit-2026-10-16]] — every screen walked against the Basecamp bar, ranked, with what was done
 
 ## The four pillars
 

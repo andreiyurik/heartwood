@@ -82,9 +82,16 @@ is pure white. Dark mode: body `hsl(202 42% 7.5%)`, sheet `hsl(200 28% 14.7%)` �
 - **Blank slate**: dashed 2px warm border, bold title + one explanatory line + actions.
 - **Flash**: bottom-centre dark pill (ink on canvas), `fade-in-up`, then fades and removes
   itself (campfire's `element-removal`).
-- **Hover-revealed controls**: `.reveal-on-hover` — row actions at 0 opacity until the
-  row is hovered or anything inside is focused. Keep them focusable; never hide the only
-  way to do something on touch (they also show under `(hover: none)`).
+- **Hover-revealed controls**: row actions (`.event-actions`) are round icon buttons at 0
+  opacity until the row is hovered or anything inside is focused. Keep them focusable, give
+  each a `title` and a screen-reader label; never hide the only way to do something on
+  touch (they also show under `(hover: none)`).
+- **Avatars**: an initials avatar hashes the name into `--avatar-hue` (`initials_avatar`
+  helper); lightness and chroma are one token (`--lch-avatar-tone`), so every person gets
+  their own colour and both schemes stay consistent.
+- **Blank states everywhere a view can be empty**: the map with no located place, a person
+  with no located event (the map section is simply absent), empty family groups (only the
+  add button, no "None recorded." for editors).
 
 ## 4. Animations (`animation.css`)
 
@@ -144,14 +151,25 @@ Ordered by impact. ✅ = done in the 2026-10-16 passes (all fifteen are done; th
     tints (`--tint-ink-10/15/25`) instead of the fixed grey tokens, so both schemes derive
     from the same rule. (`--color-border*` remain only for the Lexxy editor bridge.)
 
+### Second pass (2026-10-16, [[design-audit-2026-10-16]])
+
+A screen-by-screen walk found fifteen more gaps; all are closed. The ones that changed the
+rules above: the profile reads **record-first** (life events and family before the
+biography; the metadata line replaces the facts block), row controls are **hover-revealed
+icons**, every chrome action has a **label** (Import/Export GEDCOM live in the account
+menu), **avatars are coloured by name**, and **empty maps say what to do**.
+
 ## 6. Next bar (not yet started)
 
 - **Comments on a person** — Basecamp's thread under every record is the collaboration
   surface we lack; family members have nowhere to say "I think this date is wrong".
 - **Nav that tucks away on scroll** (Basecamp hides the toolbar after 100px) once pages get
   long enough to need it.
-- **Avatar colours per person** (Basecamp hashes the name into a hue) instead of one green.
 - **A project-home "dock"** for the tree: People / Tree / Map / Sources as preview cards.
+- **Dates in the viewer's locale** instead of raw GEDCOM strings ("26 МАЙ 1799") — a
+  presenter over `date_start`, see [[domain-model]].
+- **The tree's instruction strip** ("Scroll to zoom · drag to pan …") shown once, not
+  forever.
 
 ## Related
-[[prior-art]] · [[redesign-plan]] · [[stack]] · [[person-profile]] · [[collaboration]]
+[[prior-art]] · [[redesign-plan]] · [[design-audit-2026-10-16]] · [[stack]] · [[person-profile]] · [[collaboration]]
