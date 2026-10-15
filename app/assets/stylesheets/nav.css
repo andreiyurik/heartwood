@@ -1,10 +1,11 @@
 #header {
   align-items: center;
-  background-color: var(--color-surface);
-  border-block-end: 1px solid var(--color-border-dark);
+  border-block-end: 1px solid var(--tint-ink-10);
   column-gap: var(--inline-space-double);
   display: flex;
   flex-wrap: wrap;
+  font-size: 0.875rem;
+  min-block-size: var(--component-lg, 48px);
   padding: var(--block-space-half) var(--inline-space-double);
   row-gap: var(--block-space-half);
 }
@@ -14,35 +15,34 @@
   display: flex;
   flex: 1 1 14rem;
   gap: var(--inline-space);
-
-  h1 {
-    font-size: 1.15rem;
-    line-height: 1.25;
-    margin: 0;
-    /* overflow-wrap: anywhere shrinks a flex item's automatic minimum size to a single
-       character, so without a floor here a long name collapses into a one-letter-per-line
-       column instead of wrapping by word. */
-    min-inline-size: 8rem;
-    overflow-wrap: anywhere;
-  }
+  min-inline-size: 0;
 
   .brand,
-  .tree-name,
-  .tree-switcher summary {
-    color: var(--color-muted);
-    font-weight: 600;
+  .tree-name {
+    color: var(--color-text);
+    font-weight: 700;
     white-space: nowrap;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 
   .brand {
-    color: var(--color-text);
-    font-size: 1.15rem;
-    font-weight: 700;
+    font-size: 1rem;
   }
 }
 
 .breadcrumbs__separator {
   color: var(--color-muted);
+}
+
+.breadcrumbs__page {
+  color: var(--color-muted);
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .header-actions,
@@ -73,39 +73,136 @@
 }
 
 .sections {
-  background-color: var(--color-surface);
-  border-block-end: 1px solid var(--color-border-dark);
+  border-block-end: 1px solid var(--tint-ink-10);
   display: flex;
-  gap: var(--inline-space);
+  gap: 4px;
   grid-area: toolbar;
-  padding-inline: var(--inline-space-double);
+  padding: var(--block-space-half) var(--inline-space-double);
 
   a {
-    border-block-end: 2px solid transparent;
+    align-items: center;
+    block-size: var(--component-sm);
+    border-radius: var(--radius-lg);
     color: var(--color-muted);
+    display: inline-flex;
+    font-size: 0.875rem;
     font-weight: 500;
-    margin-block-end: -1px;
-    padding: var(--block-space-half) var(--inline-space-double);
+    padding-inline: 0.75em;
 
     &:hover {
+      background-color: var(--tint-ink-5);
       color: var(--color-text);
       text-decoration: none;
     }
 
     &[aria-current=page] {
-      border-block-end-color: var(--color-selected-dark);
-      color: var(--color-link);
+      background-color: var(--tint-ink-8);
+      color: var(--color-text);
       font-weight: 600;
     }
   }
 }
 
+/* Dropdown menus: a <details> whose <menu> is an action sheet, as in Basecamp's … menu */
+.account-menu,
+.tree-switcher {
+  position: relative;
+}
+
+.account-menu summary {
+  --btn-padding: 0;
+}
+
+.action-sheet {
+  animation: action-sheet-entrance var(--duration-medium) ease-out;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-menu);
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+  inset-block-start: calc(100% + 0.25em);
+  inset-inline-start: 0;
+  list-style: none;
+  margin: 0;
+  min-inline-size: 15rem;
+  padding: 4px;
+  position: absolute;
+  z-index: 20;
+
+  li {
+    margin: 0;
+  }
+
+  form {
+    display: contents;
+  }
+}
+
+.action-sheet--end {
+  inset-inline-end: 0;
+  inset-inline-start: auto;
+}
+
+.action-sheet__action {
+  align-items: center;
+  background: none;
+  block-size: var(--component-sm);
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  cursor: pointer;
+  display: flex;
+  gap: 12px;
+  inline-size: 100%;
+  padding: 0 12px 0 8px;
+  text-align: start;
+  white-space: nowrap;
+
+  .icon {
+    color: var(--color-muted);
+  }
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--tint-ink-5);
+    text-decoration: none;
+  }
+}
+
+.action-sheet__action--current {
+  font-weight: 700;
+}
+
+.action-sheet__action--negative:hover {
+  background-color: var(--color-negative-light);
+  color: var(--color-negative);
+}
+
+.action-sheet__divider {
+  margin-block: 4px;
+  margin-inline: -4px;
+}
+
+.action-sheet__who {
+  display: grid;
+  padding: 8px 8px 4px;
+
+  .txt-subtle {
+    font-size: 0.8125rem;
+  }
+}
+
 .locale-switcher {
-  background-color: var(--color-border-dark);
-  border-radius: 6px;
+  background-color: var(--tint-ink-5);
+  border-radius: var(--radius-md);
   display: flex;
   gap: 2px;
   padding: 2px;
+
+  .action-sheet & {
+    margin: 4px 8px;
+  }
 }
 
 .locale-switcher form {
@@ -113,65 +210,25 @@
 }
 
 .locale-switcher__btn {
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   color: var(--color-muted);
-  font-size: 0.8rem;
-  font-weight: 600;
   cursor: pointer;
+  flex: 1;
+  font-size: 0.8125rem;
+  font-weight: 600;
   padding: 0.2rem 0.55rem;
+  text-align: center;
   text-decoration: none;
-  transition: background 0.1s, color 0.1s;
 
   &:hover {
     color: var(--color-text);
-    text-decoration: none;
   }
 }
 
 .locale-switcher__btn--active {
   background-color: var(--color-surface);
-  box-shadow: 0 1px 2px oklch(var(--lch-always-black) / 0.08);
+  box-shadow: var(--shadow-base);
   color: var(--color-text);
-}
-
-.tree-switcher {
-  position: relative;
-
-  summary {
-    cursor: pointer;
-    list-style: none;
-  }
-
-  summary::-webkit-details-marker {
-    display: none;
-  }
-}
-
-.tree-switcher__menu {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border-dark);
-  border-radius: var(--border-radius);
-  box-shadow: 0 6px 18px oklch(var(--lch-always-black) / 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  inset-block-start: calc(100% + 0.35rem);
-  inset-inline-end: 0;
-  list-style: none;
-  margin: 0;
-  min-inline-size: 12rem;
-  padding: 0.5rem;
-  position: absolute;
-  z-index: 5;
-
-  li {
-    margin: 0;
-  }
-
-  .btn {
-    inline-size: 100%;
-    justify-content: flex-start;
-  }
 }
 
 .skip-navigation {

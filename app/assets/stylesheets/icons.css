@@ -29,3 +29,5 @@
 .icon--settings { --svg: url("settings.svg"); }
 .icon--share { --svg: url("share.svg"); }
 .icon--camera { --svg: url("camera.svg"); }
+.icon--more { --svg: url("more.svg"); }
+.icon--map { --svg: url("map.svg"); }

@@ -15,8 +15,9 @@ class RelativesController < ApplicationController
   end
 
   def create
-    @person.public_send(RELATION_METHODS.fetch(@relation), relative_source)
-    redirect_to url_from(params[:return_to]) || @person, status: :see_other, notice: t("family.flash.#{@relation}_added")
+    relative = @person.public_send(RELATION_METHODS.fetch(@relation), relative_source)
+    redirect_to url_from(params[:return_to]) || person_path(@person, anchor: dom_id(relative)),
+      status: :see_other, notice: t("family.flash.#{@relation}_added")
   end
 
   private

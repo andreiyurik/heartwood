@@ -1,8 +1,12 @@
 .invite-box {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-block-end: 2rem;
+  gap: var(--block-space-half);
+  margin-block-end: var(--block-space-double);
+
+  h2 {
+    margin: 0;
+  }
 }
 
 .invite-box__actions {
@@ -12,7 +16,9 @@
 
   .input {
     flex: 1;
+    font-size: 0.875rem;
     min-inline-size: 0;
+    padding-block: 0.35em;
   }
 
   form {

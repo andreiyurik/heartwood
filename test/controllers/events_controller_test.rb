@@ -3,6 +3,8 @@ require "test_helper"
 # Adding/editing a Person's life events through the UI. See docs/domain/event.md,
 # docs/features/person-profile.md.
 class EventsControllerTest < ActionDispatch::IntegrationTest
+  include ActionView::RecordIdentifier
+
   setup do
     @tree   = trees(:bach)
     @person = people(:wilhelm_friedemann)
@@ -20,8 +22,20 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_difference "@person.events.count", 1 do
       post person_events_url(@person), params: { event: { kind: "BIRT", date_raw: "10 DEC 1815" } }
     end
-    assert_redirected_to person_url(@person)
+    assert_redirected_to person_url(@person, anchor: dom_id(@person.birth))
     assert_equal "10 DEC 1815", @person.birth.date_raw
+  end
+
+  test "an event row leads with the date, then the kind, place and a sources count" do
+    event = @person.events.create!(kind: "BIRT", date_raw: "10 DEC 1815", place_name: "London")
+    event.cite({ title: "Parish register" })
+    get person_url(@person)
+    assert_select ".event-row" do
+      assert_select ".event-date", text: "10 DEC 1815"
+      assert_select ".event-kind", text: "Birth"
+      assert_select ".event-place", text: /London/
+      assert_select ".event-sources", text: "1"
+    end
   end
 
   test "rejects an event without a kind" do
@@ -34,7 +48,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
   test "updates an event" do
     event = @person.events.create!(kind: "BIRT", date_raw: "1815")
     patch person_event_url(@person, event), params: { event: { date_raw: "10 DEC 1815" } }
-    assert_redirected_to person_url(@person)
+    assert_redirected_to person_url(@person, anchor: dom_id(event))
     assert_equal "10 DEC 1815", event.reload.date_raw
   end
 

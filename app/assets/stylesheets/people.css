@@ -4,65 +4,57 @@
   padding: 0;
 }
 
+/* A Basecamp row: avatar · title over one metadata line · hairline */
 .person-row {
   align-items: center;
-  border-block-end: 1px solid var(--color-border);
+  border-block-end: 1px solid var(--tint-ink-10);
   display: flex;
-  gap: 0.75rem;
-  padding: 0.6rem 0.25rem;
+  gap: var(--inline-space-double);
+  padding-block: 0.75rem;
 
   &:last-child {
     border-block-end: none;
   }
+}
 
-  a {
-    font-size: 1.05rem;
-    font-weight: 600;
-  }
+.person-row__body {
+  flex: 1;
+  min-inline-size: 0;
 
-  .years {
-    color: var(--color-muted);
-    font-size: 0.9rem;
-    white-space: nowrap;
-  }
-
-  .separator {
-    border: none;
-    border-block-start: 1px dotted var(--color-border-darker);
-    flex: 1;
+  p {
     margin: 0;
   }
+}
+
+.person-row__name {
+  font-weight: 700;
+
+  a {
+    color: var(--color-text);
+  }
+}
+
+.person-row__meta,
+.person-row__role {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.person-row__role {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.35em;
 }
 
 .empty {
   color: var(--color-muted);
 }
 
-.person {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border-dark);
-  border-radius: var(--border-radius);
-  padding: 1.5rem;
-}
-
-.profile-identity {
-  align-items: center;
-  display: flex;
-  gap: var(--inline-space-double);
-  margin-block-end: var(--block-space);
-
-  p {
-    color: var(--color-muted);
-    font-size: 1rem;
-    margin: 0;
-  }
-}
-
 .facts {
   display: grid;
-  gap: 0.35rem 1rem;
+  gap: 0.35rem 1.5rem;
   grid-template-columns: max-content 1fr;
-  margin: 1rem 0 1.5rem;
+  margin: 0 0 var(--block-space-double);
 
   dt {
     color: var(--color-muted);
@@ -73,36 +65,36 @@
   }
 }
 
-.relations,
-.biography-section {
-  border-block-start: 1px solid var(--color-border-dark);
-  padding-block-start: 1rem;
-
-  h2 {
-    font-size: 1.2rem;
-    margin-block: 0.83em;
-  }
-}
-
-.biography-section {
-  margin-block-start: 1rem;
-}
-
 .relation-group {
-  margin-block-end: 1rem;
+  margin-block-end: var(--block-space);
 
   h3 {
     color: var(--color-muted);
-    font-size: 0.85rem;
-    letter-spacing: 0.04em;
+    font-size: 0.8125rem;
+    font-weight: 600;
     margin: 0 0 0.25rem;
-    text-transform: uppercase;
   }
 
   ul {
+    list-style: none;
     margin: 0;
-    padding-inline-start: 1.1rem;
+    padding: 0;
   }
+
+  li {
+    border-radius: var(--radius-sm);
+    scroll-margin-block-start: 5rem;
+  }
+
+  li a {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+}
+
+/* The row a redirect pointed at (#dom_id) glows for a moment, Basecamp's yellow fade */
+:is(.event-row, .relation, .source-item, .person-row):target {
+  animation: yellow-fade 3s ease-out;
 }
 
 .add-relative {
@@ -126,11 +118,17 @@
 }
 
 .blank-slate {
+  background-color: var(--color-surface);
+  border: 2px dashed var(--color-highlight-border);
+  border-radius: var(--radius-lg);
   display: grid;
   gap: var(--block-space);
   justify-items: center;
-  padding-block: var(--block-space-double);
+  margin: var(--block-space-double) auto;
+  max-inline-size: 30rem;
+  padding: var(--block-space-double) var(--inline-space-double);
   text-align: center;
+  text-wrap: pretty;
 
   h2,
   p {
@@ -139,6 +137,37 @@
 
   p {
     color: var(--color-muted);
+  }
+}
+
+.blank-slate--inline {
+  align-items: center;
+  grid-template-columns: 1fr auto;
+  justify-items: start;
+  margin: 0;
+  max-inline-size: none;
+  padding: var(--block-space) var(--inline-space-double);
+  text-align: start;
+
+  strong {
+    display: block;
+  }
+
+  p {
+    font-size: 0.9375rem;
+    margin-block-start: 0.15rem;
+  }
+
+  .btn {
+    grid-column: 2;
+  }
+
+  @media (max-width: 40rem) {
+    grid-template-columns: 1fr;
+
+    .btn {
+      grid-column: 1;
+    }
   }
 }
 

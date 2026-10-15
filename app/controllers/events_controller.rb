@@ -13,7 +13,7 @@ class EventsController < ApplicationController
   def create
     @event = @person.events.new(event_params)
     if @event.save
-      respond_to_change :created
+      redirect_to person_path(@person, anchor: dom_id(@event)), status: :see_other, notice: t("events.flash.created")
     else
       render :new, status: :unprocessable_entity
     end
@@ -21,7 +21,7 @@ class EventsController < ApplicationController
 
   def update
     if @event.update(event_params)
-      respond_to_change :updated
+      redirect_to person_path(@person, anchor: dom_id(@event)), status: :see_other, notice: t("events.flash.updated")
     else
       render :edit, status: :unprocessable_entity
     end
@@ -29,7 +29,7 @@ class EventsController < ApplicationController
 
   def destroy
     @event.destroy!
-    respond_to_change :destroyed
+    redirect_back_or_to @person, status: :see_other, notice: t("events.flash.destroyed")
   end
 
   private
@@ -40,9 +40,5 @@ class EventsController < ApplicationController
 
   def event_params
     params.expect(event: %i[kind date_raw value place_name place_latitude place_longitude])
-  end
-
-  def respond_to_change(key)
-    redirect_back_or_to @person, status: :see_other, notice: t("events.flash.#{key}")
   end
 end

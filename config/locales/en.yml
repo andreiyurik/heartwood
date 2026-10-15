@@ -1,5 +1,6 @@
 en:
   nav:
+    account: Account
     sign_out: Sign out
     members: Members
     skip_to_content: Skip to main content
@@ -89,8 +90,6 @@ en:
     remove: Remove
     delete_person: Delete this person
     remove_confirm: "Remove %{name}?"
-    danger_zone: Danger zone
-    danger_zone_hint: Permanently delete this person along with their events, sources, and memories. This can't be undone.
     profile: Profile
     tree: Tree
     edit_button: Edit
@@ -102,21 +101,26 @@ en:
       import: Import GEDCOM
     unknown_name: Unknown
     living: Living
-    tabs_label: Profile sections
     avatar_label: Photo
     avatar_hint: JPEG, PNG or WebP · max 5 MB
     biography_label: Biography
     biography_hint: Their life story, in your own words.
     biography_empty: No biography yet. Edit this person to add their story.
-    tabs:
-      details: Details
+    sections_label: Profile sections
+    more: More actions
+    sections:
+      biography: Biography
+      events: Life events
+      family: Family
       sources: Sources
       memories: Memories
-      timeline: Timeline
       map: Map
-      memories_stub: No photos yet. Add one when you edit this person.
-      memories_more_stub: More photos and albums are coming soon.
-      timeline_stub: Coming soon — this person's life events, laid out in order.
+    biography_empty_title: No biography yet
+    biography_empty_viewer: No biography yet.
+    biography_write: Write their story
+    memories_empty_title: No photos yet
+    memories_empty: Add a photo from the camera badge on the portrait.
+    memories_more: More photos and albums are coming soon.
     search_placeholder: Search by name…
     search_empty: No people match your search.
     search_clear: Clear
@@ -227,6 +231,7 @@ en:
     no_match: We couldn't find that place. You can still save the name, or drag the pin after a closer search.
 
   maps:
+    show_places: Show on the map
     person_note: Places with coordinates appear here; events without a located place aren't shown.
     unavailable: The map library couldn't be loaded. Check your connection and refresh.
 
@@ -235,6 +240,7 @@ en:
     nav: Duplicates
     lede: We only suggest. Review each pair and dismiss or merge it yourself — nothing changes automatically.
     empty: No possible duplicates found.
+    empty_lede: Run a scan after importing or adding many people; we flag pairs that look like the same person.
     scan: Scan now
     vs: "&"
     score_title: Match score
@@ -274,6 +280,7 @@ en:
       updated: Event updated.
       destroyed: Event removed.
     kinds:
+      EVEN: Event
       BIRT: Birth
       DEAT: Death
       BAPM: Baptism
@@ -292,6 +299,7 @@ en:
     sourced_title: This event has a source
     remove: Remove source
     remove_confirm: Remove this source?
+    none_for_person_title: No sources cited yet
     none_for_person: No sources cited yet. Add a source to any life event.
     source_title_label: Title
     source_url_label: URL (optional)

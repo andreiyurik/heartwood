@@ -43,12 +43,27 @@ class LayoutTest < ActionDispatch::IntegrationTest
     assert_select "body > main#main"
   end
 
-  test "the header shows the tree name and the page as breadcrumbs" do
+  test "the header shows the tree name as a breadcrumb and the page title is the sheet's heading" do
     get people_url
-    assert_select "#header nav.breadcrumbs" do
-      assert_select "a[href=?]", root_path, text: /Alpha Tree/
-      assert_select "h1", text: I18n.t("people.title")
+    assert_select "#header nav.breadcrumbs a[href=?]", root_path, text: /Alpha Tree/
+    assert_select "#header h1", count: 0
+    assert_select "main#main > header.page-header h1", text: I18n.t("people.title")
+  end
+
+  test "a person page opens with the name as the title and the life years as the metadata line" do
+    person = Person.create!(given_names: "Ada", surname: "Lovelace", sex: "F", tree: trees(:alpha))
+    Event.create!(kind: "BIRT", eventable: person, tree: trees(:alpha), date_raw: "1815", date_start: Date.new(1815, 12, 10))
+    get person_url(person)
+    assert_select "main#main > header.page-header" do
+      assert_select "h1", text: "Ada Lovelace"
+      assert_select ".page-header__meta", text: /1815/
     end
+  end
+
+  test "full-bleed pages keep the title in the toolbar instead of a sheet heading" do
+    get clan_tree_url
+    assert_select "header.page-header", count: 0
+    assert_select "#header .breadcrumbs .breadcrumbs__page", text: I18n.t("nav.tree")
   end
 
   test "the same People / Tree / Map navigation is on every page, marking the current one" do
@@ -61,10 +76,24 @@ class LayoutTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "members and sign out are icon buttons with screen-reader labels" do
+  test "the account menu gathers members, language and sign out behind the avatar" do
     get people_url
-    assert_select "#header a[href=?] .for-screen-reader", tree_memberships_path, text: I18n.t("nav.members")
-    assert_select "#header form[action=?] .for-screen-reader", session_path, text: I18n.t("nav.sign_out")
+    assert_select "#header details.account-menu" do
+      assert_select "summary .avatar", text: "UO"
+      assert_select "menu.action-sheet a[href=?]", tree_memberships_path, text: I18n.t("nav.members")
+      assert_select "menu.action-sheet nav.locale-switcher"
+      assert_select "menu.action-sheet form[action=?] button", session_path, text: I18n.t("nav.sign_out")
+    end
+  end
+
+  test "settings appear in the account menu only for the owner" do
+    get people_url
+    assert_select "details.account-menu a[href=?]", settings_path
+    viewer = User.create!(name: "Viewer Vee", email_address: "vee@example.com", password: "password")
+    TreeMembership.create!(user: viewer, tree: trees(:alpha), role: "viewer")
+    sign_in_as viewer
+    get people_url
+    assert_select "details.account-menu a[href=?]", settings_path, count: 0
   end
 
   test "pages hand their actions to the header" do

@@ -1,11 +1,11 @@
 <% if Current.user.trees.size > 1 %>
   <details class="tree-switcher">
-    <summary class="btn btn--plain">🌳 <%= Current.tree.name %></summary>
-    <menu class="tree-switcher__menu">
+    <summary class="btn btn--ghost tree-name">🌳 <span><%= Current.tree.name %></span></summary>
+    <menu class="action-sheet">
       <% Current.user.tree_memberships.includes(:tree).each do |m| %>
         <li>
           <%= button_to m.tree.name, active_tree_path(tree_id: m.tree_id), method: :patch,
-                class: "btn btn--plain #{"btn--reversed" if m.tree_id == Current.tree.id}" %>
+                class: "action-sheet__action #{"action-sheet__action--current" if m.tree_id == Current.tree.id}" %>
         </li>
       <% end %>
     </menu>

@@ -1,12 +1,18 @@
 .input {
-  background-color: var(--input-background, var(--color-bg));
-  border-radius: var(--input-border-radius, 0.5em);
-  border: var(--input-border-size, 1px) solid var(--input-border-color, var(--color-border-darker));
+  background-color: var(--input-background, var(--color-surface));
+  border: var(--input-border-size, 1px) solid var(--input-border-color, var(--tint-ink-15));
+  border-radius: var(--input-border-radius, var(--radius-lg));
   color: var(--input-color, var(--color-text));
   font: inherit;
   font-size: max(16px, 1em);
   inline-size: 100%;
-  padding: var(--input-padding, 0.5em 0.8em);
+  line-height: 1.5;
+  padding: var(--input-padding, 0.5em 0.65em);
+  transition: box-shadow 125ms ease-out, border-color 125ms ease-out;
+
+  &::placeholder {
+    color: var(--color-muted);
+  }
 }
 
 select.input {
@@ -16,21 +22,24 @@ select.input {
 .input:focus {
   --input-border-color: var(--color-selected-dark);
 
+  box-shadow: 0 0 0 3px var(--color-selected);
   outline: none;
 }
 
 .input--actor {
   align-items: center;
-  background-color: var(--color-bg);
-  border-radius: 0.5em;
-  border: 1px solid var(--color-border-darker);
+  background-color: var(--color-surface);
+  border: 1px solid var(--tint-ink-15);
+  border-radius: var(--radius-lg);
   display: flex;
   gap: 0.6em;
   padding: 0.5em 0.8em;
+  transition: box-shadow 125ms ease-out, border-color 125ms ease-out;
 }
 
 .input--actor:focus-within {
   border-color: var(--color-selected-dark);
+  box-shadow: 0 0 0 3px var(--color-selected);
 }
 
 .input--actor .input {
@@ -38,11 +47,15 @@ select.input {
   --input-border-radius: 0;
   --input-background: transparent;
   --input-border-size: 0;
+
+  &:focus {
+    box-shadow: none;
+  }
 }
 
 .input--actor .icon {
-  flex: 0 0 auto;
   color: var(--color-muted);
+  flex: 0 0 auto;
 }
 
 .input--actor:has([aria-invalid=true]) {

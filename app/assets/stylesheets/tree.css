@@ -36,8 +36,7 @@
 
 .tree-canvas {
   background-color: var(--color-bg);
-  border: 1px solid var(--color-border-dark);
-  border-radius: var(--border-radius);
+  border-block-start: 1px solid var(--tint-ink-10);
   cursor: grab;
   flex: 1;
   inline-size: 100%;
@@ -72,7 +71,7 @@
 
 .tree-edge {
   fill: none;
-  stroke: var(--color-border-darker);
+  stroke: var(--tint-ink-25);
   stroke-width: 1.5;
 }
 
@@ -82,7 +81,7 @@
 
 .tree-heart-bg {
   fill: var(--color-surface);
-  stroke: var(--color-border-darker);
+  stroke: var(--tint-ink-25);
   stroke-width: 1.5;
 }
 
@@ -100,8 +99,8 @@
 /* Node sizes must match CARD_W, CARD_H and CIRC_D in tree_controller.js */
 .tree-node {
   background-color: var(--color-surface);
-  border: 1px solid var(--color-border-dark);
-  box-shadow: 0 1px 3px oklch(var(--lch-always-black) / 0.06);
+  border: 1px solid var(--tint-ink-15);
+  box-shadow: 0 1px 3px var(--tint-ink-10);
   inset-block-start: 0;
   inset-inline-start: 0;
   overflow: hidden;
@@ -164,7 +163,7 @@
 }
 
 .node-band {
-  background-color: var(--color-border-dark);
+  background-color: var(--color-border-darker);
   block-size: 22px;
   color: var(--color-always-white);
   display: block;
@@ -250,7 +249,7 @@
 
 .tree-node--ghost {
   background: transparent;
-  border-color: var(--color-border-darker);
+  border-color: var(--tint-ink-25);
   border-style: dashed;
   box-shadow: none;
 
@@ -349,9 +348,9 @@
   align-items: center;
   background-color: var(--color-surface);
   block-size: 1.3rem;
-  border: 1px solid var(--color-border-dark);
+  border: 1px solid var(--tint-ink-15);
   border-radius: 999px;
-  box-shadow: 0 1px 2px oklch(var(--lch-always-black) / 0.06);
+  box-shadow: 0 1px 2px var(--tint-ink-10);
   color: var(--color-link);
   cursor: pointer;
   display: flex;
@@ -384,9 +383,9 @@
 
 .tree-search-input {
   background-color: var(--color-surface);
-  border: 1px solid var(--color-border-dark);
+  border: 1px solid var(--tint-ink-15);
   border-radius: var(--border-radius);
-  box-shadow: 0 1px 3px oklch(var(--lch-always-black) / 0.06);
+  box-shadow: 0 1px 3px var(--tint-ink-10);
   color: var(--color-text);
   cursor: text;
   font-size: 0.85rem;
@@ -401,9 +400,9 @@
 
 .tree-search-results {
   background-color: var(--color-surface);
-  border: 1px solid var(--color-border-dark);
+  border: 1px solid var(--tint-ink-15);
   border-radius: var(--border-radius);
-  box-shadow: 0 6px 24px oklch(var(--lch-always-black) / 0.08);
+  box-shadow: 0 6px 24px var(--tint-ink-15);
   list-style: none;
   margin: 0.25rem 0 0;
   max-block-size: 14rem;
@@ -456,16 +455,16 @@
 }
 
 @keyframes tree-found {
-  0%, 100% { box-shadow: 0 1px 3px oklch(var(--lch-always-black) / 0.06); }
+  0%, 100% { box-shadow: 0 1px 3px var(--tint-ink-10); }
   25%, 60% { box-shadow: 0 0 0 3px var(--color-selected-dark); }
 }
 
 .tree-minimap {
   background-color: var(--color-surface);
   block-size: 8rem;
-  border: 1px solid var(--color-border-dark);
+  border: 1px solid var(--tint-ink-15);
   border-radius: 8px;
-  box-shadow: 0 1px 3px oklch(var(--lch-always-black) / 0.06);
+  box-shadow: 0 1px 3px var(--tint-ink-10);
   cursor: pointer;
   inline-size: 11rem;
   inset-block-end: 0.75rem;
@@ -492,9 +491,9 @@
     align-items: center;
     background-color: var(--color-surface);
     block-size: 2.1rem;
-    border: 1px solid var(--color-border-dark);
+    border: 1px solid var(--tint-ink-15);
     border-radius: 8px;
-    box-shadow: 0 1px 3px oklch(var(--lch-always-black) / 0.06);
+    box-shadow: 0 1px 3px var(--tint-ink-10);
     color: var(--color-link);
     cursor: pointer;
     display: flex;

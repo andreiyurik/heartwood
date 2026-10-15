@@ -6,7 +6,8 @@
 <% else %>
   <% content_for :header do %>
     <% if can_edit? %>
-      <%= link_to new_person_path, class: "btn btn--reversed" do %>
+      <%= link_to new_person_path, class: "btn btn--reversed", title: "#{t("people.add")} (n)",
+            data: { controller: "hotkey", hotkey_key_value: "n", action: "keydown@window->hotkey#trigger" } do %>
         <%= icon_tag "add" %> <%= t("people.add") %>
       <% end %>
     <% end %>
@@ -21,9 +22,11 @@
         <%= icon_tag "search" %>
         <%= f.search_field :q, value: @q,
               placeholder: t("people.search_placeholder"),
-                aria: { label: t("people.search_placeholder") },
+              aria: { label: t("people.search_placeholder") },
               autocomplete: "off",
-              data: { action: "input->autocomplete#search" } %>
+              data: { controller: "hotkey", hotkey_key_value: "/",
+                      action: "input->autocomplete#search keydown@window->hotkey#trigger" } %>
+        <kbd class="search-field__kbd" aria-hidden="true">/</kbd>
       </div>
       <%= f.select :sex,
             Person::SEXES.map { |s| [t("people.sex.#{s}"), s] },

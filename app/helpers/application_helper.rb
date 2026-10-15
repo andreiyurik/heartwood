@@ -10,9 +10,10 @@ module ApplicationHelper
     tag.span class: classes, "aria-hidden": true, **options
   end
 
-  def page_title(name)
+  # heading: false for pages that draw their own title (the auth cards)
+  def page_title(name, heading: true)
     content_for :title, [ name, Current.tree&.name, "Heartwood" ].compact.join(" · ")
-    content_for :page, name
+    content_for :page, name if heading
   end
 
   def back_link(path)
@@ -51,8 +52,20 @@ module ApplicationHelper
                                 action: "turbo:frame-load->preserve-form#sync turbo:submit-end->preserve-form#release" }, &block
   end
 
+  def page_meta(text)
+    content_for :page_meta, text
+  end
+
   def full_bleed
     content_for :body_class, "full-bleed"
+  end
+
+  def full_bleed?
+    content_for?(:body_class)
+  end
+
+  def initials_for(name)
+    name.to_s.split.map(&:first).first(2).join.upcase
   end
 
   def section_link(section, path)

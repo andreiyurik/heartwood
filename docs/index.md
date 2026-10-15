@@ -36,6 +36,7 @@ agent, also read [`CLAUDE.md`](../CLAUDE.md) at the repo root.
 - [[stack]] — canonical vanilla Rails 8.1 stack & constraints
 - [[rails8-features]] — each Rails 8/8.1 capability → a concrete use (used to the fullest)
 - [[tree-rendering]] — the one hard part, the Hotwire way
+- [[design-system]] — how it looks and moves: Basecamp's approach, adapted (binding rules + gap list)
 - [[hotwire-native]] — one codebase → web + iOS + Android (SPA-feel, no SPA)
 - [[multi-tenancy]] — self-host vs hosted on one codebase
 - Decisions: `architecture/adr/` — [[adr/0001-vanilla-rails-stack|0001]] · [[adr/0002-sqlite-production|0002]] · [[adr/0003-agpl-open-core|0003]] · [[adr/0004-gedcom-interop|0004]] · [[adr/0005-tree-rendering-svg-stimulus|0005]] · [[adr/0006-hotwire-native-ready|0006]]

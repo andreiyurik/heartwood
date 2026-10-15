@@ -1,3 +1,5 @@
+/* One sheet on a tinted page: the header, the sections bar and main share the
+   sheet's width and surface, so together they read as a single card. */
 body {
   display: grid;
   grid-template-areas:
@@ -6,18 +8,63 @@ body {
     "main";
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto auto 1fr;
+  min-block-size: 100dvh;
+}
+
+#header,
+#toolbar,
+#main {
+  background-color: var(--color-surface);
+  inline-size: min(var(--main-width), 100%);
+  margin-inline: auto;
 }
 
 #header {
   grid-area: header;
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 5;
 }
 
 #main {
   grid-area: main;
-  inline-size: min(var(--main-width), 100%);
-  margin-inline: auto;
+  box-shadow: var(--shadow-xl);
   min-block-size: 0;
-  padding: var(--block-space-double) var(--inline-space-double);
+  padding: var(--block-space-double) var(--inline-space-double) calc(var(--block-space-double) * 2);
+
+  @media (min-width: 40rem) {
+    padding-inline: 2.5rem;
+  }
+}
+
+@media (min-width: 70rem) {
+  #header {
+    border-start-start-radius: var(--radius-sheet);
+    border-start-end-radius: var(--radius-sheet);
+    margin-block-start: var(--block-space);
+  }
+
+  #main {
+    border-end-start-radius: var(--radius-sheet);
+    border-end-end-radius: var(--radius-sheet);
+    margin-block-end: var(--block-space-double);
+  }
+}
+
+.page-header {
+  align-items: center;
+  display: flex;
+  gap: var(--inline-space-double);
+  margin-block-end: var(--block-space-double);
+}
+
+.page-header__text {
+  min-inline-size: 0;
+}
+
+.page-header__meta {
+  color: var(--color-muted);
+  margin: var(--block-space-half) 0 0;
 }
 
 .full-bleed #main {

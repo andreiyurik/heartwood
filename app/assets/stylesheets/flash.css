@@ -1,21 +1,27 @@
 .flash {
   align-items: center;
-  animation: appear-then-fade 5s 300ms both;
-  background-color: var(--color-positive);
-  border-radius: var(--border-radius);
-  box-shadow: 0 6px 18px oklch(var(--lch-always-black) / 0.2);
-  color: var(--color-always-white);
+  animation: toast 5s 300ms both;
+  background-color: var(--color-text);
+  border-radius: 99rem;
+  box-shadow: var(--shadow-lg);
+  color: var(--color-text-reversed);
   display: flex;
+  font-size: 0.9375rem;
+  font-weight: 500;
   gap: var(--inline-space);
-  inset-block-start: var(--block-space);
+  inset-block-end: var(--block-space-double);
   inset-inline-start: 50%;
   max-inline-size: calc(100vw - var(--inline-space-double));
-  padding: var(--block-space-half) var(--inline-space-double);
+  padding: var(--block-space-half) 1.25rem;
   position: fixed;
   transform: translate(-50%);
-  z-index: 6;
+  z-index: 75;
+
+  .icon {
+    color: var(--color-positive);
+  }
 }
 
-.flash--alert {
-  background-color: var(--color-negative);
+.flash--alert .icon {
+  color: var(--color-alert);
 }

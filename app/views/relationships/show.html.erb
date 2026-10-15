@@ -1,3 +1,7 @@
+<% page_title t("relationships.section_title") %>
+<% page_meta t("relationships.lede", name: @person.display_name) %>
+<% back_link person_path(@person) %>
+
 <%# The whole "how are we related?" island, swapped in as one Turbo Frame. The
     candidate links break out to this frame, so picking someone reloads it with
     the named result and a fresh search to try another person. %>
@@ -12,7 +16,7 @@
               class: "input",
               placeholder: t("relationships.search_placeholder"),
               aria: { label: t("relationships.search_placeholder") },
-              autocomplete: "off",
+              autocomplete: "off", autofocus: true,
               data: { action: "input->autocomplete#search" } %>
       </div>
     <% end %>

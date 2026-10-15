@@ -31,6 +31,7 @@ class HintsControllerTest < ActionDispatch::IntegrationTest
     get hints_url
     assert_response :success
     assert_select ".hint-row", 0
+    assert_select "#hints.blank-slate form[action=?]", hints_scan_path
   end
 
   test "scan enqueues a duplicate scan" do

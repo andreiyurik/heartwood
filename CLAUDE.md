@@ -96,6 +96,39 @@ for r in once-campfire writebook fizzy; do git clone --depth 1 https://github.co
 
 Full detail and the "what to take from what" map: [[prior-art]].
 
+## Design language — Basecamp's approach, adapted (binding)
+
+Studied on the live Basecamp app on 2026-10-16; the full write-up with tokens, patterns,
+animations and the open gap list is [[design-system]] (`docs/architecture/design-system.md`).
+Every screen, CSS rule and view decision is checked against these before it ships:
+
+1. **The page is a sheet.** Tinted body (`--color-bg`), one white sheet (`--color-surface`,
+   `--main-width`, `--shadow-xl`). No cards inside the sheet for ordinary content — a form, a
+   profile, a list is never a box inside a box. Cards are for *collections* only.
+2. **Quiet chrome, loud title.** `#header` is the sheet's toolbar: back · tree crumb ·
+   People/Tree/Map · page actions · avatar menu. The page itself opens with a 36px/800 `h1`
+   (`.page-header`) and one subtle metadata line (`page_meta`). Section titles are 18px/600.
+   Account things live behind the avatar (`details.account-menu`); nothing else in the chrome.
+3. **Rows, not cards.** List item = avatar · bold name · one muted metadata line · hairline
+   (`--tint-ink-10`). No dotted leaders, no coloured link names, no uppercase labels.
+4. **Edit in place.** Adding/editing happens in a turbo-frame where the thing lives
+   (`.form--inline`: label-left / field-right, placeholder as prompt, small primary + ghost
+   Cancel, `fade-in-up` on open). No modals, no "new page" for small records.
+5. **One flat button.** `.btn` = 32px, radius 8px, weight 500, 1px border at 25% of its colour.
+   Variants are property mixes: `--primary` (solid accent), `--ghost`, `--round`, `--large`,
+   `--negative`. Old names (`--reversed`, `--plain`, `--circle`) are aliases. Hover = 5–8% tint,
+   never a halo. Menus are `details > menu.action-sheet` (32px items, 4px padding, dividers).
+6. **Motion says what happened, in ≤300ms.** Use the named keyframes in `animation.css`
+   (`fade-in-up`, `action-sheet-entrance`, `yellow-fade` via `.just-changed`, `adding`/`removing`,
+   `pop-open`, `modal-appear`, `shake-it`) with `--duration-*`/`--ease-out-*`; all collapse under
+   `prefers-reduced-motion`. Never decorative, never looping (except skeleton `pulse`).
+7. **Tokens, not numbers.** Radii `--radius-sm/md/lg/xl`, shadows `--shadow-sm…xl`, sizes
+   `--component-xs/sm/base`, tints `--tint-ink-*`, text `--color-muted`. A new literal colour,
+   radius or shadow in CSS is a smell.
+
+Honest gap list (what still isn't at the Basecamp bar) is §5 of [[design-system]]; pick from
+it before inventing new UI work.
+
 ## Key strategic features & tasks — keep these front of mind
 
 These are the product's actual differentiation, not just items on a backlog — every feature

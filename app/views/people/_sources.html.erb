@@ -5,7 +5,7 @@
     <% sourced_events.each do |event| %>
       <% event.citations.each do |citation| %>
         <dt class="source-event-label"><%= event.kind_label %></dt>
-        <dd class="source-item">
+        <%= tag.dd id: dom_id(citation), class: "source-item" do %>
           <p class="source-title">
             <% if citation.source.url.present? %>
               <%= link_to citation.source.title, citation.source.url,
@@ -36,10 +36,15 @@
           <%= render "shared/delete_button",
                 url: person_event_citation_path(person, event, citation),
                 label: t("citations.remove"), confirm: t("citations.remove_confirm") %>
-        </dd>
+        <% end %>
       <% end %>
     <% end %>
   </dl>
 <% else %>
-  <p class="muted tab-stub"><%= t("citations.none_for_person") %></p>
+  <%= render "shared/blank_slate", title: t("citations.none_for_person_title"), lede: t("citations.none_for_person") do %>
+    <% if can_edit? && (first = person.events.first) %>
+      <%= link_to t("citations.add"), new_person_event_citation_path(person, first), class: "btn",
+            data: { turbo_frame: dom_id(first, :citation_form) } %>
+    <% end %>
+  <% end %>
 <% end %>

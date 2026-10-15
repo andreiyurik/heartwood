@@ -3,9 +3,9 @@
     <% if Current.tree %>
       <%= yield :back %>
       <%= render "layouts/tree_crumb" %>
-      <% if content_for?(:page) %>
-        <span class="breadcrumbs__separator" aria-hidden="true">▸</span>
-        <h1><%= yield :page %></h1>
+      <% if full_bleed? && content_for?(:page) %>
+        <span class="breadcrumbs__separator" aria-hidden="true">‹</span>
+        <span class="breadcrumbs__page"><%= yield :page %></span>
       <% end %>
     <% else %>
       <%= link_to "🌳 Heartwood", root_path, class: "brand" %>
@@ -16,23 +16,51 @@
     <%= yield :header %>
   </div>
 
-  <div class="header-account">
-    <nav class="locale-switcher" aria-label="<%= t("locale.switcher") %>">
-      <% I18n.available_locales.each do |loc| %>
-        <%= button_to t("locale.#{loc}"), locale_path, method: :patch, params: { locale: loc },
-              class: "locale-switcher__btn #{"locale-switcher__btn--active" if I18n.locale == loc}",
-              aria: { current: I18n.locale == loc ? "true" : nil } %>
-      <% end %>
-    </nav>
-
-    <% if Current.tree %>
+  <% if Current.tree %>
+    <div class="header-account">
       <%= turbo_stream_from Current.tree, :hints %>
       <%= render "hints/badge", count: Current.tree.duplicate_hints.pending.count %>
-      <% if Current.membership.owner? %>
-        <%= icon_link_to "settings", t("nav.settings"), settings_path, class: "btn--plain" %>
-      <% end %>
-      <%= icon_link_to "people", t("nav.members"), tree_memberships_path, class: "btn--plain" %>
-      <%= icon_button_to "logout", t("nav.sign_out"), session_path, method: :delete, class: "btn--plain" %>
-    <% end %>
-  </div>
+
+      <details class="account-menu">
+        <summary class="btn btn--ghost btn--round" title="<%= Current.user.name %>">
+          <span class="avatar avatar--small avatar--initials" aria-hidden="true"><%= initials_for(Current.user.name) %></span>
+          <span class="for-screen-reader"><%= t("nav.account") %></span>
+        </summary>
+        <menu class="action-sheet action-sheet--end">
+          <li class="action-sheet__who">
+            <strong><%= Current.user.name %></strong>
+            <span class="txt-subtle"><%= Current.user.email_address %></span>
+          </li>
+          <li><hr class="action-sheet__divider"></li>
+          <li><%= link_to tree_memberships_path, class: "action-sheet__action" do %><%= icon_tag "people" %> <%= t("nav.members") %><% end %></li>
+          <% if Current.membership.owner? %>
+            <li><%= link_to settings_path, class: "action-sheet__action" do %><%= icon_tag "settings" %> <%= t("nav.settings") %><% end %></li>
+          <% end %>
+          <li><%= link_to hints_path, class: "action-sheet__action" do %><%= icon_tag "search" %> <%= t("hints.title") %><% end %></li>
+          <li><hr class="action-sheet__divider"></li>
+          <li>
+            <nav class="locale-switcher" aria-label="<%= t("locale.switcher") %>">
+              <% I18n.available_locales.each do |loc| %>
+                <%= button_to t("locale.#{loc}"), locale_path, method: :patch, params: { locale: loc },
+                      class: "locale-switcher__btn #{"locale-switcher__btn--active" if I18n.locale == loc}",
+                      aria: { current: I18n.locale == loc ? "true" : nil } %>
+              <% end %>
+            </nav>
+          </li>
+          <li><hr class="action-sheet__divider"></li>
+          <li><%= button_to session_path, method: :delete, class: "action-sheet__action" do %><%= icon_tag "logout" %> <%= t("nav.sign_out") %><% end %></li>
+        </menu>
+      </details>
+    </div>
+  <% else %>
+    <div class="header-account">
+      <nav class="locale-switcher" aria-label="<%= t("locale.switcher") %>">
+        <% I18n.available_locales.each do |loc| %>
+          <%= button_to t("locale.#{loc}"), locale_path, method: :patch, params: { locale: loc },
+                class: "locale-switcher__btn #{"locale-switcher__btn--active" if I18n.locale == loc}",
+                aria: { current: I18n.locale == loc ? "true" : nil } %>
+        <% end %>
+      </nav>
+    </div>
+  <% end %>
 </header>

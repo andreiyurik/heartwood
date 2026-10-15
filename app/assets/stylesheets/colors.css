@@ -1,30 +1,33 @@
 :root {
   /* Named color values */
-  --lch-black: 16% 0.018 55;
-  --lch-white: 97.98% 0.005 78.3;
+  --lch-black: 22% 0.02 230;
+  --lch-white: 97.6% 0.006 140;
   --lch-paper: 100% 0 0;
-  --lch-gray: 96% 0.005 96;
-  --lch-gray-dark: 92% 0.005 96;
-  --lch-gray-darker: 75% 0.005 96;
-  --lch-taupe: 60.7% 0.015 53.21;
+  --lch-gray: 95% 0.004 230;
+  --lch-gray-dark: 90% 0.006 230;
+  --lch-gray-darker: 72% 0.01 230;
+  --lch-taupe: 52% 0.02 230;
   --lch-green: 61% 0.082 137.63;
   --lch-green-dark: 43.58% 0.066 138.12;
   --lch-green-light: 95.76% 0.014 128.63;
   --lch-red: 56.01% 0.131 33.15;
   --lch-red-light: 96.98% 0.009 34.3;
   --lch-orange: 70% 0.2 44;
+  --lch-yellow: 93% 0.12 95;
+  --lch-yellow-light: 97% 0.05 95;
   --lch-blue: 67.52% 0.066 229.68;
   --lch-pink: 65.88% 0.088 343.07;
   --lch-always-black: 0% 0 0;
   --lch-always-white: 100% 0 0;
 
-  /* Abstractions */
+  /* Abstractions: the body is a tinted page, the sheet (surface) is lighter than it */
   --color-bg: oklch(var(--lch-white));
   --color-surface: oklch(var(--lch-paper));
   --color-text: oklch(var(--lch-black));
-  --color-text-reversed: oklch(var(--lch-white));
+  --color-text-reversed: oklch(var(--lch-paper));
   --color-muted: oklch(var(--lch-taupe));
   --color-link: oklch(var(--lch-green-dark));
+  --color-accent: oklch(var(--lch-green-dark));
   --color-border: oklch(var(--lch-gray));
   --color-border-dark: oklch(var(--lch-gray-dark));
   --color-border-darker: oklch(var(--lch-gray-darker));
@@ -35,25 +38,63 @@
   --color-negative-border: color-mix(in oklch, var(--color-negative) 35%, var(--color-bg));
   --color-positive: oklch(var(--lch-green));
   --color-alert: oklch(var(--lch-orange));
+  --color-highlight: oklch(var(--lch-yellow-light));
+  --color-highlight-border: oklch(var(--lch-yellow));
   --color-male: oklch(var(--lch-blue));
   --color-female: oklch(var(--lch-pink));
   --color-always-white: oklch(var(--lch-always-white));
 
+  /* Ink tints: borders, hovers and dividers are the text color at low opacity */
+  --tint-ink-3: color-mix(in oklch, transparent, var(--color-text) 3%);
+  --tint-ink-5: color-mix(in oklch, transparent, var(--color-text) 5%);
+  --tint-ink-8: color-mix(in oklch, transparent, var(--color-text) 8%);
+  --tint-ink-10: color-mix(in oklch, transparent, var(--color-text) 10%);
+  --tint-ink-15: color-mix(in oklch, transparent, var(--color-text) 15%);
+  --tint-ink-25: color-mix(in oklch, transparent, var(--color-text) 25%);
+  --tint-ink-50: color-mix(in oklch, transparent, var(--color-text) 50%);
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-sheet: 16px;
+
+  --shadow-base: 0 -1px 1px oklch(var(--lch-always-black) / 0.025), 0 1px 2px -0.5px oklch(var(--lch-always-black) / 0.05);
+  --shadow-sm: var(--shadow-base), 0 2px 4px -1px oklch(var(--lch-always-black) / 0.1);
+  --shadow-md: var(--shadow-sm), 0 4px 8px -2px oklch(var(--lch-always-black) / 0.1);
+  --shadow-lg: var(--shadow-md), 0 16px 32px -8px oklch(var(--lch-always-black) / 0.1);
+  --shadow-xl: 0 0 3rem oklch(var(--lch-always-black) / 0.08);
+  --shadow-menu: 0 0 0 1px var(--tint-ink-10), 0 4px 8px oklch(var(--lch-always-black) / 0.1);
+
+  --component-xs: 24px;
+  --component-sm: 32px;
+  --component-base: 40px;
+
+  --duration-fast: 75ms;
+  --duration-medium: 150ms;
+  --duration-slow: 300ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-overshoot: cubic-bezier(0.25, 1.25, 0.5, 1);
+
   /* Redefine named color values for dark mode */
   @media (prefers-color-scheme: dark) {
-    --lch-black: 94% 0.008 78;
-    --lch-white: 18% 0.008 55;
-    --lch-paper: 22% 0.008 55;
-    --lch-gray: 26% 0.006 60;
-    --lch-gray-dark: 31% 0.006 60;
-    --lch-gray-darker: 45% 0.006 60;
-    --lch-taupe: 68% 0.015 60;
+    --lch-black: 93% 0.006 230;
+    --lch-white: 15% 0.015 235;
+    --lch-paper: 22% 0.016 230;
+    --lch-gray: 27% 0.012 230;
+    --lch-gray-dark: 32% 0.012 230;
+    --lch-gray-darker: 48% 0.012 230;
+    --lch-taupe: 70% 0.012 230;
     --lch-green: 70% 0.09 137.63;
     --lch-green-dark: 78% 0.08 138.12;
     --lch-green-light: 30% 0.03 135;
     --lch-red: 70% 0.14 30;
     --lch-red-light: 28% 0.04 30;
+    --lch-yellow: 60% 0.1 95;
+    --lch-yellow-light: 30% 0.04 95;
     --lch-blue: 58% 0.07 229.68;
     --lch-pink: 58% 0.09 343.07;
+
+    --shadow-xl: 0 0 3rem oklch(var(--lch-always-black) / 0.4);
   }
 }
