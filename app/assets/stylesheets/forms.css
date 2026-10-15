@@ -93,6 +93,7 @@
 /* A long field (the biography) takes the whole row, label on top */
 .field--stacked {
   @media (min-width: 40rem) {
+    align-items: stretch;
     display: flex;
 
     > label {

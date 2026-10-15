@@ -34,8 +34,9 @@
   border-radius: var(--radius-xl);
 }
 
+/* Resolved here, not in colors.css, so each avatar's own --avatar-hue is seen */
 .avatar--initials {
-  background-color: var(--color-avatar);
+  background-color: oklch(var(--lch-avatar-tone) var(--avatar-hue, 137.63));
   letter-spacing: 0.02em;
 }
 

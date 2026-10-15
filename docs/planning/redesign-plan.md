@@ -138,6 +138,22 @@ Reference: the live Basecamp app + its compiled CSS, written up in [[design-syst
       menu, event rows, field-row forms, `:target` yellow fade, inline blank slates, hotkeys
       (`/`, `n`, `e`, `t`), ink-tint borders in dark mode. Next bar: [[design-system]] §6.
 
+## Phase 7 — The audit pass (2026-10-16) ✅
+Reference: [[design-audit-2026-10-16]], every screen walked at 1280px and 375px, light and
+dark, EN and RU, as owner, fresh owner and invitee.
+- [x] Bugs: the relationship search sent no `person_id`/`for` (500 on the first keystroke);
+      inline titles were Title-Cased by CSS; the map was an empty planet when nothing was located.
+- [x] Profile reads record-first: events → family → biography → sources → memories → map
+      (map only when an event is located); the metadata line (nickname · years · sex · living)
+      replaces the facts block; relatives are people rows; one "Add event"; row controls are
+      hover-revealed icon buttons.
+- [x] Forms: the optional fields line up with the names; the biography takes the full row.
+- [x] Chrome: Import/Export GEDCOM are labelled items in the account menu; Edit is a word;
+      the tree name stays on phones; Members explains roles and removes quietly; Duplicates
+      shows Scan in the toolbar only with a list.
+- [x] Avatars coloured by name (`initials_avatar`, `--avatar-hue`).
+- Open: [[design-system]] §6.
+
 ## Decisions
 - Product name stays **Heartwood** (decided 2026-09-26); open source and community go in
   the tagline, not the name — see [[positioning]].
