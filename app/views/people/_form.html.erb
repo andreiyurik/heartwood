@@ -15,7 +15,7 @@
     <div class="field"><%= f.label :name_suffix %><%= f.text_field :name_suffix, class: "input" %></div>
     <div class="field"><%= f.label :nickname %><%= f.text_field :nickname, class: "input" %></div>
 
-    <div class="field field--biography">
+    <div class="field field--biography field--stacked">
       <%= f.label :biography, t("people.biography_label") %>
       <span class="field-hint"><%= t("people.biography_hint") %></span>
       <%= f.rich_text_area :biography %>

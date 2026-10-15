@@ -1,7 +1,6 @@
 .inline-title {
   font-weight: 700;
   margin: 0 0 var(--block-space-half);
-  text-transform: capitalize;
 }
 
 .relative-picker {
