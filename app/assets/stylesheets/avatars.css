@@ -1,5 +1,5 @@
 .avatar {
-  --avatar-size: 32px;
+  --avatar-size: var(--component-base);
 
   align-items: center;
   background-color: var(--color-selected-dark);
@@ -8,6 +8,7 @@
   color: var(--color-always-white);
   display: inline-flex;
   flex-shrink: 0;
+  font-size: calc(var(--avatar-size) * 0.36);
   font-weight: 700;
   inline-size: var(--avatar-size);
   justify-content: center;
@@ -15,23 +16,22 @@
   overflow: hidden;
 }
 
-.avatar--thumb {
-  --avatar-size: 32px;
+.avatar--small {
+  --avatar-size: var(--component-xs);
+}
 
-  font-size: 0.65rem;
+.avatar--thumb {
+  --avatar-size: var(--component-sm);
 }
 
 .avatar--large {
-  --avatar-size: 96px;
-
-  font-size: 1.6rem;
+  --avatar-size: 80px;
 }
 
 .avatar--gallery {
   --avatar-size: 200px;
 
-  border-radius: var(--border-radius);
-  font-size: 2.5rem;
+  border-radius: var(--radius-xl);
 }
 
 .avatar--initials {
@@ -53,12 +53,13 @@
 }
 
 .avatar-upload__badge {
-  --icon-size: 1.4rem;
+  --icon-size: 1.1rem;
 
   align-self: end;
   background-color: var(--color-surface);
   border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+  box-sizing: content-box;
   justify-self: end;
   padding: 0.3rem;
-  box-sizing: content-box;
 }

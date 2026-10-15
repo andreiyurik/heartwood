@@ -3,22 +3,76 @@
   5%,60%  { opacity: 1; }
 }
 
-@keyframes success {
-  0%  { background-color: var(--color-border-darker); scale: 0.8; }
-  20% { background-color: var(--color-border-darker); scale: 1; }
+@keyframes toast {
+  0%      { opacity: 0; transform: translate(-50%, 8px); }
+  6%, 70% { opacity: 1; transform: translate(-50%, 0); }
+  100%    { opacity: 0; transform: translate(-50%, 8px); }
+}
+
+@keyframes fade-in-up {
+  0%   { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes action-sheet-entrance {
+  0%   { opacity: 0; transform: translateY(-8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes yellow-fade {
+  0% { background-color: var(--color-highlight); }
+}
+
+@keyframes adding {
+  0% { opacity: 0; transform: translateX(2rem); }
+}
+
+@keyframes removing {
+  100% { opacity: 0; transform: translateX(2rem); }
+}
+
+@keyframes pop-open {
+  0%   { opacity: 0; transform: scale(0.3); }
+  75%  { opacity: 1; transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes modal-appear {
+  0%   { opacity: 0; transform: scale(0.85); }
+  67%  { opacity: 1; transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake-it {
+  0%, 100%                { transform: translate3d(0, 0, 0); }
+  10%, 30%, 50%, 70%, 90% { transform: translate3d(-0.15em, 0, 0); }
+  20%, 40%, 60%, 80%      { transform: translate3d(0.15em, 0, 0); }
+}
+
+@keyframes pulse {
+  50% { opacity: 0.4; }
 }
 
 @keyframes zoom-fade {
   100% { transform: translateY(-2em); opacity: 0; }
 }
 
-@keyframes shake {
-  0%  { transform: translateX(-2rem); }
-  25% { transform: translateX(2rem); }
-  50% { transform: translateX(-1rem); }
-  75% { transform: translateX(1rem); }
+.shake {
+  animation: shake-it 400ms both;
 }
 
-.shake {
-  animation: shake 400ms both;
+.just-changed {
+  animation: yellow-fade 3s ease-out;
+}
+
+.pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
 }

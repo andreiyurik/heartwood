@@ -1,0 +1,55 @@
+/* The profile reads top-down like a Basecamp record: facts, then every section in
+   order; the jump links only scroll. */
+.profile-nav {
+  border-block-end: 1px solid var(--tint-ink-10);
+  display: flex;
+  gap: 4px;
+  margin: 0 0 var(--block-space-double);
+  overflow-x: auto;
+  padding-block-end: var(--block-space-half);
+
+  a {
+    align-items: center;
+    block-size: var(--component-sm);
+    border-radius: var(--radius-lg);
+    color: var(--color-muted);
+    display: inline-flex;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding-inline: 0.75em;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: var(--tint-ink-5);
+      color: var(--color-text);
+      text-decoration: none;
+    }
+  }
+}
+
+.profile-section,
+.relations,
+.events {
+  border-block-start: 1px solid var(--tint-ink-10);
+  margin-block-start: var(--block-space-double);
+  padding-block-start: var(--block-space-double);
+  scroll-margin-block-start: 5rem;
+
+  h2 {
+    margin-block-end: var(--block-space);
+  }
+}
+
+.profile-map {
+  summary {
+    display: inline-flex;
+  }
+
+  .map-canvas {
+    margin-block-start: var(--block-space);
+  }
+
+  &:not([open]) .map-note {
+    display: none;
+  }
+}

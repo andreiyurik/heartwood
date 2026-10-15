@@ -1,0 +1,11 @@
+<%# Closed by default; the map controller lives on the <details> so it can resize
+    Leaflet when the block opens (a map laid out while hidden has no size). %>
+<details class="profile-map"
+         data-controller="map"
+         data-action="toggle->map#resize"
+         data-map-url-value="<%= person_map_path(person, format: :json) %>"
+         data-map-unavailable-value="<%= t("maps.unavailable") %>">
+  <summary class="btn"><%= icon_tag "map" %> <%= t("maps.show_places") %></summary>
+  <div class="map-canvas" data-map-target="canvas"></div>
+  <p class="muted map-note"><%= t("maps.person_note") %></p>
+</details>

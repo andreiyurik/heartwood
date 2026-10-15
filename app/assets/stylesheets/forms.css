@@ -1,50 +1,102 @@
 .form {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border-dark);
-  border-radius: var(--border-radius);
-  max-inline-size: 32rem;
-  padding: 1.5rem;
+  max-inline-size: 36rem;
 
   .actions {
     align-items: center;
     display: flex;
     gap: 0.5rem;
-    margin-block-start: 0.5rem;
+    margin-block-start: var(--block-space);
   }
 }
 
+/* Label on the left, field on the right (Basecamp's field-row); stacked on phones */
 .field {
   display: flex;
   flex-direction: column;
-  margin-block-end: 0.85rem;
+  gap: 0.25rem;
+  margin-block-end: var(--block-space);
 
   label {
-    color: var(--color-muted);
-    font-size: 0.85rem;
-    margin-block-end: 0.2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
   }
 
   input:not(:where(.input)),
   select:not(:where(.input)) {
     background-color: var(--color-surface);
-    border: 1px solid var(--color-border-dark);
-    border-radius: 8px;
+    border: 1px solid var(--tint-ink-15);
+    border-radius: var(--radius-lg);
     font: inherit;
     padding: 0.5rem;
+  }
+
+  @media (min-width: 40rem) {
+    align-items: start;
+    display: grid;
+    gap: 0.25rem var(--inline-space-double);
+    grid-template-columns: var(--field-label-width, 9rem) minmax(0, 1fr);
+
+    > label {
+      grid-column: 1;
+      line-height: var(--component-base);
+      text-align: end;
+    }
+
+    > :not(label) {
+      grid-column: 2;
+    }
   }
 }
 
 .field-hint {
   color: var(--color-muted);
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
+}
+
+/* Inline forms open in place */
+.form--inline {
+  --field-label-width: 8rem;
+
+  animation: fade-in-up var(--duration-medium) ease-out;
+  border-block: 1px dotted var(--tint-ink-25);
+  margin-block: var(--block-space-half);
+  padding-block: var(--block-space);
+
+  .field {
+    margin-block-end: var(--block-space-half);
+
+    @media (min-width: 40rem) {
+      > label {
+        line-height: var(--component-sm);
+      }
+    }
+  }
+
+  .input {
+    font-size: 1rem;
+    padding-block: 0.3em;
+  }
+
+  .actions {
+    margin-block-start: var(--block-space-half);
+  }
+}
+
+@media (min-width: 40rem) {
+  .form .actions,
+  .form .more-fields,
+  .form > .errors {
+    margin-inline-start: calc(var(--field-label-width, 9rem) + var(--inline-space-double));
+  }
 }
 
 .errors {
   background-color: var(--color-negative-light);
-  border: 1px solid var(--color-negative);
-  border-radius: var(--border-radius);
+  border: 1px solid var(--color-negative-border);
+  border-radius: var(--radius-lg);
   color: var(--color-negative);
-  margin-block-end: 1rem;
+  font-size: 0.9375rem;
+  margin-block-end: var(--block-space);
   padding: 0.75rem 1rem;
 
   ul {
@@ -53,39 +105,25 @@
 }
 
 .delete-link {
+  align-items: center;
   background: none;
   border: none;
-  color: var(--color-negative);
+  border-radius: var(--radius-sm);
+  color: var(--color-muted);
   cursor: pointer;
-  font-size: 0.85rem;
-  padding: 0 0.4rem;
+  display: inline-flex;
+  font-size: 0.8125rem;
+  gap: 0.35em;
+  padding: 0.15rem 0.4rem;
 
   &:hover {
-    text-decoration: underline;
-  }
-}
-
-.danger-zone {
-  background-color: var(--color-negative-light);
-  border: 1px solid var(--color-negative-border);
-  border-radius: var(--border-radius);
-  margin-block-start: 2rem;
-  padding: 1rem 1.25rem;
-
-  h2 {
+    background-color: var(--color-negative-light);
     color: var(--color-negative);
-    font-size: 1rem;
-    margin: 0 0 0.25rem;
-  }
-
-  p {
-    font-size: 0.9rem;
-    margin: 0 0 0.75rem;
   }
 }
 
 .settings-links {
-  margin-block-start: var(--block-space);
+  margin-block-start: var(--block-space-double);
 }
 
 .more-fields {
@@ -93,7 +131,20 @@
 
   summary {
     color: var(--color-muted);
-    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
     margin-block-end: var(--block-space-half);
+
+    &::before {
+      content: "▸ ";
+    }
+
+    &:hover {
+      color: var(--color-text);
+    }
+  }
+
+  &[open] summary::before {
+    content: "▾ ";
   }
 }

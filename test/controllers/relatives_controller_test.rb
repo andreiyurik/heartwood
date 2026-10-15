@@ -2,6 +2,8 @@ require "test_helper"
 
 # Adding relatives to a Person through the UI. See docs/features/person-profile.md.
 class RelativesControllerTest < ActionDispatch::IntegrationTest
+  include ActionView::RecordIdentifier
+
   setup do
     @tree   = trees(:bach)
     @person = people(:wilhelm_friedemann)
@@ -21,8 +23,8 @@ class RelativesControllerTest < ActionDispatch::IntegrationTest
         relation: "parent", person: { given_names: "Mary", surname: "Root", sex: "F" }
       }
     end
-    assert_redirected_to person_url(@person)
-    assert_includes @person.parents.map(&:given_names), "Mary"
+    mary = @person.parents.find_by!(given_names: "Mary")
+    assert_redirected_to person_url(@person, anchor: dom_id(mary))
   end
 
   test "create with return_to lands back on that page (tree panel flow)" do
@@ -38,7 +40,7 @@ class RelativesControllerTest < ActionDispatch::IntegrationTest
       relation: "parent", return_to: "https://evil.example/phish",
       person: { given_names: "Mary", sex: "F" }
     }
-    assert_redirected_to person_url(@person)
+    assert_redirected_to person_url(@person, anchor: dom_id(@person.parents.find_by!(given_names: "Mary")))
   end
 
   test "adds a child" do
@@ -64,7 +66,7 @@ class RelativesControllerTest < ActionDispatch::IntegrationTest
 
   test "create answers with a see-other redirect, so Turbo morphs the page" do
     post person_relatives_url(@person), params: { relation: "child", person: { given_names: "Kim", sex: "U" } }
-    assert_redirected_to person_url(@person)
+    assert_redirected_to person_url(@person, anchor: dom_id(@person.children.find_by!(given_names: "Kim")))
     assert_response :see_other
   end
 

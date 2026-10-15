@@ -123,6 +123,21 @@ Reference: campfire/writebook `app/models`, `app/controllers/concerns`, `config/
       `helpers/timing_helpers.js` (with `cancel`), generic `auto_submit` and `autocomplete`
       (the old `search`), `hello_controller.js` deleted. No `toggle_class`: nothing would use it yet.
 
+## Phase 6 — Basecamp design language (2026-10-16) ✅
+Reference: the live Basecamp app + its compiled CSS, written up in [[design-system]].
+- [x] Tokens: radii, shadows, component sizes, durations, easings, ink tints; body tint vs sheet.
+- [x] Frame: `#header` is the sheet toolbar (back · crumb · sections · actions · account menu);
+      `#main` is the sheet; the page title is a 36px `h1` in `.page-header` with a metadata line.
+- [x] Buttons rewritten on the Basecamp model (`--primary`, `--ghost`, `--icon`, `--round`;
+      old names kept as aliases); inputs, inline forms, menus (`action-sheet`), blank slate, flash.
+- [x] Rows: people and members lists as avatar · name · metadata · hairline.
+- [x] Animations: `fade-in-up`, `action-sheet-entrance`, `yellow-fade`, `adding`/`removing`,
+      `pop-open`, `modal-appear`, `shake-it`, with `prefers-reduced-motion`.
+- [x] Tree drawer restyled as a sheet-style card.
+- [x] §5 gap list closed: profile without tabs, relationship calculator and delete in the `…`
+      menu, event rows, field-row forms, `:target` yellow fade, inline blank slates, hotkeys
+      (`/`, `n`, `e`, `t`), ink-tint borders in dark mode. Next bar: [[design-system]] §6.
+
 ## Decisions
 - Product name stays **Heartwood** (decided 2026-09-26); open source and community go in
   the tagline, not the name — see [[positioning]].

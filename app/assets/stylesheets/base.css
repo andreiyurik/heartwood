@@ -2,11 +2,8 @@
   color-scheme: light dark;
 
   --font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --hover-color: var(--color-border-darker);
-  --hover-size: 0.15em;
-  --hover-filter: brightness(1);
-  --border-radius: 10px;
-  --main-width: 60rem;
+  --border-radius: var(--radius-lg);
+  --main-width: 68rem;
 }
 
 html, body {
@@ -14,7 +11,8 @@ html, body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-family);
-  line-height: 1.55;
+  letter-spacing: -0.00625em;
+  line-height: 1.5;
   overflow: initial;
   text-size-adjust: none;
 }
@@ -22,6 +20,31 @@ html, body {
 body {
   display: flex;
   flex-direction: column;
+}
+
+h1, h2, h3, h4 {
+  line-height: 1.15;
+  text-wrap: pretty;
+}
+
+h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02375em;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+h3 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin: 0;
 }
 
 a {
@@ -33,40 +56,59 @@ a {
   }
 }
 
-/* Checkboxes, radios and file pickers keep their native look */
 :where(button, input:not([type=checkbox], [type=radio], [type=file]), textarea, summary, .input, .btn) {
-  --outline-size: min(0.2em, 2px);
+  --outline-size: 2px;
 
   appearance: none;
   border: none;
   background-color: transparent;
   font: inherit;
+  letter-spacing: inherit;
   line-height: inherit;
   text-decoration: none;
   touch-action: manipulation;
-  transition: box-shadow 150ms ease, outline-offset 150ms ease, background-color 150ms ease, opacity 150ms ease, filter 150ms ease;
-
-  @media (any-hover: hover) {
-    &:where(:not(:active):hover) {
-      filter: var(--hover-filter);
-      box-shadow: 0 0 0 var(--hover-size) var(--hover-color);
-    }
-  }
+  transition:
+    background-color var(--duration-medium) ease-out,
+    border-color var(--duration-medium) ease-out,
+    box-shadow var(--duration-medium) ease-out,
+    opacity var(--duration-medium) ease-out;
 
   &:where(:not(:active)):focus-visible {
-    outline-width: var(--outline-size);
-    outline-color: var(--outline-color, var(--color-selected-dark));
-    outline-offset: var(--outline-offset, calc(var(--outline-size) * 2));
-  }
-
-  &:focus:not(:focus-visible) {
-    --outline-offset: 0;
+    outline: var(--outline-size) solid var(--outline-color, var(--color-selected-dark));
+    outline-offset: 2px;
   }
 
   &:where([disabled]):not(:hover):not(:active) {
     cursor: not-allowed;
-    filter: brightness(0.75);
+    opacity: 0.5;
   }
+}
+
+summary {
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+hr {
+  border: 0;
+  border-block-end: 1px solid var(--tint-ink-10);
+  margin: 0;
+}
+
+kbd {
+  border: 1px solid currentColor;
+  border-block-end-width: 2px;
+  border-radius: 0.3em;
+  font-family: inherit;
+  font-size: 0.625rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.15em 0.4em;
+  text-transform: uppercase;
 }
 
 turbo-frame,

@@ -1,5 +1,5 @@
 .hints-lede {
-  margin: 0 0 1rem;
+  margin: 0 0 var(--block-space);
   max-inline-size: 42rem;
 }
 
@@ -11,18 +11,15 @@
 
 .hint-row {
   align-items: center;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border-dark);
-  border-radius: var(--border-radius);
+  border-block-end: 1px solid var(--tint-ink-10);
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem 1.25rem;
-  margin-block-end: 0.6rem;
-  padding: 0.85rem 1rem;
+  gap: 0.5rem 1.25rem;
+  padding-block: 0.85rem;
 }
 
 .hint-pair {
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .hint-vs {
@@ -40,9 +37,10 @@
 
 .hint-score {
   background-color: var(--color-selected);
-  border-radius: 999px;
+  border-radius: 99rem;
   color: var(--color-link);
   display: inline-grid;
+  font-size: 0.8125rem;
   font-weight: 700;
   min-inline-size: 2.1rem;
   padding: 0.15rem 0.4rem;
@@ -58,9 +56,8 @@
   padding: 0;
 
   li {
-    background-color: var(--color-bg);
-    border: 1px solid var(--color-border-dark);
-    border-radius: 999px;
+    background-color: var(--tint-ink-5);
+    border-radius: 99rem;
     color: var(--color-muted);
     font-size: 0.78rem;
     padding: 0.1rem 0.5rem;
@@ -79,18 +76,28 @@
 
 .hints-badge {
   align-items: center;
+  border-radius: var(--radius-lg);
+  color: var(--color-text);
   display: inline-flex;
-  font-size: 0.85rem;
-  font-weight: 600;
-  gap: 0.3rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  gap: 0.35rem;
+  padding: 0.2rem 0.5rem;
+
+  &:hover {
+    background-color: var(--tint-ink-5);
+    text-decoration: none;
+  }
 }
 
 .hints-badge-count {
+  animation: pop-open var(--duration-slow) var(--ease-out-overshoot);
   background-color: var(--color-negative);
-  border-radius: 999px;
+  border-radius: 99rem;
   color: var(--color-always-white);
   display: inline-grid;
   font-size: 0.75rem;
+  font-weight: 700;
   min-inline-size: 1.25rem;
   padding: 0 0.3rem;
   place-items: center;

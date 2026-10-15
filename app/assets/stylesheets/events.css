@@ -1,51 +1,69 @@
-.events {
-  border-block-start: 1px solid var(--color-border-dark);
-  margin-block-start: 1rem;
-  padding-block-start: 1rem;
-
-  h2 {
-    font-size: 1.2rem;
-    margin-block: 0.83em;
-  }
-}
-
 .event-list {
   list-style: none;
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--block-space-half);
   padding: 0;
 }
 
+/* A row: date · kind + detail + place · sources count · actions (quiet until hovered) */
 .event-row {
-  border-block-end: 1px solid var(--color-border-dark);
-  padding: 0.35rem 0;
+  border-block-end: 1px solid var(--tint-ink-10);
+  padding-block: 0.5rem;
+  scroll-margin-block-start: 5rem;
 
-  turbo-frame {
-    align-items: baseline;
+  > turbo-frame:first-child {
+    align-items: center;
     display: flex;
-    gap: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.75rem;
   }
+
+  &:hover .event-actions,
+  &:focus-within .event-actions {
+    opacity: 1;
+  }
+
+  &:has(turbo-frame[id^="citation_form"] form) .citation-add {
+    display: none;
+  }
+}
+
+.event-date {
+  color: var(--color-muted);
+  flex: 0 0 7rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.event-body {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+  min-inline-size: 12rem;
 }
 
 .event-kind {
   font-weight: 600;
-  min-inline-size: 7rem;
 }
 
-.event-summary {
-  color: var(--color-text);
-  flex: 1;
+.event-place {
+  color: var(--color-muted);
+
+  &::before {
+    content: "· ";
+  }
 }
 
-.event-actions {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.sourced-badge {
+.event-sources {
+  align-items: center;
+  background-color: var(--color-selected);
+  border-radius: 99rem;
   color: var(--color-link);
+  display: inline-flex;
   font-size: 0.75rem;
   font-weight: 700;
-  margin-inline-start: 0.2rem;
+  justify-content: center;
+  min-inline-size: 1.4rem;
+  padding: 0.05rem 0.4rem;
 }
 
 .sourced-badge--very_low,
@@ -57,6 +75,20 @@
   opacity: 0.8;
 }
 
-.citation-add:hover {
-  color: var(--color-link);
+.event-actions {
+  display: flex;
+  gap: 0.25rem;
+  margin-inline-start: auto;
+  opacity: 0.6;
+  transition: opacity var(--duration-medium) ease-out;
+
+  @media (hover: none) {
+    opacity: 1;
+  }
+}
+
+.event-add-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
 }

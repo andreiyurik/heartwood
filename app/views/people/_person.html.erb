@@ -1,14 +1,13 @@
 <%= tag.li id: dom_id(person), class: "person-row" do %>
   <% if person.avatar.attached? %>
-    <%= image_tag person.avatar, class: "avatar avatar--thumb", alt: "" %>
+    <%= image_tag person.avatar, class: "avatar", alt: "" %>
   <% else %>
-    <div class="avatar avatar--thumb avatar--initials" aria-hidden="true">
-      <%= person.display_name.split.map(&:first).first(2).join.upcase %>
-    </div>
+    <div class="avatar avatar--initials" aria-hidden="true"><%= initials_for(person.display_name) %></div>
   <% end %>
-  <%= link_to person.display_name, person %>
-  <hr class="separator" aria-hidden="true">
-  <span class="years">
-    <%= person.birth&.date_raw %><% if person.death %> – <%= person.death.date_raw %><% end %>
-  </span>
+  <div class="person-row__body">
+    <p class="person-row__name"><%= link_to person.display_name, person %></p>
+    <% if person.life_years.present? %>
+      <p class="person-row__meta"><%= person.life_years %></p>
+    <% end %>
+  </div>
 <% end %>

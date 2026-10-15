@@ -18,9 +18,11 @@ class RelationshipsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_session_url
   end
 
-  test "show without a target renders the search frame" do
+  test "show is its own page with the search frame" do
     get person_relationship_url(@person)
     assert_response :success
+    assert_select "main .page-header h1", text: I18n.t("relationships.section_title")
+    assert_select "#header a.back[href=?]", person_path(@person)
     assert_select "turbo-frame#relationship input[type=search]"
   end
 

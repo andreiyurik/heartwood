@@ -10,7 +10,7 @@ class CitationsController < ApplicationController
 
   def create
     @event.cite(source_params, citation_params)
-    redirect_back_or_to person_path(@person, tab: "sources"), status: :see_other
+    redirect_back_or_to person_path(@person, anchor: "sources"), status: :see_other
   rescue ActiveRecord::RecordInvalid => error
     @citation = Citation.new
     @source   = error.record
@@ -19,7 +19,7 @@ class CitationsController < ApplicationController
 
   def destroy
     @event.citations.find(params[:id]).destroy!
-    redirect_back_or_to person_path(@person, tab: "sources"), status: :see_other
+    redirect_back_or_to person_path(@person, anchor: "sources"), status: :see_other
   end
 
   private

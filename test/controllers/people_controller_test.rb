@@ -20,6 +20,16 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     assert_select "body", /Lovelace/
   end
 
+  test "lists people as rows with the name over a metadata line" do
+    Event.create!(kind: "BIRT", eventable: @person, tree: @tree, date_raw: "1815", date_start: Date.new(1815, 12, 10))
+    get people_url
+    assert_select ".person-row" do
+      assert_select ".person-row__name a[href=?]", person_path(@person), text: "Ada Lovelace"
+      assert_select ".person-row__meta", text: /1815/
+      assert_select "hr.separator", count: 0
+    end
+  end
+
   test "shows a person" do
     get person_url(@person)
     assert_response :success
@@ -37,34 +47,44 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "profile defaults to details tab" do
+  test "the profile shows every section top-down with jump links, no tabs" do
     get person_url(@person)
-    assert_select ".profile-tab--active", text: /Details/i
+    assert_select ".profile-tab", count: 0
+    %w[biography events family sources memories map].each do |section|
+      assert_select ".profile-nav a[href='##{section}']"
+      assert_select "section##{section}"
+    end
     assert_select ".facts"
+    assert_select ".relationship-tool", count: 0
   end
 
-  test "profile renders sources tab" do
-    get person_url(@person, tab: "sources")
-    assert_response :success
-    assert_select ".profile-tab--active", text: /Sources/i
+  test "empty sources and memories show a blank slate" do
+    get person_url(@person)
+    assert_select "section#sources .blank-slate"
+    assert_select "section#memories .blank-slate"
   end
 
-  test "profile renders memories tab" do
-    get person_url(@person, tab: "memories")
-    assert_response :success
-    assert_select ".profile-tab--active", text: /Memories/i
+  test "the profile's more menu offers the relationship calculator and deletion for editors" do
+    get person_url(@person)
+    assert_select "#header details.action-menu" do
+      assert_select "a[href=?]", person_relationship_path(@person)
+      assert_select "form[action=?] input[name=_method][value=delete]", person_path(@person)
+    end
   end
 
-  test "profile renders timeline tab" do
-    get person_url(@person, tab: "timeline")
-    assert_response :success
-    assert_select ".profile-tab--active", text: /Timeline/i
+  test "viewers get the relationship calculator but not deletion in the more menu" do
+    viewer = User.create!(name: "Viewer Vee", email_address: "vee@example.com", password: "password")
+    TreeMembership.create!(user: viewer, tree: @tree, role: "viewer")
+    sign_in_as viewer
+    get person_url(@person)
+    assert_select "#header details.action-menu a[href=?]", person_relationship_path(@person)
+    assert_select "#header form[action=?] input[name=_method][value=delete]", person_path(@person), count: 0
   end
 
-  test "unknown tab falls back to details" do
+  test "a stray tab param is ignored" do
     get person_url(@person, tab: "hacker/../../etc")
     assert_response :success
-    assert_select ".profile-tab--active", text: /Details/i
+    assert_select ".facts"
   end
 
   test "index search filters by name" do

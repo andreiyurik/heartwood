@@ -1,70 +1,97 @@
-/* Primary actions use .btn--reversed; the green accent is reserved for links and selection */
-:root {
-  --btn-size: 2.65em;
-}
-
+/* One button, varied through custom properties (Basecamp's model). Older names
+   stay as aliases so views and tests need not change: reversed = primary,
+   plain = ghost, circle = round icon. */
 .btn {
+  --btn-color: var(--color-text);
+  --btn-background: var(--color-surface);
+  --btn-background-hover: color-mix(in oklch, var(--color-surface), var(--btn-color) 5%);
+  --btn-border-color: color-mix(in oklch, transparent, var(--btn-color) 25%);
+  --btn-text-color: var(--btn-color);
+  --btn-size: var(--component-sm);
+  --btn-padding: 0.75em;
+  --btn-radius: var(--radius-lg);
+
   align-items: center;
-  background-color: var(--btn-background, var(--color-text-reversed));
-  border-radius: var(--btn-border-radius, 2em);
-  border: var(--btn-border-size, 1px) solid var(--btn-border-color, var(--color-border-darker));
-  color: var(--btn-color, var(--color-text));
+  background-color: var(--btn-background);
+  block-size: var(--btn-size);
+  border: 1px solid var(--btn-border-color);
+  border-radius: var(--btn-radius);
+  color: var(--btn-text-color);
   cursor: pointer;
   display: inline-flex;
-  font: inherit;
-  font-weight: 600;
+  font-size: 0.875rem;
+  font-weight: 500;
   gap: 0.5em;
   justify-content: center;
-  padding: var(--btn-padding, 0.5em 1.1em);
-  text-align: center;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  padding-inline: var(--btn-padding);
+  position: relative;
   text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: var(--btn-background-hover);
+    text-decoration: none;
+  }
+
+  .icon {
+    --icon-size: 1.1em;
+  }
 }
 
-.btn--circle {
-  --btn-border-radius: 50%;
-  --btn-padding: 0;
+.btn--large {
+  --btn-size: var(--component-base);
 
-  aspect-ratio: 1;
-  block-size: var(--btn-size);
-  display: grid;
-  inline-size: var(--btn-size);
-  place-items: center;
+  font-size: 1rem;
 }
 
+.btn--primary,
 .btn--reversed {
-  --btn-background: var(--color-text);
-  --btn-color: var(--color-text-reversed);
-  --btn-border-color: transparent;
+  --btn-color: var(--color-accent);
+  --btn-background: var(--btn-color);
+  --btn-background-hover: color-mix(in oklch, var(--btn-color), var(--color-text) 8%);
+  --btn-border-color: var(--btn-color);
+  --btn-text-color: var(--color-text-reversed);
 }
 
 .btn--negative {
-  --btn-background: var(--color-negative);
-  --btn-color: var(--color-text-reversed);
-  --btn-border-color: transparent;
+  --btn-color: var(--color-negative);
+  --btn-background: var(--btn-color);
+  --btn-background-hover: color-mix(in oklch, var(--btn-color), var(--color-text) 8%);
+  --btn-border-color: var(--btn-color);
+  --btn-text-color: var(--color-always-white);
 }
 
-.btn--plain {
-  --btn-background: transparent;
-  --btn-border-color: transparent;
-  --btn-padding: 0;
-}
-
+.btn--ghost,
+.btn--plain,
 .btn--borderless {
+  --btn-background: transparent;
+  --btn-background-hover: var(--tint-ink-8);
   --btn-border-color: transparent;
+}
+
+.btn--round,
+.btn--circle {
+  --btn-radius: 99rem;
+  --btn-padding: 0;
+
+  aspect-ratio: 1;
+  flex-shrink: 0;
+  inline-size: var(--btn-size);
+
+  .icon {
+    --icon-size: 1.2em;
+  }
 }
 
 .btn:disabled,
 .btn[aria-disabled="true"] {
   cursor: not-allowed;
-  filter: grayscale(100%) contrast(0.5);
   opacity: 0.5;
   pointer-events: none;
 }
 
 .btn--success {
-  animation: success 1s ease-out;
-
-  .icon {
-    animation: zoom-fade 300ms ease-out;
-  }
+  animation: pop-open var(--duration-slow) var(--ease-out-overshoot);
 }

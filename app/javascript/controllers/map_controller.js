@@ -3,19 +3,29 @@ import { loadLeaflet, osmTiles, escapeHtml } from "maps"
 
 // Leaflet is imported lazily so a blocked CDN shows a message instead of a blank box.
 export default class extends Controller {
+  static targets = [ "canvas" ]
   static values = { url: String, unavailable: String }
 
   async connect() {
     const L = await loadLeaflet()
     if (!L) return this.showUnavailable()
 
-    this.map = L.map(this.element)
+    this.map = L.map(this.canvas)
     osmTiles(L, this.map)
     this.loadMarkers(L)
   }
 
   disconnect() {
     this.map?.remove()
+  }
+
+  resize() {
+    this.map?.invalidateSize()
+    if (this.points?.length) this.map.fitBounds(this.points, { padding: [30, 30], maxZoom: 12 })
+  }
+
+  get canvas() {
+    return this.hasCanvasTarget ? this.canvasTarget : this.element
   }
 
   async loadMarkers(L) {
@@ -27,11 +37,12 @@ export default class extends Controller {
       points.push([m.lat, m.lng])
     }
 
+    this.points = points
     if (points.length) {
       this.map.fitBounds(points, { padding: [30, 30], maxZoom: 12 })
     } else {
       this.map.setView([20, 0], 1)
-      this.element.classList.add("map-canvas--empty")
+      this.canvas.classList.add("map-canvas--empty")
     }
   }
 
@@ -45,8 +56,8 @@ export default class extends Controller {
   }
 
   showUnavailable() {
-    this.element.classList.add("map-canvas--empty")
-    this.element.textContent = this.unavailableValue || ""
+    this.canvas.classList.add("map-canvas--empty")
+    this.canvas.textContent = this.unavailableValue || ""
   }
 
   popup(m) {

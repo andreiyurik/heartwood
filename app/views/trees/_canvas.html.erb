@@ -15,7 +15,8 @@
       <%= icon_tag "search" %>
       <input type="search" class="tree-search-input"
              data-tree-target="searchInput"
-             data-action="input->tree#search keydown->tree#searchKeys"
+             data-controller="hotkey" data-hotkey-key-value="/"
+             data-action="input->tree#search keydown->tree#searchKeys keydown@window->hotkey#trigger"
              placeholder="<%= t("trees.search_placeholder") %>"
              aria-label="<%= t("trees.search_placeholder") %>"
              autocomplete="off">

@@ -1,6 +1,4 @@
 class PeopleController < ApplicationController
-  TABS = %w[details sources memories timeline map].freeze
-
   include PersonScoped
   skip_before_action :set_person, only: %i[index new create]
   before_action :require_can_edit, only: %i[new create edit update destroy]
@@ -16,7 +14,6 @@ class PeopleController < ApplicationController
   end
 
   def show
-    @tab = TABS.include?(params[:tab]) ? params[:tab] : "details"
   end
 
   def new

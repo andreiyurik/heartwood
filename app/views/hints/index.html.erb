@@ -12,5 +12,7 @@
     <%= render partial: "hint", collection: @hints %>
   </ul>
 <% else %>
-  <p class="empty" id="hints"><%= t("hints.empty") %></p>
+  <%= render "shared/blank_slate", id: "hints", title: t("hints.empty"), lede: t("hints.empty_lede") do %>
+    <%= button_to t("hints.scan"), hints_scan_path, class: "btn btn--primary" %>
+  <% end %>
 <% end %>

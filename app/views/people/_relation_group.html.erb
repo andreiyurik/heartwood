@@ -3,7 +3,7 @@
   <% if people.any? %>
     <ul>
       <% people.each do |relative| %>
-        <li><%= link_to relative.display_name, relative %></li>
+        <%= tag.li id: dom_id(relative), class: "relation" do %><%= link_to relative.display_name, relative %><% end %>
       <% end %>
     </ul>
   <% else %>

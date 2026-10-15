@@ -1,0 +1,8 @@
+<%# Locals: title, optional lede, optional id; the block holds the one next action. %>
+<div class="blank-slate blank-slate--inline" <%= tag.attributes(id: local_assigns[:id]) %>>
+  <div class="blank-slate__text">
+    <strong><%= title %></strong>
+    <% if local_assigns[:lede].present? %><p><%= lede %></p><% end %>
+  </div>
+  <%= yield if block_given? %>
+</div>

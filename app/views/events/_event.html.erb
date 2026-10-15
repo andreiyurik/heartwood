@@ -1,19 +1,28 @@
 <%= tag.li id: dom_id(event), class: "event-row" do %>
   <%= preserved_frame_tag dom_id(event, :edit) do %>
-    <span class="event-kind"><%= event.kind_label %></span>
-    <span class="event-summary"><%= event.summary %></span>
-    <% if event.place %>
-      <span class="event-place">· <%= event.place.name %></span>
-    <% end %>
+    <span class="event-date"><%= event.date_raw %></span>
+    <span class="event-body">
+      <span class="event-kind"><%= event.kind_label %></span>
+      <% if event.value.present? %>
+        <span class="event-detail"><%= event.value %></span>
+      <% end %>
+      <% if event.place %>
+        <span class="event-place"><%= event.place.name %></span>
+      <% end %>
+    </span>
     <% if (best = event.best_citation_confidence) %>
-      <span class="sourced-badge sourced-badge--<%= best %>"
+      <span class="event-sources sourced-badge sourced-badge--<%= best %>"
             title="<%= t("citations.sourced_title") %> · <%= t("citations.confidence.#{best}") %>">
-        <%= icon_tag "check" %>
+        <%= event.citations.size %>
       </span>
     <% end %>
     <% if can_edit? %>
       <span class="event-actions">
-        <%= link_to edit_person_event_path(person, event), class: "btn btn--plain" do %>
+        <%= link_to new_person_event_citation_path(person, event), class: "btn btn--ghost citation-add",
+              data: { turbo_frame: dom_id(event, :citation_form) } do %>
+          <%= icon_tag "add" %> <%= t("citations.add") %>
+        <% end %>
+        <%= link_to edit_person_event_path(person, event), class: "btn btn--ghost" do %>
           <%= icon_tag "pencil" %> <%= t("events.edit") %>
         <% end %>
         <%= render "shared/delete_button", url: person_event_path(person, event),
@@ -21,5 +30,5 @@
       </span>
     <% end %>
   <% end %>
-  <%= render "citations/add_link", event: event, person: person if can_edit? %>
+  <%= preserved_frame_tag dom_id(event, :citation_form) if can_edit? %>
 <% end %>

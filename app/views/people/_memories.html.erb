@@ -2,7 +2,7 @@
   <div class="memories-gallery">
     <%= image_tag person.avatar, class: "avatar avatar--gallery", alt: person.display_name %>
   </div>
-  <p class="muted tab-stub" style="margin-top:1rem"><%= t("people.tabs.memories_more_stub") %></p>
+  <p class="muted"><%= t("people.memories_more") %></p>
 <% else %>
-  <p class="muted tab-stub"><%= t("people.tabs.memories_stub") %></p>
+  <%= render "shared/blank_slate", title: t("people.memories_empty_title"), lede: t("people.memories_empty") %>
 <% end %>

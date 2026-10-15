@@ -43,6 +43,17 @@
     <%= render "layouts/flash" %>
 
     <main id="main">
+      <% if content_for?(:page) && !full_bleed? %>
+        <header class="page-header">
+          <%= yield :page_avatar %>
+          <div class="page-header__text">
+            <h1><%= yield :page %></h1>
+            <% if content_for?(:page_meta) %>
+              <p class="page-header__meta"><%= yield :page_meta %></p>
+            <% end %>
+          </div>
+        </header>
+      <% end %>
       <%= yield %>
     </main>
   </body>

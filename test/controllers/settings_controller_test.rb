@@ -35,10 +35,10 @@ class SettingsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Alpha Tree", @tree.reload.name
   end
 
-  test "only the owner gets the settings icon in the header" do
+  test "only the owner gets settings in the account menu" do
     sign_in_as users(:one)
     get people_url
-    assert_select "#header a[href=?] .for-screen-reader", settings_path, text: I18n.t("nav.settings")
+    assert_select "#header details.account-menu a[href=?]", settings_path, text: I18n.t("nav.settings")
 
     editor = User.create!(name: "Ed", email_address: "ed@example.com", password: "password")
     TreeMembership.create!(user: editor, tree: @tree, role: "editor")
