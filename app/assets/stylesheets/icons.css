@@ -26,6 +26,7 @@
 .icon--alert { --svg: url("alert.svg"); }
 .icon--people { --svg: url("people.svg"); }
 .icon--download { --svg: url("download.svg"); }
+.icon--upload { --svg: url("upload.svg"); }
 .icon--settings { --svg: url("settings.svg"); }
 .icon--share { --svg: url("share.svg"); }
 .icon--camera { --svg: url("camera.svg"); }

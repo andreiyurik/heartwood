@@ -24,6 +24,7 @@ class HintsControllerTest < ActionDispatch::IntegrationTest
     get hints_url
     assert_response :success
     assert_select "#hints .hint-row", 1
+    assert_select "#header form[action=?]", hints_scan_path
   end
 
   test "index hides resolved hints" do
@@ -32,6 +33,7 @@ class HintsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select ".hint-row", 0
     assert_select "#hints.blank-slate form[action=?]", hints_scan_path
+    assert_select "#header form[action=?]", hints_scan_path, count: 0
   end
 
   test "scan enqueues a duplicate scan" do

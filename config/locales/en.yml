@@ -57,6 +57,7 @@ en:
 
   tree_memberships:
     title: Members
+    lede: Everyone here can see the whole tree. Editors can also add and change people; viewers only look.
     invite_label: Share this link to invite your family
     copy_link: Copy invite link
     reset_link: Generate a new link
@@ -231,6 +232,9 @@ en:
     no_match: We couldn't find that place. You can still save the name, or drag the pin after a closer search.
 
   maps:
+    blank:
+      title: Nothing on the map yet
+      lede: Give a life event a place, and it will be pinned here once we have found it.
     show_places: Show on the map
     person_note: Places with coordinates appear here; events without a located place aren't shown.
     unavailable: The map library couldn't be loaded. Check your connection and refresh.

@@ -1,8 +1,10 @@
 <% page_title t("hints.title") %>
 <% back_link root_path %>
 
-<% content_for :header do %>
-  <%= button_to t("hints.scan"), hints_scan_path, class: "btn" %>
+<% if @hints.any? %>
+  <% content_for :header do %>
+    <%= button_to t("hints.scan"), hints_scan_path, class: "btn" %>
+  <% end %>
 <% end %>
 
 <p class="muted hints-lede"><%= t("hints.lede") %></p>

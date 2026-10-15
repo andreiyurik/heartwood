@@ -23,7 +23,7 @@
 
       <details class="account-menu">
         <summary class="btn btn--ghost btn--round" title="<%= Current.user.name %>">
-          <span class="avatar avatar--small avatar--initials" aria-hidden="true"><%= initials_for(Current.user.name) %></span>
+          <%= initials_avatar Current.user.name, class: "avatar--small" %>
           <span class="for-screen-reader"><%= t("nav.account") %></span>
         </summary>
         <menu class="action-sheet action-sheet--end">
@@ -37,6 +37,13 @@
             <li><%= link_to settings_path, class: "action-sheet__action" do %><%= icon_tag "settings" %> <%= t("nav.settings") %><% end %></li>
           <% end %>
           <li><%= link_to hints_path, class: "action-sheet__action" do %><%= icon_tag "search" %> <%= t("hints.title") %><% end %></li>
+          <% unless blank_tree? %>
+            <li><hr class="action-sheet__divider"></li>
+            <% if can_edit? %>
+              <li><%= link_to new_import_path, class: "action-sheet__action" do %><%= icon_tag "upload" %> <%= t("imports.title") %><% end %></li>
+            <% end %>
+            <li><%= button_to export_path, class: "action-sheet__action" do %><%= icon_tag "download" %> <%= t("exports.create") %><% end %></li>
+          <% end %>
           <li><hr class="action-sheet__divider"></li>
           <li>
             <nav class="locale-switcher" aria-label="<%= t("locale.switcher") %>">

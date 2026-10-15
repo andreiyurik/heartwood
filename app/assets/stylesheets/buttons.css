@@ -79,6 +79,16 @@
   }
 }
 
+/* A quiet destructive icon: grey until hovered, then red (Basecamp's trash) */
+.btn--remove {
+  --btn-text-color: var(--color-muted);
+
+  &:hover {
+    --btn-background-hover: var(--color-negative-light);
+    --btn-text-color: var(--color-negative);
+  }
+}
+
 .btn:disabled,
 .btn[aria-disabled="true"] {
   cursor: not-allowed;

@@ -1,4 +1,5 @@
 <% page_title t("tree_memberships.title") %>
+<% page_meta t("tree_memberships.lede") %>
 <% back_link root_path %>
 
 <% if Current.membership.owner? %>
@@ -33,7 +34,7 @@
 <ul class="people-list">
   <% @memberships.each do |membership| %>
     <li class="person-row">
-      <div class="avatar avatar--initials" aria-hidden="true"><%= initials_for(membership.user.name) %></div>
+      <%= initials_avatar membership.user.name %>
       <div class="person-row__body">
         <p class="person-row__name"><%= membership.user.name %></p>
         <p class="person-row__meta"><%= membership.user.email_address %></p>
@@ -50,7 +51,7 @@
                 data: { action: "change->auto-submit#submit" } %>
         <% end %>
         <%= icon_button_to "minus", t("tree_memberships.remove"), tree_membership_path(membership),
-              method: :delete, class: "btn--negative",
+              method: :delete, class: "btn--ghost btn--remove", title: t("tree_memberships.remove"),
               data: { turbo_confirm: t("tree_memberships.remove_confirm", name: membership.user.name) } %>
       <% else %>
         <span class="person-row__role"><%= t("tree_memberships.roles.#{membership.role}") %></span>
