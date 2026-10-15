@@ -232,6 +232,9 @@ en:
     no_match: We couldn't find that place. You can still save the name, or drag the pin after a closer search.
 
   maps:
+    meta:
+      one: "1 place on the map"
+      other: "%{count} places on the map"
     blank:
       title: Nothing on the map yet
       lede: Give a life event a place, and it will be pinned here once we have found it.
@@ -336,10 +339,19 @@ en:
     create: Export GEDCOM
 
   trees:
-    options: Tree options
     ancestors: Ancestors
     descendants: Descendants
-    hint: "Scroll to zoom · drag to pan · click a person for details · arrow keys to navigate"
+    tip: Scroll to zoom, drag to pan, click a person for their card.
+    people:
+      one: "1 person"
+      other: "%{count} people"
+    generations:
+      one: "1 generation"
+      other: "%{count} generations"
+    clan_meta: "%{people} · %{generations} · from %{root}"
+    person_meta: "%{mode} · %{generations}"
+    fewer_generations: Fewer generations
+    more_generations: More generations
     canvas_label: "Family tree: arrow keys walk between relatives, Enter opens the person card, plus and minus zoom"
     close_panel: Close panel
     depth_label: Generations

@@ -6,45 +6,34 @@
   min-block-size: 0;
 }
 
-.tree-hint {
-  color: var(--color-muted);
-  font-size: 0.8rem;
-  margin: var(--block-space-half) var(--inline-space-double);
+/* The action row under the title: search, then the view controls */
+.tree-actions {
+  flex-shrink: 0;
+  margin-block-end: var(--block-space);
 }
 
-.tree-options {
-  summary {
-    cursor: pointer;
-    list-style: none;
-
-    @media (min-width: 40rem) {
-      display: none;
-    }
-  }
+.tree-search {
+  flex: 1;
+  min-inline-size: 12rem;
+  position: relative;
 }
 
-.tree-options__body {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--inline-space);
-
-  @media (max-width: 40rem) {
-    margin-block-start: var(--block-space-half);
-  }
-}
-
+/* The canvas bleeds to the sheet's edges and takes its bottom corners */
 .tree-canvas {
   background-color: var(--color-bg);
-  border-block-start: 1px solid var(--tint-ink-10);
   cursor: grab;
   flex: 1;
-  inline-size: 100%;
+  margin-inline: calc(-1 * var(--sheet-padding-inline));
   min-block-size: 400px;
   overflow: hidden;
   position: relative;
   touch-action: none;
   user-select: none;
+
+  @media (min-width: 70rem) {
+    border-end-end-radius: var(--radius-sheet);
+    border-end-start-radius: var(--radius-sheet);
+  }
 
   &:active {
     cursor: grabbing;
@@ -100,7 +89,7 @@
 .tree-node {
   background-color: var(--color-surface);
   border: 1px solid var(--tint-ink-15);
-  box-shadow: 0 1px 3px var(--tint-ink-10);
+  box-shadow: var(--shadow-sm);
   inset-block-start: 0;
   inset-inline-start: 0;
   overflow: hidden;
@@ -163,9 +152,9 @@
 }
 
 .node-band {
-  background-color: var(--color-border-darker);
+  background-color: var(--tint-ink-5);
   block-size: 22px;
-  color: var(--color-always-white);
+  color: var(--color-muted);
   display: block;
   font-size: 0.62rem;
   font-weight: 600;
@@ -220,12 +209,21 @@
   min-inline-size: 0;
 }
 
+/* Sex as a tint, never a fill */
 .tree-node--m.tree-node--card .node-band {
-  background-color: var(--color-male);
+  background-color: color-mix(in oklch, transparent, var(--color-male) 18%);
+  color: var(--color-male);
 }
 
 .tree-node--f.tree-node--card .node-band {
-  background-color: var(--color-female);
+  background-color: color-mix(in oklch, transparent, var(--color-female) 18%);
+  color: var(--color-female);
+}
+
+/* Opening: nodes fade in generation by generation, inside 300ms */
+.tree-canvas--entering .tree-node {
+  animation: fade-in-up var(--duration-medium) var(--ease-out-expo) both;
+  animation-delay: min(calc(var(--gen, 0) * 40ms), 150ms);
 }
 
 .tree-node--m.tree-node--circle {
@@ -373,41 +371,19 @@
   border-color: var(--color-selected-dark);
 }
 
-.tree-search {
-  inline-size: min(15rem, 60%);
-  inset-block-start: 0.75rem;
-  inset-inline-start: 0.75rem;
-  position: absolute;
-  z-index: 3;
-}
-
-.tree-search-input {
-  background-color: var(--color-surface);
-  border: 1px solid var(--tint-ink-15);
-  border-radius: var(--border-radius);
-  box-shadow: 0 1px 3px var(--tint-ink-10);
-  color: var(--color-text);
-  cursor: text;
-  font-size: 0.85rem;
-  inline-size: 100%;
-  padding: 0.45rem 0.6rem;
-
-  &:focus {
-    border-color: var(--color-selected-dark);
-    outline: none;
-  }
-}
-
 .tree-search-results {
   background-color: var(--color-surface);
-  border: 1px solid var(--tint-ink-15);
-  border-radius: var(--border-radius);
-  box-shadow: 0 6px 24px var(--tint-ink-15);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-menu);
+  inset-block-start: calc(100% + 0.25rem);
+  inset-inline: 0;
   list-style: none;
-  margin: 0.25rem 0 0;
+  margin: 0;
   max-block-size: 14rem;
   overflow: auto;
-  padding: 0.25rem;
+  padding: 4px;
+  position: absolute;
+  z-index: 4;
 
   li {
     align-items: baseline;
@@ -467,11 +443,16 @@
   box-shadow: 0 1px 3px var(--tint-ink-10);
   cursor: pointer;
   inline-size: 11rem;
-  inset-block-end: 0.75rem;
-  inset-inline-start: 0.75rem;
+  inset-block-end: var(--block-space);
+  inset-inline-start: var(--block-space);
   opacity: 0.95;
   position: absolute;
   z-index: 3;
+
+  @media (max-width: 40rem) {
+    block-size: 5.5rem;
+    inline-size: 7.5rem;
+  }
 }
 
 .tree-minimap--hidden {
@@ -482,43 +463,44 @@
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  inset-block-end: 0.75rem;
-  inset-inline-end: 0.75rem;
+  inset-block-end: var(--block-space);
+  inset-inline-end: var(--block-space);
   position: absolute;
   z-index: 3;
 
-  button {
-    align-items: center;
-    background-color: var(--color-surface);
-    block-size: 2.1rem;
-    border: 1px solid var(--tint-ink-15);
-    border-radius: 8px;
-    box-shadow: 0 1px 3px var(--tint-ink-10);
-    color: var(--color-link);
-    cursor: pointer;
-    display: flex;
-    font-size: 1.05rem;
-    inline-size: 2.1rem;
-    justify-content: center;
-    line-height: 1;
-    padding: 0;
-
-    &:hover {
-      background-color: var(--color-selected);
-      border-color: var(--color-selected-dark);
-    }
-
-    svg {
-      block-size: 1.05rem;
-      inline-size: 1.05rem;
-    }
+  .btn {
+    box-shadow: var(--shadow-md);
   }
 }
 
-/* tree#print sets the camera and --print-h before calling window.print() */
+/* Shown once, until the first gesture (tree_controller.js remembers) */
+.tree-tip {
+  animation: fade-in-up var(--duration-slow) var(--ease-out-expo) 600ms both;
+  background-color: var(--color-surface);
+  border-radius: 99rem;
+  box-shadow: var(--shadow-md);
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  inset-block-end: var(--block-space);
+  inset-inline-start: 50%;
+  margin: 0;
+  max-inline-size: calc(100% - 8rem);
+  padding: 0.4rem 1rem;
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+  transform: translateX(-50%);
+  z-index: 3;
+
+  /* Touch screens pinch and drag without being told; the words are about a mouse */
+  @media (pointer: coarse) {
+    display: none;
+  }
+}
+
 @media print {
-  .tree-hint,
-  .tree-search,
+  .tree-actions,
+  .tree-tip,
   .tree-zoom,
   .tree-minimap,
   .tree-toggles,

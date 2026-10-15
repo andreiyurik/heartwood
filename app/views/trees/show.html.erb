@@ -1,36 +1,28 @@
 <% page_title @person.display_name %>
+<% page_meta t("trees.person_meta", mode: t("trees.#{@mode}"), generations: t("trees.generations", count: @depth)) %>
 <% back_link person_path(@person) %>
-<% full_bleed %>
+<% canvas_page %>
 <%= live_updates refresh: "replace" %>
 
 <% content_for :header do %>
-  <details class="tree-options" data-controller="collapse-on-mobile" open>
-    <summary class="btn"><%= t("trees.options") %></summary>
-    <div class="tree-options__body">
-      <%= link_to t("trees.ancestors"),
-            person_tree_path(@person, mode: "ancestors", depth: @depth),
-            class: "btn #{"btn--primary" if @mode == "ancestors"}",
-            aria: { current: @mode == "ancestors" ? "true" : nil } %>
-      <%= link_to t("trees.descendants"),
-            person_tree_path(@person, mode: "descendants", depth: @depth),
-            class: "btn #{"btn--primary" if @mode == "descendants"}",
-            aria: { current: @mode == "descendants" ? "true" : nil } %>
-
-      <div class="depth-controls">
-        <%= @depth > 1 ?
-              link_to("−", person_tree_path(@person, mode: @mode, depth: @depth - 1), class: "btn btn--round") :
-              tag.span("−", class: "btn btn--round", aria: { disabled: true }) %>
-        <span class="depth-label" title="<%= t("trees.depth_label") %>"><%= @depth %></span>
-        <%= @depth < 6 ?
-              link_to("+", person_tree_path(@person, mode: @mode, depth: @depth + 1), class: "btn btn--round") :
-              tag.span("+", class: "btn btn--round", aria: { disabled: true }) %>
-      </div>
-    </div>
-  </details>
+  <%= render "trees/menu" %>
 <% end %>
 
-<div class="tree-page">
-  <p class="tree-hint"><%= t("trees.hint") %></p>
+<%= render layout: "trees/canvas", locals: { graph: @graph, mode: @mode, depth: @depth, focus_id: @person.id } do %>
+  <%= link_to t("trees.ancestors"), person_tree_path(@person, mode: "ancestors", depth: @depth),
+        class: "btn #{"btn--primary" if @mode == "ancestors"}",
+        aria: { current: @mode == "ancestors" ? "true" : nil } %>
+  <%= link_to t("trees.descendants"), person_tree_path(@person, mode: "descendants", depth: @depth),
+        class: "btn #{"btn--primary" if @mode == "descendants"}",
+        aria: { current: @mode == "descendants" ? "true" : nil } %>
 
-  <%= render "trees/canvas", graph: @graph, mode: @mode, depth: @depth, focus_id: @person.id %>
-</div>
+  <div class="depth-controls">
+    <%= @depth > 1 ?
+          link_to("−", person_tree_path(@person, mode: @mode, depth: @depth - 1), class: "btn btn--round", title: t("trees.fewer_generations")) :
+          tag.span("−", class: "btn btn--round", aria: { disabled: true }) %>
+    <span class="depth-label" title="<%= t("trees.depth_label") %>"><%= @depth %></span>
+    <%= @depth < 6 ?
+          link_to("+", person_tree_path(@person, mode: @mode, depth: @depth + 1), class: "btn btn--round", title: t("trees.more_generations")) :
+          tag.span("+", class: "btn btn--round", aria: { disabled: true }) %>
+  </div>
+<% end %>

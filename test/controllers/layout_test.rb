@@ -60,10 +60,12 @@ class LayoutTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "full-bleed pages keep the title in the toolbar instead of a sheet heading" do
+  test "canvas pages keep the sheet heading and flex the sheet around the canvas" do
     get clan_tree_url
-    assert_select "header.page-header", count: 0
-    assert_select "#header .breadcrumbs .breadcrumbs__page", text: I18n.t("nav.tree")
+    assert_select "body.canvas-page"
+    assert_select "main#main > header.page-header h1", text: I18n.t("nav.tree")
+    get people_url
+    assert_select "body.canvas-page", count: 0
   end
 
   test "the same People / Tree / Map navigation is on every page, marking the current one" do
@@ -101,15 +103,14 @@ class LayoutTest < ActionDispatch::IntegrationTest
     assert_select "#header .header-actions a[href=?]", new_person_path
   end
 
-  test "tree and map are full-bleed through a class on the body" do
+  test "the map is a sheet page too, with a summary line" do
     place = Place.create!(name: "London", latitude: 51.5, longitude: -0.12, tree: trees(:alpha))
     Event.create!(kind: "BIRT", eventable: Person.last, tree: trees(:alpha), place: place)
-    get clan_tree_url
-    assert_select "body.full-bleed"
     get map_url
-    assert_select "body.full-bleed"
-    get people_url
+    assert_select "body.canvas-page"
     assert_select "body.full-bleed", count: 0
+    assert_select "main#main > header.page-header h1", text: I18n.t("nav.map")
+    assert_select ".page-header__meta", text: "1 place on the map"
   end
 
   test "person pages offer a back button" do

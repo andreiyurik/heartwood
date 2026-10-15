@@ -32,3 +32,5 @@
 .icon--camera { --svg: url("camera.svg"); }
 .icon--more { --svg: url("more.svg"); }
 .icon--map { --svg: url("map.svg"); }
+.icon--fit { --svg: url("fit.svg"); }
+.icon--print { --svg: url("print.svg"); }

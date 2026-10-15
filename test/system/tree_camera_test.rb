@@ -26,10 +26,23 @@ class TreeCameraTest < ApplicationSystemTestCase
     sign_in_as users(:one)
   end
 
-  test "initial camera fits a tall tree inside the canvas" do
+  test "a tall tree opens readable, with the focus card at the top edge, and Fit shows it whole" do
     visit person_tree_path(@chain.first, mode: "descendants", depth: 6)
     assert_selector ".tree-edges path", wait: 5
 
+    opened = page.evaluate_script(<<~JS)
+      (() => {
+        const canvas = document.querySelector(".tree-canvas").getBoundingClientRect()
+        const focus  = document.querySelector(".tree-node--focus").getBoundingClientRect()
+        const scale  = new DOMMatrix(getComputedStyle(document.querySelector(".tree-inner")).transform).a
+        return { scale, top: focus.top - canvas.top, centred: Math.abs((focus.left + focus.right) / 2 - (canvas.left + canvas.right) / 2) }
+      })()
+    JS
+    assert_in_delta 0.85, opened["scale"], 0.01, "a tree that cannot fit opens at the readable floor"
+    assert_in_delta 48, opened["top"], 2, "the focus card sits at the top padding"
+    assert opened["centred"] < 2, "the focus card is centred horizontally"
+
+    find(".tree-zoom button[data-action='tree#zoomFit']").click
     fits = page.evaluate_script(<<~JS)
       (() => {
         const canvas = document.querySelector(".tree-canvas").getBoundingClientRect()
@@ -71,10 +84,10 @@ class TreeCameraTest < ApplicationSystemTestCase
     scale = -> { page.evaluate_script(
       "new DOMMatrix(getComputedStyle(document.querySelector('.tree-inner')).transform).a") }
     before = scale.call
-    find(".tree-zoom button", text: "+").click
+    find(".tree-zoom button[data-action='tree#zoomIn']").click
     assert_in_delta before * 1.2, scale.call, 0.01
 
-    find(".tree-zoom button", text: "⌂").click
+    find(".tree-zoom button[data-action='tree#zoomFit']").click
     assert_in_delta before, scale.call, 0.05   # fit returns to the fitted scale
   end
 
@@ -104,11 +117,11 @@ class TreeCameraTest < ApplicationSystemTestCase
   end
 
   test "mini map appears once the tree overflows and a click jumps the camera" do
-    visit person_tree_path(@chain.first, mode: "descendants", depth: 6)
+    visit person_tree_path(@chain.first, mode: "descendants", depth: 2)
     assert_selector ".tree-edges path", wait: 5
-    assert_no_selector ".tree-minimap"   # fitted tree → no map
+    assert_no_selector ".tree-minimap"   # a short tree fits → no map
 
-    3.times { find(".tree-zoom button", text: "+").click }
+    3.times { find(".tree-zoom button[data-action='tree#zoomIn']").click }
     assert_selector ".tree-minimap", wait: 3
 
     moved = page.evaluate_script(<<~JS)
@@ -134,7 +147,7 @@ class TreeCameraTest < ApplicationSystemTestCase
         window.print = () => {}   // headless: no dialog, just the setup around it
         const inner  = document.querySelector(".tree-inner")
         const before = getComputedStyle(inner).transform
-        document.querySelector(".tree-print-btn").click()
+        document.querySelector("[data-controller=print]").click()
         const during = {
           printing: document.querySelector(".tree-canvas--print") !== null,
           origin:   new DOMMatrix(getComputedStyle(inner).transform).e === 0

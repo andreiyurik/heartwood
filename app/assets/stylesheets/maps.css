@@ -12,8 +12,16 @@
 }
 
 .map-canvas--full {
+  border: 0;
+  border-radius: 0;
   flex: 1;
+  margin-inline: calc(-1 * var(--sheet-padding-inline));
   min-block-size: 400px;
+
+  @media (min-width: 70rem) {
+    border-end-end-radius: var(--radius-sheet);
+    border-end-start-radius: var(--radius-sheet);
+  }
 }
 
 .map-note {

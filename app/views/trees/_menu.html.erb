@@ -1,0 +1,13 @@
+<details class="action-menu">
+  <summary class="btn btn--round" title="<%= t("people.more") %>">
+    <%= icon_tag "more" %><span class="for-screen-reader"><%= t("people.more") %></span>
+  </summary>
+  <menu class="action-sheet action-sheet--end">
+    <li>
+      <button type="button" class="action-sheet__action"
+              data-controller="print" data-print-tree-outlet=".tree-page" data-action="print#print">
+        <%= icon_tag "print" %> <%= t("trees.print") %>
+      </button>
+    </li>
+  </menu>
+</details>

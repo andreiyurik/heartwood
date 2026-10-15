@@ -104,4 +104,21 @@ class TreesControllerTest < ActionDispatch::IntegrationTest
     get person_tree_url(@person, mode: "descendants", depth: 1)
     assert_select ".tree-node:not(.tree-node--focus) a[href*='/panel']"
   end
+
+  test "the person tree is a sheet page titled with the name, the view in the summary line" do
+    get person_tree_url(@person, mode: "ancestors", depth: 3)
+    assert_select "body.full-bleed", count: 0
+    assert_select "main#main > header.page-header h1", text: "Johann Sebastian Bach"
+    assert_select ".page-header__meta", text: "#{I18n.t("trees.ancestors")} · 3 generations"
+    assert_select ".tree-hint", count: 0
+    assert_select "details.tree-options", count: 0
+    assert_select ".tree-page .tree-actions" do
+      assert_select "a[href*='mode=descendants']", text: I18n.t("trees.descendants")
+      assert_select "a[href*='depth=4']"
+      assert_select ".search-field input.tree-search-input"
+    end
+    assert_select "#header a.back[href=?]", person_path(@person)
+    assert_select "#header details.action-menu button[data-controller=print]"
+  end
+
 end

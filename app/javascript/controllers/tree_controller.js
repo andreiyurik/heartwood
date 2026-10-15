@@ -8,6 +8,9 @@ const CARD_W      = 210   // .tree-node--card width
 const CARD_H      = 100   // .tree-node--card height (band + name + dates)
 const CIRC_D      = 160   // .tree-node--circle diameter
 const MIN_FIT     = 0.35  // fit-to-view floor — below this a huge tree is confetti
+const OPEN_MIN    = 0.85  // a tree opens no smaller than this: readable first, whole on request
+const OPEN_PAD    = 48
+const TIP_KEY     = "heartwood:tree:tip"
 const PAIR_GAP    = 26    // gap between the two cards of a couple (fits the ♥)
 const SIBLING_GAP = 40    // gap between adjacent units in a row
 const ROW_GAP     = 70    // vertical gap between generation rows
@@ -19,7 +22,7 @@ const AUTO_COLLAPSE_MIN = 60
 const AUTO_ROWS         = 3
 
 export default class extends Controller {
-  static targets = ["inner", "svg", "node", "searchInput", "searchResults", "minimap"]
+  static targets = ["canvas", "inner", "svg", "node", "searchInput", "searchResults", "minimap", "tip"]
   static values  = {
     graph:         Object,
     mode:          String,
@@ -66,9 +69,23 @@ export default class extends Controller {
       this.#pan   = { x: saved.camera.x, y: saved.camera.y }
       this.#applyTransform()
     } else {
-      this.#fitToView()
+      this.#openCamera()
     }
     this.#bindPanZoom()
+    this.#enter()
+  }
+
+  // Nodes fade in generation by generation; the class only lives for that moment.
+  #enter() {
+    this.canvasTarget.classList.add("tree-canvas--entering")
+    setTimeout(() => this.canvasTarget.classList.remove("tree-canvas--entering"), 700)
+    if (this.hasTipTarget && localStorage.getItem(TIP_KEY)) this.tipTarget.hidden = true
+  }
+
+  #dismissTip() {
+    if (!this.hasTipTarget || this.tipTarget.hidden) return
+    this.tipTarget.hidden = true
+    try { localStorage.setItem(TIP_KEY, "1") } catch {}
   }
 
   disconnect() {
@@ -298,7 +315,8 @@ export default class extends Controller {
       const pos = this.#pos[+el.dataset.treeNodeId]
       if (pos) {
         el.style.display   = ""
-        el.style.transform = `translate(${pos.x}px, ${pos.y}px)`
+        el.style.translate = `${pos.x}px ${pos.y}px`
+        el.style.setProperty("--gen", this.#nodeById.get(+el.dataset.treeNodeId)?.generation ?? 0)
       } else {
         el.style.display = "none"
       }
@@ -474,24 +492,25 @@ export default class extends Controller {
     const restore = { pan: { ...this.#pan }, scale: this.#scale }
     const after = () => {
       window.removeEventListener("afterprint", after)
-      this.element.classList.remove("tree-canvas--print")
+      this.canvasTarget.classList.remove("tree-canvas--print")
       this.#pan   = restore.pan
       this.#scale = restore.scale
       this.#applyTransform()
     }
     window.addEventListener("afterprint", after)
 
-    this.element.classList.add("tree-canvas--print")
+    this.canvasTarget.classList.add("tree-canvas--print")
     const pageWidth = 720
     this.#scale = Math.min(1, pageWidth / this.innerTarget.offsetWidth)
     this.#pan   = { x: 0, y: 0 }
     this.#applyTransform()
-    this.element.style.setProperty("--print-h", `${this.innerTarget.offsetHeight * this.#scale}px`)
+    this.canvasTarget.style.setProperty("--print-h", `${this.innerTarget.offsetHeight * this.#scale}px`)
     window.print()
   }
 
   keydown(e) {
     if (e.target.closest("input, textarea, select, [contenteditable]")) return
+    this.#dismissTip()
     if (e.key === "+" || e.key === "=") { e.preventDefault(); return this.zoomIn() }
     if (e.key === "-")                  { e.preventDefault(); return this.zoomOut() }
     if (![ "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter" ].includes(e.key)) return
@@ -551,15 +570,37 @@ export default class extends Controller {
     if (!p) return
     const sx = this.#pan.x + p.cx * this.#scale
     const sy = this.#pan.y + (p.y + p.h / 2) * this.#scale
-    const vw = this.element.clientWidth, vh = this.element.clientHeight
+    const vw = this.canvasTarget.clientWidth, vh = this.canvasTarget.clientHeight
     if (sx < 60 || sx > vw - 60 || sy < 60 || sy > vh - 60) {
       this.#panTo(p.cx, p.y + p.h / 2, true)
     }
   }
 
+  // Readable first: fit with a margin, but never below OPEN_MIN; a tree that cannot
+  // fit opens with the focus card centred and against the nearer edge.
+  #openCamera() {
+    const vw = this.canvasTarget.clientWidth,  vh = this.canvasTarget.clientHeight
+    const w  = this.innerTarget.offsetWidth,   h  = this.innerTarget.offsetHeight
+    const fit = Math.min((vw - 2 * OPEN_PAD) / w, (vh - 2 * OPEN_PAD) / h, 1)
+    const p   = this.#pos[this.graphValue.focus_id]
+
+    if (fit >= OPEN_MIN || !p) {
+      this.#scale = Math.max(fit, MIN_FIT)
+      this.#pan   = { x: (vw - w * this.#scale) / 2, y: (vh - h * this.#scale) / 2 }
+    } else {
+      this.#scale = OPEN_MIN
+      const nearTop = p.y + p.h / 2 < h / 2
+      this.#pan = {
+        x: vw / 2 - p.cx * OPEN_MIN,
+        y: nearTop ? OPEN_PAD - p.y * OPEN_MIN : vh - OPEN_PAD - (p.y + p.h) * OPEN_MIN
+      }
+    }
+    this.#applyTransform()
+  }
+
   // Falls back to centring the focus card when even MIN_FIT can't contain the tree.
   #fitToView() {
-    const vw  = this.element.clientWidth,     vh = this.element.clientHeight
+    const vw  = this.canvasTarget.clientWidth,     vh = this.canvasTarget.clientHeight
     const w   = this.innerTarget.offsetWidth, h  = this.innerTarget.offsetHeight
     const fit = Math.min(vw / w, vh / h, 1)
     this.#scale = Math.max(fit, MIN_FIT)
@@ -578,8 +619,8 @@ export default class extends Controller {
 
   #panTo(cx, cy, animate = false) {
     this.#pan = {
-      x: this.element.clientWidth  / 2 - cx * this.#scale,
-      y: this.element.clientHeight / 2 - cy * this.#scale
+      x: this.canvasTarget.clientWidth  / 2 - cx * this.#scale,
+      y: this.canvasTarget.clientHeight / 2 - cy * this.#scale
     }
     this.#applyTransform(animate)
   }
@@ -600,16 +641,17 @@ export default class extends Controller {
   #bindPanZoom() {
     this.#boundMove = this.#onMove.bind(this)
     this.#boundUp   = this.#onUp.bind(this)
-    this.element.addEventListener("pointerdown", this.#onDown.bind(this))
-    this.element.addEventListener("wheel",       this.#onWheel.bind(this), { passive: false })
+    this.canvasTarget.addEventListener("pointerdown", this.#onDown.bind(this))
+    this.canvasTarget.addEventListener("wheel",       this.#onWheel.bind(this), { passive: false })
     window.addEventListener("pointermove",       this.#boundMove)
     window.addEventListener("pointerup",         this.#boundUp)
     window.addEventListener("pointercancel",     this.#boundUp)
   }
 
   #onDown(e) {
-    if (e.target.closest("a, button, .tree-search, .tree-drawer, .tree-minimap")) return
+    if (e.target.closest("a, button, .tree-drawer, .tree-minimap")) return
     e.preventDefault()
+    this.#dismissTip()
     this.#pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
     if (this.#pointers.size === 2) {
       this.#drag  = null
@@ -660,7 +702,7 @@ export default class extends Controller {
 
   #pinchNow() {
     const [ a, b ] = [ ...this.#pointers.values() ]
-    const rect = this.element.getBoundingClientRect()
+    const rect = this.canvasTarget.getBoundingClientRect()
     return {
       dist: Math.hypot(a.x - b.x, a.y - b.y) || 1,
       mid:  { x: (a.x + b.x) / 2 - rect.left, y: (a.y + b.y) / 2 - rect.top }
@@ -669,7 +711,8 @@ export default class extends Controller {
 
   #onWheel(e) {
     e.preventDefault()
-    const rect = this.element.getBoundingClientRect()
+    this.#dismissTip()
+    const rect = this.canvasTarget.getBoundingClientRect()
     this.#zoomAt(e.clientX - rect.left, e.clientY - rect.top,
                  this.#scale * (e.deltaY < 0 ? 1.1 : 0.9))
   }
@@ -679,7 +722,7 @@ export default class extends Controller {
   zoomFit() { this.#fitToView() }
 
   #zoomBy(k) {
-    this.#zoomAt(this.element.clientWidth / 2, this.element.clientHeight / 2, this.#scale * k)
+    this.#zoomAt(this.canvasTarget.clientWidth / 2, this.canvasTarget.clientHeight / 2, this.#scale * k)
   }
 
   #zoomAt(mx, my, scale) {
@@ -707,7 +750,7 @@ export default class extends Controller {
   #drawMiniMap() {
     if (!this.hasMinimapTarget || !this.#pos || !this.#pan) return
     const mm = this.minimapTarget
-    const vw = this.element.clientWidth,     vh = this.element.clientHeight
+    const vw = this.canvasTarget.clientWidth,     vh = this.canvasTarget.clientHeight
     const tw = this.innerTarget.offsetWidth, th = this.innerTarget.offsetHeight
     const fits = tw * this.#scale <= vw + 1 && th * this.#scale <= vh + 1
     mm.classList.toggle("tree-minimap--hidden", fits)

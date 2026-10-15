@@ -56,12 +56,9 @@ module ApplicationHelper
     content_for :page_meta, text
   end
 
-  def full_bleed
-    content_for :body_class, "full-bleed"
-  end
-
-  def full_bleed?
-    content_for?(:body_class)
+  # Tree and map: the sheet flexes so the canvas fills it to the bottom edge
+  def canvas_page
+    content_for :body_class, "canvas-page"
   end
 
   def initials_for(name)

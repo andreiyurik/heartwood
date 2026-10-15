@@ -43,10 +43,30 @@ operate on the already-loaded graph — no extra requests.
   in the tidy pass and hides its descendant cards, so a big род stays readable. The focus card
   is pinned on screen across the re-flow, so the view doesn't jump. State is per-session
   (client-only); the graph itself is unchanged.
-- **Search-fly.** A floating "Find a person…" box filters the loaded nodes by name; picking a
-  result expands the path to that person (in case they were folded away), centres the camera on
-  their card with a smooth pan, and flashes it briefly. Living/redacted nodes are excluded from
-  results (they have no real name to match).
+- **Search-fly.** The "Find a person…" field in the action row under the title (hotkey `/`)
+  filters the loaded nodes by name; picking a result expands the path to that person (in case
+  they were folded away), centres the camera on their card with a smooth pan, and flashes it
+  briefly. Living/redacted nodes are excluded from results (they have no real name to match).
+
+## The page (2026-10-16, [[design-system]])
+
+The tree is a sheet page like every other: `h1` ("Tree", or the person's name) and one
+metadata line ("14 people · 5 generations · from Abram Gannibal", or "Ancestors · 4
+generations"), then an action row (search, and for a person's tree the Ancestors/Descendants
+switch and the generations stepper), then the canvas, which bleeds to the sheet's edges and
+takes its bottom corners (`canvas_page` helper → `body.canvas-page`, `#main` flexes). No
+instruction strip: one gesture tip (`.tree-tip`) shows until the first pan, wheel or key and
+is then remembered in `localStorage`. Controls are three round `.btn`s (zoom in / out / fit)
+at the bottom right; Print lives in the header's `…` menu and reaches the canvas through a
+Stimulus outlet (`print_controller.js`). Nodes are positioned with the CSS `translate`
+property so the entrance animation (`fade-in-up`, delayed 40ms per generation, capped at
+150ms) can use `transform` without fighting the layout.
+
+**Opening camera** (`#openCamera`): fit the tree with a 48px margin, but never below scale
+0.85 — readable first. A tree that cannot fit opens with the focus card centred horizontally
+and against the nearer edge (top for descendants, bottom for ancestors); "Fit" (`#fitToView`)
+still shows the whole tree down to 0.35. The camera is remembered per tree view in
+`localStorage` as before.
 
 At very large scale (10k+ people, [[roadmap]] Phase 3) the next step is *server-side* depth
 windowing / lazy "load more" so the client isn't shipped the whole graph at once — "don't build
