@@ -26,6 +26,14 @@ class RelationshipsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-frame#relationship input[type=search]"
   end
 
+  test "the search form tells the autocomplete whose relationship it is for" do
+    get person_relationship_url(@person)
+    assert_select "turbo-frame#relationship form[action=?]", autocompletable_people_path do
+      assert_select "input[type=hidden][name=person_id][value=?]", @person.id.to_s
+      assert_select "input[type=hidden][name=for][value=relationship]"
+    end
+  end
+
   test "show names the relationship to the chosen person" do
     get person_relationship_url(@person, with: @mother.id)
     assert_response :success
