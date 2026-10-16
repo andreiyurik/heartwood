@@ -751,7 +751,7 @@ export default class extends Controller {
   #applyTransform(animate = false) {
     const inner = this.innerTarget
     inner.style.transformOrigin = "0 0"
-    inner.style.transition = animate ? "transform .45s ease" : ""
+    inner.style.transition = animate ? "transform .45s ease" : "none"
     inner.style.transform =
       `translate(${this.#pan.x}px, ${this.#pan.y}px) scale(${this.#scale})`
     this.#persist()
