@@ -78,11 +78,6 @@ class TreeInteractionsTest < ApplicationSystemTestCase
     p
   end
 
-  def js_click(element)
-    page.execute_script("arguments[0].click()", element)
-    sleep 0.4   # let the Stimulus relayout settle
-  end
-
   test "the gesture tip shows once and goes away after the first gesture" do
     visit clan_tree_path
     assert_selector ".tree-tip", text: I18n.t("trees.tip"), wait: 5
