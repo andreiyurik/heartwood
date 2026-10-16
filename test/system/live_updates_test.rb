@@ -62,7 +62,7 @@ class LiveUpdatesTest < ApplicationSystemTestCase
     js_click find(:link, I18n.t("events.add"))
     select "Residence", from: "event_kind"
     fill_in "event_date_raw", with: "1723"
-    find("form.form--inline input[type=submit]").click
+    js_click find("form.form--inline input[type=submit]")
 
     assert_selector ".event-list", text: "1723", wait: 10
     assert_no_field "event_date_raw"
@@ -84,7 +84,7 @@ class LiveUpdatesTest < ApplicationSystemTestCase
     assert_selector "#add_child form", wait: 10
     within("#add_child") do
       fill_in "person_given_names", with: "Friedemann Junior"
-      find("input[type=submit]").click
+      js_click find("input[type=submit]")
     end
 
     assert_selector "#family", text: "Friedemann Junior", wait: 10
@@ -96,7 +96,7 @@ class LiveUpdatesTest < ApplicationSystemTestCase
     js_click find(".event-row", text: "Death").find(:link, I18n.t("citations.add"), visible: :all)
     assert_selector "form.form--inline", wait: 10
     fill_in "source_title", with: "Leipzig burial register"
-    find("form.form--inline input[type=submit]").click
+    js_click find("form.form--inline input[type=submit]")
 
     within(".event-row", text: "Death") { assert_selector ".sourced-badge", wait: 10 }
     assert_no_field "source_title"
