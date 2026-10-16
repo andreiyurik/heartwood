@@ -6,17 +6,11 @@ class LiveUpdatesTest < ApplicationSystemTestCase
   setup do
     @previous_adapter = ActiveJob::Base.queue_adapter
     ActiveJob::Base.queue_adapter = :inline
-    ActionCable.server.config.cable = { "adapter" => "async" }
-    ActionCable.server.restart
     @person = people(:johann_sebastian)
     sign_in_as users(:bach)
   end
 
-  teardown do
-    ActiveJob::Base.queue_adapter = @previous_adapter
-    ActionCable.server.config.cable = { "adapter" => "test" }
-    ActionCable.server.restart
-  end
+  teardown { ActiveJob::Base.queue_adapter = @previous_adapter }
 
   test "a relative sees an event someone else adds without reloading" do
     visit person_path(@person)
