@@ -22,6 +22,43 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # server so the next fetch never leaves the browser.
     options.add_argument("--disable-features=BackForwardCache")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_option("goog:loggingPrefs", { browser: "ALL" })
+  end
+
+  # TEMPORARY CI diagnostics, taken before Capybara resets the session.
+  def before_teardown
+    dump_failure_state unless passed?
+  ensure
+    super
+  end
+
+  def dump_failure_state
+    dir = Rails.root.join("tmp/screenshots"); FileUtils.mkdir_p(dir)
+    state = page.evaluate_async_script(<<~JS)
+      const done = arguments[0]
+      const s = window.Turbo && window.Turbo.session
+      const out = {
+        url: location.href, navType: performance.getEntriesByType("navigation")[0]?.type,
+        turboStarted: s && s.started, drive: s && s.drive, bodyTurbo: document.body.dataset.turbo || null,
+        preview: document.documentElement.hasAttribute("data-turbo-preview"),
+        stimulus: window.Stimulus ? window.Stimulus.controllers.length : null,
+        events: []
+      }
+      const names = ["turbo:click", "turbo:before-fetch-request", "turbo:frame-load", "turbo:before-visit", "turbo:submit-start", "click"]
+      names.forEach(n => document.addEventListener(n, e => out.events.push(n + "@" + (e.target.id || e.target.tagName)), true))
+      const link = document.querySelector("turbo-frame a")
+      out.link = link ? link.getAttribute("href") : null
+      if (link) link.click()
+      setTimeout(() => {
+        out.frames = [...document.querySelectorAll("turbo-frame")].map(f => f.id + ":" + (f.getAttribute("src") || "-") + ":" + (f.hasAttribute("busy") ? "busy" : "idle"))
+        done(out)
+      }, 1500)
+    JS
+    File.write(dir.join("#{method_name}.state.txt"), JSON.pretty_generate(state))
+    File.write(dir.join("#{method_name}.console.txt"), page.driver.browser.logs.get(:browser).map { |l| "#{l.level} #{l.message}" }.join("\n"))
+    File.write(dir.join("#{method_name}.test.log"), `tail -n 120 #{Rails.root.join("log/test.log")}`)
+  rescue => e
+    File.write(dir.join("#{method_name}.diag-error.txt"), "#{e.class}: #{e.message}")
   end
 
   # Absorb Turbo navigation / Stimulus-connect latency under load (default is 2s).
