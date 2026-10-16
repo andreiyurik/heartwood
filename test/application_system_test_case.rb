@@ -30,7 +30,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     @delivering_broadcasts = true
   end
 
-  setup { self.class.deliver_broadcasts! }
+  setup { ApplicationSystemTestCase.deliver_broadcasts! }
 
   # Block until the Stimulus controller `identifier` is actually connected to the element
   # matched by `selector`. Without this, an input we dispatch can fire before Stimulus has
