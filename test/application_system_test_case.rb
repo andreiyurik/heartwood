@@ -16,13 +16,15 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # Selenium Manager ourselves so driver and browser stay a matched pair.
     paths = Selenium::WebDriver::SeleniumManager.binary_paths("--browser", "chrome")
     options.binary = paths["browser_path"] if paths["browser_path"].present?
+    # Capybara clicks where an element rests. With smooth scrolling and entrance animations
+    # on, a slow runner scrolls the target away under the click and nothing happens.
+    options.add_argument("--force-prefers-reduced-motion")
   end
 
   # Absorb Turbo navigation / Stimulus-connect latency under load (default is 2s).
   Capybara.default_max_wait_time = 5
 
   # Browsers get real broadcasts: the async adapter, switched on once for the whole run.
-  # Restarting the cable server per test left pages that stopped talking to the server.
   def self.deliver_broadcasts!
     return if @delivering_broadcasts
     ActionCable.server.config.cable = { "adapter" => "async" }
