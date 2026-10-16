@@ -21,6 +21,17 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   # Absorb Turbo navigation / Stimulus-connect latency under load (default is 2s).
   Capybara.default_max_wait_time = 5
 
+  # Browsers get real broadcasts: the async adapter, switched on once for the whole run.
+  # Restarting the cable server per test left pages that stopped talking to the server.
+  def self.deliver_broadcasts!
+    return if @delivering_broadcasts
+    ActionCable.server.config.cable = { "adapter" => "async" }
+    ActionCable.server.restart
+    @delivering_broadcasts = true
+  end
+
+  setup { self.class.deliver_broadcasts! }
+
   # Block until the Stimulus controller `identifier` is actually connected to the element
   # matched by `selector`. Without this, an input we dispatch can fire before Stimulus has
   # wired its action, so the debounced submit never runs — the dominant source of flake in
