@@ -356,6 +356,28 @@ en:
     from: "from %{date}"
     to: "to %{date}"
 
+  shared:
+    read_only: View only
+    start_your_own: Start your own tree
+    tree_meta: "%{people} · %{generations}"
+    empty: Nobody is in this tree yet.
+    living_relatives:
+      one: "and %{count} living relative — only the tree's members see their details"
+      other: "and %{count} living relatives — only the tree's members see their details"
+
+  share_links:
+    title: View-only link
+    lede: Anyone with this link can see the tree without signing up — but can't change anything. Living relatives stay hidden.
+    create: Create a view-only link
+    renew: Make a new link
+    renew_confirm: The old link will stop working. Continue?
+    destroy: Turn the link off
+    destroy_confirm: The link stops working for everyone who has it. Turn it off?
+    copy: Copy link
+    flash:
+      created: The view-only link is ready.
+      destroyed: The view-only link is off.
+
   exports:
     create: Export GEDCOM
 
@@ -533,7 +555,7 @@ en:
       move_q: Can I move my tree from MyHeritage or Ancestry?
       move_a: Yes. Export your tree as GEDCOM there and upload it to Heartwood — people, families and events come across.
       relatives_q: Do relatives need an account?
-      relatives_a: To add to the tree, yes — a minute through your link. The owner decides who can edit and who can only look.
+      relatives_a: To look — no, a view-only link is enough, and living relatives stay hidden on it. To add to the tree — yes, it takes a minute through your invite link.
       living_q: Who sees my living relatives?
       living_a: Only your tree's members. Living people are hidden from everyone else.
       price_q: How much does it cost?
