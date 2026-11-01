@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :tree_memberships, dependent: :destroy
   has_many :trees, through: :tree_memberships
   has_many :imports, dependent: :destroy
+  has_many :archives, dependent: :destroy
   has_many :edits, dependent: :nullify
   has_many :reverted_edits, class_name: "Edit", foreign_key: :reverted_by_id, dependent: :nullify
 

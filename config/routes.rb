@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   end
   resource :registration, only: %i[new create]
   resource :export, only: :create
+  resources :archives, only: %i[create show]
   resource :import, only: %i[new create show]
   resource :settings, only: %i[show update]
   resources :passwords, param: :token
