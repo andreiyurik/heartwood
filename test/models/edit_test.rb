@@ -85,6 +85,16 @@ class EditTest < ActiveSupport::TestCase
     assert edit.reload.reverted?
   end
 
+  test "restoring a deleted person brings their photo back" do
+    @sebastian.avatar.attach(io: StringIO.new("\x89PNG\r\n\x1a\n" + "\x00" * 100), filename: "js.png", content_type: "image/png")
+    blob = @sebastian.avatar.blob
+    @sebastian.destroy!
+
+    @tree.edits.last.revert(by: @user)
+
+    assert_equal blob, Person.find(@sebastian.id).avatar.blob
+  end
+
   test "restoring a person is itself recorded and can be undone again" do
     @sebastian.destroy!
     @tree.edits.last.revert(by: @user)

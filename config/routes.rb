@@ -2,6 +2,13 @@ Rails.application.routes.draw do
   resource :locale, only: :update
 
   resource :session
+  resource :account, only: %i[show destroy]
+
+  scope controller: :legal do
+    get :privacy
+    get :consent
+    get :terms
+  end
   resource :registration, only: %i[new create]
   resource :export, only: :create
   resource :import, only: %i[new create show]

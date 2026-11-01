@@ -15,7 +15,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   test "create makes the user and their named tree in one request" do
     assert_difference [ "User.count", "Tree.count" ], 1 do
       post registration_path, params: { tree_name: "Lovelace family", user: {
-        name: "Ada Lovelace", email_address: "ada@example.com", password: "secret123" } }
+        name: "Ada Lovelace", email_address: "ada@example.com", password: "secret123", privacy_consent: "1" } }
     end
 
     tree = User.find_by!(email_address: "ada@example.com").trees.sole
@@ -25,7 +25,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
 
   test "create names the tree by default when none is given" do
     post registration_path, params: { user: {
-      name: "Ada Lovelace", email_address: "ada@example.com", password: "secret123" } }
+      name: "Ada Lovelace", email_address: "ada@example.com", password: "secret123", privacy_consent: "1" } }
 
     assert_equal I18n.t("trees.default_name"), User.find_by!(email_address: "ada@example.com").trees.sole.name
   end
@@ -33,7 +33,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   test "create registers a user, signs them in, and owns a tree" do
     assert_difference "User.count", 1 do
       post registration_path, params: { user: {
-        name: "Ada Lovelace", email_address: "ada@example.com", password: "secret123" } }
+        name: "Ada Lovelace", email_address: "ada@example.com", password: "secret123", privacy_consent: "1" } }
     end
 
     assert_redirected_to root_path
@@ -48,7 +48,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   test "create sends a welcome email" do
     assert_enqueued_emails 1 do
       post registration_path, params: { user: {
-        name: "Grace Hopper", email_address: "grace@example.com", password: "secret123" } }
+        name: "Grace Hopper", email_address: "grace@example.com", password: "secret123", privacy_consent: "1" } }
     end
   end
 
@@ -63,7 +63,23 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   test "create rejects a duplicate email address gracefully" do
     assert_no_difference "User.count" do
       post registration_path, params: { user: {
-        name: "Impostor", email_address: users(:one).email_address, password: "secret123" } }
+        name: "Impostor", email_address: users(:one).email_address, password: "secret123", privacy_consent: "1" } }
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test "the form asks for consent separately and links the legal documents" do
+    get new_registration_path
+    assert_select "input[type=checkbox][name='user[privacy_consent]'][required]"
+    assert_select "a[href=?]", consent_path
+    assert_select "a[href=?]", privacy_path
+    assert_select "a[href=?]", terms_path
+  end
+
+  test "create refuses to sign up without consent" do
+    assert_no_difference "User.count" do
+      post registration_path, params: { user: {
+        name: "Ada Lovelace", email_address: "ada@example.com", password: "secret123", privacy_consent: "0" } }
     end
     assert_response :unprocessable_entity
   end

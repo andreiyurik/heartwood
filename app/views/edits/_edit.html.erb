@@ -1,12 +1,13 @@
 <%= tag.li id: dom_id(edit), class: class_names("person-row edit-row", "edit-row--reverted": edit.reverted?) do %>
-  <%= initials_avatar edit.user.name %>
+  <% author = edit.user&.name || t("edits.deleted_user") %>
+  <%= initials_avatar author %>
   <div class="person-row__body">
     <p class="person-row__name"><%= edit_subject(edit) %></p>
     <p class="person-row__meta">
-      <%= edit_description(edit) %> · <%= t("edits.by", name: edit.user.name, time: time_ago_in_words(edit.created_at)) %>
+      <%= edit_description(edit) %> · <%= t("edits.by", name: author, time: time_ago_in_words(edit.created_at)) %>
     </p>
     <% if edit.reverted? %>
-      <p class="person-row__meta"><%= t("edits.reverted", name: edit.reverted_by.name, time: time_ago_in_words(edit.reverted_at)) %></p>
+      <p class="person-row__meta"><%= t("edits.reverted", name: edit.reverted_by&.name || t("edits.deleted_user"), time: time_ago_in_words(edit.reverted_at)) %></p>
     <% end %>
   </div>
 
