@@ -42,7 +42,7 @@ class Person < ApplicationRecord
 
   private
     def event_year(event)
-      event&.date_start&.year || event&.date_raw.presence
+      event&.life_year
     end
 
     def tree_has_capacity

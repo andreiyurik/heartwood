@@ -272,7 +272,7 @@ en:
     date_label: Date
     detail_label: Detail
     select_blank: "Select…"
-    date_placeholder: "e.g. 10 DEC 1815 or 1815"
+    date_placeholder: "e.g. 10 Dec 1815, abt. 1815 or 1815"
     detail_placeholder: "e.g. Engineer (for facts)"
     place_label: Place
     place_placeholder: "e.g. Boston, Massachusetts"
@@ -346,6 +346,15 @@ en:
     expires: The link works for 24 hours, then the archive is deleted — it holds your family's personal data.
     failed: We couldn't build the archive. Please try again, and write to us if it keeps failing.
     retry: Build it again
+
+  fuzzy_dates:
+    about: "abt. %{date}"
+    before: "before %{date}"
+    after: "after %{date}"
+    between: "between %{from} and %{to}"
+    from_to: "from %{from} to %{to}"
+    from: "from %{date}"
+    to: "to %{date}"
 
   exports:
     create: Export GEDCOM

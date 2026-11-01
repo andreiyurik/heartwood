@@ -1,6 +1,6 @@
 <%= tag.li id: dom_id(event), class: "event-row" do %>
   <%= preserved_frame_tag dom_id(event, :edit) do %>
-    <span class="event-date"><%= event.date_raw %></span>
+    <span class="event-date"><%= event.date_label %></span>
     <span class="event-body">
       <span class="event-kind"><%= event.kind_label %></span>
       <% if event.value.present? %>
