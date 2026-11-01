@@ -3,6 +3,7 @@ en:
     account: Account
     sign_out: Sign out
     members: Members
+    history: History
     skip_to_content: Skip to main content
     settings: Settings
     back: Back
@@ -427,6 +428,35 @@ en:
       cta_link: Open Heartwood
       signoff: "— The Heartwood team"
 
+  edits:
+    title: History
+    lede: Every change anyone makes to the tree. Nothing is lost — undo a mistake or restore someone deleted by accident.
+    empty: No changes yet.
+    empty_lede: When you or your relatives add, edit or delete something, it shows up here.
+    undo: Undo
+    restore: Restore
+    reverted: "Undone by %{name} %{time} ago"
+    by: "%{name}, %{time} ago"
+    family: family of %{names}
+    person:
+      added: Added to the tree
+      edited: "Changed: %{fields}"
+      removed: Deleted from the tree
+    event:
+      added: "Event added: %{kind}"
+      edited: "Event “%{kind}” changed: %{fields}"
+      removed: "Event deleted: %{kind}"
+    family_child:
+      added: "Linked as a child of %{relatives}"
+      removed: "Unlinked as a child of %{relatives}"
+    family_partner:
+      added: "Linked in a family with %{relatives}"
+      removed: "Unlinked from a family with %{relatives}"
+    no_relatives: a new family
+    flash:
+      reverted: Undone.
+      failed: "Couldn't undo: %{errors}"
+
   activerecord:
     errors:
       messages:
@@ -450,6 +480,12 @@ en:
         nickname: Nickname
         sex: Sex
         avatar: Photo
+        private: Private
+      event:
+        kind: Type
+        date_raw: Date
+        value: Details
+        place_id: Place
     errors:
       models:
         import:

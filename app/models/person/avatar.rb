@@ -5,7 +5,8 @@ module Person::Avatar
   AVATAR_MAX_BYTES     = 5.megabytes
 
   included do
-    has_one_attached :avatar
+    # Kept on destroy so restoring the person from history brings the photo back.
+    has_one_attached :avatar, dependent: false
 
     validate :avatar_is_an_image, if: -> { avatar.attached? }
   end

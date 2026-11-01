@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_27_164812) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_01_171654) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -75,6 +75,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_164812) do
     t.index ["person_a_id", "person_b_id"], name: "index_duplicate_hints_on_person_a_id_and_person_b_id"
     t.index ["tree_id", "status"], name: "index_duplicate_hints_on_tree_id_and_status"
     t.index ["tree_id"], name: "index_duplicate_hints_on_tree_id"
+  end
+
+  create_table "edits", force: :cascade do |t|
+    t.integer "tree_id", null: false
+    t.integer "user_id", null: false
+    t.string "subject_type", null: false
+    t.integer "subject_id", null: false
+    t.integer "person_id"
+    t.string "action", null: false
+    t.json "particulars", default: {}, null: false
+    t.datetime "reverted_at"
+    t.integer "reverted_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id"], name: "index_edits_on_person_id"
+    t.index ["reverted_by_id"], name: "index_edits_on_reverted_by_id"
+    t.index ["subject_type", "subject_id"], name: "index_edits_on_subject"
+    t.index ["tree_id", "created_at"], name: "index_edits_on_tree_id_and_created_at"
+    t.index ["tree_id"], name: "index_edits_on_tree_id"
+    t.index ["user_id"], name: "index_edits_on_user_id"
   end
 
   create_table "events", force: :cascade do |t|
@@ -248,6 +268,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_164812) do
   add_foreign_key "duplicate_hints", "people", column: "person_a_id"
   add_foreign_key "duplicate_hints", "people", column: "person_b_id"
   add_foreign_key "duplicate_hints", "trees"
+  add_foreign_key "edits", "trees"
+  add_foreign_key "edits", "users"
+  add_foreign_key "edits", "users", column: "reverted_by_id"
   add_foreign_key "events", "trees"
   add_foreign_key "families", "trees"
   add_foreign_key "family_children", "families"

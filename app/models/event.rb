@@ -1,5 +1,5 @@
 class Event < ApplicationRecord
-  include LiveUpdates
+  include LiveUpdates, Editable
 
   KINDS = {
     "BIRT" => "Birth", "DEAT" => "Death", "BAPM" => "Baptism", "BURI" => "Burial",
