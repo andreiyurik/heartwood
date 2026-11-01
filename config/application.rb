@@ -7,6 +7,9 @@ require "rails/all"
 Bundler.require(*Rails.groups)
 
 module Heartwood
+  # AGPL §13: users of a modified hosted copy must be offered its source.
+  SOURCE_CODE_URL = ENV.fetch("SOURCE_CODE_URL", "https://github.com/andreiyurik/heartwood")
+
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.1

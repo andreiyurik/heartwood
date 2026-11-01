@@ -77,6 +77,9 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  # Defines the root path route ("/")
+  # Guests (no live session) get the landing page; signed-in people get their tree.
+  constraints(->(request) { !Session.exists?(id: request.cookie_jar.signed[:session_id]) }) do
+    get "/", to: "landing#show", as: :landing
+  end
   root "people#index"
 end
