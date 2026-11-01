@@ -48,15 +48,19 @@ env:
     # - OPERATOR_ADDRESS
     # - OPERATOR_EMAIL
     # - OPERATOR_HOSTING
-    # - STORAGE_ENDPOINT
     # - STORAGE_BUCKET
     # - STORAGE_ACCESS_KEY_ID
     # - STORAGE_SECRET_ACCESS_KEY
-    # - BACKUP_ENDPOINT
     # - BACKUP_BUCKET
     # - BACKUP_ACCESS_KEY_ID
     # - BACKUP_SECRET_ACCESS_KEY
   clear:
+    # Timeweb Cloud S3 (the endpoint and region its bucket page shows):
+    # STORAGE_ENDPOINT: https://s3.twcstorage.ru
+    # STORAGE_REGION: ru-1
+    # BACKUP_ENDPOINT: https://s3.twcstorage.ru
+    # BACKUP_REGION: ru-1
+
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
     SOLID_QUEUE_IN_PUMA: true
