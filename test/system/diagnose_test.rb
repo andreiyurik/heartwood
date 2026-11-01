@@ -40,9 +40,14 @@ class DiagnoseTest < ApplicationSystemTestCase
     puts "\nbrowser=#{page.driver.browser.capabilities.browser_version}"
   end
 
+  teardown { page.driver.quit }
+
   20.times do |i|
     test "open the add-event form #{i}" do
       visit person_path(@person)
+      before = page.evaluate_script("document.hasFocus()")
+      page.driver.browser.switch_to.window(page.driver.browser.window_handle) if i.even?
+      puts "\n#{i} #{i.even? ? "ACTIVATED" : "plain"} focus before=#{before} after=#{page.evaluate_script("document.hasFocus()")}"
       page.execute_script(TRACE)
       click_on I18n.t("events.add")
       begin
