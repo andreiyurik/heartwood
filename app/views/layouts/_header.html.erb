@@ -29,6 +29,7 @@
           </li>
           <li><hr class="action-sheet__divider"></li>
           <li><%= link_to tree_memberships_path, class: "action-sheet__action" do %><%= icon_tag "people" %> <%= t("nav.members") %><% end %></li>
+          <li><%= link_to edits_path, class: "action-sheet__action" do %><%= icon_tag "refresh" %> <%= t("nav.history") %><% end %></li>
           <% if Current.membership.owner? %>
             <li><%= link_to settings_path, class: "action-sheet__action" do %><%= icon_tag "settings" %> <%= t("nav.settings") %><% end %></li>
           <% end %>

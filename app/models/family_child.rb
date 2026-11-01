@@ -1,5 +1,5 @@
 class FamilyChild < ApplicationRecord
-  include LiveUpdates
+  include LiveUpdates, FamilyLink
 
   belongs_to :family
   belongs_to :person

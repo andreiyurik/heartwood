@@ -25,3 +25,34 @@
 .flash--alert .icon {
   color: var(--color-alert);
 }
+
+.flash--undoable {
+  animation-duration: 10s;
+
+  &:hover,
+  &:focus-within {
+    animation-play-state: paused;
+  }
+}
+
+.flash__action {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* Reduced motion shortens every animation to 1ms; a toast must still stay long enough to read and undo. */
+@media (prefers-reduced-motion: reduce) {
+  .flash {
+    animation: toast-still 5s 300ms both !important;
+  }
+
+  .flash--undoable {
+    animation-duration: 10s !important;
+  }
+}

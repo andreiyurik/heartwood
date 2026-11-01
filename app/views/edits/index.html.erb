@@ -1,0 +1,11 @@
+<% page_title t("edits.title") %>
+<% page_meta t("edits.lede") %>
+<% back_link root_path %>
+
+<% if @edits.any? %>
+  <ul class="people-list" id="edits">
+    <%= render partial: "edit", collection: @edits %>
+  </ul>
+<% else %>
+  <%= render "shared/blank_slate", id: "edits", title: t("edits.empty"), lede: t("edits.empty_lede") %>
+<% end %>
