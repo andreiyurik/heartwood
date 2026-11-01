@@ -40,6 +40,7 @@
             <% if can_edit? %>
               <li><%= link_to new_import_path, class: "action-sheet__action" do %><%= icon_tag "upload" %> <%= t("imports.title") %><% end %></li>
             <% end %>
+            <li><%= button_to archives_path, class: "action-sheet__action" do %><%= icon_tag "download" %> <%= t("archives.create") %><% end %></li>
             <li><%= button_to export_path, class: "action-sheet__action" do %><%= icon_tag "download" %> <%= t("exports.create") %><% end %></li>
           <% end %>
           <li><hr class="action-sheet__divider"></li>

@@ -32,7 +32,8 @@ Key positions the texts commit us to (the code must keep them true):
 - Data about relatives is entered by the user for personal and family purposes; living people
   are hidden from outsiders; anyone named in a tree can ask the operator to remove it.
 - Retention: account data until deletion; history snapshots of deleted records for
-  `Edit::RETENTION` (90 days); backups up to 30 days.
+  `Edit::RETENTION` (90 days); download archives `Archive::RETENTION` (24 hours); backups up to
+  30 days.
 - Requests from data subjects answered within 10 working days.
 
 ## Consent at sign-up

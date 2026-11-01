@@ -16,6 +16,7 @@ class Tree < ApplicationRecord
   has_many :places, dependent: :destroy
   has_many :duplicate_hints, dependent: :destroy
   has_many :imports, dependent: :destroy
+  has_many :archives, dependent: :destroy
   has_many :edits, dependent: :delete_all
   has_many :sessions, foreign_key: :current_tree_id, dependent: :nullify
 

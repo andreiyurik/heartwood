@@ -21,7 +21,7 @@ en:
 
   imports:
     title: Import GEDCOM
-    lede: Upload a .ged file exported from Gramps or another program. Everything in it is added to this tree.
+    lede: Upload a .ged file exported from Gramps or another program, or a Heartwood archive (.zip) to bring the photos too. Everything in it is added to this tree.
     file: GEDCOM file
     submit: Import
     show:
@@ -39,7 +39,7 @@ en:
       retry: Try another file
       failed:
         title: The import did not finish
-        no_records: We found no people in that file. Is it a GEDCOM (.ged) file?
+        no_records: We found no people in that file. Is it a GEDCOM (.ged) file or an archive with one inside?
         tree_full: That file has more people than the free plan holds. Nothing was imported.
         invalid: Some records in that file could not be read. Nothing was imported.
 
@@ -336,6 +336,17 @@ en:
       created: Source added.
       destroyed: Source removed.
 
+  archives:
+    create: Download with photos (.zip)
+    title: Tree archive
+    lede: The whole tree as GEDCOM plus every photo, in one file. Unzip it to open in Gramps, or upload it back to Heartwood.
+    running: Putting the archive together… This page updates itself when it's ready.
+    ready: The archive is ready
+    download: Download archive
+    expires: The link works for 24 hours, then the archive is deleted — it holds your family's personal data.
+    failed: We couldn't build the archive. Please try again, and write to us if it keeps failing.
+    retry: Build it again
+
   exports:
     create: Export GEDCOM
 
@@ -490,7 +501,7 @@ en:
       living_title: Living people stay private
       living_text: Only your tree's members see information about living relatives.
       export_title: Download or delete any time
-      export_text: Your tree exports to GEDCOM, the standard every genealogy program reads. Deleting your account is one step.
+      export_text: Your tree downloads as GEDCOM, the standard every genealogy program reads — with every photo, in one archive. Deleting your account is one step.
       open_title: Open source
       open_text: Heartwood's code is open. Even if something happens to us, your tree won't disappear.
       backup_title: Backups
@@ -509,7 +520,7 @@ en:
       safe_q: Is it safe?
       safe_a: Only the people you invite can open your tree. Passwords are stored as hashes, connections are encrypted, and data is backed up regularly.
       shutdown_q: What if Heartwood shuts down?
-      shutdown_a: You can download your tree as GEDCOM at any time. And Heartwood's code is open — you can run it on your own server.
+      shutdown_a: You can download your tree with all its photos at any time. And Heartwood's code is open — you can run it on your own server.
       move_q: Can I move my tree from MyHeritage or Ancestry?
       move_a: Yes. Export your tree as GEDCOM there and upload it to Heartwood — people, families and events come across.
       relatives_q: Do relatives need an account?
@@ -544,7 +555,7 @@ en:
   accounts:
     title: Account
     your_data: Your data
-    your_data_lede: Your tree is yours. Download it any time as GEDCOM — it opens in Gramps and every other genealogy program.
+    your_data_lede: Your tree is yours. Download it any time with every photo, or as plain GEDCOM — it opens in Gramps and every other genealogy program.
     delete_title: Delete account
     delete_lede: "Your account and every tree you own are deleted for good: people, photos, history. Trees you only joined stay with their owners. Download your tree first if you may want it."
     tree_goes:

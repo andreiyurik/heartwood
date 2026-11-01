@@ -43,7 +43,6 @@ module Gedcom
         attrs = { gedcom_xref: record[:xref], sex: "U" }
         raw   = []
         notes = []
-        photo = nil
         named = false
 
         record[:children].each do |child|
@@ -57,18 +56,14 @@ module Gedcom
               raw.concat extract_name(child, attrs)
             end
           when "NOTE" then notes << note_text(child)
-          when "OBJE"
-            object = dereference(child)
-            if photo.nil? && (file = attachable(object))
-              photo = file
-            else
-              raw << raw_node(object)
-            end
-          when *EVENT_TAGS, "FAMS", "FAMC"
+          when *EVENT_TAGS, "FAMS", "FAMC", "OBJE"
           else
             raw << raw_node(child)
           end
         end
+
+        photo, others = pick_photo(record[:children].select { it[:tag] == "OBJE" })
+        raw.concat others.map { raw_node(dereference(it)) }
 
         attrs[:gedcom_raw] = raw.presence
         attrs[:biography]  = biography_html(notes) if notes.any?
@@ -197,6 +192,14 @@ module Gedcom
 
       def biography_html(notes)
         notes.join("\n\n").split("\n", -1).map { "<div>#{it.empty? ? "<br>" : ERB::Util.html_escape(it)}</div>" }.join
+      end
+
+      # The link marked _PRIM Y, else the first not marked _PRIM N, if its file can be attached.
+      def pick_photo(links)
+        primary = links.find { child_value(it, "_PRIM") == "Y" } || links.find { child_value(it, "_PRIM") != "N" }
+        photo   = attachable(dereference(primary)) if primary
+
+        photo ? [ photo, links - [ primary ] ] : [ nil, links ]
       end
 
       def attachable(object)
