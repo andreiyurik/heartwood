@@ -35,6 +35,12 @@ class DiagnoseTest < ApplicationSystemTestCase
   JS
 
   setup do
+    @fix = name[/\d+\z/].to_i.even? ? "emulation" : "bring_to_front"
+    if @fix == "emulation"
+      page.driver.browser.execute_cdp("Emulation.setFocusEmulationEnabled", enabled: true)
+    else
+      page.driver.browser.execute_cdp("Page.bringToFront")
+    end
     @person = people(:johann_sebastian)
     sign_in_as users(:bach)
     puts "\nbrowser=#{page.driver.browser.capabilities.browser_version}"
@@ -46,8 +52,7 @@ class DiagnoseTest < ApplicationSystemTestCase
     test "open the add-event form #{i}" do
       visit person_path(@person)
       before = page.evaluate_script("document.hasFocus()")
-      page.driver.browser.switch_to.window(page.driver.browser.window_handle) if i.even?
-      puts "\n#{i} #{i.even? ? "ACTIVATED" : "plain"} focus before=#{before} after=#{page.evaluate_script("document.hasFocus()")}"
+      puts "\n#{i} #{@fix} focus=#{before}"
       page.execute_script(TRACE)
       click_on I18n.t("events.add")
       begin
