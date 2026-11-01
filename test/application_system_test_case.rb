@@ -23,6 +23,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # Capybara clicks where an element rests. With smooth scrolling and entrance animations
     # on, a slow runner scrolls the target away under the click and nothing happens.
     options.add_argument("--force-prefers-reduced-motion")
+    options.add_argument("--window-size=1400,1400")
   end
 
   # Absorb Turbo navigation / Stimulus-connect latency under load (default is 2s).
