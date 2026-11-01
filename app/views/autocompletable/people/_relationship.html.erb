@@ -8,7 +8,7 @@
                 data: { turbo_frame: "relationship" } do %>
             <span class="combobox-option-name"><%= candidate.display_name %></span>
             <% if candidate.birth&.date_raw.present? %>
-              <span class="combobox-option-meta">b.&thinsp;<%= candidate.birth.date_raw %></span>
+              <span class="combobox-option-meta">b.&thinsp;<%= candidate.birth.date_label %></span>
             <% end %>
           <% end %>
         </li>

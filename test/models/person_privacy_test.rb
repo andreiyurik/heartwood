@@ -47,7 +47,7 @@ class PersonPrivacyTest < ActiveSupport::TestCase
 
   test "living? is true when birth event has no parsed date (raw string only)" do
     person = Person.create!(sex: "U", tree: @tree)
-    Event.create!(kind: "BIRT", eventable: person, tree: @tree, date_raw: "ABT 1890")
+    Event.create!(kind: "BIRT", eventable: person, tree: @tree, date_raw: "в детстве")
     assert person.living?
   end
 

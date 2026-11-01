@@ -110,6 +110,7 @@ module Gedcom
 
       def map_event(record, eventable)
         date  = record[:children].find { it[:tag] == "DATE" }&.dig(:value)
+        date  = date[/\A\((.*)\)\z/, 1] || date if date # a date phrase
         place = record[:children].find { it[:tag] == "PLAC" }&.dig(:value)
         raw   = record[:children].reject { it[:tag].in?(%w[DATE PLAC SOUR]) }.map { raw_node(it) }
 

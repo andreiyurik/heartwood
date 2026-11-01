@@ -31,7 +31,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     event.cite({ title: "Parish register" })
     get person_url(@person)
     assert_select ".event-row" do
-      assert_select ".event-date", text: "10 DEC 1815"
+      assert_select ".event-date", text: "10 December 1815"
       assert_select ".event-kind", text: "Birth"
       assert_select ".event-place", text: /London/
       assert_select ".event-sources", text: "1"

@@ -89,10 +89,10 @@ class Person::TreeGraphTest < ActiveSupport::TestCase
 
   test "lifespan falls back to the raw date string when the date did not parse" do
     approx = Person.create!(given_names: "Approx", sex: "M", tree: @tree)
-    Event.create!(kind: "BIRT", eventable: approx, tree: @tree, date_raw: "ок. 1696")
+    Event.create!(kind: "BIRT", eventable: approx, tree: @tree, date_raw: "весна 1696")
     Event.create!(kind: "DEAT", eventable: approx, tree: @tree)
     node = node_for(approx)
-    assert_equal "ок. 1696", node[:years]
+    assert_equal "весна 1696", node[:years]
   end
 
   # --- ghost add-relative slots ---
