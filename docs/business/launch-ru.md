@@ -35,7 +35,7 @@ See [[positioning]], [[pricing-hosting]], [[open-core]].
 2. ✅ [[accounts-and-legal]] — policy, separate consent, terms, account deletion, 90-day history.
 3. ✅ [[backups]] — verified snapshots every 6 hours, off-site in Russia, restore drill.
 4. ✅ [[landing]] — the story for signed-out visitors.
-5. GEDZIP export with photos (see [[import-export]]).
+5. ✅ Archive with photos — GEDZIP layout as `.zip`, and its import (see [[import-export]]).
 6. View-only share links (see [[privacy-access]]).
 
 ## Before the first real user (outside the code)

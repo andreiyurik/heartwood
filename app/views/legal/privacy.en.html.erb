@@ -33,6 +33,7 @@
     <li>Databases holding Russian citizens' data are located in Russia. There is no cross-border transfer.</li>
     <li>Account and tree data are kept while the account exists. You can delete the account yourself on the Account page; its data and every tree it owns are then deleted.</li>
     <li>Change history keeps copies of deleted records for <%= Edit::RETENTION.in_days.to_i %> days so mistakes can be undone, then destroys them.</li>
+    <li>A tree archive built for download is deleted after 24 hours.</li>
     <li>Backups are kept for no more than 30 days.</li>
   </ul>
 

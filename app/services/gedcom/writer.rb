@@ -5,7 +5,7 @@ module Gedcom
     MONTHS = %w[JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC].freeze
     CHUNK  = 200
 
-    # media: { person_id => [ { xref:, path:, form: } ] } — only a GEDZIP has files to point at.
+    # media: { person_id => [ { xref:, path:, form:, primary: } ] } — only an archive has files to point at.
     def initialize(tree, user: nil, media: {})
       @tree  = tree
       @user  = user
@@ -63,7 +63,10 @@ module Gedcom
         person.events.sort_by(&:id).each { |event| write_event(event) }
         line 1, "NOTE", person.biography.to_plain_text if person.biography.present?
 
-        Array(@media[person.id]).each { |file| line 1, "OBJE", file[:xref] }
+        Array(@media[person.id]).each do |file|
+          line 1, "OBJE", file[:xref]
+          line 2, "_PRIM", file[:primary] ? "Y" : "N"
+        end
         person.families_as_partner.each { |family| line 1, "FAMS", family_xref(family) }
         person.families_as_child.each { |family| line 1, "FAMC", family_xref(family) }
         write_raw(person.gedcom_raw, level: 1)

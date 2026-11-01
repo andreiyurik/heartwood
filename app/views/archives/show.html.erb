@@ -1,0 +1,21 @@
+<% page_title t("archives.title") %>
+<% back_link root_path %>
+
+<%= turbo_stream_from @archive %>
+
+<section class="import-report">
+  <% if @archive.completed? %>
+    <h2><%= t("archives.ready") %></h2>
+    <p><%= link_to rails_blob_path(@archive.file, disposition: "attachment"), class: "btn btn--primary" do %>
+      <%= icon_tag "download" %> <%= t("archives.download") %>
+    <% end %></p>
+    <p class="muted"><%= t("archives.expires") %></p>
+  <% elsif @archive.failed? %>
+    <h2><%= t("archives.failed") %></h2>
+    <%= button_to t("archives.retry"), archives_path, class: "btn btn--primary" %>
+  <% else %>
+    <h2><%= t("archives.running") %></h2>
+  <% end %>
+
+  <p class="muted"><%= t("archives.lede") %></p>
+</section>

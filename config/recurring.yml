@@ -16,6 +16,9 @@ production:
   prune_edits:
     command: "Edit.prune"
     schedule: every day at 4am
+  prune_archives:
+    command: "Archive.prune"
+    schedule: every hour at minute 40
   backup:
     command: "Backup.create"
     schedule: every 6 hours
