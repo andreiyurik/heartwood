@@ -3,6 +3,7 @@ ru:
     account: Аккаунт
     sign_out: Выйти
     members: Участники
+    history: История
     skip_to_content: Перейти к содержимому
     settings: Настройки
     back: Назад
@@ -497,6 +498,35 @@ ru:
         many: почти %{count} лет
         other: почти %{count} лет
 
+  edits:
+    title: История изменений
+    lede: "Все изменения в дереве — кто и что поменял. Ничего не теряется: ошибку можно отменить, а случайно удалённого человека — восстановить."
+    empty: Изменений пока нет.
+    empty_lede: Когда вы или ваши родные что-то добавят, исправят или удалят, это появится здесь.
+    undo: Отменить
+    restore: Восстановить
+    reverted: "Отменено: %{name}, %{time} назад"
+    by: "%{name}, %{time} назад"
+    family: семья %{names}
+    person:
+      added: Добавлено в дерево
+      edited: "Изменено: %{fields}"
+      removed: Удалено из дерева
+    event:
+      added: "Добавлено событие: %{kind}"
+      edited: "Изменено событие «%{kind}»: %{fields}"
+      removed: "Удалено событие: %{kind}"
+    family_child:
+      added: "Связь добавлена: ребёнок — %{relatives}"
+      removed: "Связь удалена: ребёнок — %{relatives}"
+    family_partner:
+      added: "Связь добавлена: семья с %{relatives}"
+      removed: "Связь удалена: семья с %{relatives}"
+    no_relatives: новая семья
+    flash:
+      reverted: Отменено.
+      failed: "Не получилось отменить: %{errors}"
+
   activerecord:
     errors:
       messages:
@@ -524,6 +554,12 @@ ru:
         nickname: Прозвище
         sex: Пол
         avatar: Фото
+        private: Скрыт
+      event:
+        kind: Тип
+        date_raw: Дата
+        value: Подробности
+        place_id: Место
     errors:
       models:
         import:

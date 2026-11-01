@@ -29,6 +29,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :edits, only: :index do
+    scope module: :edits do
+      resource :reversion, only: :create
+    end
+  end
+
   resources :hints, only: :index do
     scope module: :hints do
       resource :dismissal, only: :create

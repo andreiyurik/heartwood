@@ -1,7 +1,11 @@
 <% if (message = flash[:notice] || flash[:alert]) %>
-  <div class="flash <%= "flash--alert" if flash[:alert] %>" role="<%= flash[:alert] ? "alert" : "status" %>"
+  <% undo_edit_id = flash[:undo_edit_id] if can_edit? %>
+  <div class="flash <%= "flash--alert" if flash[:alert] %> <%= "flash--undoable" if undo_edit_id %>" role="<%= flash[:alert] ? "alert" : "status" %>"
        data-controller="element-removal" data-action="animationend->element-removal#remove">
     <%= icon_tag flash[:alert] ? "alert" : "check" %>
     <%= message %>
+    <% if undo_edit_id %>
+      <%= button_to t("edits.undo"), edit_reversion_path(undo_edit_id), class: "flash__action" %>
+    <% end %>
   </div>
 <% end %>

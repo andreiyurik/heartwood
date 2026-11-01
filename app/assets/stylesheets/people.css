@@ -171,3 +171,8 @@
   align-items: flex-start;
   flex-direction: column;
 }
+
+.edit-row--reverted .person-row__name,
+.edit-row--reverted .person-row__name a {
+  color: var(--color-muted);
+}
