@@ -31,8 +31,16 @@ See [[positioning]], [[pricing-hosting]], [[open-core]].
   closed beta (metric: relatives invited per tree).
 
 ## Trust features that gate a paid launch
-1. [[change-history]] — who changed what, and one-click undo/restore. ✅ first slice shipped.
-2. Off-site backups with a tested restore (in a RF data center).
-3. GEDZIP export with photos (see [[import-export]]).
-4. View-only share links (see [[privacy-access]]).
-5. Landing page for signed-out visitors (see [[positioning]]).
+1. ✅ [[change-history]] — who changed what, and one-click undo/restore.
+2. ✅ [[accounts-and-legal]] — policy, separate consent, terms, account deletion, 90-day history.
+3. ✅ [[backups]] — verified snapshots every 6 hours, off-site in Russia, restore drill.
+4. ✅ [[landing]] — the story for signed-out visitors.
+5. GEDZIP export with photos (see [[import-export]]).
+6. View-only share links (see [[privacy-access]]).
+
+## Before the first real user (outside the code)
+- Register the operator (ИП/ООО), fill the `OPERATOR_*` settings, have a lawyer review the
+  three documents, notify Roskomnadzor.
+- Rent a server and two object-storage buckets in a Russian data center; set `STORAGE_*` and
+  `BACKUP_*`, versioning on the photo bucket, a 30-day lifecycle rule on the backup bucket.
+- Run the restore drill once on staging.
