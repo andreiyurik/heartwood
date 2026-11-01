@@ -28,7 +28,9 @@ class DiagnoseTest < ApplicationSystemTestCase
         .observe(frame, { attributes: true });
       log("installed turbo=" + !!window.Turbo + " stimulus=" + !!window.Stimulus +
           " preserve=" + !!(window.Stimulus && window.Stimulus.getControllerForElementAndIdentifier(frame, "preserve-form")) +
-          " cable=" + document.querySelector("turbo-cable-stream-source")?.hasAttribute("connected"));
+          " cable=" + document.querySelector("turbo-cable-stream-source")?.hasAttribute("connected") +
+          " paints=" + JSON.stringify(performance.getEntriesByType("paint").map(p => p.name + "@" + Math.round(p.startTime))) +
+          " now=" + Math.round(performance.now()) + " visible=" + document.visibilityState + " focus=" + document.hasFocus());
     })()
   JS
 
@@ -50,6 +52,7 @@ class DiagnoseTest < ApplicationSystemTestCase
         sleep 1
         puts "\n--- FAIL #{i} ---"
         puts page.evaluate_script("window.__trace").join("\n")
+        puts "paints at fail: " + page.evaluate_script("JSON.stringify(performance.getEntriesByType('paint').map(p => p.name + '@' + Math.round(p.startTime)))")
         puts "frame html: " + page.evaluate_script("document.getElementById('add_event').outerHTML")[0, 400]
         puts "console: " + page.driver.browser.logs.get(:browser).map(&:message).join(" | ") rescue puts "no console logs"
         raise
