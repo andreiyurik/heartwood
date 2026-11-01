@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_01_171654) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_01_183528) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -79,7 +79,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_01_171654) do
 
   create_table "edits", force: :cascade do |t|
     t.integer "tree_id", null: false
-    t.integer "user_id", null: false
+    t.integer "user_id"
     t.string "subject_type", null: false
     t.integer "subject_id", null: false
     t.integer "person_id"
@@ -259,6 +259,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_01_171654) do
     t.string "name"
     t.string "password_digest", null: false
     t.datetime "updated_at", null: false
+    t.datetime "privacy_consented_at"
+    t.string "privacy_consent_version"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 

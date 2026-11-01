@@ -1,0 +1,43 @@
+.account-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--block-space-half);
+  margin-block-end: var(--block-space-double);
+  max-inline-size: 40rem;
+
+  h2,
+  p {
+    margin: 0;
+  }
+}
+
+.account-section__actions,
+.account-delete {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  form {
+    display: contents;
+  }
+}
+
+.account-delete .input {
+  flex: 1;
+  min-inline-size: 12rem;
+}
+
+.account-trees {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    border-block-end: 1px solid var(--tint-ink-10);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--inline-space);
+    padding-block: 0.5rem;
+  }
+}

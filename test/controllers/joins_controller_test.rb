@@ -20,7 +20,7 @@ class JoinsControllerTest < ActionDispatch::IntegrationTest
     assert_difference [ "User.count", "TreeMembership.count" ], 1 do
       assert_no_difference "Tree.count" do
         post join_path(@tree.join_code), params: {
-          user: { name: "Fresh Signup", email_address: "fresh@example.com", password: "password123" } }
+          user: { name: "Fresh Signup", email_address: "fresh@example.com", password: "password123", privacy_consent: "1" } }
       end
     end
     assert_redirected_to root_url
@@ -80,5 +80,15 @@ class JoinsControllerTest < ActionDispatch::IntegrationTest
     post session_url, params: { email_address: users(:one).email_address, password: "password" }
     get join_url("NOPE-0000-CODE")
     assert_response :not_found
+  end
+
+  test "joining as a new person also asks for consent" do
+    get join_url(@tree.join_code)
+    assert_select "input[type=checkbox][name='user[privacy_consent]'][required]"
+
+    assert_no_difference "User.count" do
+      post join_path(@tree.join_code), params: { user: { name: "No Consent", email_address: "nc@example.com", password: "password123" } }
+    end
+    assert_response :unprocessable_entity
   end
 end

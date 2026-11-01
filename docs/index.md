@@ -29,6 +29,7 @@ agent, also read [`CLAUDE.md`](../CLAUDE.md) at the repo root.
 ### 2. Features — what users do
 - [[features-index]] — curated & prioritized feature catalog (borrowed from the best)
 - [[change-history]] — who changed what, and one-click undo/restore
+- [[accounts-and-legal]] — 152-ФЗ policy & consent, account deletion, data retention
 
 ### 3. Interop — getting data in & out (our moat)
 - [[gedcom]] — the accepted exchange format (GEDCOM 7 + 5.5.1)
