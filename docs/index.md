@@ -28,6 +28,9 @@ agent, also read [`CLAUDE.md`](../CLAUDE.md) at the repo root.
 
 ### 2. Features — what users do
 - [[features-index]] — curated & prioritized feature catalog (borrowed from the best)
+- [[change-history]] — who changed what, and one-click undo/restore
+- [[landing]] — what guests see at `/`: the story, the rules for marketing claims
+- [[accounts-and-legal]] — 152-ФЗ policy & consent, account deletion, data retention
 
 ### 3. Interop — getting data in & out (our moat)
 - [[gedcom]] — the accepted exchange format (GEDCOM 7 + 5.5.1)
@@ -40,11 +43,13 @@ agent, also read [`CLAUDE.md`](../CLAUDE.md) at the repo root.
 - [[design-system]] — how it looks and moves: Basecamp's approach, adapted (binding rules + gap list)
 - [[hotwire-native]] — one codebase → web + iOS + Android (SPA-feel, no SPA)
 - [[multi-tenancy]] — self-host vs hosted on one codebase
+- [[backups]] — verified SQLite snapshots, off-site copies in Russia, the restore drill
 - Decisions: `architecture/adr/` — [[adr/0001-vanilla-rails-stack|0001]] · [[adr/0002-sqlite-production|0002]] · [[adr/0003-agpl-open-core|0003]] · [[adr/0004-gedcom-interop|0004]] · [[adr/0005-tree-rendering-svg-stimulus|0005]] · [[adr/0006-hotwire-native-ready|0006]]
 
 ## Business
 - [[open-core]] — what's free vs paid, the AGPL + Engine split
 - [[pricing-hosting]] — the hosted plan
+- [[launch-ru]] — hosted launch market: Russia first (152-ФЗ, ЮKassa, channels)
 
 ## Learning from others
 - [[prior-art]] — webtrees, Gramps, GeneWeb, family-chart, Topola, Maybe, Solidus — and exactly what we take from each

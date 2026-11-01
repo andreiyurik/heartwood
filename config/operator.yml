@@ -1,0 +1,9 @@
+# The personal-data operator named in the privacy policy, consent and terms (152-ФЗ).
+# Every installation is its own operator, so these come from the environment.
+shared:
+  name: <%= ENV["OPERATOR_NAME"] %>
+  inn: <%= ENV["OPERATOR_INN"] %>
+  ogrn: <%= ENV["OPERATOR_OGRN"] %>
+  address: <%= ENV["OPERATOR_ADDRESS"] %>
+  email: <%= ENV["OPERATOR_EMAIL"] %>
+  hosting: <%= ENV["OPERATOR_HOSTING"] %>

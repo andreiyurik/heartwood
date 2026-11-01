@@ -1,4 +1,6 @@
 class Tree < ApplicationRecord
+  include Incineratable
+
   # An expired family plan behaves as free only for adding people; existing data is never locked.
   PLANS = {
     "free"   => { people_limit: 100 },
@@ -14,6 +16,10 @@ class Tree < ApplicationRecord
   has_many :places, dependent: :destroy
   has_many :duplicate_hints, dependent: :destroy
   has_many :imports, dependent: :destroy
+  has_many :archives, dependent: :destroy
+  has_one :share_link, dependent: :delete
+  has_many :edits, dependent: :delete_all
+  has_many :sessions, foreign_key: :current_tree_id, dependent: :nullify
 
   validates :name, presence: true
   validates :plan, inclusion: { in: PLANS.keys }

@@ -3,6 +3,7 @@ en:
     account: Account
     sign_out: Sign out
     members: Members
+    history: History
     skip_to_content: Skip to main content
     settings: Settings
     back: Back
@@ -20,7 +21,7 @@ en:
 
   imports:
     title: Import GEDCOM
-    lede: Upload a .ged file exported from Gramps or another program. Everything in it is added to this tree.
+    lede: Upload a .ged file exported from Gramps or another program, or a Heartwood archive (.zip) to bring the photos too. Everything in it is added to this tree.
     file: GEDCOM file
     submit: Import
     show:
@@ -38,7 +39,7 @@ en:
       retry: Try another file
       failed:
         title: The import did not finish
-        no_records: We found no people in that file. Is it a GEDCOM (.ged) file?
+        no_records: We found no people in that file. Is it a GEDCOM (.ged) file or an archive with one inside?
         tree_full: That file has more people than the free plan holds. Nothing was imported.
         invalid: Some records in that file could not be read. Nothing was imported.
 
@@ -271,7 +272,7 @@ en:
     date_label: Date
     detail_label: Detail
     select_blank: "Select…"
-    date_placeholder: "e.g. 10 DEC 1815 or 1815"
+    date_placeholder: "e.g. 10 Dec 1815, abt. 1815 or 1815"
     detail_placeholder: "e.g. Engineer (for facts)"
     place_label: Place
     place_placeholder: "e.g. Boston, Massachusetts"
@@ -334,6 +335,48 @@ en:
     flash:
       created: Source added.
       destroyed: Source removed.
+
+  archives:
+    create: Download with photos (.zip)
+    title: Tree archive
+    lede: The whole tree as GEDCOM plus every photo, in one file. Unzip it to open in Gramps, or upload it back to Heartwood.
+    running: Putting the archive together… This page updates itself when it's ready.
+    ready: The archive is ready
+    download: Download archive
+    expires: The link works for 24 hours, then the archive is deleted — it holds your family's personal data.
+    failed: We couldn't build the archive. Please try again, and write to us if it keeps failing.
+    retry: Build it again
+
+  fuzzy_dates:
+    about: "abt. %{date}"
+    before: "before %{date}"
+    after: "after %{date}"
+    between: "between %{from} and %{to}"
+    from_to: "from %{from} to %{to}"
+    from: "from %{date}"
+    to: "to %{date}"
+
+  shared:
+    read_only: View only
+    start_your_own: Start your own tree
+    tree_meta: "%{people} · %{generations}"
+    empty: Nobody is in this tree yet.
+    living_relatives:
+      one: "and %{count} living relative — only the tree's members see their details"
+      other: "and %{count} living relatives — only the tree's members see their details"
+
+  share_links:
+    title: View-only link
+    lede: Anyone with this link can see the tree without signing up — but can't change anything. Living relatives stay hidden.
+    create: Create a view-only link
+    renew: Make a new link
+    renew_confirm: The old link will stop working. Continue?
+    destroy: Turn the link off
+    destroy_confirm: The link stops working for everyone who has it. Turn it off?
+    copy: Copy link
+    flash:
+      created: The view-only link is ready.
+      destroyed: The view-only link is off.
 
   exports:
     create: Export GEDCOM
@@ -427,6 +470,166 @@ en:
       cta_link: Open Heartwood
       signoff: "— The Heartwood team"
 
+  landing:
+    meta:
+      title: Heartwood — the family tree your whole family builds
+      description: Start a family tree and send your relatives a link — everyone adds what they remember. Changes show up for everyone at once, and your data stays yours. Free.
+    hero:
+      eyebrow: A family tree for the whole family
+      title: Gather your family's story together — while there's still someone to ask
+      lede: Start a tree and send your relatives a link — everyone adds what they remember. Grandma knows her mother's maiden name, an uncle knows where grandpa served, and you see it all at once, on one tree.
+      cta: Start for free
+      sign_in: Sign in
+      note: "Free up to %{limit} people. No card, no ads."
+      image_alt: A family tree in Heartwood
+    pain:
+      title: A family's memory fades quietly
+      stories_title: Nobody wrote the stories down
+      stories_text: What grandparents remember lives only in their memory. We put off asking every year — until there's no one left to ask.
+      photos_title: Photos without names
+      photos_text: Old prints sit in boxes and family chats. A generation from now, nobody will know who's in them.
+      pieces_title: Everyone holds one piece
+      pieces_text: An aunt knows one branch, a cousin another. Together it's the family's story; apart, it's fragments.
+    how:
+      title: How it works
+      create_title: Start a tree
+      create_text: Begin with yourself, your parents and grandparents — a couple of minutes. Or upload an existing tree from a GEDCOM file.
+      invite_title: Send relatives a link
+      invite_text: One link in the family chat, and relatives join the tree to add to it.
+      together_title: Fill it in together
+      together_text: Changes appear for everyone at once, no reload. Every edit is in the history, and any mistake can be undone.
+    why:
+      title: Why your family's story matters
+      lede: It's not only about the past. It's about who your children grow up to be.
+      research: Emory University psychologists Marshall Duke and Robyn Fivush found that children who know their family's stories — how their parents met, what their grandparents went through — have more confidence and cope better with hardship. They feel part of something bigger than themselves.
+      roots_title: People, not dates
+      roots_text: Not just a list of names but who they were, where they lived, what they lived through. A story you can tell.
+      legacy_title: Something to hand down
+      legacy_text: A tree outlives phones and social networks. You leave your children and grandchildren what you may never have had.
+      talk_title: A reason to talk
+      talk_text: Asking grandma about her youth may be the best conversation you've had in years. A tree gives you the reason.
+    features:
+      title: Everything you need to build a tree properly
+      live_title: Together, in real time
+      live_text: Several relatives edit one tree at once — everyone sees changes immediately.
+      history_title: History and undo
+      history_text: See who changed what. Bring back someone deleted by accident with one click.
+      sources_title: Sources and evidence
+      sources_text: Attach parish registers, archive records and documents to facts — with how sure you are.
+      map_title: The family on a map
+      map_text: Births, marriages and moves, all on one map.
+      kinship_title: How are we related?
+      kinship_text: Pick two people and Heartwood names the relationship — down to third cousins and great-grandparents.
+      gedcom_title: GEDCOM import and export
+      gedcom_text: Bring your tree from MyHeritage, Ancestry or Gramps, and take it back any time.
+    trust:
+      title: Your data is yours
+      lede: Family history is too important to be held hostage.
+      russia_title: Stored in Russia
+      russia_text: Servers and backups are in a Russian data center, as Federal Law 152-FZ requires.
+      ads_title: No ads, no tracking
+      ads_text: There are no ads or trackers inside the app. We earn from subscriptions, not from your data.
+      living_title: Living people stay private
+      living_text: Only your tree's members see information about living relatives.
+      export_title: Download or delete any time
+      export_text: Your tree downloads as GEDCOM, the standard every genealogy program reads — with every photo, in one archive. Deleting your account is one step.
+      open_title: Open source
+      open_text: Heartwood's code is open. Even if something happens to us, your tree won't disappear.
+      backup_title: Backups
+      backup_text: Data is copied every 6 hours, and every copy is checked.
+      policy: How we handle your data
+    pricing:
+      title: Pricing
+      free_title: Free
+      free_price: "0 ₽"
+      free_text: "Up to %{limit} people per tree, every feature, as many relatives as you like."
+      family_title: Family
+      family_price: Soon
+      family_text: No limit on people. If the subscription ends, your data is never locked or deleted.
+    faq:
+      title: Questions
+      safe_q: Is it safe?
+      safe_a: Only the people you invite can open your tree. Passwords are stored as hashes, connections are encrypted, and data is backed up regularly.
+      shutdown_q: What if Heartwood shuts down?
+      shutdown_a: You can download your tree with all its photos at any time. And Heartwood's code is open — you can run it on your own server.
+      move_q: Can I move my tree from MyHeritage or Ancestry?
+      move_a: Yes. Export your tree as GEDCOM there and upload it to Heartwood — people, families and events come across.
+      relatives_q: Do relatives need an account?
+      relatives_a: To look — no, a view-only link is enough, and living relatives stay hidden on it. To add to the tree — yes, it takes a minute through your invite link.
+      living_q: Who sees my living relatives?
+      living_a: Only your tree's members. Living people are hidden from everyone else.
+      price_q: How much does it cost?
+      price_a: "A tree of up to %{limit} people is free, forever. The paid plan removes the limit."
+    final:
+      title: Start with yourself — your family will tell you the rest
+      cta: Create a tree for free
+    footer:
+      source: Source code
+      tagline: The family tree your whole family builds.
+
+  legal:
+    privacy:
+      title: Privacy policy
+    consent:
+      title: Consent to personal data processing
+    terms:
+      title: Terms of use
+    edition: "Edition of %{date}"
+    missing: not specified
+    consent_checkbox_html: "I give my %{consent}"
+    consent_link: consent to the processing of my personal data
+    accepts_html: "By signing up you accept the %{terms} and the %{privacy}."
+    terms_link: terms of use
+    privacy_link: privacy policy
+    footer: Legal
+
+  accounts:
+    title: Account
+    your_data: Your data
+    your_data_lede: Your tree is yours. Download it any time with every photo, or as plain GEDCOM — it opens in Gramps and every other genealogy program.
+    delete_title: Delete account
+    delete_lede: "Your account and every tree you own are deleted for good: people, photos, history. Trees you only joined stay with their owners. Download your tree first if you may want it."
+    tree_goes:
+      zero: deleted with your account
+      one: deleted with your account — 1 other member loses it
+      other: "deleted with your account — %{count} other members lose it"
+    password_placeholder: Your password, to confirm
+    delete_submit: Delete my account
+    delete_confirm: Delete your account and your trees for good?
+    flash:
+      deleted: Your account has been deleted.
+      wrong_password: That password isn't right.
+
+  edits:
+    title: History
+    lede: Every change anyone makes to the tree. Nothing is lost — undo a mistake or restore someone deleted by accident.
+    empty: No changes yet.
+    empty_lede: When you or your relatives add, edit or delete something, it shows up here.
+    undo: Undo
+    restore: Restore
+    reverted: "Undone by %{name} %{time} ago"
+    by: "%{name}, %{time} ago"
+    family: family of %{names}
+    person:
+      added: Added to the tree
+      edited: "Changed: %{fields}"
+      removed: Deleted from the tree
+    event:
+      added: "Event added: %{kind}"
+      edited: "Event “%{kind}” changed: %{fields}"
+      removed: "Event deleted: %{kind}"
+    family_child:
+      added: "Linked as a child of %{relatives}"
+      removed: "Unlinked as a child of %{relatives}"
+    family_partner:
+      added: "Linked in a family with %{relatives}"
+      removed: "Unlinked from a family with %{relatives}"
+    no_relatives: a new family
+    deleted_user: Deleted user
+    flash:
+      reverted: Undone.
+      failed: "Couldn't undo: %{errors}"
+
   activerecord:
     errors:
       messages:
@@ -450,6 +653,12 @@ en:
         nickname: Nickname
         sex: Sex
         avatar: Photo
+        private: Private
+      event:
+        kind: Type
+        date_raw: Date
+        value: Details
+        place_id: Place
     errors:
       models:
         import:

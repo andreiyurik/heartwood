@@ -24,6 +24,6 @@ class RegistrationsController < ApplicationController
     end
 
     def registration_params
-      params.expect(user: %i[name email_address password])
+      params.expect(user: %i[name email_address password privacy_consent])
     end
 end

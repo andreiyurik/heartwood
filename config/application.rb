@@ -7,6 +7,9 @@ require "rails/all"
 Bundler.require(*Rails.groups)
 
 module Heartwood
+  # AGPL §13: users of a modified hosted copy must be offered its source.
+  SOURCE_CODE_URL = ENV.fetch("SOURCE_CODE_URL", "https://github.com/andreiyurik/heartwood")
+
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.1
@@ -23,6 +26,11 @@ module Heartwood
     #
     config.i18n.available_locales = %i[en ru]
     config.i18n.default_locale   = :en
+
+    config.x.operator = config_for(:operator)
+
+    config.x.backups.directory = Rails.root.join("storage/backups")
+    config.x.backups.offsite   = ENV["BACKUP_BUCKET"].present?
 
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")

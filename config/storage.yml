@@ -25,3 +25,33 @@ local:
 #   service: Mirror
 #   primary: local
 #   mirrors: [ amazon, google, microsoft ]
+
+# Photos on the hosted service: S3-compatible object storage in Russia (Timeweb Cloud, Selectel, Yandex).
+# Non-AWS providers reject the CRC32 checksums aws-sdk-s3 adds by default, hence "when_required".
+object_storage:
+  service: S3
+  endpoint: <%= ENV["STORAGE_ENDPOINT"] %>
+  region: <%= ENV.fetch("STORAGE_REGION", "ru-1") %>
+  bucket: <%= ENV["STORAGE_BUCKET"] %>
+  access_key_id: <%= ENV["STORAGE_ACCESS_KEY_ID"] %>
+  secret_access_key: <%= ENV["STORAGE_SECRET_ACCESS_KEY"] %>
+  force_path_style: true
+  request_checksum_calculation: when_required
+  response_checksum_validation: when_required
+
+# Off-site database snapshots (see docs/architecture/backups.md); a separate bucket and key.
+backups:
+<% if Rails.env.test? %>
+  service: Disk
+  root: <%= Rails.root.join("tmp/backups_offsite") %>
+<% else %>
+  service: S3
+  endpoint: <%= ENV["BACKUP_ENDPOINT"] %>
+  region: <%= ENV.fetch("BACKUP_REGION", "ru-1") %>
+  bucket: <%= ENV["BACKUP_BUCKET"] %>
+  access_key_id: <%= ENV["BACKUP_ACCESS_KEY_ID"] %>
+  secret_access_key: <%= ENV["BACKUP_SECRET_ACCESS_KEY"] %>
+  force_path_style: true
+  request_checksum_calculation: when_required
+  response_checksum_validation: when_required
+<% end %>

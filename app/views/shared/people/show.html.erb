@@ -1,0 +1,88 @@
+<% page_title @person.display_name %>
+<%= render "shared/chrome" %>
+<% page_meta [ @person.nickname, @person.life_years, (t("people.sex.#{@person.sex}") unless @person.sex == "U") ].compact_blank.join(" · ") %>
+<% content_for :page_avatar do %>
+  <%= render "people/avatar", person: @person %>
+<% end %>
+
+<article class="person">
+  <section class="events" id="events">
+    <h2><%= t("events.title") %></h2>
+    <% events = @person.events.includes(:place).sort_by { [ it.date_start || it.date_end || Date.new(9999), it.id ] } %>
+    <% if events.any? %>
+      <ul class="event-list">
+        <% events.each do |event| %>
+          <li class="event-row">
+            <span class="event-date"><%= event.date_label %></span>
+            <span class="event-body">
+              <span class="event-kind"><%= event.kind_label %></span>
+              <% if event.value.present? %><span class="event-detail"><%= event.value %></span><% end %>
+              <% if event.place %><span class="event-place"><%= event.place.name %></span><% end %>
+            </span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="muted"><%= t("events.none") %></p>
+    <% end %>
+  </section>
+
+  <section class="relations" id="family">
+    <h2><%= t("family.title") %></h2>
+    <% { parents: @person.parents, partners: @person.partners, children: @person.children }.each do |group, relatives| %>
+      <div class="relation-group">
+        <h3><%= t("family.#{group}") %></h3>
+        <% visible = relatives.select { @share_link.people.exists?(it.id) } %>
+        <% hidden = relatives.size - visible.size %>
+        <% if visible.any? %>
+          <ul class="people-list">
+            <% visible.each do |relative| %>
+              <li class="person-row">
+                <% if relative.avatar.attached? %>
+                  <%= image_tag relative.avatar, class: "avatar", alt: "" %>
+                <% else %>
+                  <%= initials_avatar relative.display_name %>
+                <% end %>
+                <div class="person-row__body">
+                  <p class="person-row__name"><%= link_to relative.display_name, shared_person_path(@share_link.token, relative) %></p>
+                  <% if relative.life_years.present? %><p class="person-row__meta"><%= relative.life_years %></p><% end %>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+        <% if hidden > 0 %>
+          <p class="muted"><%= t("shared.living_relatives", count: hidden) %></p>
+        <% elsif visible.none? %>
+          <p class="muted"><%= t("family.none") %></p>
+        <% end %>
+      </div>
+    <% end %>
+  </section>
+
+  <% if @person.biography.present? %>
+    <section class="profile-section" id="biography">
+      <h2><%= t("people.sections.biography") %></h2>
+      <div class="biography lexxy-content"><%= @person.biography %></div>
+    </section>
+  <% end %>
+
+  <% citations = @person.events.includes(citations: :source).flat_map { |event| event.citations.map { [ event, it ] } } %>
+  <% if citations.any? %>
+    <section class="profile-section" id="sources">
+      <h2><%= t("people.sections.sources") %></h2>
+      <dl class="sources-list">
+        <% citations.each do |event, citation| %>
+          <dt class="source-event-label"><%= event.kind_label %></dt>
+          <dd class="source-item">
+            <p class="source-title"><%= citation.source.title %>
+              <span class="confidence-badge confidence-badge--<%= citation.confidence %>"><%= citation.confidence_label %></span>
+            </p>
+            <% meta = [ citation.source.author, citation.source.repository, citation.page ].compact_blank %>
+            <% if meta.any? %><p class="source-meta muted"><%= meta.join(" · ") %></p><% end %>
+          </dd>
+        <% end %>
+      </dl>
+    </section>
+  <% end %>
+</article>

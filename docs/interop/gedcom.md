@@ -70,10 +70,27 @@ deliberately:
 - Lean on a Ruby GEDCOM parsing gem if a maintained one fits the vanilla-stack rule; otherwise
   a small hand-written line parser is very doable (the grammar is simple). Evaluate in Phase 2.
 - The whole pipeline (upload → parse → map → report) is described in [[import-export]].
-- **Gap:** `app/services/gedcom/writer.rb` does not emit `SOUR`/`CITA`/`QUAY` at all yet —
-  exported files currently carry no source/citation data. The confidence → `QUAY` mapping
-  decision lives in [[source-citation]]; wiring it into the writer is real, separate work for
-  whenever source export is built, not something to assume is already covered.
+
+## What we write and read (the field map)
+Export is **GEDCOM 5.5.1** text for now, because that is what Gramps and every legacy app read
+best; the 7.0 header switch is a later, separate step. Every field a user can type survives
+export → re-import:
+
+| Heartwood | GEDCOM |
+|---|---|
+| `name_prefix`, `given_names`, `nickname`, `surname`, `name_suffix` | `NAME` with `NPFX` `GIVN` `NICK` `SURN` `NSFX` |
+| `sex` | `SEX` |
+| event `kind`, `date_raw`, `value` | `BIRT`… with `DATE`, `PLAC` |
+| biography (rich text) | `1 NOTE` as plain text, `CONT` per line — formatting is lost, the words are not |
+| `Source` (`title`, `author`, `citation_text`, `url`, `repository`, `source_type`) | `0 @S1@ SOUR` with `TITL` `AUTH` `TEXT` `WWW` `_TYPE`, and `REPO` → a `0 @R1@ REPO` record with its `NAME` |
+| `Citation` on an event (`page`, `confidence`, `text`, `date`) | `2 SOUR @S1@` with `PAGE`, `QUAY` (see [[source-citation]]), `DATA`/`TEXT`, `DATA`/`DATE` |
+| photo and pictures in the biography | `0 @O1@ OBJE` + `FILE media/…` — **only inside a GEDZIP**, where the file exists |
+| anything else | the raw store (`gedcom_raw` on people, families, events), **with its sub-lines** |
+
+On import, `NOTE` may be inline or a pointer to a `0 @N1@ NOTE` record; both become the
+biography. `SOUR` records become sources, an event's `SOUR` becomes a citation. A `REPO`
+pointer resolves to its `NAME`. Unknown tags keep their whole subtree, so e.g. a `CREM` with its
+`DATE` and `PLAC` comes back out exactly as it went in.
 
 ## Related
 - [[import-export]] · [[domain-model]] · [[source-citation]] · [[media]] · [[adr/0004-gedcom-interop]]

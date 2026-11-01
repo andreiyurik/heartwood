@@ -1,0 +1,22 @@
+<% page_title t("legal.consent.title") %>
+<% page_meta t("legal.edition", date: l(Legal::VERSION.to_date, format: :long)) %>
+
+<article class="legal">
+  <p class="muted">This is a translation for convenience; for users in Russia the Russian version prevails.</p>
+
+  <p>By signing up for Heartwood and ticking the consent box, I freely, of my own will and in my own interest consent to the operator — <%= operator(:name) %> (INN <%= operator(:inn) %>, OGRN <%= operator(:ogrn) %>, address: <%= operator(:address) %>) — processing my personal data as follows.</p>
+
+  <h2>Which data</h2>
+  <p>Name, email address, password hash, IP address and browser details, and whatever I enter into the family tree myself.</p>
+
+  <h2>Purposes</h2>
+  <p>Running my account; keeping the family tree and letting the members I invite work on it with me; service emails; keeping the data safe.</p>
+
+  <h2>What may be done with it</h2>
+  <p>Collection, recording, organisation, accumulation, storage, correction, retrieval, use, disclosure — only to members of my tree and to processors acting for the operator (hosting provider, email delivery) — anonymisation, blocking, deletion and destruction. Processing is automated.</p>
+
+  <h2>Duration and withdrawal</h2>
+  <p>This consent lasts until the account is deleted or the consent is withdrawn. I can withdraw it by deleting my account on the Account page or by writing to <%= operator(:email) %>. The data is then destroyed within 30 days unless the law requires otherwise.</p>
+
+  <p>Details are in the <%= link_to "Privacy policy", privacy_path %>.</p>
+</article>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_27_164812) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_01_205852) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -49,6 +49,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_164812) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "archives", force: :cascade do |t|
+    t.integer "tree_id", null: false
+    t.integer "user_id", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tree_id"], name: "index_archives_on_tree_id"
+    t.index ["user_id"], name: "index_archives_on_user_id"
+  end
+
   create_table "citations", force: :cascade do |t|
     t.integer "citable_id", null: false
     t.string "citable_type", null: false
@@ -75,6 +85,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_164812) do
     t.index ["person_a_id", "person_b_id"], name: "index_duplicate_hints_on_person_a_id_and_person_b_id"
     t.index ["tree_id", "status"], name: "index_duplicate_hints_on_tree_id_and_status"
     t.index ["tree_id"], name: "index_duplicate_hints_on_tree_id"
+  end
+
+  create_table "edits", force: :cascade do |t|
+    t.integer "tree_id", null: false
+    t.integer "user_id"
+    t.string "subject_type", null: false
+    t.integer "subject_id", null: false
+    t.integer "person_id"
+    t.string "action", null: false
+    t.json "particulars", default: {}, null: false
+    t.datetime "reverted_at"
+    t.integer "reverted_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id"], name: "index_edits_on_person_id"
+    t.index ["reverted_by_id"], name: "index_edits_on_reverted_by_id"
+    t.index ["subject_type", "subject_id"], name: "index_edits_on_subject"
+    t.index ["tree_id", "created_at"], name: "index_edits_on_tree_id_and_created_at"
+    t.index ["tree_id"], name: "index_edits_on_tree_id"
+    t.index ["user_id"], name: "index_edits_on_user_id"
   end
 
   create_table "events", force: :cascade do |t|
@@ -198,6 +228,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_164812) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "share_links", force: :cascade do |t|
+    t.integer "tree_id", null: false
+    t.string "token", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_share_links_on_token", unique: true
+    t.index ["tree_id"], name: "index_share_links_on_tree_id", unique: true
+  end
+
   create_table "sources", force: :cascade do |t|
     t.string "author"
     t.text "citation_text"
@@ -239,15 +278,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_164812) do
     t.string "name"
     t.string "password_digest", null: false
     t.datetime "updated_at", null: false
+    t.datetime "privacy_consented_at"
+    t.string "privacy_consent_version"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "archives", "trees"
+  add_foreign_key "archives", "users"
   add_foreign_key "citations", "sources"
   add_foreign_key "duplicate_hints", "people", column: "person_a_id"
   add_foreign_key "duplicate_hints", "people", column: "person_b_id"
   add_foreign_key "duplicate_hints", "trees"
+  add_foreign_key "edits", "trees"
+  add_foreign_key "edits", "users"
+  add_foreign_key "edits", "users", column: "reverted_by_id"
   add_foreign_key "events", "trees"
   add_foreign_key "families", "trees"
   add_foreign_key "family_children", "families"
@@ -263,6 +309,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_27_164812) do
   add_foreign_key "places", "trees"
   add_foreign_key "sessions", "trees", column: "current_tree_id"
   add_foreign_key "sessions", "users"
+  add_foreign_key "share_links", "trees"
   add_foreign_key "sources", "trees"
   add_foreign_key "tree_memberships", "trees"
   add_foreign_key "tree_memberships", "users"

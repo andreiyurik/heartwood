@@ -1,0 +1,37 @@
+<% page_title t("accounts.title") %>
+<% page_meta "#{Current.user.name} · #{Current.user.email_address}" %>
+<% back_link root_path %>
+
+<section class="account-section">
+  <h2><%= t("accounts.your_data") %></h2>
+  <p class="muted"><%= t("accounts.your_data_lede") %></p>
+  <div class="account-section__actions">
+    <%= button_to archives_path, class: "btn" do %><%= icon_tag "download" %> <%= t("archives.create") %><% end %>
+    <%= button_to export_path, class: "btn" do %><%= icon_tag "download" %> <%= t("exports.create") %><% end %>
+    <%= link_to t("legal.privacy.title"), privacy_path, class: "btn btn--ghost" %>
+  </div>
+</section>
+
+<section class="account-section">
+  <h2><%= t("accounts.delete_title") %></h2>
+  <p class="muted"><%= t("accounts.delete_lede") %></p>
+
+  <% owned = Current.user.owned_trees.to_a %>
+  <% if owned.any? %>
+    <ul class="account-trees">
+      <% owned.each do |tree| %>
+        <li>
+          <strong><%= tree.name %></strong>
+          <span class="muted"><%= t("accounts.tree_goes", count: tree.users.count - 1) %></span>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <%= form_with url: account_path, method: :delete, class: "account-delete",
+        data: { turbo_confirm: t("accounts.delete_confirm") } do |form| %>
+    <%= form.password_field :password, class: "input", required: true, autocomplete: "current-password",
+          placeholder: t("accounts.password_placeholder"), aria: { label: t("accounts.password_placeholder") } %>
+    <%= form.submit t("accounts.delete_submit"), class: "btn btn--negative" %>
+  <% end %>
+</section>

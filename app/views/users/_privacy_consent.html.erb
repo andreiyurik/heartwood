@@ -1,0 +1,5 @@
+<label class="auth-consent">
+  <%= form.check_box :privacy_consent, required: true %>
+  <span><%= t("legal.consent_checkbox_html", consent: link_to(t("legal.consent_link"), consent_path, target: "_blank")) %></span>
+</label>
+<p class="auth-hint"><%= t("legal.accepts_html", terms: link_to(t("legal.terms_link"), terms_path, target: "_blank"), privacy: link_to(t("legal.privacy_link"), privacy_path, target: "_blank")) %></p>

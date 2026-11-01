@@ -1,4 +1,4 @@
-<%# locals: node (graph node hash), focus (bool), mode (string), depth (integer) %>
+<%# locals: node (graph node hash), focus (bool), mode (string), depth (integer), link_for (lambda or nil) %>
 <%# Every person is the same card; clicking one loads the person into the slide-over panel. %>
 <% if node[:ghost] %>
   <div class="tree-node tree-node--card tree-node--ghost"
@@ -18,7 +18,8 @@
     <% if node[:living] %>
       <p class="node-name node-name--living"><%= node[:name] %></p>
     <% else %>
-      <%= link_to person_panel_path(node[:id], return_to: request.fullpath), data: { turbo_frame: "person-panel" } do %>
+      <% href, frame = link_for ? [ link_for.call(node[:id]), "_top" ] : [ person_panel_path(node[:id], return_to: request.fullpath), "person-panel" ] %>
+      <%= link_to href, data: { turbo_frame: frame } do %>
         <% if node[:avatar_url].present? %>
           <%= image_tag node[:avatar_url], class: "node-avatar", alt: node[:name] %>
         <% else %>
