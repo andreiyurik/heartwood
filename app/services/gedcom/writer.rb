@@ -97,7 +97,7 @@ module Gedcom
 
       def write_event(event)
         line 1, event.kind
-        line 2, "DATE", event.date_raw
+        line 2, "DATE", event.gedcom_date
         line 2, "PLAC", event.value
         event.citations.sort_by(&:id).each { |citation| write_citation(citation) }
         write_raw(event.gedcom_raw, level: 2)

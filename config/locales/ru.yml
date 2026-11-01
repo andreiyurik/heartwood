@@ -277,7 +277,7 @@ ru:
     date_label: Дата
     detail_label: Подробности
     select_blank: "Выберите…"
-    date_placeholder: "напр. 10 ДЕК 1815 или 1815"
+    date_placeholder: "напр. 10 декабря 1815, ок. 1815 или 1815"
     detail_placeholder: "напр. Инженер"
     place_label: Место
     place_placeholder: "напр. Бостон, Массачусетс"
@@ -351,6 +351,15 @@ ru:
     expires: Ссылка работает 24 часа, потом архив удаляется — в нём личные данные вашей семьи.
     failed: Архив собрать не удалось. Попробуйте ещё раз, а если не выйдет — напишите нам.
     retry: Собрать заново
+
+  fuzzy_dates:
+    about: "ок. %{date}"
+    before: "до %{date}"
+    after: "после %{date}"
+    between: "между %{from} и %{to}"
+    from_to: "с %{from} по %{to}"
+    from: "с %{date}"
+    to: "по %{date}"
 
   exports:
     create: Экспорт GEDCOM
@@ -675,6 +684,7 @@ ru:
     formats:
       long: "%-d %B %Y"
     month_names: [~, января, февраля, марта, апреля, мая, июня, июля, августа, сентября, октября, ноября, декабря]
+    standalone_month_names: [~, январь, февраль, март, апрель, май, июнь, июль, август, сентябрь, октябрь, ноябрь, декабрь]
 
   activerecord:
     errors:

@@ -145,7 +145,7 @@ if pt.people.none?
   evt(алекс, kind: "OCCU",                          value: "Поэт, прозаик, драматург; камер-юнкер")
   evt(алекс, kind: "EDUC",                          value: "Царскосельский лицей, 1811–1817")
   evt(лев_п, kind: "BIRT", date: "9 АВГ 1805",    value: "Москва")
-  evt(лев_п, kind: "DEAT", date: "19 ЮЛ 1852",    value: "Одесса")
+  evt(лев_п, kind: "DEAT", date: "19 ИЮЛ 1852",   value: "Одесса")
   evt(лев_п, kind: "OCCU",                          value: "Военный офицер, участник Кавказских походов")
   f3.children << [ ольга, алекс, лев_п ]
 
@@ -159,7 +159,7 @@ if pt.people.none?
   evt(натал, kind: "DEAT", date: "26 НОЯ 1863",   value: "Санкт-Петербург")
   evt(мар_п, kind: "BIRT", date: "19 МАЙ 1832",   value: "Москва")
   evt(мар_п, kind: "DEAT", date: "7 МАР 1919",    value: "Москва")
-  evt(алмл,  kind: "BIRT", date: "6 ЮЛ 1833",     value: "Санкт-Петербург")
+  evt(алмл,  kind: "BIRT", date: "6 ИЮЛ 1833",    value: "Санкт-Петербург")
   evt(алмл,  kind: "DEAT", date: "19 ЯНВ 1914",   value: "Москва")
   evt(алмл,  kind: "OCCU",                          value: "Генерал от кавалерии")
   evt(григ,  kind: "BIRT", date: "14 МАЙ 1835",   value: "Санкт-Петербург")
