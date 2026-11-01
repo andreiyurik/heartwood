@@ -428,6 +428,39 @@ en:
       cta_link: Open Heartwood
       signoff: "— The Heartwood team"
 
+  legal:
+    privacy:
+      title: Privacy policy
+    consent:
+      title: Consent to personal data processing
+    terms:
+      title: Terms of use
+    edition: "Edition of %{date}"
+    missing: not specified
+    consent_checkbox_html: "I give my %{consent}"
+    consent_link: consent to the processing of my personal data
+    accepts_html: "By signing up you accept the %{terms} and the %{privacy}."
+    terms_link: terms of use
+    privacy_link: privacy policy
+    footer: Legal
+
+  accounts:
+    title: Account
+    your_data: Your data
+    your_data_lede: Your tree is yours. Download it any time as GEDCOM — it opens in Gramps and every other genealogy program.
+    delete_title: Delete account
+    delete_lede: "Your account and every tree you own are deleted for good: people, photos, history. Trees you only joined stay with their owners. Download your tree first if you may want it."
+    tree_goes:
+      zero: deleted with your account
+      one: deleted with your account — 1 other member loses it
+      other: "deleted with your account — %{count} other members lose it"
+    password_placeholder: Your password, to confirm
+    delete_submit: Delete my account
+    delete_confirm: Delete your account and your trees for good?
+    flash:
+      deleted: Your account has been deleted.
+      wrong_password: That password isn't right.
+
   edits:
     title: History
     lede: Every change anyone makes to the tree. Nothing is lost — undo a mistake or restore someone deleted by accident.
@@ -453,6 +486,7 @@ en:
       added: "Linked in a family with %{relatives}"
       removed: "Unlinked from a family with %{relatives}"
     no_relatives: a new family
+    deleted_user: Deleted user
     flash:
       reverted: Undone.
       failed: "Couldn't undo: %{errors}"

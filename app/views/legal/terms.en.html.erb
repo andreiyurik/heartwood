@@ -1,0 +1,33 @@
+<% page_title t("legal.terms.title") %>
+<% page_meta t("legal.edition", date: l(Legal::VERSION.to_date, format: :long)) %>
+
+<article class="legal">
+  <p class="muted">This is a translation for convenience; for users in Russia the Russian version prevails.</p>
+
+  <p>This is an agreement between you and <%= operator(:name) %> ("we") about using the Heartwood service. By signing up you accept it.</p>
+
+  <h2>1. The service</h2>
+  <p>Heartwood is a service for keeping a family tree together. Its source code is open under AGPL-3.0; these terms cover our hosted service.</p>
+
+  <h2>2. Your data stays yours</h2>
+  <p>Everything you put into a tree belongs to you. We get no rights to it beyond what is needed to store it and show it to you and your tree's members. You can download your tree as standard GEDCOM and delete your account at any time.</p>
+
+  <h2>3. Your responsibilities</h2>
+  <ul>
+    <li>enter information about other people only for personal and family purposes, and respect their rights;</li>
+    <li>don't upload material you have no rights to, or that the law forbids;</li>
+    <li>keep your password secret and invite only people you trust: an invited editor can change the tree.</li>
+  </ul>
+
+  <h2>4. Plans</h2>
+  <p>The basics are free, with a limit on people per tree. A paid plan removes the limits; payment terms are published separately. When a paid plan ends, your data is never locked or deleted.</p>
+
+  <h2>5. Liability</h2>
+  <p>We do everything reasonable to keep your data safe, including change history and backups, but the service is provided "as is". We recommend downloading a copy of your tree from time to time.</p>
+
+  <h2>6. Ending</h2>
+  <p>You can stop at any time by deleting your account. We may restrict access for a serious breach of these terms, first letting you download your data unless the law forbids it.</p>
+
+  <h2>7. Other</h2>
+  <p>These terms are governed by Russian law. We email you about changes in advance. Questions: <%= operator(:email) %>.</p>
+</article>

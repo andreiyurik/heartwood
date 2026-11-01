@@ -28,8 +28,8 @@ points at the person it concerns (for filtering and links). `action` is
 `added` / `edited` / `removed`. `particulars` (JSON) keeps what's needed after the fact:
 - `name` — the subject's display label at the time;
 - `before` / `after` — changed attributes, for updates;
-- `snapshot` — for a deleted person: their attributes, events (with citations) and family
-  links, so a restore brings back the whole person with the same id (SQLite `AUTOINCREMENT`
+- `snapshot` — for a deleted person: their attributes, biography, photo blob id, events (with
+  citations) and family links, so a restore brings back the whole person with the same id (SQLite `AUTOINCREMENT`
   never reuses ids, so links and URLs keep working).
 
 Tracked: `Person`, `Event`, `FamilyChild`, `FamilyPartner` (via the `Editable` concern). Only
@@ -46,10 +46,14 @@ action and is not logged row by row. Records destroyed through a parent
 - The change is stamped `reverted_at` / `reverted_by`; the inverse operation is recorded as a
   new change, so history stays append-only.
 
+## Retention
+Active Storage always deletes the attachment row with its record, so a deleted person's photo
+*file* is kept instead (`has_one_attached :avatar, dependent: false`) and its blob id is stored in
+the snapshot; a restore re-attaches it. `Edit.prune` drops edits older than 90 days and purges
+those files once no restorable removal needs them — see [[accounts-and-legal]].
+
 ## Deferred
 - Biography (Action Text) revisions — Writebook-style `Edit` versions.
-- Photos of a deleted person: the avatar is kept (`dependent: false`) so a restore re-links it;
-  pruning old changes and their orphaned photos is a later job.
 - Per-person history tab on the profile.
-- Retention / pruning policy; the page shows the latest 200 rows (pagination later).
+- The page shows the latest 200 rows (pagination later).
 - Restoring a person past the free plan's people limit fails with a flash alert, not silently.

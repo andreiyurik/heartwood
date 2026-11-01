@@ -27,6 +27,7 @@
           <%= icon_tag "password" %>
         </label>
         <p class="auth-hint"><%= t("registrations.password_hint") %></p>
+        <%= render "users/privacy_consent", form: form %>
         <%= form.submit t("joins.submit"), class: "btn btn--primary" %>
       <% end %>
 
