@@ -26,6 +26,9 @@ module Heartwood
 
     config.x.operator = config_for(:operator)
 
+    config.x.backups.directory = Rails.root.join("storage/backups")
+    config.x.backups.offsite   = ENV["BACKUP_BUCKET"].present?
+
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
   end

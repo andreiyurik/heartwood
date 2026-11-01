@@ -48,6 +48,9 @@ gem "image_processing", "~> 2.1"
 # иначе boot падает там, где libvips не установлен системно
 gem "ruby-vips", "~> 2.2", require: false
 
+# Active Storage's S3 adapter for photos and off-site backups in Russian object storage.
+gem "aws-sdk-s3", require: false
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

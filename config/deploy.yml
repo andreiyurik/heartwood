@@ -40,6 +40,22 @@ registry:
 env:
   secret:
     - RAILS_MASTER_KEY
+    # The hosted service in Russia also sets these (see docs/architecture/backups.md and
+    # docs/features/accounts-and-legal.md); add each to .kamal/secrets before uncommenting.
+    # - OPERATOR_NAME
+    # - OPERATOR_INN
+    # - OPERATOR_OGRN
+    # - OPERATOR_ADDRESS
+    # - OPERATOR_EMAIL
+    # - OPERATOR_HOSTING
+    # - STORAGE_ENDPOINT
+    # - STORAGE_BUCKET
+    # - STORAGE_ACCESS_KEY_ID
+    # - STORAGE_SECRET_ACCESS_KEY
+    # - BACKUP_ENDPOINT
+    # - BACKUP_BUCKET
+    # - BACKUP_ACCESS_KEY_ID
+    # - BACKUP_SECRET_ACCESS_KEY
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
