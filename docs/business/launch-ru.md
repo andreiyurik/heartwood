@@ -18,7 +18,7 @@ See [[positioning]], [[pricing-hosting]], [[open-core]].
 ## What it changes
 - **Personal data law (152-ФЗ).** Personal data of RF citizens must be first recorded and
   stored on servers located in Russia (art. 18 §5). The hosted instance and its backups run
-  in a Russian data center (Selectel, Yandex Cloud, VK Cloud, Timeweb). Before launch: notify
+  in a Russian data center — Timeweb Cloud (VPS + S3), decided 2026-11-01. Before launch: notify
   Roskomnadzor as a personal-data operator, publish a privacy policy («Политика обработки
   персональных данных»), collect explicit consent at sign-up, and give users account deletion.
 - **Payments.** Stripe does not work in RF. Use ЮKassa or CloudPayments (cards + СБП),
@@ -41,6 +41,6 @@ See [[positioning]], [[pricing-hosting]], [[open-core]].
 ## Before the first real user (outside the code)
 - Register the operator (ИП/ООО), fill the `OPERATOR_*` settings, have a lawyer review the
   three documents, notify Roskomnadzor.
-- Rent a server and two object-storage buckets in a Russian data center; set `STORAGE_*` and
+- Rent a Timeweb Cloud VPS and two Timeweb S3 buckets (photos, backups); set `STORAGE_*` and
   `BACKUP_*`, versioning on the photo bucket, a 30-day lifecycle rule on the backup bucket.
 - Run the restore drill once on staging.

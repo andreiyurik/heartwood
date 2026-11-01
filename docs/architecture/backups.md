@@ -26,16 +26,22 @@ a hosted service adds: off-site copies, verification of every copy, a written re
    instead of keeping a bad copy.
 3. Gzip it to `storage/backups/heartwood-<UTC timestamp>.sqlite3.gz`.
 4. If off-site is configured (`BACKUP_BUCKET`), upload it through the Active Storage `backups`
-   service (S3 adapter → Yandex Object Storage / Selectel, `aws-sdk-s3`).
+   service (S3 adapter, `aws-sdk-s3`; the hosted service uses Timeweb Cloud S3).
 5. Prune local snapshots older than `Backup::LOCAL_RETENTION` (7 days).
 
 Off-site copies expire through a **bucket lifecycle rule of 30 days** (set once in the provider's
 console) — matching the 30-day promise in the privacy policy ([[accounts-and-legal]]).
 
 ## Configuration (hosted, Kamal secrets)
-`BACKUP_BUCKET`, `BACKUP_ENDPOINT` (e.g. `https://storage.yandexcloud.net`), `BACKUP_REGION`
-(`ru-central1`), `BACKUP_ACCESS_KEY_ID`, `BACKUP_SECRET_ACCESS_KEY`; the same set with the
-`STORAGE_` prefix for photos. Use a separate bucket and key for backups, with write-only rights
+`BACKUP_BUCKET`, `BACKUP_ENDPOINT`, `BACKUP_REGION`, `BACKUP_ACCESS_KEY_ID`,
+`BACKUP_SECRET_ACCESS_KEY`; the same set with the `STORAGE_` prefix for photos. The hosted service
+runs on a Timeweb Cloud VPS with Timeweb S3: endpoint `https://s3.twcstorage.ru`, region `ru-1`
+(the default; check both on the bucket's page). Endpoint and region aren't secret, so they sit in
+`env.clear` in `config/deploy.yml`.
+
+Both services set `request_checksum_calculation`/`response_checksum_validation` to
+`when_required`: since aws-sdk-s3 1.178 the SDK adds CRC32 checksums to every upload, and
+S3-compatible providers that don't implement them reject the request. Use a separate bucket and key for backups, with write-only rights
 if the provider allows, so a leaked app key can't delete the backups.
 
 ## Restore drill
