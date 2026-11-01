@@ -5,6 +5,7 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
     get root_url
     assert_response :success
     assert_select "h1", I18n.t("landing.hero.title")
+    assert_select "title", I18n.t("landing.meta.title")
     assert_select "a[href=?]", new_registration_path, minimum: 2
     assert_select "a[href=?]", new_session_path
   end
