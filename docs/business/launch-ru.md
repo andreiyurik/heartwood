@@ -36,7 +36,7 @@ See [[positioning]], [[pricing-hosting]], [[open-core]].
 3. ✅ [[backups]] — verified snapshots every 6 hours, off-site in Russia, restore drill.
 4. ✅ [[landing]] — the story for signed-out visitors.
 5. ✅ Archive with photos — GEDZIP layout as `.zip`, and its import (see [[import-export]]).
-6. View-only share links (see [[privacy-access]]).
+6. ✅ View-only share links (see [[privacy-access]]).
 
 ## Before the first real user (outside the code)
 - Register the operator (ИП/ООО), fill the `OPERATOR_*` settings, have a lawyer review the

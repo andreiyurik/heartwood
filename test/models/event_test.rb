@@ -72,7 +72,7 @@ class EventTest < ActiveSupport::TestCase
   end
 
   test "summary shows the date for events and the value for facts" do
-    assert_equal "10 DEC 1815", Event.new(kind: "BIRT", date_raw: "10 DEC 1815").summary
+    assert_equal "10 December 1815", Event.new(kind: "BIRT", date_raw: "10 DEC 1815").summary
     assert_equal "Engineer", Event.new(kind: "OCCU", value: "Engineer").summary
   end
 

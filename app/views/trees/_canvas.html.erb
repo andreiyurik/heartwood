@@ -1,5 +1,5 @@
-<%# locals: graph (graph hash), mode (string), depth (integer), focus_id (id of the highlighted person);
-    the block adds view controls to the action row %>
+<%# locals: graph (graph hash), mode (string), depth (integer), focus_id (id of the highlighted person),
+    link_for (optional: person id → page URL, instead of the slide-over panel); the block adds view controls %>
 <div class="tree-page"
      data-controller="tree"
      data-tree-graph-value="<%= graph.to_json %>"
@@ -66,7 +66,8 @@
                 node:  nd,
                 focus: nd[:id] == focus_id,
                 mode:  mode,
-                depth: depth %>
+                depth: depth,
+                link_for: local_assigns[:link_for] %>
         <% end %>
       </div>
     </div>

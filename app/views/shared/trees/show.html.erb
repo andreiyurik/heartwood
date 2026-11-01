@@ -1,0 +1,13 @@
+<% page_title @tree.name %>
+<%= render "shared/chrome" %>
+
+<% if @root %>
+  <% canvas_page %>
+  <% page_meta t("shared.tree_meta", people: t("trees.people", count: @graph[:nodes].count { !it[:living] }),
+       generations: t("trees.generations", count: @graph[:generations])) %>
+
+  <%= render layout: "trees/canvas", locals: { graph: @graph, mode: @graph[:mode], depth: ClanTreesController::CLAN_DEPTH,
+        focus_id: @root.id, link_for: ->(id) { shared_person_path(@share_link.token, id) } } do %><% end %>
+<% else %>
+  <p class="muted"><%= t("shared.empty") %></p>
+<% end %>

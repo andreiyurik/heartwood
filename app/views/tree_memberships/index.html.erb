@@ -29,6 +29,36 @@
       <% end %>
     </div>
   </section>
+
+  <section class="invite-box">
+    <h2 id="share_link_label"><%= t("share_links.title") %></h2>
+    <p class="muted"><%= t("share_links.lede") %></p>
+    <% if (share_link = Current.tree.share_link) %>
+      <% shared_url = shared_tree_url(share_link.token) %>
+      <div class="invite-box__actions">
+        <input type="text" class="input" value="<%= shared_url %>" aria-labelledby="share_link_label" readonly>
+
+        <%= button_to_copy_to_clipboard(shared_url) do %>
+          <%= icon_tag "copy-paste" %>
+          <span class="for-screen-reader"><%= t("share_links.copy") %></span>
+        <% end %>
+
+        <%= button_to share_link_path, class: "btn btn--round", title: t("share_links.renew"),
+              data: { turbo_confirm: t("share_links.renew_confirm") } do %>
+          <%= icon_tag "refresh" %>
+          <span class="for-screen-reader"><%= t("share_links.renew") %></span>
+        <% end %>
+
+        <%= button_to share_link_path, method: :delete, class: "btn btn--round btn--negative", title: t("share_links.destroy"),
+              data: { turbo_confirm: t("share_links.destroy_confirm") } do %>
+          <%= icon_tag "minus" %>
+          <span class="for-screen-reader"><%= t("share_links.destroy") %></span>
+        <% end %>
+      </div>
+    <% else %>
+      <%= button_to t("share_links.create"), share_link_path, class: "btn" %>
+    <% end %>
+  </section>
 <% end %>
 
 <ul class="people-list">
