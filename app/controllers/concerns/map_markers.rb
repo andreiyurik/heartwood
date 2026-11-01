@@ -9,7 +9,7 @@ module MapMarkers
           lat:    place.latitude.to_f,
           lng:    place.longitude.to_f,
           kind:   event.kind_label,
-          date:   event.date_raw,
+          date:   event.date_label,
           place:  place.name,
           person: person_for(event)
         }

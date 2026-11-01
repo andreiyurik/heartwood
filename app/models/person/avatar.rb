@@ -5,7 +5,8 @@ module Person::Avatar
   AVATAR_MAX_BYTES     = 5.megabytes
 
   included do
-    has_one_attached :avatar
+    # The file outlives its person so a restore from history can re-attach it; Edit.prune purges it.
+    has_one_attached :avatar, dependent: false
 
     validate :avatar_is_an_image, if: -> { avatar.attached? }
   end

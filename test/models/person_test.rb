@@ -71,4 +71,15 @@ class PersonTest < ActiveSupport::TestCase
   ensure
     Current.reset
   end
+
+  test "a person flagged as a possible duplicate can still be deleted" do
+    tree = trees(:alpha)
+    a = Person.create!(given_names: "John", sex: "M", tree: tree)
+    b = Person.create!(given_names: "John", sex: "M", tree: tree)
+    tree.duplicate_hints.create!(person_a: a, person_b: b, score: 80, reasons: [])
+
+    assert_difference -> { DuplicateHint.count }, -1 do
+      b.destroy!
+    end
+  end
 end

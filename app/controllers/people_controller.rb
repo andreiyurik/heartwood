@@ -42,7 +42,7 @@ class PeopleController < ApplicationController
 
   def destroy
     @person.destroy!
-    redirect_to people_url, notice: t("people.flash.destroyed")
+    redirect_to people_url, notice: t("people.flash.destroyed"), flash: { undo_edit_id: @person.edits.removed.last&.id }
   end
 
   private

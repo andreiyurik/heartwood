@@ -1,0 +1,140 @@
+<% content_for :title, t("landing.meta.title") %>
+<% limit = Tree::PLANS.fetch("free")[:people_limit] %>
+<% content_for :body_class, "landing-page" %>
+
+<% content_for :head do %>
+  <meta name="description" content="<%= t("landing.meta.description") %>">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="<%= t("landing.meta.title") %>">
+  <meta property="og:description" content="<%= t("landing.meta.description") %>">
+  <meta property="og:image" content="<%= image_url("landing/tree.#{I18n.locale}.png") %>">
+  <meta property="og:locale" content="<%= I18n.locale == :ru ? "ru_RU" : "en_US" %>">
+<% end %>
+
+<% content_for :header do %>
+  <%= link_to t("landing.hero.sign_in"), new_session_path, class: "btn btn--ghost" %>
+  <%= link_to t("landing.hero.cta"), new_registration_path, class: "btn btn--primary" %>
+<% end %>
+
+<div class="landing">
+  <section class="landing-hero">
+    <p class="landing-eyebrow"><%= t("landing.hero.eyebrow") %></p>
+    <h1><%= t("landing.hero.title") %></h1>
+    <p class="landing-lede"><%= t("landing.hero.lede") %></p>
+    <div class="landing-actions">
+      <%= link_to t("landing.hero.cta"), new_registration_path, class: "btn btn--primary btn--large" %>
+      <span class="landing-note"><%= t("landing.hero.note", limit: limit) %></span>
+    </div>
+    <%= image_tag "landing/tree.#{I18n.locale}.png", alt: t("landing.hero.image_alt"), class: "landing-shot", width: 940, height: 917 %>
+  </section>
+
+  <section class="landing-section" aria-labelledby="pain">
+    <h2 id="pain"><%= t("landing.pain.title") %></h2>
+    <ul class="landing-grid">
+      <% %w[stories photos pieces].each do |item| %>
+        <li>
+          <h3><%= t("landing.pain.#{item}_title") %></h3>
+          <p><%= t("landing.pain.#{item}_text") %></p>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+
+  <section class="landing-section" aria-labelledby="how">
+    <h2 id="how"><%= t("landing.how.title") %></h2>
+    <ol class="landing-grid landing-steps">
+      <% %w[create invite together].each do |step| %>
+        <li>
+          <h3><%= t("landing.how.#{step}_title") %></h3>
+          <p><%= t("landing.how.#{step}_text") %></p>
+        </li>
+      <% end %>
+    </ol>
+  </section>
+
+  <section class="landing-section landing-why" aria-labelledby="why">
+    <h2 id="why"><%= t("landing.why.title") %></h2>
+    <p class="landing-lede"><%= t("landing.why.lede") %></p>
+    <blockquote class="landing-quote"><p><%= t("landing.why.research") %></p></blockquote>
+    <ul class="landing-grid">
+      <% %w[roots legacy talk].each do |item| %>
+        <li>
+          <h3><%= t("landing.why.#{item}_title") %></h3>
+          <p><%= t("landing.why.#{item}_text") %></p>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+
+  <section class="landing-section" aria-labelledby="features">
+    <h2 id="features"><%= t("landing.features.title") %></h2>
+    <ul class="landing-grid landing-features">
+      <% { live: "people", history: "refresh", sources: "search", map: "map", kinship: "person", gedcom: "download" }.each do |feature, icon| %>
+        <li>
+          <%= icon_tag icon %>
+          <h3><%= t("landing.features.#{feature}_title") %></h3>
+          <p><%= t("landing.features.#{feature}_text") %></p>
+        </li>
+      <% end %>
+    </ul>
+    <%= image_tag "landing/profile.#{I18n.locale}.png", alt: "", class: "landing-shot", loading: "lazy", width: 940, height: 917 %>
+  </section>
+
+  <section class="landing-section" aria-labelledby="trust">
+    <h2 id="trust"><%= t("landing.trust.title") %></h2>
+    <p class="landing-lede"><%= t("landing.trust.lede") %></p>
+    <ul class="landing-grid landing-trust">
+      <% if Rails.configuration.x.operator[:hosting].present? %>
+        <li><%= icon_tag "check" %><h3><%= t("landing.trust.russia_title") %></h3><p><%= t("landing.trust.russia_text") %></p></li>
+      <% end %>
+      <% %w[ads living export open backup].each do |item| %>
+        <li><%= icon_tag "check" %><h3><%= t("landing.trust.#{item}_title") %></h3><p><%= t("landing.trust.#{item}_text") %></p></li>
+      <% end %>
+    </ul>
+    <p><%= link_to t("landing.trust.policy"), privacy_path %> · <%= link_to t("landing.footer.source"), Heartwood::SOURCE_CODE_URL %></p>
+  </section>
+
+  <section class="landing-section" id="pricing" aria-labelledby="pricing-title">
+    <h2 id="pricing-title"><%= t("landing.pricing.title") %></h2>
+    <ul class="landing-grid landing-plans">
+      <li>
+        <h3><%= t("landing.pricing.free_title") %></h3>
+        <p class="landing-price"><%= t("landing.pricing.free_price") %></p>
+        <p><%= t("landing.pricing.free_text", limit: limit) %></p>
+        <%= link_to t("landing.hero.cta"), new_registration_path, class: "btn btn--primary" %>
+      </li>
+      <li>
+        <h3><%= t("landing.pricing.family_title") %></h3>
+        <p class="landing-price"><%= t("landing.pricing.family_price") %></p>
+        <p><%= t("landing.pricing.family_text") %></p>
+      </li>
+    </ul>
+  </section>
+
+  <section class="landing-section" aria-labelledby="faq">
+    <h2 id="faq"><%= t("landing.faq.title") %></h2>
+    <div class="landing-faq">
+      <% %w[safe shutdown move relatives living price].each do |question| %>
+        <details>
+          <summary><%= t("landing.faq.#{question}_q") %></summary>
+          <p><%= t("landing.faq.#{question}_a", limit: limit) %></p>
+        </details>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="landing-final">
+    <h2><%= t("landing.final.title") %></h2>
+    <%= link_to t("landing.final.cta"), new_registration_path, class: "btn btn--primary btn--large" %>
+  </section>
+
+  <footer class="landing-footer">
+    <p>🌳 Heartwood — <%= t("landing.footer.tagline") %></p>
+    <nav aria-label="<%= t("legal.footer") %>">
+      <%= link_to t("legal.privacy.title"), privacy_path %>
+      <%= link_to t("legal.consent.title"), consent_path %>
+      <%= link_to t("legal.terms.title"), terms_path %>
+      <%= link_to t("landing.footer.source"), Heartwood::SOURCE_CODE_URL %>
+    </nav>
+  </footer>
+</div>

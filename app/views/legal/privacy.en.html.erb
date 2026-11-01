@@ -1,0 +1,51 @@
+<% page_title t("legal.privacy.title") %>
+<% page_meta t("legal.edition", date: l(Legal::VERSION.to_date, format: :long)) %>
+
+<article class="legal">
+  <p class="muted">This is a translation for convenience; for users in Russia the Russian version prevails.</p>
+
+  <h2>1. Who processes the data</h2>
+  <p>The personal-data operator is <%= operator(:name) %> (INN <%= operator(:inn) %>, OGRN <%= operator(:ogrn) %>), address: <%= operator(:address) %>. Contact for personal-data questions: <%= operator(:email) %>.</p>
+  <p>This policy follows Russian Federal Law No. 152-FZ "On Personal Data" and covers all data the operator receives through Heartwood.</p>
+
+  <h2>2. Whose data, and what</h2>
+  <ul>
+    <li><strong>Users:</strong> name, email address, a hash of the password (never the password itself), IP address and browser details of active sign-in sessions, chosen language.</li>
+    <li><strong>People in a family tree</strong>, entered by users: names, sex, dates and places of life events, family relationships, photos, biographies, source references.</li>
+  </ul>
+  <p>We do not ask for, or purposely process, special categories of data or biometric data.</p>
+
+  <h2>3. Why</h2>
+  <ul>
+    <li>to run your account and sign-in;</li>
+    <li>to keep the family tree and let invited relatives edit it together;</li>
+    <li>to send service emails (password reset, invitations);</li>
+    <li>to keep the data safe, including backups.</li>
+  </ul>
+  <p>We never sell data, use it for advertising, or hand it to third parties for their own purposes.</p>
+
+  <h2>4. Legal basis</h2>
+  <p>Your consent, given as a separate document — the <%= link_to "Consent to personal data processing", consent_path %> — and performance of the terms of use you agree to.</p>
+  <p>Users enter information about relatives for personal and family purposes and are responsible for doing so lawfully. Living people are hidden from everyone but the tree's members. Anyone named in a tree may ask the operator to correct or remove it.</p>
+
+  <h2>5. Where and for how long</h2>
+  <ul>
+    <li>Databases holding Russian citizens' data are located in Russia. There is no cross-border transfer.</li>
+    <li>Account and tree data are kept while the account exists. You can delete the account yourself on the Account page; its data and every tree it owns are then deleted.</li>
+    <li>Change history keeps copies of deleted records for <%= Edit::RETENTION.in_days.to_i %> days so mistakes can be undone, then destroys them.</li>
+    <li>A tree archive built for download is deleted after 24 hours.</li>
+    <li>Backups are kept for no more than 30 days.</li>
+  </ul>
+
+  <h2>6. Who else has access</h2>
+  <p>Only processors acting on the operator's instructions, to the extent the service needs: the hosting provider (<%= operator(:hosting) %>) and the email delivery service. There are no ad or analytics trackers inside the app; only essential cookies are used — for sign-in and language.</p>
+
+  <h2>7. How we protect it</h2>
+  <p>Encrypted connections (HTTPS), passwords stored only as a strong hash, role-based access within each tree, a change log, regular backups, and sign-in rate limiting.</p>
+
+  <h2>8. Your rights</h2>
+  <p>You may learn how your data is processed, ask for it to be corrected, blocked or destroyed, and withdraw consent. You can download your tree and delete your account yourself on the Account page; for anything else write to <%= operator(:email) %>. We answer within 10 working days. You may also complain to Roskomnadzor or a court.</p>
+
+  <h2>9. Changes</h2>
+  <p>The current edition is always published on this page. We email users about material changes.</p>
+</article>

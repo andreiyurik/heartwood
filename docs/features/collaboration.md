@@ -28,6 +28,7 @@ trees rather than one account per install).
   People/Events/Citations/Relatives/Hints, not just hidden in views.
 - **Member management**: `/tree_memberships` — owner-only role toggle and removal, visible
   member list for everyone in the tree.
+- **Change history & undo** — see [[change-history]].
 - **Multi-tree membership**: a user can belong to more than one tree (their own plus any they've
   joined). `sessions.current_tree_id` remembers which one is active; a nav `<details>` switcher
   appears once someone actually has more than one.
@@ -45,7 +46,6 @@ trees rather than one account per install).
   opens one person/branch as a view. `join_code` always grants an editing membership today;
   it should not be repurposed for "just let them look." Worth its own token/model rather than
   overloading `Tree#join_code`.
-- Change history / "who edited what" audit trail.
 
 ## Notes
 - Started simple per the original plan: roles + invite links first, live updates and granular

@@ -1,10 +1,12 @@
 class Person < ApplicationRecord
-  include BelongsToTree, LiveUpdates, Avatar, Kin, Living, Relatives, Searchable
+  include BelongsToTree, LiveUpdates, Editable, Avatar, Kin, Living, Relatives, Searchable
 
   SEXES = %w[M F U X].freeze
 
   has_rich_text :biography
   has_many :events, as: :eventable, dependent: :destroy
+  has_many :duplicate_hints_as_a, class_name: "DuplicateHint", foreign_key: :person_a_id, dependent: :delete_all
+  has_many :duplicate_hints_as_b, class_name: "DuplicateHint", foreign_key: :person_b_id, dependent: :delete_all
 
   validates :sex, inclusion: { in: SEXES }
   # Every creation path goes through Person.create, so the plan cap lives here.
@@ -40,7 +42,7 @@ class Person < ApplicationRecord
 
   private
     def event_year(event)
-      event&.date_start&.year || event&.date_raw.presence
+      event&.life_year
     end
 
     def tree_has_capacity

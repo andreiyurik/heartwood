@@ -1,0 +1,44 @@
+.legal {
+  line-height: 1.6;
+  max-inline-size: 44rem;
+
+  h2 {
+    margin-block: var(--block-space-double) var(--block-space-half);
+  }
+
+  ul {
+    padding-inline-start: 1.25rem;
+  }
+}
+
+/* Loud on purpose: an operator detail left unset must be noticed before launch. */
+.legal__missing {
+  background-color: var(--color-negative-light);
+  border-radius: var(--radius-sm);
+  color: var(--color-negative);
+  padding-inline: 0.3em;
+}
+
+.legal-links {
+  color: var(--color-muted);
+  font-size: 0.8125rem;
+  margin: 1.1rem 0 0;
+  text-align: center;
+
+  a {
+    color: inherit;
+  }
+}
+
+.auth-consent {
+  align-items: flex-start;
+  display: flex;
+  font-size: 0.9375rem;
+  gap: 0.5rem;
+  text-align: start;
+
+  input {
+    flex-shrink: 0;
+    margin-block-start: 0.3em;
+  }
+}

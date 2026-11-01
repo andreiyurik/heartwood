@@ -48,8 +48,20 @@ record instead of restarting. Emit progress via **`Rails.event`** + Turbo Stream
 - **Per-tenant isolation**: an import only ever touches the importing account. See [[multi-tenancy]].
 
 ## Export
-- One click → **GEDCOM 7.0**, or **GEDZIP** (tree + all [[media]]) for a full portable backup.
-- Generated in a Solid Queue job for large trees, delivered via Active Storage download link.
+- **GEDCOM** (`.ged`) — one click, generated in the request; text only.
+- **Archive with photos** (`.zip`, the GEDCOM 7 GEDZIP layout) — the full portable backup:
+  `gedcom.ged` at the root and every photo under `media/` (the person's photo and the pictures in
+  the biography), each referenced by an `OBJE` record with a relative `FILE` path; the person's
+  photo carries `_PRIM Y`. We name it `.zip`, not `.gdz`: a family member must be able to open
+  it with a double click. Built by `Archive#build` in `ArchiveJob` (photos may sit in S3, so
+  never inside a request); the archive page refreshes itself when it's ready and offers the
+  download. An archive is personal data, so only its creator can open it, and it is purged
+  after `Archive::RETENTION` (24 hours, hourly recurring job). Unzipped, the folder opens in
+  Gramps with the photos in place.
+- Importing a `.zip`/`.gdz` brings the photos back: the `OBJE` marked `_PRIM Y` (else the
+  first one not marked `_PRIM N`) becomes the person's photo, if it is an allowed image under
+  the photo size limit; every other `OBJE` stays in the raw store. Files are read straight from
+  the archive by name, never extracted to disk.
 - **Self-host bonus:** the whole SQLite DB *is* a backup — but GEDCOM export is the portable,
   vendor-neutral one users can take anywhere.
 - **The flagship round-trip: cloud collaboration in Heartwood ↔ deep local editing in Gramps.**

@@ -58,6 +58,5 @@ Maps cleanly to GEDCOM `SOUR`/`REPO`/`PAGE` — keep it lossless for [[gedcom]] 
 maps its top level to `QUAY 3` in an idiosyncratic way not strictly matching the GEDCOM
 spec's own definition of that level — rather than copy that ambiguity, our export uses a
 deliberate, documented collapse: `very_low`/`low` → `QUAY 0`, `normal` → `QUAY 1`,
-`high` → `QUAY 2`, `very_high` → `QUAY 3`. **Not yet implemented** — the GEDCOM writer
-(`app/services/gedcom/writer.rb`) doesn't emit `SOUR`/`CITA`/`QUAY` at all yet; this mapping
-is the decision to implement against once source export is built (see [[gedcom]]).
+`high` → `QUAY 2`, `very_high` → `QUAY 3`. On import the reverse is `QUAY 0` → `low`, `1` → `normal`, `2` → `high`,
+`3` → `very_high` (see [[gedcom]] "What we write and read").

@@ -37,7 +37,7 @@ class JoinsController < ApplicationController
     end
 
     def user_params
-      params.expect(user: %i[name email_address password])
+      params.expect(user: %i[name email_address password privacy_consent])
     end
 
     def switch_to(tree)

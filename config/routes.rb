@@ -2,8 +2,16 @@ Rails.application.routes.draw do
   resource :locale, only: :update
 
   resource :session
+  resource :account, only: %i[show destroy]
+
+  scope controller: :legal do
+    get :privacy
+    get :consent
+    get :terms
+  end
   resource :registration, only: %i[new create]
   resource :export, only: :create
+  resources :archives, only: %i[create show]
   resource :import, only: %i[new create show]
   resource :settings, only: %i[show update]
   resources :passwords, param: :token
@@ -15,6 +23,13 @@ Rails.application.routes.draw do
   resource  :active_tree, only: :update
   resources :tree_memberships, only: %i[index update destroy]
   resource  :tree_join_code, only: :create
+  resource  :share_link, only: %i[create destroy]
+
+  # View-only links for people without an account. See [[privacy-access]] "Share links".
+  scope "shared/:token", module: :shared, as: :shared do
+    get "/", to: "trees#show", as: :tree
+    resources :people, only: :show
+  end
 
   namespace :places do
     resource :search,  only: :show
@@ -26,6 +41,12 @@ Rails.application.routes.draw do
   resource :map, only: :show do
     scope module: :maps do
       resources :events, only: :index
+    end
+  end
+
+  resources :edits, only: :index do
+    scope module: :edits do
+      resource :reversion, only: :create
     end
   end
 
@@ -64,6 +85,9 @@ Rails.application.routes.draw do
   # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  # Defines the root path route ("/")
+  # Guests (no live session) get the landing page; signed-in people get their tree.
+  constraints(->(request) { !Session.exists?(id: request.cookie_jar.signed[:session_id]) }) do
+    get "/", to: "landing#show", as: :landing
+  end
   root "people#index"
 end

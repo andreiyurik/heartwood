@@ -1,5 +1,5 @@
 class Event < ApplicationRecord
-  include LiveUpdates
+  include LiveUpdates, Editable, Dating
 
   KINDS = {
     "BIRT" => "Birth", "DEAT" => "Death", "BAPM" => "Baptism", "BURI" => "Burial",
@@ -37,7 +37,7 @@ class Event < ApplicationRecord
   end
 
   def summary
-    date_raw.presence || value.presence
+    date_label.presence || value.presence
   end
 
   # Writing finds or creates a tree Place, so the same town typed twice is one row (and one map pin).
