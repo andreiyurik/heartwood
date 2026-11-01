@@ -23,6 +23,13 @@ Rails.application.routes.draw do
   resource  :active_tree, only: :update
   resources :tree_memberships, only: %i[index update destroy]
   resource  :tree_join_code, only: :create
+  resource  :share_link, only: %i[create destroy]
+
+  # View-only links for people without an account. See [[privacy-access]] "Share links".
+  scope "shared/:token", module: :shared, as: :shared do
+    get "/", to: "trees#show", as: :tree
+    resources :people, only: :show
+  end
 
   namespace :places do
     resource :search,  only: :show

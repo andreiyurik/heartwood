@@ -27,6 +27,10 @@ class EventDatingTest < ActiveSupport::TestCase
     end
   end
 
+  test "the short summary uses the label too" do
+    I18n.with_locale(:ru) { assert_equal "14 мая 1781", @person.events.create!(kind: "BIRT", date_raw: "14 MAY 1781").summary }
+  end
+
   test "life years keep a fuzzy date's qualifier" do
     @person.events.create!(kind: "BIRT", date_raw: "ок. 1696")
     @person.events.create!(kind: "DEAT", date_raw: "14 МАЙ 1781")

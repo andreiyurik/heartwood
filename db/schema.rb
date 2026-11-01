@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_01_203339) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_01_205852) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -228,6 +228,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_01_203339) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "share_links", force: :cascade do |t|
+    t.integer "tree_id", null: false
+    t.string "token", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_share_links_on_token", unique: true
+    t.index ["tree_id"], name: "index_share_links_on_tree_id", unique: true
+  end
+
   create_table "sources", force: :cascade do |t|
     t.string "author"
     t.text "citation_text"
@@ -300,6 +309,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_01_203339) do
   add_foreign_key "places", "trees"
   add_foreign_key "sessions", "trees", column: "current_tree_id"
   add_foreign_key "sessions", "users"
+  add_foreign_key "share_links", "trees"
   add_foreign_key "sources", "trees"
   add_foreign_key "tree_memberships", "trees"
   add_foreign_key "tree_memberships", "users"

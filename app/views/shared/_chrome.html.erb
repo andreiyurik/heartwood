@@ -1,0 +1,4 @@
+<% content_for :header do %>
+  <span class="txt-subtle shared-note"><%= t("shared.read_only") %></span>
+  <%= link_to t("shared.start_your_own"), new_registration_path, class: "btn" %>
+<% end %>
