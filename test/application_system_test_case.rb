@@ -16,6 +16,10 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # Selenium Manager ourselves so driver and browser stay a matched pair.
     paths = Selenium::WebDriver::SeleniumManager.binary_paths("--browser", "chrome")
     options.binary = paths["browser_path"] if paths["browser_path"].present?
+    if ENV["CHROME_BIN"]
+      options.binary = ENV["CHROME_BIN"]
+      Selenium::WebDriver::Chrome::Service.driver_path = ENV["CHROMEDRIVER_BIN"]
+    end
     # Capybara clicks where an element rests. With smooth scrolling and entrance animations
     # on, a slow runner scrolls the target away under the click and nothing happens.
     options.add_argument("--force-prefers-reduced-motion")

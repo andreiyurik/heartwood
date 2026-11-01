@@ -21,6 +21,11 @@ class DiagnoseTest < ApplicationSystemTestCase
         }, true));
       document.addEventListener("click", (e) => log("click " + (e.target.closest("a")?.getAttribute("href") || e.target.tagName) + " defaultPrevented=" + e.defaultPrevented), true);
       document.addEventListener("click", (e) => log("click(bubble) defaultPrevented=" + e.defaultPrevented), false);
+      ["pointerdown","pointerup","mousedown","mouseup","pointermove"].forEach(n => window.addEventListener(n, (e) => {
+        if (n === "pointermove" && window.__moves++ > 3) return;
+        log(n + " at " + e.clientX + "," + e.clientY + " on " + (e.target.closest?.("a")?.getAttribute("href") || e.target.tagName + "." + e.target.className));
+      }, true));
+      window.__moves = 0;
       window.addEventListener("error", (e) => log("error " + e.message));
       window.addEventListener("unhandledrejection", (e) => log("rejection " + e.reason));
       const frame = document.getElementById("add_event");
@@ -48,11 +53,17 @@ class DiagnoseTest < ApplicationSystemTestCase
 
   teardown { page.driver.quit }
 
-  20.times do |i|
+  10.times do |i|
     test "open the add-event form #{i}" do
       visit person_path(@person)
       before = page.evaluate_script("document.hasFocus()")
       puts "\n#{i} #{@fix} focus=#{before}"
+      puts page.evaluate_script(<<~JS)
+        (() => { const a = [...document.querySelectorAll("#add_event a")][0]; const r = a.getBoundingClientRect();
+          const cx = r.left + r.width / 2, cy = r.top + r.height / 2; const hit = document.elementFromPoint(cx, cy);
+          return "viewport=" + innerWidth + "x" + innerHeight + " dpr=" + devicePixelRatio + " scrollY=" + scrollY +
+            " link=" + JSON.stringify(r) + " hit=" + (hit && (hit.closest("a") === a ? "LINK" : hit.tagName + "." + hit.className)); })()
+      JS
       page.execute_script(TRACE)
       click_on I18n.t("events.add")
       begin
@@ -62,6 +73,7 @@ class DiagnoseTest < ApplicationSystemTestCase
         sleep 1
         puts "\n--- FAIL #{i} ---"
         puts page.evaluate_script("window.__trace").join("\n")
+        puts "scrollY at fail: " + page.evaluate_script("scrollY").to_s
         puts "paints at fail: " + page.evaluate_script("JSON.stringify(performance.getEntriesByType('paint').map(p => p.name + '@' + Math.round(p.startTime)))")
         puts "frame html: " + page.evaluate_script("document.getElementById('add_event').outerHTML")[0, 400]
         puts "console: " + page.driver.browser.logs.get(:browser).map(&:message).join(" | ") rescue puts "no console logs"
