@@ -1,4 +1,4 @@
-<% page_title t("landing.meta.title"), heading: false %>
+<% content_for :title, t("landing.meta.title") %>
 <% limit = Tree::PLANS.fetch("free")[:people_limit] %>
 <% content_for :body_class, "landing-page" %>
 
