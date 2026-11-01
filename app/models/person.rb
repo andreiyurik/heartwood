@@ -5,6 +5,8 @@ class Person < ApplicationRecord
 
   has_rich_text :biography
   has_many :events, as: :eventable, dependent: :destroy
+  has_many :duplicate_hints_as_a, class_name: "DuplicateHint", foreign_key: :person_a_id, dependent: :delete_all
+  has_many :duplicate_hints_as_b, class_name: "DuplicateHint", foreign_key: :person_b_id, dependent: :delete_all
 
   validates :sex, inclusion: { in: SEXES }
   # Every creation path goes through Person.create, so the plan cap lives here.
