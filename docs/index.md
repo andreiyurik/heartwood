@@ -28,6 +28,7 @@ agent, also read [`CLAUDE.md`](../CLAUDE.md) at the repo root.
 
 ### 2. Features — what users do
 - [[features-index]] — curated & prioritized feature catalog (borrowed from the best)
+- [[change-history]] — who changed what, and one-click undo/restore
 
 ### 3. Interop — getting data in & out (our moat)
 - [[gedcom]] — the accepted exchange format (GEDCOM 7 + 5.5.1)
@@ -45,6 +46,7 @@ agent, also read [`CLAUDE.md`](../CLAUDE.md) at the repo root.
 ## Business
 - [[open-core]] — what's free vs paid, the AGPL + Engine split
 - [[pricing-hosting]] — the hosted plan
+- [[launch-ru]] — hosted launch market: Russia first (152-ФЗ, ЮKassa, channels)
 
 ## Learning from others
 - [[prior-art]] — webtrees, Gramps, GeneWeb, family-chart, Topola, Maybe, Solidus — and exactly what we take from each
