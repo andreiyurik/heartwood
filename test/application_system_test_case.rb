@@ -30,6 +30,10 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # A fresh browser on CI starts at 800×600 and applies screen_size late; start at full size.
     options.add_argument("--window-size=1400,1400")
     options.unhandled_prompt_behavior = :ignore
+    options.add_argument("--disable-features=PasswordLeakDetection,PasswordManagerOnboarding")
+    options.add_preference("credentials_enable_service", false)
+    options.add_preference("profile.password_manager_enabled", false)
+    options.add_preference("profile.password_manager_leak_detection", false)
   end
 
   # Absorb Turbo navigation / Stimulus-connect latency under load (default is 2s).
