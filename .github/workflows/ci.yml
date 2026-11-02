@@ -114,6 +114,10 @@ jobs:
         with:
           bundler-cache: true
 
+      # Ubuntu 24.04's AppArmor blocks the sandbox of a Chrome that didn't come from a package.
+      - name: Allow the pinned Chrome's sandbox
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
       - name: Run System Tests
         env:
           RAILS_ENV: test
