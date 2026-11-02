@@ -6,6 +6,14 @@ require "test_helper"
 #
 # NOTE: requires a Chrome/Chromium + chromedriver on the host. They are NOT part of the
 # default `bin/rails test` run — execute with `bin/rails test:system`.
+module TraceClicks
+  def click(*args, **options)
+    driver.browser.execute_script("window.__trace?.push('-- ruby click ' + arguments[0])", tag_name) rescue nil
+    super.tap { driver.browser.execute_script("window.__trace?.push('-- ruby click returned')") rescue nil }
+  end
+end
+Capybara::Selenium::Node.prepend(TraceClicks)
+
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   driven_by :selenium, using: :headless_chrome, screen_size: [ 1400, 1400 ] do |options|
     # Rails eagerly pins Chrome::Service.driver_path (Browser#preload), which makes
@@ -54,6 +62,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     const t0 = performance.now();
     const log = (m) => window.__trace.push(Math.round(performance.now() - t0) + "ms " + m);
     log("doc " + location.pathname + " " + innerWidth + "x" + innerHeight + " focus=" + document.hasFocus());
+    ["pointermove","mouseover"].forEach(n => addEventListener(n, (e) => { if ((window.__moves = (window.__moves || 0) + 1) < 4) log(n + " " + e.clientX + "," + e.clientY) }, true));
     ["pointerdown","click","keydown","focus","blur"].forEach(n => addEventListener(n, (e) =>
       log(n + " " + (e.target?.closest?.("a,button,summary,input")?.outerHTML?.slice(0, 80) || e.target?.tagName || "window")), true));
     ["turbo:click","turbo:visit","turbo:load","turbo:before-fetch-request","turbo:fetch-request-error","turbo:frame-load",
