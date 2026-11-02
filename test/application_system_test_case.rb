@@ -6,14 +6,6 @@ require "test_helper"
 #
 # NOTE: requires a Chrome/Chromium + chromedriver on the host. They are NOT part of the
 # default `bin/rails test` run — execute with `bin/rails test:system`.
-module TraceClicks
-  def click(*args, **options)
-    driver.browser.execute_script("window.__trace?.push('-- ruby click ' + arguments[0])", tag_name) rescue nil
-    super
-  end
-end
-Capybara::Selenium::Node.prepend(TraceClicks)
-
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   driven_by :selenium, using: :headless_chrome, screen_size: [ 1400, 1400 ] do |options|
     # Rails eagerly pins Chrome::Service.driver_path (Browser#preload), which makes
@@ -27,13 +19,11 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # Capybara clicks where an element rests. With smooth scrolling and entrance animations
     # on, a slow runner scrolls the target away under the click and nothing happens.
     options.add_argument("--force-prefers-reduced-motion")
-    # A fresh browser on CI starts at 800×600 and applies screen_size late; start at full size.
-    options.add_argument("--window-size=1400,1400")
-    options.unhandled_prompt_behavior = :ignore
-    options.add_argument("--disable-features=PasswordLeakDetection,PasswordManagerOnboarding")
+    # Signing in with "password" makes Chrome pop its save-password / leaked-password bubble
+    # on CI; the bubble takes focus for a moment and the click sent then is lost.
+    options.add_argument("--disable-features=PasswordLeakDetection")
     options.add_preference("credentials_enable_service", false)
     options.add_preference("profile.password_manager_enabled", false)
-    options.add_preference("profile.password_manager_leak_detection", false)
   end
 
   # Absorb Turbo navigation / Stimulus-connect latency under load (default is 2s).
@@ -48,53 +38,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   setup { ApplicationSystemTestCase.deliver_broadcasts! }
-
-  # Chrome on CI activates its window only after the first page has loaded, flipping focus on
-  # and off, and drops any click or key sent before that settles. Once per browser, wait for it.
-  setup do
-    unless page.driver.browser.instance_variable_get(:@window_settled)
-      visit new_session_path
-      Timeout.timeout(10) do
-        sleep 0.05 until 6.times.all? { sleep 0.05; page.evaluate_script("document.hasFocus()") }
-      end
-      page.driver.browser.instance_variable_set(:@window_settled, true)
-    end
-  end
-
-  # TEMPORARY: record input and Turbo events on every page; print them when a test fails.
-  TRACE = <<~JS
-    window.__trace = [];
-    const t0 = performance.now();
-    const log = (m) => window.__trace.push(Math.round(performance.now() - t0) + "ms " + m);
-    log("doc " + location.pathname + " " + innerWidth + "x" + innerHeight + " focus=" + document.hasFocus());
-    ["pointermove","mouseover"].forEach(n => addEventListener(n, (e) => { if ((window.__moves = (window.__moves || 0) + 1) < 4) log(n + " " + e.clientX + "," + e.clientY) }, true));
-    ["pointerdown","click","keydown","focus","blur"].forEach(n => addEventListener(n, (e) =>
-      log(n + " " + (e.target?.closest?.("a,button,summary,input")?.outerHTML?.slice(0, 80) || e.target?.tagName || "window")), true));
-    ["turbo:click","turbo:visit","turbo:load","turbo:before-fetch-request","turbo:fetch-request-error","turbo:frame-load",
-     "turbo:before-stream-render","turbo:morph","turbo:render","turbo:frame-missing"].forEach(n => addEventListener(n, (e) =>
-      log(n + " " + (e.target?.id || e.target?.tagName || "") + (e.detail?.url ? " " + e.detail.url : "") +
-          (n === "turbo:before-stream-render" ? " " + e.target.getAttribute("action") : "")), true));
-    addEventListener("error", (e) => log("error " + e.message));
-    document.addEventListener("visibilitychange", () => log("visibility " + document.visibilityState));
-  JS
-
-  setup do
-    unless page.driver.browser.instance_variable_get(:@__traced)
-      page.driver.browser.execute_cdp("Page.addScriptToEvaluateOnNewDocument", source: TRACE)
-      page.driver.browser.instance_variable_set(:@__traced, true)
-    end
-  end
-
-  def before_teardown
-    unless passed?
-      puts "\n=== TRACE #{name} ===", (page.evaluate_script("window.__trace") || []).last(60).join("\n"),
-        "now: #{page.evaluate_script("innerWidth + 'x' + innerHeight + ' focus=' + document.hasFocus() + ' active=' + document.activeElement?.outerHTML?.slice(0, 80)")}"
-    end
-  rescue => error
-    puts "trace failed: #{error.message}"
-  ensure
-    super
-  end
 
   # Block until the Stimulus controller `identifier` is actually connected to the element
   # matched by `selector`. Without this, an input we dispatch can fire before Stimulus has
