@@ -16,7 +16,6 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # Selenium Manager ourselves so driver and browser stay a matched pair.
     paths = Selenium::WebDriver::SeleniumManager.binary_paths("--browser", "chrome")
     options.binary = paths["browser_path"] if paths["browser_path"].present?
-    options.add_argument("--disable-gpu")
     # Capybara clicks where an element rests. With smooth scrolling and entrance animations
     # on, a slow runner scrolls the target away under the click and nothing happens.
     options.add_argument("--force-prefers-reduced-motion")
@@ -36,6 +35,40 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   setup { ApplicationSystemTestCase.deliver_broadcasts! }
+
+  # TEMPORARY: record input and Turbo events on every page; print them when a test fails.
+  TRACE = <<~JS
+    window.__trace = [];
+    const t0 = performance.now();
+    const log = (m) => window.__trace.push(Math.round(performance.now() - t0) + "ms " + m);
+    log("doc " + location.pathname + " " + innerWidth + "x" + innerHeight + " focus=" + document.hasFocus());
+    ["pointerdown","click","keydown","focus","blur"].forEach(n => addEventListener(n, (e) =>
+      log(n + " " + (e.target?.closest?.("a,button,summary,input")?.outerHTML?.slice(0, 80) || e.target?.tagName || "window")), true));
+    ["turbo:click","turbo:visit","turbo:load","turbo:before-fetch-request","turbo:fetch-request-error","turbo:frame-load",
+     "turbo:before-stream-render","turbo:morph","turbo:render","turbo:frame-missing"].forEach(n => addEventListener(n, (e) =>
+      log(n + " " + (e.target?.id || e.target?.tagName || "") + (e.detail?.url ? " " + e.detail.url : "") +
+          (n === "turbo:before-stream-render" ? " " + e.target.getAttribute("action") : "")), true));
+    addEventListener("error", (e) => log("error " + e.message));
+    document.addEventListener("visibilitychange", () => log("visibility " + document.visibilityState));
+  JS
+
+  setup do
+    unless page.driver.browser.instance_variable_get(:@__traced)
+      page.driver.browser.execute_cdp("Page.addScriptToEvaluateOnNewDocument", source: TRACE)
+      page.driver.browser.instance_variable_set(:@__traced, true)
+    end
+  end
+
+  def before_teardown
+    unless passed?
+      puts "\n=== TRACE #{name} ===", (page.evaluate_script("window.__trace") || []).last(60).join("\n"),
+        "now: #{page.evaluate_script("innerWidth + 'x' + innerHeight + ' focus=' + document.hasFocus() + ' active=' + document.activeElement?.outerHTML?.slice(0, 80)")}"
+    end
+  rescue => error
+    puts "trace failed: #{error.message}"
+  ensure
+    super
+  end
 
   # Block until the Stimulus controller `identifier` is actually connected to the element
   # matched by `selector`. Without this, an input we dispatch can fire before Stimulus has
