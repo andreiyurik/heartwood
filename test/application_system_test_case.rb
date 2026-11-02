@@ -14,12 +14,9 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # system (on WSL that's /usr/bin/chromium-browser, a snap stub that exits at once:
     # "session not created: Chrome instance exited"). Resolve the browser through
     # Selenium Manager ourselves so driver and browser stay a matched pair.
-    # CHROME_VERSION pins the build (CI does): Chrome 156.0.8078.47 sometimes stops routing
-    # mouse and keyboard input to a page after a full navigation, so clicks silently vanish.
-    version = [ "--browser-version", ENV["CHROME_VERSION"] ] if ENV["CHROME_VERSION"].present?
-    paths = Selenium::WebDriver::SeleniumManager.binary_paths("--browser", "chrome", *version)
+    paths = Selenium::WebDriver::SeleniumManager.binary_paths("--browser", "chrome")
     options.binary = paths["browser_path"] if paths["browser_path"].present?
-    Selenium::WebDriver::Chrome::Service.driver_path = paths["driver_path"] if version && paths["driver_path"].present?
+    options.add_argument("--disable-gpu")
     # Capybara clicks where an element rests. With smooth scrolling and entrance animations
     # on, a slow runner scrolls the target away under the click and nothing happens.
     options.add_argument("--force-prefers-reduced-motion")
