@@ -36,6 +36,18 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   setup { ApplicationSystemTestCase.deliver_broadcasts! }
 
+  # Chrome on CI activates its window only after the first page has loaded, flipping focus on
+  # and off, and drops any click or key sent before that settles. Once per browser, wait for it.
+  setup do
+    unless page.driver.browser.instance_variable_get(:@window_settled)
+      visit new_session_path
+      Timeout.timeout(10) do
+        sleep 0.05 until 6.times.all? { sleep 0.05; page.evaluate_script("document.hasFocus()") }
+      end
+      page.driver.browser.instance_variable_set(:@window_settled, true)
+    end
+  end
+
   # TEMPORARY: record input and Turbo events on every page; print them when a test fails.
   TRACE = <<~JS
     window.__trace = [];
