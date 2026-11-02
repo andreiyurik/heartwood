@@ -19,6 +19,12 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     # Capybara clicks where an element rests. With smooth scrolling and entrance animations
     # on, a slow runner scrolls the target away under the click and nothing happens.
     options.add_argument("--force-prefers-reduced-motion")
+    # Signing in with "password" makes Chrome pop its save-password / leaked-password bubble
+    # on CI; the bubble takes focus for a moment and the click sent then is lost.
+    options.add_argument("--disable-features=PasswordLeakDetection,PasswordManagerOnboarding")
+    options.add_preference("credentials_enable_service", false)
+    options.add_preference("profile.password_manager_enabled", false)
+    options.add_preference("profile.password_manager_leak_detection", false)
   end
 
   # Absorb Turbo navigation / Stimulus-connect latency under load (default is 2s).
