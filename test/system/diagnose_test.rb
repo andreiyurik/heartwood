@@ -53,7 +53,9 @@ class DiagnoseTest < ApplicationSystemTestCase
 
   teardown { page.driver.quit }
 
-  10.times do |i|
+  VARIANTS = %w[plain sleep actions twice warmup].freeze
+
+  15.times do |i|
     test "open the add-event form #{i}" do
       visit person_path(@person)
       before = page.evaluate_script("document.hasFocus()")
@@ -65,7 +67,19 @@ class DiagnoseTest < ApplicationSystemTestCase
             " link=" + JSON.stringify(r) + " hit=" + (hit && (hit.closest("a") === a ? "LINK" : hit.tagName + "." + hit.className)); })()
       JS
       page.execute_script(TRACE)
-      click_on I18n.t("events.add")
+      variant = VARIANTS[i % VARIANTS.size]
+      puts "variant=#{variant}"
+      link = find_link(I18n.t("events.add"))
+      case variant
+      when "plain" then link.click
+      when "sleep" then sleep 1; link.click
+      when "actions" then page.driver.browser.action.move_to(link.native).click.perform
+      when "twice"
+        link.click
+        sleep 0.5
+        link.click unless page.has_field?("event_date_raw", wait: 0)
+      when "warmup" then find("h1").click; link.click
+      end
       begin
         assert_field "event_date_raw"
         puts "\n--- PASS #{i} ---\n" + page.evaluate_script("window.__trace").join("\n") if i < 2
