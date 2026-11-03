@@ -25,6 +25,17 @@ class LegalControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "the hosted engine can name its own processors in the policy, in both languages" do
+    [ "en", "ru" ].each do |locale|
+      cookies[:locale] = locale
+      get privacy_path
+      assert_select "#cloud-processors", count: 0
+
+      with_cloud_slots { get privacy_path }
+      assert_select "article.legal #cloud-processors"
+    end
+  end
+
   test "documents follow the interface language" do
     get privacy_path
     assert_select "h1", I18n.t("legal.privacy.title", locale: :en)

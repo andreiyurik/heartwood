@@ -51,6 +51,7 @@ agent, also read [`CLAUDE.md`](../CLAUDE.md) at the repo root.
 - [[open-core]] — what's free vs paid, the AGPL + Engine split
 - [[pricing-hosting]] — the hosted plan
 - [[launch-ru]] — hosted launch market: Russia first (152-ФЗ, ЮKassa, channels)
+- [[rkn-notification]] — draft answers for the Roskomnadzor operator notification
 
 ## Learning from others
 - [[prior-art]] — webtrees, Gramps, GeneWeb, family-chart, Topola, Maybe, Solidus — and exactly what we take from each

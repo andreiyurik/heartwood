@@ -64,5 +64,6 @@ flagged as a possible duplicate also drops the hint (it used to fail on the fore
 ## Deferred
 - Re-consent when `Legal::VERSION` changes.
 - Ownership transfer before deleting an account.
-- Public оферта and receipts (54-ФЗ) — with ЮKassa billing.
+- ~~Public оферта and receipts (54-ФЗ)~~ — done in the private engine (`/offer`, receipts sent
+  with every ЮKassa payment), see [[open-core]] "How the Engine plugs in".
 - Cookie notice — with the landing page's analytics.
