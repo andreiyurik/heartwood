@@ -19,7 +19,7 @@ See [[positioning]], [[pricing-hosting]], [[open-core]].
 - **Personal data law (152-ФЗ).** Personal data of RF citizens must be first recorded and
   stored on servers located in Russia (art. 18 §5). The hosted instance and its backups run
   in a Russian data center — Timeweb Cloud (VPS + S3), decided 2026-11-01. Before launch: notify
-  Roskomnadzor as a personal-data operator, publish a privacy policy («Политика обработки
+  Roskomnadzor as a personal-data operator ([[rkn-notification]] has the answers), publish a privacy policy («Политика обработки
   персональных данных»), collect explicit consent at sign-up, and give users account deletion.
 - **Payments.** Stripe does not work in RF. ЮKassa (cards + СБП) — chosen 2026-11-03, 1 490 ₽/year per tree, see [[pricing-hosting]];
   integrated in the private Cloud Engine per [[open-core]]. A one-time payment per year fits
