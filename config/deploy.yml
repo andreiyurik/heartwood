@@ -13,16 +13,11 @@ servers:
   #     - 192.168.0.1
   #   cmd: bin/jobs
 
-# Enable SSL auto certification via Let's Encrypt and allow for multiple apps on a single web server.
-# If used with Cloudflare, set encryption mode in SSL/TLS setting to "Full" to enable CF-to-app encryption.
-#
-# Using an SSL proxy like this requires turning on config.assume_ssl and config.force_ssl in production.rb!
-#
-# Don't use this when deploying to multiple web servers (then you have to terminate SSL at your load balancer).
-#
+# Let's Encrypt certificate for the domain; set the same domain as APP_HOST below
+# (docs/architecture/deployment.md).
 # proxy:
 #   ssl: true
-#   host: app.example.com
+#   host: heartwood.example
 
 # Where you keep your container images.
 registry:
@@ -54,7 +49,13 @@ env:
     # - BACKUP_BUCKET
     # - BACKUP_ACCESS_KEY_ID
     # - BACKUP_SECRET_ACCESS_KEY
+    # - SMTP_USERNAME
+    # - SMTP_PASSWORD
   clear:
+    # APP_HOST: heartwood.example
+    # MAILER_FROM: Heartwood <no-reply@heartwood.example>
+    # SMTP_ADDRESS: smtp.yandex.ru
+
     # Timeweb Cloud S3 (the endpoint and region its bucket page shows):
     # STORAGE_ENDPOINT: https://s3.twcstorage.ru
     # STORAGE_REGION: ru-1

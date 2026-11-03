@@ -32,6 +32,8 @@ module Heartwood
     config.x.backups.directory = Rails.root.join("storage/backups")
     config.x.backups.offsite   = ENV["BACKUP_BUCKET"].present?
 
+    config.action_mailer.default_options = { from: "Heartwood <no-reply@localhost>" }
+
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
   end
