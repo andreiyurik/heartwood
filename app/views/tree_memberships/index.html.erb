@@ -59,6 +59,8 @@
       <%= button_to t("share_links.create"), share_link_path, class: "btn" %>
     <% end %>
   </section>
+
+  <%= cloud_slot "tree_plan", tree: Current.tree %>
 <% end %>
 
 <ul class="people-list">

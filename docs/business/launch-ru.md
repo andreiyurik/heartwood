@@ -21,7 +21,7 @@ See [[positioning]], [[pricing-hosting]], [[open-core]].
   in a Russian data center — Timeweb Cloud (VPS + S3), decided 2026-11-01. Before launch: notify
   Roskomnadzor as a personal-data operator, publish a privacy policy («Политика обработки
   персональных данных»), collect explicit consent at sign-up, and give users account deletion.
-- **Payments.** Stripe does not work in RF. Use ЮKassa or CloudPayments (cards + СБП),
+- **Payments.** Stripe does not work in RF. ЮKassa (cards + СБП) — chosen 2026-11-03, 1 490 ₽/year per tree, see [[pricing-hosting]];
   integrated in the private Cloud Engine per [[open-core]]. A one-time payment per year fits
   the existing `Tree#activate_family!(period:)`.
 - **Analytics and ads.** Yandex.Metrica and VK Ads pixels go **only on the landing page**,

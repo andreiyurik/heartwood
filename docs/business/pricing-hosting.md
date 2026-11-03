@@ -29,6 +29,13 @@ The optional paid plan. Built on [[multi-tenancy]] and the [[open-core]] split. 
 This framing turns the open core from a threat into the trust-builder that *drives* paid
 conversions.
 
+## Price (RF launch)
+Decided 2026-11-03: **Family — 1 490 ₽ per tree per year**, paid once a year by card or СБП
+through ЮKassa, with a fiscal receipt (54-ФЗ) from «Чеки от ЮKassa». Free stays at
+`Tree::PLANS["free"][:people_limit]` people. No auto-renewal (no stored cards): the owner pays again,
+and a payment before expiry extends from the current end date; an expired tree keeps every person and only stops adding new ones
+(`Tree#effective_plan`). Revisit after the closed beta.
+
 ## Billing implementation
 Lives in the private Cloud Engine ([[open-core]]). Keep the integration (ЮKassa/CloudPayments for the RF launch — see [[launch-ru]]; Stripe elsewhere)
 out of the AGPL core entirely.
