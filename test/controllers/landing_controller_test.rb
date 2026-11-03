@@ -36,6 +36,14 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
     assert_match Tree::PLANS["free"][:people_limit].to_s, css_select("#pricing").text
   end
 
+  test "the hosted engine can add its own legal documents to the footer" do
+    get root_url
+    assert_select "footer #cloud-offer", count: 0
+
+    with_cloud_slots { get root_url }
+    assert_select "footer nav #cloud-offer"
+  end
+
   test "the family price says soon until the hosted engine names one" do
     get root_url
     assert_select "#pricing .landing-price", text: I18n.t("landing.pricing.family_price")

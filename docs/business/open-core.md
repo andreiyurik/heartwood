@@ -60,5 +60,6 @@ partials; the Engine ships them. Current slots:
 |---|---|---|
 | `family_price` | landing pricing card, in place of "Soon" | — |
 | `tree_plan` | tree's people & sharing page, owner only | `tree` |
+| `legal_links` | landing footer, after the terms | — |
 
 A new slot is added to the core only when the Engine needs one — keep the list short.
