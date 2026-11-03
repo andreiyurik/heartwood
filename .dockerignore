@@ -49,3 +49,6 @@
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*
+
+# The private engine's own git history.
+/vendor/cloud/.git

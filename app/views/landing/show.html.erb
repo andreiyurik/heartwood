@@ -105,7 +105,7 @@
       </li>
       <li>
         <h3><%= t("landing.pricing.family_title") %></h3>
-        <p class="landing-price"><%= t("landing.pricing.family_price") %></p>
+        <p class="landing-price"><%= cloud_slot("family_price") || t("landing.pricing.family_price") %></p>
         <p><%= t("landing.pricing.family_text") %></p>
       </li>
     </ul>

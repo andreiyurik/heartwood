@@ -11,6 +11,9 @@
 ARG RUBY_VERSION=4.0.7
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
+# Gemfile.cloud adds the private hosted engine (config/deploy.hosted.yml).
+ARG BUNDLE_GEMFILE=Gemfile
+
 # Rails app lives here
 WORKDIR /rails
 
@@ -25,6 +28,7 @@ ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development" \
+    BUNDLE_GEMFILE="/rails/${BUNDLE_GEMFILE}" \
     LD_PRELOAD="/usr/local/lib/libjemalloc.so"
 
 # Throw-away build stage to reduce size of final image
@@ -36,8 +40,8 @@ RUN apt-get update -qq && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
-COPY vendor/* ./vendor/
-COPY Gemfile Gemfile.lock ./
+COPY vendor/ ./vendor/
+COPY Gemfile Gemfile.lock Gemfile.cloud* ./
 
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \

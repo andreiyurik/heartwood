@@ -33,3 +33,7 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+
+# The private hosted engine and its bundle (docs/business/open-core.md).
+/vendor/cloud
+/Gemfile.cloud.lock

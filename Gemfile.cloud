@@ -1,0 +1,5 @@
+# The hosted service's bundle: the core plus the private engine cloned into vendor/cloud
+# (docs/business/open-core.md). Self-hosters never use this file.
+eval_gemfile "Gemfile"
+
+gem "heartwood_cloud", path: "vendor/cloud"

@@ -1,0 +1,6 @@
+# bin/kamal deploy -d hosted: the image includes the private engine from vendor/cloud, which is
+# not in git, so build from the working directory (docs/business/open-core.md).
+builder:
+  context: .
+  args:
+    BUNDLE_GEMFILE: Gemfile.cloud

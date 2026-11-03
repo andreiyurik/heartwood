@@ -44,3 +44,21 @@ How "free & self-hostable" and "paid hosted" coexist in one codebase. Decision:
 | Collaboration & privacy | ✅ | |
 | Multi-tenant accounts, billing | | ✅ |
 | Managed backups, support SLAs | | ✅ |
+
+## How the Engine plugs in
+The Engine is the private gem `heartwood_cloud` (repo `heartwood-cloud`). The hosted build
+clones it into `vendor/cloud` (git-ignored) and bundles with `BUNDLE_GEMFILE=Gemfile.cloud`,
+which is the core `Gemfile` plus that one gem — so the public `Gemfile.lock` never mentions it.
+`bin/kamal deploy -d hosted` builds from the working directory (`config/deploy.hosted.yml`) so
+the untracked engine is in the image. See [[deployment]].
+
+The core knows nothing about billing. It exposes **cloud slots**: `cloud_slot "name"` renders
+the partial `cloud/_name` when one exists and nothing otherwise. Self-hosters have no such
+partials; the Engine ships them. Current slots:
+
+| Slot | Where | Locals |
+|---|---|---|
+| `family_price` | landing pricing card, in place of "Soon" | — |
+| `tree_plan` | tree's people & sharing page, owner only | `tree` |
+
+A new slot is added to the core only when the Engine needs one — keep the list short.
