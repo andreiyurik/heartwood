@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_01_205852) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_04_120000) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -175,17 +175,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_01_205852) do
     t.index ["user_id"], name: "index_imports_on_user_id"
   end
 
-  create_table "payments", force: :cascade do |t|
-    t.integer "amount_cents", null: false
-    t.datetime "created_at", null: false
-    t.string "provider_payment_id"
-    t.string "status", default: "pending", null: false
-    t.integer "tree_id", null: false
-    t.datetime "updated_at", null: false
-    t.index ["provider_payment_id"], name: "index_payments_on_provider_payment_id", unique: true
-    t.index ["tree_id"], name: "index_payments_on_tree_id"
-  end
-
   create_table "people", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.json "gedcom_raw"
@@ -304,7 +293,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_01_205852) do
   add_foreign_key "family_partners", "trees"
   add_foreign_key "imports", "trees"
   add_foreign_key "imports", "users"
-  add_foreign_key "payments", "trees"
   add_foreign_key "people", "trees"
   add_foreign_key "places", "trees"
   add_foreign_key "sessions", "trees", column: "current_tree_id"
