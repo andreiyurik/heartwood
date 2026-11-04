@@ -40,6 +40,8 @@ guest. Guests get Russian or English from `Accept-Language` until they pick one.
 - Same design language as the app ([[design-system]]): tokens, `.btn`, quiet chrome. Wider
   measure and bigger type than app pages, but no new colours, shadows or radii.
 - No claim the product can't back today. When a feature ships, add it; never the reverse.
-- No analytics until the paid-ads step; then Yandex.Metrica on this page only, with a notice
-  and a line in the privacy policy ([[accounts-and-legal]]).
+- Analytics on this page only, never inside the app. The hosted engine fills the
+  `landing_analytics` slot ([[open-core]]): Yandex.Metrica, off until `YANDEX_METRICA_ID` is
+  set, loaded only after the visitor accepts the notice, with a line in the privacy policy
+  ([[accounts-and-legal]]). Self-hosted installs have no analytics at all.
 - Copy lives in `config/locales` (`landing.*`), Russian first.
