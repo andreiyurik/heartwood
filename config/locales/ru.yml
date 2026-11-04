@@ -455,7 +455,7 @@ ru:
     cancel: Отмена
     save: Сохранить
     errors:
-      one: "1 ошибка не позволила сохранить:"
+      one: "%{count} ошибка не позволила сохранить:"
       few: "%{count} ошибки не позволили сохранить:"
       many: "%{count} ошибок не позволило сохранить:"
       other: "%{count} ошибок не позволило сохранить:"
@@ -487,57 +487,57 @@ ru:
     distance_in_words:
       half_a_minute: полминуты
       less_than_x_seconds:
-        one: меньше одной секунды
+        one: меньше %{count} секунды
         few: меньше %{count} секунд
         many: меньше %{count} секунд
         other: меньше %{count} секунд
       x_seconds:
-        one: одна секунда
+        one: "%{count} секунда"
         few: "%{count} секунды"
         many: "%{count} секунд"
         other: "%{count} секунды"
       less_than_x_minutes:
-        one: меньше одной минуты
+        one: меньше %{count} минуты
         few: меньше %{count} минут
         many: меньше %{count} минут
         other: меньше %{count} минуты
       x_minutes:
-        one: одна минута
+        one: "%{count} минута"
         few: "%{count} минуты"
         many: "%{count} минут"
         other: "%{count} минуты"
       about_x_hours:
-        one: около одного часа
+        one: около %{count} часа
         few: около %{count} часов
         many: около %{count} часов
         other: около %{count} часов
       x_days:
-        one: один день
+        one: "%{count} день"
         few: "%{count} дня"
         many: "%{count} дней"
         other: "%{count} дня"
       about_x_months:
-        one: около одного месяца
+        one: около %{count} месяца
         few: около %{count} месяцев
         many: около %{count} месяцев
         other: около %{count} месяцев
       x_months:
-        one: один месяц
+        one: "%{count} месяц"
         few: "%{count} месяца"
         many: "%{count} месяцев"
         other: "%{count} месяца"
       about_x_years:
-        one: около одного года
+        one: около %{count} года
         few: около %{count} лет
         many: около %{count} лет
         other: около %{count} лет
       over_x_years:
-        one: больше одного года
+        one: больше %{count} года
         few: больше %{count} лет
         many: больше %{count} лет
         other: больше %{count} лет
       almost_x_years:
-        one: почти один год
+        one: почти %{count} год
         few: почти %{count} года
         many: почти %{count} лет
         other: почти %{count} лет

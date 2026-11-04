@@ -9,6 +9,14 @@ class PluralsTest < ActiveSupport::TestCase
     end
   end
 
+  test "a russian one-form carries its count, so 21 isn't read as one" do
+    I18n.with_locale(:ru) do
+      assert_equal "21 минута", I18n.t("datetime.distance_in_words.x_minutes", count: 21)
+      assert_equal "около 21 часа", I18n.t("datetime.distance_in_words.about_x_hours", count: 21)
+      assert_match "21 ошибка", I18n.t("forms.errors", count: 21)
+    end
+  end
+
   test "english keeps one and other" do
     assert_equal I18n.t("imports.show.completed.other", count: 5), I18n.t("imports.show.completed", count: 5)
   end
