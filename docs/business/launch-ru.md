@@ -40,7 +40,7 @@ See [[positioning]], [[pricing-hosting]], [[open-core]].
 
 ## Before the first real user (outside the code)
 - Register the operator (ИП/ООО), fill the `OPERATOR_*` settings, have a lawyer review the
-  three documents, notify Roskomnadzor.
+  three documents with [[legal-ru]] (fixes and questions), notify Roskomnadzor.
 - Rent a Timeweb Cloud VPS and two Timeweb S3 buckets (photos, backups); set `STORAGE_*` and
   `BACKUP_*`, versioning on the photo bucket, a 30-day lifecycle rule on the backup bucket.
 - Run the restore drill once on staging.
