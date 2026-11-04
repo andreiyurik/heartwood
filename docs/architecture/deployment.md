@@ -15,10 +15,10 @@ certificate. The same recipe serves a self-hoster and the hosted service in Russ
 ## Environment
 | Variable | Needed | What it does |
 |---|---|---|
-| `APP_HOST` | yes, for a public install | The domain (`heartwood.example`). Turns on HTTPS (`assume_ssl`, `force_ssl`), host authorization, and is the host in links inside emails. Without it the app answers on any host over plain HTTP — fine on a home LAN. |
+| `APP_HOST` | yes, for a public install | The domain (`heartwood.example`). Turns on HTTPS (`assume_ssl`, `force_ssl`), host authorization, and is the host in links inside emails. Without it the app answers on any host over plain HTTP — fine on a home LAN, but links in emails then point at `localhost`. |
 | `MAILER_FROM` | no | The sender of password-reset and confirmation emails. Defaults to `Heartwood <no-reply@APP_HOST>`. |
-| `SMTP_ADDRESS` | to send email | SMTP server. Without it email isn't delivered. |
-| `SMTP_PORT` | no | Defaults to 587 (STARTTLS). |
+| `SMTP_ADDRESS` | to send email | SMTP server. Without it password-reset and confirmation emails fail (and their jobs retry), so set it on any install people sign up to. |
+| `SMTP_PORT` | no | Defaults to 587 (STARTTLS); 465 switches to implicit TLS. |
 | `SMTP_USERNAME`, `SMTP_PASSWORD` | with `SMTP_ADDRESS` | SMTP login, kept in `.kamal/secrets`. |
 | `OPERATOR_*` | hosted in RF | The personal-data operator — [[accounts-and-legal]]. |
 | `STORAGE_*`, `BACKUP_*` | hosted | Photos and backups in S3 — [[backups]]. |

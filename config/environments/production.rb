@@ -57,13 +57,15 @@ Rails.application.configure do
   config.action_mailer.default_url_options = host ? { host: host, protocol: "https" } : { host: "localhost" }
   config.action_mailer.default_options = { from: ENV.fetch("MAILER_FROM") { "Heartwood <no-reply@#{host || "localhost"}>" } }
 
+  smtp_port = ENV.fetch("SMTP_PORT", 587).to_i
   config.action_mailer.smtp_settings = {
     address: ENV["SMTP_ADDRESS"],
-    port: ENV.fetch("SMTP_PORT", 587).to_i,
+    port: smtp_port,
     user_name: ENV["SMTP_USERNAME"],
     password: ENV["SMTP_PASSWORD"],
     authentication: :plain,
-    enable_starttls_auto: true
+    tls: smtp_port == 465,
+    enable_starttls_auto: smtp_port != 465
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
