@@ -27,7 +27,15 @@ class ProductionTest < ActiveSupport::TestCase
     assert_equal "smtp", config["delivery_method"]
     assert_equal "Семья <tree@heartwood.example>", config["from"]
     assert_equal({ "address" => "smtp.yandex.ru", "port" => 587, "user_name" => "tree@heartwood.example",
-      "password" => "secret", "authentication" => "plain", "enable_starttls_auto" => true }, config["smtp"].except("open_timeout", "read_timeout"))
+      "password" => "secret", "authentication" => "plain", "tls" => false, "enable_starttls_auto" => true }, config["smtp"].except("open_timeout", "read_timeout"))
+  end
+
+  test "port 465 speaks TLS from the first byte instead of STARTTLS" do
+    config = production_config "SMTP_ADDRESS" => "smtp.yandex.ru", "SMTP_PORT" => "465"
+
+    assert_equal 465, config["smtp"]["port"]
+    assert config["smtp"]["tls"]
+    assert_not config["smtp"]["enable_starttls_auto"]
   end
 
   private
@@ -39,7 +47,8 @@ class ProductionTest < ActiveSupport::TestCase
           from: ApplicationMailer.default[:from], delivery_method: ApplicationMailer.delivery_method,
           smtp: mailer.smtp_settings }.to_json)
       RUBY
-      env = { "RAILS_ENV" => "production", "SECRET_KEY_BASE_DUMMY" => "1" }.merge(env)
+      blank = %w[ APP_HOST MAILER_FROM SMTP_ADDRESS SMTP_PORT SMTP_USERNAME SMTP_PASSWORD ].index_with(nil)
+      env = blank.merge("RAILS_ENV" => "production", "SECRET_KEY_BASE_DUMMY" => "1").merge(env)
       out, err, status = Open3.capture3(env, "bin/rails", "runner", script, chdir: Rails.root.to_s)
       assert status.success?, err
       JSON.parse(out.lines.last)
