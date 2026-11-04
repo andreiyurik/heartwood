@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Resolve the hosted bundle from the core's Gemfile.lock so the image ships the same gem
+# versions as CI, plus the private engine (docs/architecture/deployment.md).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+cp Gemfile.lock Gemfile.cloud.lock
+BUNDLE_GEMFILE=Gemfile.cloud bundle lock --local

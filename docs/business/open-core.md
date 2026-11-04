@@ -64,3 +64,7 @@ partials; the Engine ships them. Current slots:
 | `privacy_processors` | privacy policy, after the list of processors | — |
 
 A new slot is added to the core only when the Engine needs one — keep the list short.
+
+Run the core suite with the plain `Gemfile`: under `Gemfile.cloud` the real engine fills the
+slots and the core's "no engine" assertions fail by design. The engine's own suite is
+`BUNDLE_GEMFILE=Gemfile.cloud bin/rails test vendor/cloud/test`.

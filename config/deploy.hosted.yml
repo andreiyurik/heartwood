@@ -4,3 +4,38 @@ builder:
   context: .
   args:
     BUNDLE_GEMFILE: Gemfile.cloud
+
+# Kamal replaces arrays from deploy.yml, so this is the hosted service's full secret list. With
+# a destination Kamal reads .kamal/secrets-common and .kamal/secrets.hosted, not .kamal/secrets.
+env:
+  secret:
+    - RAILS_MASTER_KEY
+    - OPERATOR_NAME
+    - OPERATOR_INN
+    - OPERATOR_OGRN
+    - OPERATOR_ADDRESS
+    - OPERATOR_EMAIL
+    - OPERATOR_HOSTING
+    - STORAGE_BUCKET
+    - STORAGE_ACCESS_KEY_ID
+    - STORAGE_SECRET_ACCESS_KEY
+    - BACKUP_BUCKET
+    - BACKUP_ACCESS_KEY_ID
+    - BACKUP_SECRET_ACCESS_KEY
+    - SMTP_USERNAME
+    - SMTP_PASSWORD
+    - YOOKASSA_SHOP_ID
+    - YOOKASSA_SECRET_KEY
+  clear:
+    SOLID_QUEUE_IN_PUMA: true
+    STORAGE_ENDPOINT: https://s3.twcstorage.ru
+    STORAGE_REGION: ru-1
+    BACKUP_ENDPOINT: https://s3.twcstorage.ru
+    BACKUP_REGION: ru-1
+    # APP_HOST: heartwood.example
+    # MAILER_FROM: Heartwood <no-reply@heartwood.example>
+    # SMTP_ADDRESS: smtp.yandex.ru
+
+# proxy:
+#   ssl: true
+#   host: heartwood.example

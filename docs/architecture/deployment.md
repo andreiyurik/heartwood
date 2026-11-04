@@ -41,3 +41,14 @@ The hosted service sends mail through a Russian SMTP provider (Yandex 360 for bu
 Mail.ru for business, Unisender Go) so delivery to `@mail.ru`/`@yandex.ru` inboxes works and
 the addresses stay in RF ([[launch-ru]]). Set SPF, DKIM and DMARC for the domain at the
 provider.
+
+## The hosted service (`-d hosted`)
+`bin/kamal deploy -d hosted` merges `config/deploy.hosted.yml` over `config/deploy.yml`: it
+builds the image from the working directory with the private engine ([[open-core]]), lists
+the hosted service's full `env.secret` (Kamal replaces arrays, it doesn't merge them) and the
+Timeweb endpoints. With a destination Kamal reads secrets from `.kamal/secrets-common` and
+`.kamal/secrets.hosted` — **not** `.kamal/secrets` — so the hosted values go there.
+
+Before every hosted build, run `bin/cloud-lock`: `Gemfile.cloud.lock` is not in git, and
+without it the image would keep whatever gem versions the last local resolve picked instead of
+the core's `Gemfile.lock` (security bumps included).
