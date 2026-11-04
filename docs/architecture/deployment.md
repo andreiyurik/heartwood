@@ -52,3 +52,7 @@ Timeweb endpoints. With a destination Kamal reads secrets from `.kamal/secrets-c
 Before every hosted build, run `bin/cloud-lock`: `Gemfile.cloud.lock` is not in git, and
 without it the image would keep whatever gem versions the last local resolve picked instead of
 the core's `Gemfile.lock` (security bumps included).
+
+Kamal tags the image with the core's git SHA, which doesn't change when only the engine did.
+Deploy an engine-only change with a version naming both:
+`bin/kamal deploy -d hosted --version "$(git rev-parse --short HEAD)-$(git -C vendor/cloud rev-parse --short HEAD)"`.
