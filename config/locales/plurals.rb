@@ -1,5 +1,7 @@
-# Rails ships only English plural rules; Russian needs one/few/many by the last digits.
+# Russian needs one/few/many by the last digits; English is stated too, since a locale without
+# a rule is a missing translation once the Pluralization backend looks it up.
 {
+  en: { i18n: { plural: { keys: %i[ one other ], rule: ->(count) { count == 1 ? :one : :other } } } },
   ru: {
     i18n: {
       plural: {
