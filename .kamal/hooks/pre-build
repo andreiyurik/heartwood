@@ -1,0 +1,5 @@
+#!/bin/sh
+# The hosted image bundles from Gemfile.cloud.lock, which isn't in git; refresh it from the core's lock.
+if [ "$KAMAL_DESTINATION" = "hosted" ]; then
+  exec bin/cloud-lock
+fi

@@ -48,6 +48,8 @@ class Tree < ApplicationRecord
   end
 
   def activate_family!(period: 1.year)
+    return if plan == "family" && plan_expires_at.nil?
+
     base = [ plan_expires_at, Time.current ].compact.max
     update!(plan: "family", plan_expires_at: base + period)
   end

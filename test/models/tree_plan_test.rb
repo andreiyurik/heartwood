@@ -37,6 +37,13 @@ class TreePlanTest < ActiveSupport::TestCase
     assert_in_delta 1.year.from_now.to_i, @tree.plan_expires_at.to_i, 5
   end
 
+  test "an open-ended family plan stays open-ended when the owner pays" do
+    @tree.update!(plan: "family", plan_expires_at: nil)
+    @tree.activate_family!
+    assert_nil @tree.reload.plan_expires_at
+    assert @tree.family_plan?
+  end
+
   test "unknown plans are rejected" do
     @tree.plan = "platinum"
     assert_not @tree.valid?

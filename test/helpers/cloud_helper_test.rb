@@ -9,6 +9,6 @@ class CloudHelperTest < ActionView::TestCase
     view.lookup_context.prepend_view_paths [ file_fixture("cloud_views").to_s ]
 
     assert_dom_equal '<strong class="cloud-price">1 490 ₽</strong>', view.cloud_slot("family_price").strip
-    assert_match trees(:alpha).name, view.cloud_slot("family_price", tree: trees(:alpha))
+    assert_dom_equal %(<p id="cloud-plan">#{trees(:alpha).name}</p>), view.cloud_slot("tree_plan", tree: trees(:alpha)).strip
   end
 end
