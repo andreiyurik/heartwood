@@ -43,8 +43,12 @@ actions, processing method, retention.
   обрабатываются. A photo in a family tree is not biometric data unless used to identify a
   person; say so if asked.
 - **Субъекты:** родственники и предки пользователей, в том числе умершие.
-- **Основание:** согласие пользователя; обработка для личных и семейных нужд пользователя; для
-  живых родственников — их право потребовать удаления (в политике).
+- **Основание:** для данных самого пользователя — его согласие. **Для живых родственников
+  основание не решено — главный вопрос юристу.** The user's own household exemption (ч. 2
+  ст. 1) covers the user, not us as operator, and a right to ask for deletion is not a basis
+  under ст. 6. Options to discuss: the relative's consent collected when they are invited,
+  hiding living people by default (already true for outsiders), or a legitimate-interest
+  argument (п. 7 ч. 1 ст. 6).
 - **Действия, способ:** как в п. 1, плюс предоставление доступа участникам древа и по ссылке
   для просмотра (живые люди по ссылке скрыты).
 - **Срок:** пока древо существует; удалённые записи — 90 дней в истории изменений; архивы для
@@ -84,4 +88,8 @@ actions, processing method, retention.
 ## Обработчики (поручение обработки)
 - ООО «Таймвэб.Облако» — хостинг и хранилище.
 - ‹почтовый сервис› — отправка писем (сброс пароля, подтверждение).
-- ООО НКО «ЮMoney» (ЮKassa) — приём платежей и кассовые чеки.
+
+## Передача третьим лицам
+- ООО НКО «ЮMoney» (ЮKassa) — приём платежей и кассовые чеки. A payment institution acting as
+  an independent operator, not on our instruction: email and amount are passed to perform the
+  contract (п. 5 ч. 1 ст. 6).
