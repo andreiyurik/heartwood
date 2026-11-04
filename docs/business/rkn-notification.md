@@ -44,7 +44,7 @@ actions, processing method, retention.
   person; say so if asked.
 - **Субъекты:** родственники и предки пользователей, в том числе умершие.
 - **Основание:** для данных самого пользователя — его согласие. **Для живых родственников
-  основание не решено — главный вопрос юристу.** The user's own household exemption (ч. 2
+  основание не решено — главный вопрос юристу** (предлагаемая позиция — [[legal-ru]] п. 2). The user's own household exemption (ч. 2
   ст. 1) covers the user, not us as operator, and a right to ask for deletion is not a basis
   under ст. 6. Options to discuss: the relative's consent collected when they are invited,
   hiding living people by default (already true for outsiders), or a legitimate-interest
@@ -79,7 +79,8 @@ actions, processing method, retention.
   100 000 subjects, threats of type 3›.
 
 ## Трансграничная передача
-Не осуществляется.
+Не осуществляется — **только после** замены тайлов карты и геокодера OpenStreetMap на
+российского провайдера и выбора российского почтового сервиса, см. [[legal-ru]] п. 1 и 8.
 
 ## Местонахождение базы данных
 Российская Федерация, ‹адрес ЦОД Timeweb Cloud, указанный в панели для выбранной локации›,
