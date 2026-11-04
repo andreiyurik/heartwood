@@ -28,7 +28,8 @@ Key positions the texts commit us to (the code must keep them true):
 - Databases with citizens' data are in Russia (art. 18 §5); no cross-border transfer.
 - No selling or sharing; processors are only the hosting provider and the mail sender.
 - No analytics or ad trackers inside the app; only essential cookies (session, locale), so no
-  cookie banner in the app. The landing page gets its own notice when Metrica is added.
+  cookie banner in the app. On the hosted landing page only, Metrica waits for the visitor to
+  accept its notice ([[landing]]).
 - Data about relatives is entered by the user for personal and family purposes; living people
   are hidden from outsiders; anyone named in a tree can ask the operator to remove it.
 - Retention: account data until deletion; history snapshots of deleted records for

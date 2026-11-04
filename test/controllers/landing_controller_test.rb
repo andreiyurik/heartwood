@@ -44,6 +44,16 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
     assert_select "footer nav #cloud-offer"
   end
 
+  test "the hosted engine can add its analytics notice to the landing page only" do
+    with_cloud_slots do
+      get root_url
+      assert_select "#cloud-analytics"
+
+      get privacy_url
+      assert_select "#cloud-analytics", count: 0
+    end
+  end
+
   test "the family price says soon until the hosted engine names one" do
     get root_url
     assert_select "#pricing .landing-price", text: I18n.t("landing.pricing.family_price")

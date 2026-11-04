@@ -28,6 +28,8 @@ env:
     - YOOKASSA_SECRET_KEY
   clear:
     SOLID_QUEUE_IN_PUMA: true
+    SOLID_QUEUE_RECURRING_SCHEDULE: vendor/cloud/config/recurring.yml
+    # YANDEX_METRICA_ID: "12345678"
     STORAGE_ENDPOINT: https://s3.twcstorage.ru
     STORAGE_REGION: ru-1
     BACKUP_ENDPOINT: https://s3.twcstorage.ru

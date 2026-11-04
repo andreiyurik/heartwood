@@ -62,6 +62,7 @@ partials; the Engine ships them. Current slots:
 | `tree_plan` | tree's people & sharing page, owner only | `tree` |
 | `legal_links` | landing footer, after the terms | — |
 | `privacy_processors` | privacy policy, after the list of processors | — |
+| `landing_analytics` | end of the landing page — the only page analytics may run on | — |
 
 A new slot is added to the core only when the Engine needs one — keep the list short.
 
