@@ -52,6 +52,7 @@ agent, also read [`CLAUDE.md`](../CLAUDE.md) at the repo root.
 - [[pricing-hosting]] — the hosted plan
 - [[launch-ru]] — hosted launch market: Russia first (152-ФЗ, ЮKassa, channels)
 - [[rkn-notification]] — draft answers for the Roskomnadzor operator notification
+- [[legal-ru]] — legal review for the RF launch: what to fix, questions for the lawyer
 
 ## Learning from others
 - [[prior-art]] — webtrees, Gramps, GeneWeb, family-chart, Topola, Maybe, Solidus — and exactly what we take from each
