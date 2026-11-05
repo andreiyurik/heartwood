@@ -40,7 +40,7 @@
   <% if Maps.tiles? || Maps.geocoder? %>
     <p id="map-servers">
       <% if Maps.tiles? %>Карта в приложении загружает изображения местности с сервера <%= Maps.tiles_host %>: он получает ваш IP-адрес и сведения о браузере.<% end %>
-      <% if Maps.geocoder? %>Поиск места на карте отправляет его название на сервер <%= Maps.geocoder_host %>.<% end %>
+      <% if Maps.geocoder? %>Названия мест, которые вы вносите или импортируете, отправляются на сервер <%= Maps.geocoder_host %>, чтобы найти их на карте.<% end %>
     </p>
   <% end %>
   <%= cloud_slot "privacy_processors" %>

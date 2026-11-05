@@ -3,8 +3,17 @@ require "test_helper"
 # Place — normalized event locations. The raw string is kept; coordinates are
 # best-effort. Also covers Event#place_name, the find-or-create the form leans on.
 class PlaceTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   setup { Current.tree = trees(:alpha) }
   teardown { Current.reset }
+
+  test "a new place is looked up only when a geocoder is on" do
+    assert_enqueued_jobs(1, only: PlaceGeocodeJob) { Place.create!(name: "Tver") }
+    with_maps(geocoder_url: "off") do
+      assert_no_enqueued_jobs(only: PlaceGeocodeJob) { Place.create!(name: "Pskov") }
+    end
+  end
 
   test "requires a name" do
     assert_not Place.new(tree: Current.tree).valid?

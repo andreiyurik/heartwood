@@ -29,9 +29,12 @@ environment, like the operator details ([[accounts-and-legal]]):
 - `GEOCODER_URL` — a Nominatim-compatible `/search` endpoint, default
   `nominatim.openstreetmap.org`.
 
-Set either to an empty string to turn it off. Without tiles there is no map: the Map tab, the
-person's map block and the place picker's map are hidden and `/map` is 404. Without a geocoder
-the «find on the map» button is hidden and imported places stay without coordinates. The
+Set either to `off` to turn it off (an empty value works too, but Kamal drops empty values to a
+bare `--env KEY`, which falls back to OSM). Without tiles there is no map: the Map tab, the
+person's map section, the place picker's map and the landing page's map feature are hidden, and
+`/map` and the map JSON are 404. Without a geocoder the «find on the map» button is hidden, no
+lookup jobs are queued, and places stay without coordinates. The policy names whichever servers
+are on, so switching them on a live install is a policy change: bump `Legal::VERSION`. The
 hosted service in Russia keeps both off until it has a Russian provider: the OSM servers are
 abroad, and the policy promises no cross-border transfer ([[legal-ru]] п. 1).
 

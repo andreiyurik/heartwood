@@ -35,7 +35,7 @@ class Geocoder
     get["User-Agent"] = USER_AGENT
 
     # Short timeouts: a slow geocoder must not pin a web thread.
-    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true,
+    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == "https",
       open_timeout: 3, read_timeout: 3) { |http| http.request(get) }
     return unless response.is_a?(Net::HTTPSuccess)
 
