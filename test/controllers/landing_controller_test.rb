@@ -18,6 +18,19 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
     assert_select ".landing-features h3", text: I18n.t("landing.features.map_title"), count: 0
   end
 
+  test "the footer names the operator once it is configured" do
+    get root_url
+    assert_select ".landing-footer .landing-operator", count: 0
+
+    operator = Rails.configuration.x.operator
+    original = operator.slice(:name, :inn, :ogrn, :email)
+    operator.merge!(name: "ИП Иванов И. И.", inn: "770000000000", ogrn: "300000000000000", email: "hi@example.ru")
+    get root_url
+    assert_select ".landing-footer .landing-operator", text: /ИП Иванов И\. И\..*770000000000.*300000000000000.*hi@example\.ru/m
+  ensure
+    operator&.merge!(original)
+  end
+
   test "a signed-in person at the root goes straight to their tree" do
     sign_in_as users(:one)
     get root_url
