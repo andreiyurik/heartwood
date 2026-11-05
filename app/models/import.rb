@@ -7,7 +7,7 @@ class Import < ApplicationRecord
 
   enum :status, %w[pending processing completed failed].index_by(&:itself), default: "pending"
 
-  validate :file_is_gedcom
+  validate :file_is_gedcom, on: :create
 
   broadcasts_refreshes
 
@@ -27,6 +27,9 @@ class Import < ApplicationRecord
     failed_with(error.record.errors.of_kind?(:base, :tree_full) ? "tree_full" : "invalid")
   rescue Zip::Error
     failed_with("no_records")
+  ensure
+    # The upload is a full copy of the tree, the parts the import leaves out included.
+    file.purge_later
   end
 
   private
