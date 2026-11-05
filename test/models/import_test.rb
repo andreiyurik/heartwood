@@ -24,6 +24,20 @@ class ImportTest < ActiveSupport::TestCase
     assert_equal 1, import.families_count
   end
 
+  test "the uploaded file is purged once it is read, whatever the outcome" do
+    done = import_from("minimal_551.ged")
+    failed = Import.new(tree: @tree, user: users(:one))
+    failed.file.attach(io: StringIO.new("this is not gedcom"), filename: "notes.ged")
+    failed.save!
+
+    [ done, failed ].each(&:process)
+
+    assert done.reload.completed?
+    assert failed.reload.failed?
+    assert_not done.file.attached?
+    assert_not failed.file.attached?
+  end
+
   test "a file with no people fails without touching the tree" do
     import = Import.new(tree: @tree, user: users(:one))
     import.file.attach(io: StringIO.new("this is not gedcom"), filename: "notes.ged")
