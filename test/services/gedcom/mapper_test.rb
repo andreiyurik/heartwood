@@ -13,6 +13,66 @@ class Gedcom::MapperTest < ActiveSupport::TestCase
 
   # --- INDI → Person ---
 
+  test "leaves out religion, nationality, caste and cause of death of a living person" do
+    result = import(<<~GED)
+      0 @I1@ INDI
+      1 NAME Anna /Petrova/
+      1 RELI Orthodox
+      1 NATI Russian
+      1 CAST Merchant
+      1 OCCU Teacher
+      1 BIRT
+      2 DATE 1985
+      2 RELI Orthodox
+      1 RESI
+      2 CAUS Illness
+      2 PLAC Moscow
+    GED
+    person = result[:people].first
+    tags = ->(raw) { Array(raw).flat_map { [ it["tag"], *tags.(it["children"]) ] } }
+
+    assert_equal [], tags.(person.gedcom_raw) & %w[RELI NATI CAST]
+    assert_equal [], person.events.flat_map { tags.(it.gedcom_raw) } & %w[RELI CAUS]
+    assert person.events.exists?(kind: "OCCU")
+    assert_equal 1, result[:warnings].grep(/@I1@/).size
+  end
+
+  test "leaves out the religion of a living couple's wedding" do
+    result = import(<<~GED)
+      0 @I1@ INDI
+      1 NAME Anna /Petrova/
+      0 @I2@ INDI
+      1 NAME Ivan /Petrov/
+      1 DEAT
+      0 @F1@ FAM
+      1 HUSB @I2@
+      1 WIFE @I1@
+      1 MARR
+      2 DATE 2010
+      2 RELI Orthodox
+    GED
+    marriage = result[:families].first.events.find_by(kind: "MARR")
+
+    assert_nil marriage.gedcom_raw
+    assert_equal 1, result[:warnings].grep(/@F1@/).size
+  end
+
+  test "keeps the special categories of the dead" do
+    result = import(<<~GED)
+      0 @I1@ INDI
+      1 NAME Ivan /Petrov/
+      1 RELI Orthodox
+      1 DEAT
+      2 DATE 1942
+      2 CAUS Typhus
+    GED
+    person = result[:people].first
+
+    assert_includes person.gedcom_raw.map { it["tag"] }, "RELI"
+    assert_includes person.events.find_by(kind: "DEAT").gedcom_raw.map { it["tag"] }, "CAUS"
+    assert_empty result[:warnings]
+  end
+
   test "maps INDI to Person with gedcom_xref and sex" do
     result = import(<<~GED)
       0 @I1@ INDI
