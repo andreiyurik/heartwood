@@ -16,6 +16,25 @@ class MapsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".blank-slate", count: 0
   end
 
+  test "the layout hands the tile server to the map script" do
+    get map_url
+    assert_select "meta[name=map-tiles][content=?]", Rails.configuration.x.maps.tiles_url
+    assert_select "meta[name=map-tiles-attribution]"
+    assert_select "nav a[href=?]", map_path
+  end
+
+  test "without a tile server there is no map anywhere" do
+    with_maps tiles_url: "" do
+      get map_url
+      assert_response :not_found
+
+      get person_url(people(:wilhelm_friedemann))
+      assert_select "meta[name=map-tiles]", count: 0
+      assert_select "a[href=?]", map_path, count: 0
+      assert_select "[data-controller=map]", count: 0
+    end
+  end
+
   test "with nothing located the map page says what to do instead of showing a bare planet" do
     trees(:bach).places.update_all(latitude: nil, longitude: nil)
     get map_url

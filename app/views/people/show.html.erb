@@ -83,7 +83,7 @@
     <%= render "people/memories", person: @person %>
   </section>
 
-  <% if @person.located_events.exists? %>
+  <% if Maps.tiles? && @person.located_events.exists? %>
     <section class="profile-section" id="map">
       <h2><%= t("people.sections.map") %></h2>
       <%= render "people/map", person: @person %>

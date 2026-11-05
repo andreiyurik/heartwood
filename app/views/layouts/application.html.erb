@@ -12,6 +12,10 @@
     <meta name="turbo-refresh-scroll" content="preserve">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <% if Maps.tiles? %>
+      <meta name="map-tiles" content="<%= Maps.config.tiles_url %>">
+      <meta name="map-tiles-attribution" content="<%= Maps.config.tiles_attribution %>">
+    <% end %>
 
     <%= yield :head %>
 
@@ -36,7 +40,7 @@
       <nav id="toolbar" class="sections" aria-label="<%= t("nav.sections") %>">
         <%= section_link "people", root_path %>
         <%= section_link "tree", clan_tree_path %>
-        <%= section_link "map", map_path %>
+        <%= section_link "map", map_path if Maps.tiles? %>
       </nav>
     <% end %>
 
