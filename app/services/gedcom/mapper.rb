@@ -6,7 +6,8 @@ module Gedcom
     QUAY       = { "0" => "low", "1" => "normal", "2" => "high", "3" => "very_high" }.freeze
     REFERENCED = %w[NOTE SOUR REPO OBJE SUBM].freeze
     # Special categories under ст. 10 152-ФЗ; see docs/interop/gedcom.md for why living people lose them.
-    SPECIAL    = %w[RELI NATI CAST CAUS].freeze
+    SPECIAL    = %w[RELI NATI CAST CAUS _MDCL].freeze
+    SPECIAL_TYPES = /религ|вероисп|национальн|здоров|болезн|religio|nationalit|ethnic|caste|health|medical/i
 
     # media: resolves an OBJE FILE path to an attachable (a GEDZIP's files), or nil.
     def initialize(records, tree: nil, media: nil)
@@ -84,9 +85,10 @@ module Gedcom
       end
 
       def living?(record)
-        return false if record[:children].any? { it[:tag].in?(Person::Living::DEATH_KINDS) }
+        # Only the death kinds that become events, or the person would count as living once created.
+        return false if record[:children].any? { it[:tag].in?(Person::Living::DEATH_KINDS & EVENT_TAGS) }
         birth = record[:children].find { it[:tag] == "BIRT" }
-        year  = FuzzyDate.parse(birth && child_value(birth, "DATE"))&.start&.year
+        year  = FuzzyDate.parse(birth && date_value(birth))&.start&.year
         year.nil? || year > Date.current.year - Person::Living::LIVING_CUTOFF_YEARS
       end
 
@@ -96,12 +98,16 @@ module Gedcom
 
       def without_special_categories(record)
         stripped = strip_special(record)
-        @warnings << "Left out religion, nationality, caste or cause of death of the living in #{record[:xref]}" if stripped != record
+        @warnings << "Left out religion, nationality, caste or health of the living in #{record[:xref]}" if stripped != record
         stripped
       end
 
       def strip_special(node)
-        node.merge(children: node[:children].reject { it[:tag].in?(SPECIAL) }.map { strip_special(it) })
+        node.merge(children: node[:children].reject { special?(it) }.map { strip_special(it) })
+      end
+
+      def special?(node)
+        node[:tag].in?(SPECIAL) || (node[:tag].in?(%w[EVEN FACT]) && child_value(node, "TYPE").to_s.match?(SPECIAL_TYPES))
       end
 
       def map_fam(record)
@@ -134,8 +140,7 @@ module Gedcom
       end
 
       def map_event(record, eventable)
-        date  = record[:children].find { it[:tag] == "DATE" }&.dig(:value)
-        date  = date[/\A\((.*)\)\z/, 1] || date if date # a date phrase
+        date  = date_value(record)
         place = record[:children].find { it[:tag] == "PLAC" }&.dig(:value)
         raw   = record[:children].reject { it[:tag].in?(%w[DATE PLAC SOUR]) }.map { raw_node(it) }
 
@@ -245,6 +250,11 @@ module Gedcom
 
       def child_value(record, tag)
         record[:children].find { it[:tag] == tag }&.dig(:value)
+      end
+
+      def date_value(record)
+        date = child_value(record, "DATE")
+        date && (date[/\A\((.*)\)\z/, 1] || date) # a date phrase
       end
 
       def parse_date(value)
