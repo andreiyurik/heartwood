@@ -63,6 +63,13 @@ deliberately:
   (`_CUSTOM`), encodings vary (ANSEL in old files!), and structure differs. Our rule:
   **never drop data.** Unknown tags get preserved in a raw/`extra` store and surfaced, not
   discarded. A user must never lose information by importing into Heartwood.
+- **The one deliberate exception: special categories of living people.** For a person the
+  import counts as living (no death, burial or cremation; born less than
+  `Person::Living::LIVING_CUTOFF_YEARS` ago or birth unknown — the same rule as
+  [[privacy-access]]), `RELI`, `NATI`, `CAST` and `CAUS` are left out at any depth, with one
+  import warning per person. Religion, nationality and health are special categories under
+  ст. 10 152-ФЗ, which need written consent we don't have ([[legal-ru]] п. 3). The dead keep
+  them. Free text in notes is the user's responsibility ([[accounts-and-legal]]).
 - Keep original `@xref@` ids (`gedcom_xref` fields across the [[domain-model]]) so a
   round-trip import → export → import is **stable**. This is a Phase-2 acceptance test.
 
