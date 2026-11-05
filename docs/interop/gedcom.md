@@ -66,8 +66,11 @@ deliberately:
 - **The one deliberate exception: special categories of living people.** For a person the
   import counts as living (no death, burial or cremation; born less than
   `Person::Living::LIVING_CUTOFF_YEARS` ago or birth unknown — the same rule as
-  [[privacy-access]]), `RELI`, `NATI`, `CAST` and `CAUS` are left out at any depth, with one
-  import warning per person. Religion, nationality and health are special categories under
+  [[privacy-access]], counting only the death kinds that become events), `RELI`, `NATI`,
+  `CAST`, `CAUS`, `_MDCL` and any `EVEN`/`FACT` whose `TYPE` names religion, nationality,
+  ethnicity, caste or health (en/ru) are left out at any depth, with one import warning per
+  record. The uploaded file itself is purged once it is read, so the left-out lines don't
+  survive there either. Religion, nationality and health are special categories under
   ст. 10 152-ФЗ, which need written consent we don't have ([[legal-ru]] п. 3). The dead keep
   them. Free text in notes is the user's responsibility ([[accounts-and-legal]]).
 - Keep original `@xref@` ids (`gedcom_xref` fields across the [[domain-model]]) so a
