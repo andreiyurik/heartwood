@@ -60,10 +60,16 @@ people kept for undo ([[change-history]]). It runs in `Tree::IncinerateJob`.
 ## Erasing a person on request
 Anyone named in a tree may demand their data be removed (ст. 21 152-ФЗ; 10 working days). An
 ordinary removal keeps a copy for undo for 90 days, which such a request rules out, so
-`Person#erase` is a separate path: it destroys the person with their events and links, deletes
-every history row about them (`Edit.person_id`) without writing a new one, and purges their
-photo, including photos kept by earlier removals. Backups still hold them for up to 30 days,
-as the policy says. The hosted service runs it from `/cloud/support` (person search on the
+`Person#erase` is a separate path. Writing no history of its own, it:
+- destroys the person with their events and family links, the events of every couple they were
+  a partner in (a marriage is both people's data), and any family left with nobody in it;
+- deletes every history row about them (`Edit.person_id`) and every row in the tree that names
+  them, under their current or a former name (a family event's or a sibling link's particulars);
+- deletes places and sources only their events used (a place is often a home address);
+- destroys the tree's download archives and purges stored import uploads, which hold everyone;
+- purges their photo, including photos kept by earlier removals.
+
+Backups still hold them for up to 30 days, as the policy says. The hosted service runs it from `/cloud/support` (person search on the
 tree page), logs who did it, and emails the tree's owner that the person was removed on their
 request; a self-hoster runs `Person.find(id).erase` in the console.
 
