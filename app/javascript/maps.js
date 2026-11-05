@@ -22,15 +22,19 @@ export async function loadLeaflet() {
   return leaflet
 }
 
-// The standard OpenStreetMap tile layer, with a credit line free of Leaflet's
-// bundled Ukrainian-flag prefix.
-export function osmTiles(L, map) {
+// The tile server is the installation's setting (layout meta tags); the credit line is
+// kept free of Leaflet's bundled Ukrainian-flag prefix.
+export function addTiles(L, map) {
   map.attributionControl.setPrefix(
     '<a href="https://leafletjs.com" title="A JavaScript library for interactive maps">Leaflet</a>')
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap contributors",
+  L.tileLayer(metaContent("map-tiles"), {
+    attribution: escapeHtml(metaContent("map-tiles-attribution")),
     maxZoom: 19
   }).addTo(map)
+}
+
+function metaContent(name) {
+  return document.querySelector(`meta[name="${name}"]`)?.content ?? ""
 }
 
 export function escapeHtml(value) {

@@ -30,6 +30,9 @@ env:
     SOLID_QUEUE_IN_PUMA: true
     # Needs the engine version that ships this file; without it Solid Queue runs no recurring tasks, backups included.
     SOLID_QUEUE_RECURRING_SCHEDULE: vendor/cloud/config/recurring.yml
+    # OSM's tile and geocoding servers are abroad; off until a Russian provider is chosen.
+    MAP_TILES_URL: ""
+    GEOCODER_URL: ""
     # YANDEX_METRICA_ID: "12345678"
     # SUPPORT_USER_IDS: "1"
     STORAGE_ENDPOINT: https://s3.twcstorage.ru

@@ -20,6 +20,19 @@ class GeocoderTest < ActiveSupport::TestCase
     assert_in_delta(-71.0589, candidate[:lng], 0.0001)
   end
 
+  test "searches the configured endpoint, Nominatim by default" do
+    assert_equal "https://nominatim.openstreetmap.org/search", Rails.configuration.x.maps.geocoder_url
+  end
+
+  test "an empty endpoint turns lookups off" do
+    geocoder = Geocoder.new
+    def geocoder.request(_query, _limit) = raise("must not be called")
+
+    with_maps geocoder_url: "" do
+      assert_equal [], geocoder.search("Boston")
+    end
+  end
+
   test "a lookup error degrades to an empty list" do
     geocoder = Geocoder.new
     def geocoder.request(_query, _limit) = raise("boom")
