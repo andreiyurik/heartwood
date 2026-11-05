@@ -32,8 +32,17 @@ Key positions the texts commit us to (the code must keep them true):
 - No analytics or ad trackers inside the app; only essential cookies (session, locale), so no
   cookie banner in the app. On the hosted landing page only, Metrica waits for the visitor to
   accept its notice ([[landing]]).
-- Data about relatives is entered by the user for personal and family purposes; living people
-  are hidden from outsiders; anyone named in a tree can ask the operator to remove it.
+- Data about relatives is entered by the user for personal and family purposes; the operator's
+  basis is the family's legitimate interest (п. 7 ч. 1 ст. 6), kept by: only tree members see
+  it, view links hide the living and are `noindex`, and anyone named can demand removal
+  (`Person#erase`, 10 working days, the owner is told). See [[legal-ru]] п. 2.
+- The consent also covers what other members of a tree have entered or will enter about the
+  person who joins it.
+- The terms: 14+; the user enters living people with their knowledge and no health, religion
+  or ethnicity of the living; liability is the statutory one (no "as is" — ст. 16 ЗоЗПП); a
+  rights-holder's notice is handled in 10 working days (ст. 1253.1 ГК); changes come 10 days
+  ahead and never worsen a paid period.
+- The landing footer names the operator (name, ИНН, ОГРН, email) once `OPERATOR_NAME` is set.
 - Retention: account data until deletion; history snapshots of deleted records for
   `Edit::RETENTION` (90 days); download archives `Archive::RETENTION` (24 hours); backups up to
   30 days.
