@@ -5,6 +5,8 @@ module Gedcom
                    "SURN" => :surname, "NSFX" => :name_suffix }.freeze
     QUAY       = { "0" => "low", "1" => "normal", "2" => "high", "3" => "very_high" }.freeze
     REFERENCED = %w[NOTE SOUR REPO OBJE SUBM].freeze
+    # Special categories under ст. 10 152-ФЗ; see docs/interop/gedcom.md for why living people lose them.
+    SPECIAL    = %w[RELI NATI CAST CAUS].freeze
 
     # media: resolves an OBJE FILE path to an attachable (a GEDZIP's files), or nil.
     def initialize(records, tree: nil, media: nil)
@@ -40,7 +42,8 @@ module Gedcom
 
     private
       def map_indi(record)
-        attrs = { gedcom_xref: record[:xref], sex: "U" }
+        record = without_special_categories(record) if living?(record)
+        attrs  = { gedcom_xref: record[:xref], sex: "U" }
         raw   = []
         notes = []
         named = false
@@ -80,7 +83,29 @@ module Gedcom
         person
       end
 
+      def living?(record)
+        return false if record[:children].any? { it[:tag].in?(Person::Living::DEATH_KINDS) }
+        birth = record[:children].find { it[:tag] == "BIRT" }
+        year  = FuzzyDate.parse(birth && child_value(birth, "DATE"))&.start&.year
+        year.nil? || year > Date.current.year - Person::Living::LIVING_CUTOFF_YEARS
+      end
+
+      def partner_living?(node)
+        node[:tag].in?(%w[HUSB WIFE]) && @by_xref[node[:value]]&.then { living?(it) }
+      end
+
+      def without_special_categories(record)
+        stripped = strip_special(record)
+        @warnings << "Left out religion, nationality, caste or cause of death of the living in #{record[:xref]}" if stripped != record
+        stripped
+      end
+
+      def strip_special(node)
+        node.merge(children: node[:children].reject { it[:tag].in?(SPECIAL) }.map { strip_special(it) })
+      end
+
       def map_fam(record)
+        record = without_special_categories(record) if record[:children].any? { partner_living?(it) }
         fam = Family.create!(gedcom_xref: record[:xref], tree: @tree)
         raw = []
 
