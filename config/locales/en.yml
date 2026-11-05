@@ -564,6 +564,7 @@ en:
       title: Start with yourself — your family will tell you the rest
       cta: Create a tree for free
     footer:
+      operator: "%{name} · INN %{inn} · OGRN %{ogrn} · %{email}"
       source: Source code
       tagline: The family tree your whole family builds.
 
