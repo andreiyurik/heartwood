@@ -130,6 +130,9 @@
 
   <footer class="landing-footer">
     <p>🌳 Heartwood — <%= t("landing.footer.tagline") %></p>
+    <% if (operator = Rails.configuration.x.operator).name.present? %>
+      <p class="landing-operator"><%= t("landing.footer.operator", name: operator.name, inn: operator.inn, ogrn: operator.ogrn, email: operator.email) %></p>
+    <% end %>
     <nav aria-label="<%= t("legal.footer") %>">
       <%= link_to t("legal.privacy.title"), privacy_path %>
       <%= link_to t("legal.consent.title"), consent_path %>
