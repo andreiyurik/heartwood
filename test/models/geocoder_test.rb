@@ -28,8 +28,8 @@ class GeocoderTest < ActiveSupport::TestCase
     geocoder = Geocoder.new
     def geocoder.request(_query, _limit) = raise("must not be called")
 
-    with_maps geocoder_url: "" do
-      assert_equal [], geocoder.search("Boston")
+    [ "", "off" ].each do |off|
+      with_maps(geocoder_url: off) { assert_equal [], geocoder.search("Boston") }
     end
   end
 
