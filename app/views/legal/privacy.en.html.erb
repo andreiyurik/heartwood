@@ -42,7 +42,7 @@
   <% if Maps.tiles? || Maps.geocoder? %>
     <p id="map-servers">
       <% if Maps.tiles? %>The map in the app loads its imagery from <%= Maps.tiles_host %>, which receives your IP address and browser details.<% end %>
-      <% if Maps.geocoder? %>Looking a place up on the map sends its name to <%= Maps.geocoder_host %>.<% end %>
+      <% if Maps.geocoder? %>Place names you enter or import are sent to <%= Maps.geocoder_host %> to find them on the map.<% end %>
     </p>
   <% end %>
   <%= cloud_slot "privacy_processors" %>

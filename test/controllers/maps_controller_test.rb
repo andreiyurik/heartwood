@@ -23,15 +23,28 @@ class MapsControllerTest < ActionDispatch::IntegrationTest
     assert_select "nav a[href=?]", map_path
   end
 
-  test "without a tile server there is no map anywhere" do
-    with_maps tiles_url: "" do
-      get map_url
-      assert_response :not_found
+  test "a person with located events gets a map section" do
+    get person_url(people(:johann_sebastian))
+    assert_select "nav.profile-nav a[href='#map']"
+    assert_select "[data-controller=map]"
+  end
 
-      get person_url(people(:wilhelm_friedemann))
-      assert_select "meta[name=map-tiles]", count: 0
-      assert_select "a[href=?]", map_path, count: 0
-      assert_select "[data-controller=map]", count: 0
+  test "without a tile server there is no map anywhere" do
+    [ "", "off" ].each do |off|
+      with_maps tiles_url: off do
+        get map_url
+        assert_response :not_found
+        get map_events_url(format: :json)
+        assert_response :not_found
+        get person_map_url(people(:johann_sebastian), format: :json)
+        assert_response :not_found
+
+        get person_url(people(:johann_sebastian))
+        assert_select "meta[name=map-tiles]", count: 0
+        assert_select "a[href=?]", map_path, count: 0
+        assert_select "nav.profile-nav a[href='#map']", count: 0
+        assert_select "[data-controller=map]", count: 0
+      end
     end
   end
 

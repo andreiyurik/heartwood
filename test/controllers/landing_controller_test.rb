@@ -10,6 +10,14 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", new_session_path
   end
 
+  test "the map is advertised only when the install has one" do
+    get root_url
+    assert_select ".landing-features h3", text: I18n.t("landing.features.map_title")
+
+    with_maps(tiles_url: "off") { get root_url }
+    assert_select ".landing-features h3", text: I18n.t("landing.features.map_title"), count: 0
+  end
+
   test "a signed-in person at the root goes straight to their tree" do
     sign_in_as users(:one)
     get root_url
