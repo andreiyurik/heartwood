@@ -29,12 +29,16 @@
     <div class="place-input-row">
       <%= f.text_field :place_name, class: "input", placeholder: t("events.place_placeholder"), autocomplete: "off",
             data: { place_target: "input", action: "input->place#search" } %>
-      <button type="button" class="btn"
-              data-action="place#locate"><%= t("places.locate") %></button>
+      <% if Maps.geocoder? %>
+        <button type="button" class="btn"
+                data-action="place#locate"><%= t("places.locate") %></button>
+      <% end %>
     </div>
     <div class="place-suggestions" data-place-target="suggestions" data-action="click->place#chooseSuggestion"></div>
     <div class="place-candidates" data-place-target="candidates"></div>
-    <div class="place-map" data-place-target="map" hidden></div>
+    <% if Maps.tiles? %>
+      <div class="place-map" data-place-target="map" hidden></div>
+    <% end %>
     <%= f.hidden_field :place_latitude,  data: { place_target: "lat" } %>
     <%= f.hidden_field :place_longitude, data: { place_target: "lng" } %>
   </div>

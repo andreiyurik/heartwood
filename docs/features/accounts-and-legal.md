@@ -27,6 +27,8 @@ sign-up and join screens and from the account page. `Legal::VERSION` dates the c
 Key positions the texts commit us to (the code must keep them true):
 - Databases with citizens' data are in Russia (art. 18 §5); no cross-border transfer.
 - No selling or sharing; processors are only the hosting provider and the mail sender.
+- The map's tile server and the geocoder are named in the policy whenever they are on
+  (`Maps.tiles_host`, [[place]]); the hosted service keeps them off.
 - No analytics or ad trackers inside the app; only essential cookies (session, locale), so no
   cookie banner in the app. On the hosted landing page only, Metrica waits for the visitor to
   accept its notice ([[landing]]).

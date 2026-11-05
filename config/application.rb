@@ -28,6 +28,7 @@ module Heartwood
     config.i18n.default_locale   = :en
 
     config.x.operator = config_for(:operator)
+    config.x.maps = config_for(:maps)
 
     config.x.backups.directory = Rails.root.join("storage/backups")
     config.x.backups.offsite   = ENV["BACKUP_BUCKET"].present?

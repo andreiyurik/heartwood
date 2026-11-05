@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import { loadLeaflet, osmTiles, escapeHtml } from "maps"
+import { loadLeaflet, addTiles, escapeHtml } from "maps"
 
 // Leaflet is imported lazily so a blocked CDN shows a message instead of a blank box.
 export default class extends Controller {
@@ -11,7 +11,7 @@ export default class extends Controller {
     if (!L) return this.showUnavailable()
 
     this.map = L.map(this.canvas)
-    osmTiles(L, this.map)
+    addTiles(L, this.map)
     this.loadMarkers(L)
   }
 

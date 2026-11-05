@@ -1,3 +1,3 @@
 module Legal
-  VERSION = "2026-11-01"
+  VERSION = "2026-11-05"
 end
