@@ -20,6 +20,24 @@ five ways." So we keep the raw string **and** a normalized, hierarchical Place.
 - `latitude` / `longitude` (optional; enables a future map view — a "Could" in [[roadmap]]).
 - `gedcom_raw` — original `PLAC` string for lossless [[gedcom]] round-trip.
 
+## Map tiles and geocoding are settings
+The browser fetches map tiles and the server asks a geocoder for coordinates; both are third
+parties that see a request (the tile server sees the viewer's IP). So they come from the
+environment, like the operator details ([[accounts-and-legal]]):
+- `MAP_TILES_URL` — a Leaflet URL template, default the OpenStreetMap tile server;
+  `MAP_TILES_ATTRIBUTION` — its credit line, default «© OpenStreetMap contributors».
+- `GEOCODER_URL` — a Nominatim-compatible `/search` endpoint, default
+  `nominatim.openstreetmap.org`.
+
+Set either to `off` to turn it off (an empty value works too, but Kamal drops empty values to a
+bare `--env KEY`, which falls back to OSM). Without tiles there is no map: the Map tab, the
+person's map section, the place picker's map and the landing page's map feature are hidden, and
+`/map` and the map JSON are 404. Without a geocoder the «find on the map» button is hidden, no
+lookup jobs are queued, and places stay without coordinates. The policy names whichever servers
+are on, so switching them on a live install is a policy change: bump `Legal::VERSION`. The
+hosted service in Russia keeps both off until it has a Russian provider: the OSM servers are
+abroad, and the policy promises no cross-border transfer ([[legal-ru]] п. 1).
+
 ## Notes
 - On import, store the raw string immediately; normalize lazily/optionally. Never block
   import on geocoding.

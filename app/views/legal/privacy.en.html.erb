@@ -39,6 +39,12 @@
 
   <h2>6. Who else has access</h2>
   <p>Only processors acting on the operator's instructions, to the extent the service needs: the hosting provider (<%= operator(:hosting) %>) and the email delivery service. There are no ad or analytics trackers inside the app; only essential cookies are used — for sign-in and language.</p>
+  <% if Maps.tiles? || Maps.geocoder? %>
+    <p id="map-servers">
+      <% if Maps.tiles? %>The map in the app loads its imagery from <%= Maps.tiles_host %>, which receives your IP address and browser details.<% end %>
+      <% if Maps.geocoder? %>Place names you enter or import are sent to <%= Maps.geocoder_host %> to find them on the map.<% end %>
+    </p>
+  <% end %>
   <%= cloud_slot "privacy_processors" %>
 
   <h2>7. How we protect it</h2>

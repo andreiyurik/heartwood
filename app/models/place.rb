@@ -17,6 +17,6 @@ class Place < ApplicationRecord
   def geocoded? = latitude.present? && longitude.present?
 
   def geocode_later
-    PlaceGeocodeJob.perform_later(self) unless geocoded?
+    PlaceGeocodeJob.perform_later(self) if Maps.geocoder? && !geocoded?
   end
 end

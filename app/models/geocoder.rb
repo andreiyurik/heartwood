@@ -2,7 +2,6 @@ require "net/http"
 
 # Called once per explicit user action, never per keystroke: Nominatim's usage policy.
 class Geocoder
-  ENDPOINT   = "https://nominatim.openstreetmap.org/search".freeze
   USER_AGENT = "Heartwood/0.1 (open-source family tree)".freeze
 
   def self.search(query, limit: 5)
@@ -11,7 +10,7 @@ class Geocoder
 
   def search(query, limit: 5)
     query = query.to_s.strip
-    return [] if query.blank?
+    return [] if query.blank? || !Maps.geocoder?
 
     Array(request(query, limit)).map do |result|
       {
@@ -29,14 +28,14 @@ class Geocoder
   private
 
   def request(query, limit)
-    uri = URI(ENDPOINT)
+    uri = URI(Maps.config.geocoder_url)
     uri.query = URI.encode_www_form(q: query, format: "json", limit: limit)
 
     get = Net::HTTP::Get.new(uri)
     get["User-Agent"] = USER_AGENT
 
-    # Short timeouts: a slow Nominatim must not pin a web thread.
-    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true,
+    # Short timeouts: a slow geocoder must not pin a web thread.
+    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == "https",
       open_timeout: 3, read_timeout: 3) { |http| http.request(get) }
     return unless response.is_a?(Net::HTTPSuccess)
 

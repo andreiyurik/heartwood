@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-import { loadLeaflet, osmTiles, escapeHtml } from "maps"
+import { loadLeaflet, addTiles, escapeHtml } from "maps"
 import { debounce } from "helpers/timing_helpers"
 
 // Leaflet is imported lazily so a blocked CDN never stops autocomplete and the button from working.
@@ -94,6 +94,7 @@ export default class extends Controller {
   }
 
   async showMap(lat, lng) {
+    if (!this.hasMapTarget) return
     const L = await loadLeaflet()
     if (!L) return
 
@@ -101,7 +102,7 @@ export default class extends Controller {
 
     if (!this.#map) {
       this.#map = L.map(this.mapTarget).setView([lat, lng], 11)
-      osmTiles(L, this.#map)
+      addTiles(L, this.#map)
 
       this.#marker = L.marker([lat, lng], { draggable: true }).addTo(this.#map)
       this.#marker.on("dragend", () => {

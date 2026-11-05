@@ -69,7 +69,7 @@
   <section class="landing-section" aria-labelledby="features">
     <h2 id="features"><%= t("landing.features.title") %></h2>
     <ul class="landing-grid landing-features">
-      <% { live: "people", history: "refresh", sources: "search", map: "map", kinship: "person", gedcom: "download" }.each do |feature, icon| %>
+      <% { live: "people", history: "refresh", sources: "search", map: "map", kinship: "person", gedcom: "download" }.then { Maps.tiles? ? it : it.except(:map) }.each do |feature, icon| %>
         <li>
           <%= icon_tag icon %>
           <h3><%= t("landing.features.#{feature}_title") %></h3>

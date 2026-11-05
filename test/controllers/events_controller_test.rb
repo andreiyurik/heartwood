@@ -72,6 +72,18 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to person_url(@person)
   end
 
+  test "the place picker offers a map lookup only with a geocoder" do
+    get new_person_event_url(@person)
+    assert_select "[data-action='place#locate']"
+
+    with_maps geocoder_url: "off", tiles_url: "off" do
+      get new_person_event_url(@person)
+      assert_select "[data-controller=place]"
+      assert_select "[data-action='place#locate']", count: 0
+      assert_select "[data-place-target=map]", count: 0
+    end
+  end
+
   test "new renders an inline event form" do
     get new_person_event_url(@person)
     assert_response :success

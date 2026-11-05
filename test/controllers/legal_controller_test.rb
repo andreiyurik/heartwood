@@ -36,6 +36,21 @@ class LegalControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "the policy names the map servers that see a viewer, in both languages" do
+    [ "en", "ru" ].each do |locale|
+      cookies[:locale] = locale
+      with_maps tiles_url: "https://{s}.tiles.example.ru/{z}/{x}/{y}.png", geocoder_url: "https://geo.example.ru/search" do
+        get privacy_path
+        assert_select "article.legal #map-servers", text: /tiles\.example\.ru.*geo\.example\.ru/m
+      end
+
+      with_maps tiles_url: "", geocoder_url: "" do
+        get privacy_path
+        assert_select "#map-servers", count: 0
+      end
+    end
+  end
+
   test "documents follow the interface language" do
     get privacy_path
     assert_select "h1", I18n.t("legal.privacy.title", locale: :en)

@@ -50,7 +50,8 @@
 <article class="person">
   <nav class="profile-nav" aria-label="<%= t("people.sections_label") %>">
     <% sections = %w[events family biography sources memories] %>
-    <% sections << "map" if @person.located_events.exists? %>
+    <% mapped = Maps.tiles? && @person.located_events.exists? %>
+    <% sections << "map" if mapped %>
     <% sections.each do |section| %>
       <a href="#<%= section %>"><%= t("people.sections.#{section}") %></a>
     <% end %>
@@ -83,7 +84,7 @@
     <%= render "people/memories", person: @person %>
   </section>
 
-  <% if @person.located_events.exists? %>
+  <% if mapped %>
     <section class="profile-section" id="map">
       <h2><%= t("people.sections.map") %></h2>
       <%= render "people/map", person: @person %>

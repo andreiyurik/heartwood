@@ -1,0 +1,5 @@
+# Both are third parties: the tile server sees every viewer's IP. "off" turns either off.
+shared:
+  tiles_url: <%= ENV.fetch("MAP_TILES_URL", "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").to_json %>
+  tiles_attribution: <%= ENV.fetch("MAP_TILES_ATTRIBUTION", "© OpenStreetMap contributors").to_json %>
+  geocoder_url: <%= ENV.fetch("GEOCODER_URL", "https://nominatim.openstreetmap.org/search").to_json %>
