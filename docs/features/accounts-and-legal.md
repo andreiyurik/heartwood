@@ -59,6 +59,16 @@ account** — confirmed with the password. Deleting:
 live updates suppressed and **purges every photo file**, including those of previously deleted
 people kept for undo ([[change-history]]). It runs in `Tree::IncinerateJob`.
 
+## Erasing a person on request
+Anyone named in a tree may demand their data be removed (ст. 21 152-ФЗ; 10 working days). An
+ordinary removal keeps a copy for undo for 90 days, which such a request rules out, so
+`Person#erase` is a separate path: it destroys the person with their events and links, deletes
+every history row about them (`Edit.person_id`) without writing a new one, and purges their
+photo, including photos kept by earlier removals. Backups still hold them for up to 30 days,
+as the policy says. The hosted service runs it from `/cloud/support` (person search on the
+tree page), logs who did it, and emails the tree's owner that the person was removed on their
+request; a self-hoster runs `Person.find(id).erase` in the console.
+
 ## Retention of history
 `Edit.prune` (daily, `config/recurring.yml`) deletes edits older than `Edit::RETENTION` and
 purges the kept photo files of people whose deletion is no longer restorable. Deleting a person
