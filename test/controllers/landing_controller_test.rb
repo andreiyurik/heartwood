@@ -4,7 +4,7 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
   test "a guest at the root sees the landing page" do
     get root_url
     assert_response :success
-    assert_select "h1", I18n.t("landing.hero.title")
+    assert_select "h1", hero_title
     assert_select "title", I18n.t("landing.meta.title")
     assert_select "a[href=?]", new_registration_path, minimum: 2
     assert_select "a[href=?]", new_session_path
@@ -15,6 +15,9 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
     assert_select ".landing-hero h1 mark", I18n.t("landing.hero.title_mark")
     assert_select ".landing-album img[alt=?]", I18n.t("landing.album.person")
     assert_select ".landing-album .landing-album__note", 2
+
+    get root_url, headers: { "Accept-Language" => "ru" }
+    assert_select ".landing-hero h1 mark", I18n.t("landing.hero.title_mark", locale: :ru)
   end
 
   test "the pain reads as before and after" do
@@ -23,11 +26,14 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
     assert_select ".landing-contrast__after li", 3
   end
 
-  test "the maker signs a letter, with initials until there is a photo" do
+  test "the maker's signed letter belongs to the hosted engine, not to every install" do
     get root_url
+    assert_select "#letter", count: 0
+
+    with_cloud_slots { get root_url }
     assert_select "#letter h2", I18n.t("landing.letter.title")
+    assert_select "#letter .landing-signature .avatar"
     assert_select "#letter .landing-signature", text: /#{I18n.t("landing.letter.name")}/
-    assert_select "#letter .avatar", text: "AY"
   end
 
   test "the screenshots have dark twins for dark mode" do
@@ -75,7 +81,7 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
     sign_in_as users(:one)
     Session.delete_all
     get root_url
-    assert_select "h1", I18n.t("landing.hero.title")
+    assert_select "h1", hero_title
   end
 
   test "links the legal documents and the source code" do
@@ -137,7 +143,7 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
   test "speaks the visitor's language until they choose one" do
     get root_url, headers: { "Accept-Language" => "ru-RU,ru;q=0.9,en;q=0.8" }
     assert_select "html[lang=ru]"
-    assert_select "h1", I18n.t("landing.hero.title", locale: :ru)
+    assert_select "h1", hero_title(locale: :ru)
 
     get root_url, headers: { "Accept-Language" => "de-DE,de;q=0.9" }
     assert_select "html[lang=en]"
@@ -146,4 +152,9 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
     get root_url, headers: { "Accept-Language" => "ru-RU" }
     assert_select "html[lang=en]"
   end
+
+  private
+    def hero_title(locale: I18n.locale)
+      I18n.t("landing.hero.title_html", mark: I18n.t("landing.hero.title_mark", locale:), locale:)
+    end
 end
