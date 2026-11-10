@@ -8,7 +8,7 @@ module Person::Erasable
   def erase
     history = Edit.where(person_id: id)
     photos = [ avatar.blob&.id, *history.person_removals.filter_map(&:kept_photo_blob_id) ].compact
-    names = [ display_name, *history.filter_map { it.particulars["name"] }, *former_names(history) ].compact_blank.uniq
+    names = [ display_name, *history.filter_map { it.particulars["name"] }, *former_names(history) ].compact_blank.uniq - placeholder_names
     couples = families_as_partner.to_a
     places = events.filter_map(&:place_id)
     sources = Citation.where(citable: events).pluck(:source_id)
@@ -32,6 +32,11 @@ module Person::Erasable
   end
 
   private
+    # An unnamed person's history says "Unknown", like that of every other unnamed person in the tree.
+    def placeholder_names
+      I18n.available_locales.map { I18n.t("people.unknown_name", locale: it) }
+    end
+
     def former_names(history)
       history.filter_map { it.particulars["before"]&.slice(*NAME_ATTRIBUTES).presence }
         .map { Person.new(attributes.slice(*NAME_ATTRIBUTES).merge(it)).display_name }

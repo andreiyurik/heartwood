@@ -52,6 +52,16 @@ class Person::ErasableTest < ActiveSupport::TestCase
     assert_equal 0, Edit.where("particulars LIKE ?", "%Барбара%").count
   end
 
+  test "erasing an unnamed person leaves the history of other unnamed people alone" do
+    nameless = Person.create!(sex: "U", tree: trees(:bach))
+    other = Person.create!(sex: "U", tree: trees(:bach))
+    other.update!(sex: "M")
+
+    assert_no_difference -> { Edit.where(person_id: other.id).count } do
+      nameless.erase
+    end
+  end
+
   test "an erased partner takes the couple's events, and an emptied family goes too" do
     barbara = people(:maria_barbara)
     alone = Family.create!(tree: trees(:bach))
