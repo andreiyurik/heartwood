@@ -1,4 +1,3 @@
-/* The one page that leaves the sheet: full-width bands, each with its own shape, on the app's tokens. */
 .landing-page {
   --landing-width: 68rem;
   --landing-gutter: max(var(--inline-space-double), calc((100% - var(--landing-width)) / 2));
@@ -133,7 +132,6 @@
   margin-block-start: var(--block-space-half);
 }
 
-/* A page from the family album: the person, and two notes from the relatives who filled it in. */
 .landing-album {
   display: grid;
   justify-items: center;
@@ -426,7 +424,6 @@
   }
 }
 
-/* Basecamp's trust device: the maker, in the first person, signed. */
 .landing-letter {
   align-self: center;
   background-color: var(--color-surface);

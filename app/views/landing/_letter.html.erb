@@ -1,0 +1,12 @@
+<section class="landing-band" id="letter" aria-labelledby="letter-title">
+  <article class="landing-letter">
+    <h2 id="letter-title"><%= t("landing.letter.title") %></h2>
+    <% t("landing.letter.body").each do |paragraph| %>
+      <p><%= paragraph %></p>
+    <% end %>
+    <footer class="landing-signature">
+      <%= founder_portrait t("landing.letter.name") %>
+      <span><strong><%= t("landing.letter.name") %></strong> <%= t("landing.letter.role") %></span>
+    </footer>
+  </article>
+</section>

@@ -476,7 +476,7 @@ en:
       description: Start a family tree and send your relatives a link — everyone adds what they remember. Changes show up for everyone at once, and your data stays yours. Free.
     hero:
       eyebrow: A family tree for the whole family
-      title: Gather your family's story together — while there's still someone to ask
+      title_html: "Gather your family's story together — %{mark}"
       title_mark: while there's still someone to ask
       lede: Start a tree and send your relatives a link — everyone adds what they remember. Grandma knows her mother's maiden name, an uncle knows where grandpa served, and you see it all at once, on one tree.
       cta: Start for free

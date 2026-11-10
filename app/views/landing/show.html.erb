@@ -20,7 +20,7 @@
   <section class="landing-band landing-band--cream landing-hero">
     <div class="landing-hero__text">
       <p class="landing-eyebrow"><%= t("landing.hero.eyebrow") %></p>
-      <h1><%= highlight t("landing.hero.title"), t("landing.hero.title_mark") %></h1>
+      <h1><%= t("landing.hero.title_html", mark: tag.mark(t("landing.hero.title_mark"))) %></h1>
       <p class="landing-lede"><%= t("landing.hero.lede") %></p>
       <div class="landing-actions">
         <%= link_to t("landing.hero.cta"), new_registration_path, class: "btn btn--primary btn--large" %>
@@ -126,18 +126,7 @@
     </div>
   </section>
 
-  <section class="landing-band" id="letter" aria-labelledby="letter-title">
-    <article class="landing-letter">
-      <h2 id="letter-title"><%= t("landing.letter.title") %></h2>
-      <% t("landing.letter.body").each do |paragraph| %>
-        <p><%= paragraph %></p>
-      <% end %>
-      <footer class="landing-signature">
-        <%= founder_portrait t("landing.letter.name") %>
-        <span><strong><%= t("landing.letter.name") %></strong> <%= t("landing.letter.role") %></span>
-      </footer>
-    </article>
-  </section>
+  <%= cloud_slot "landing_letter" %>
 
   <section class="landing-band landing-band--cream" aria-labelledby="trust">
     <h2 id="trust"><%= t("landing.trust.title") %></h2>

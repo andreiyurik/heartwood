@@ -36,7 +36,10 @@ three-column grid twice. Warm paper (`--color-cream`) alternates with the white 
 5. **What's inside** — only shipped features, icons in a list beside the profile screenshot.
 6. **A letter from the maker** — Basecamp's trust device: why Heartwood exists and what it
    promises, first person, signed by name with a photo (`landing/founder.jpg`; initials until
-   it exists). No invented testimonials — until real families speak, the maker does.
+   it exists). No invented testimonials — until real families speak, the maker does. Hosted
+   only: the maker's promises are about the server he runs, so the letter
+   (`landing/_letter`) renders through the `landing_letter` cloud slot ([[open-core]]) and a
+   self-hosted install shows none.
 7. **Our promises** (cream) — stored in Russia (only when the operator says so), no ads or
    trackers, living people hidden, export or delete any time, open source, backups. Each links to
    where it's true.
