@@ -5,3 +5,9 @@
 
 `people.svg` is from [37signals/writebook](https://github.com/basecamp/writebook), MIT-licensed.
 Copyright (c) 37signals, LLC.
+
+## Landing portraits
+
+`landing/portrait-*.jpg` are early-19th-century portraits in the public domain: Alexander
+Pushkin by Orest Kiprensky (1827), and period portraits of his parents, Nadezhda Osipovna and
+Sergei Lvovich Pushkin.

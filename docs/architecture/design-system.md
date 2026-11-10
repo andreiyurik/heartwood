@@ -64,6 +64,9 @@ Light mode: body tint is a barely-green off-white (Basecamp's `hsl(135 29% 97%)`
 is pure white. Dark mode: body `hsl(202 42% 7.5%)`, sheet `hsl(200 28% 14.7%)` — the sheet is
 *lighter* than the body in both schemes.
 
+- `--color-cream` — warm paper, used only by the landing's bands ([[landing]]); the app
+  itself stays on `--color-bg` / `--color-surface`.
+
 ## 3. Patterns (how screens are built)
 
 - **Frame**: `#header` (sticky sheet toolbar: back · tree crumb · sections · page actions ·

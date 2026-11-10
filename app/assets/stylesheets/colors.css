@@ -15,6 +15,7 @@
   --lch-orange: 70% 0.2 44;
   --lch-yellow: 93% 0.12 95;
   --lch-yellow-light: 97% 0.05 95;
+  --lch-cream: 97.5% 0.018 85;
   --lch-blue: 67.52% 0.066 229.68;
   --lch-pink: 65.88% 0.088 343.07;
   --lch-always-black: 0% 0 0;
@@ -42,6 +43,7 @@
   --color-alert: oklch(var(--lch-orange));
   --color-highlight: oklch(var(--lch-yellow-light));
   --color-highlight-border: oklch(var(--lch-yellow));
+  --color-cream: oklch(var(--lch-cream));
   --color-male: oklch(var(--lch-blue));
   --color-female: oklch(var(--lch-pink));
   --color-always-white: oklch(var(--lch-always-white));
@@ -94,6 +96,7 @@
     --lch-red-light: 28% 0.04 30;
     --lch-yellow: 60% 0.1 95;
     --lch-yellow-light: 30% 0.04 95;
+    --lch-cream: 19% 0.016 70;
     --lch-blue: 58% 0.07 229.68;
     --lch-pink: 58% 0.09 343.07;
     --lch-avatar-tone: 62% 0.1;
