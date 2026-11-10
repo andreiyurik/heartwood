@@ -88,7 +88,7 @@
       <% end %>
     </ol>
     <div class="landing-window">
-      <%= image_tag "landing/tree.#{I18n.locale}.png", alt: t("landing.hero.image_alt"), loading: "lazy", width: 940, height: 917 %>
+      <%= landing_screenshot "tree", alt: t("landing.hero.image_alt") %>
     </div>
   </section>
 
@@ -121,7 +121,7 @@
         <% end %>
       </ul>
       <div class="landing-window">
-        <%= image_tag "landing/profile.#{I18n.locale}.png", alt: "", loading: "lazy", width: 940, height: 917 %>
+        <%= landing_screenshot "profile", alt: "" %>
       </div>
     </div>
   </section>
@@ -173,11 +173,15 @@
   <section class="landing-band landing-band--surface" aria-labelledby="faq">
     <h2 id="faq"><%= t("landing.faq.title") %></h2>
     <div class="landing-faq">
-      <% %w[safe shutdown move relatives living price].each do |question| %>
-        <details>
-          <summary><%= t("landing.faq.#{question}_q") %></summary>
-          <p><%= t("landing.faq.#{question}_a", limit: limit) %></p>
-        </details>
+      <% %w[safe shutdown move relatives living price].each_slice(3) do |questions| %>
+        <div class="landing-faq__column">
+          <% questions.each do |question| %>
+            <details>
+              <summary><%= t("landing.faq.#{question}_q") %> <%= icon_tag "add" %></summary>
+              <p><%= t("landing.faq.#{question}_a", limit: limit) %></p>
+            </details>
+          <% end %>
+        </div>
       <% end %>
     </div>
   </section>

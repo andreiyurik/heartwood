@@ -102,7 +102,7 @@
   padding-block: calc(var(--block-space-double) * 2.5) calc(var(--block-space-double) * 3);
 
   h1 {
-    font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+    font-size: clamp(2.25rem, 1.25rem + 2.4vw, 3.125rem);
     font-weight: 800;
     letter-spacing: -0.03em;
     line-height: 1.08;
@@ -111,7 +111,11 @@
   }
 
   @media (min-width: 60rem) {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+
+    mark {
+      white-space: nowrap;
+    }
   }
 }
 
@@ -360,10 +364,17 @@
   max-inline-size: 56rem;
   overflow: hidden;
 
+  picture {
+    display: block;
+  }
+
   img {
+    aspect-ratio: 3 / 2;
     block-size: auto;
     display: block;
     inline-size: 100%;
+    object-fit: cover;
+    object-position: top;
   }
 }
 
@@ -523,6 +534,7 @@
 }
 
 .landing-faq {
+  align-items: start;
   column-gap: calc(var(--block-space-double) * 1.5);
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
@@ -533,8 +545,27 @@
   }
 
   summary {
+    align-items: baseline;
     cursor: pointer;
+    display: flex;
     font-weight: 600;
+    gap: var(--inline-space);
+    justify-content: space-between;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  summary .icon {
+    color: var(--color-muted);
+    flex-shrink: 0;
+    transition: rotate var(--duration-medium) var(--ease-out-expo);
+  }
+
+  details[open] summary .icon {
+    rotate: 45deg;
   }
 
   details p {
