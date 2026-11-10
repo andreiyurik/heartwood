@@ -16,29 +16,36 @@ inside the app and signed-in people never take an extra redirect. A stale cookie
 guest. Guests get Russian or English from `Accept-Language` until they pick one.
 
 ## The story, top to bottom
-1. **Hero** — the pain and the promise in one line: *collect the family's story together, while
-   there's still someone to ask.* Primary CTA "Начать бесплатно" → `/registration`; secondary
-   "Войти". A real screenshot of a tree.
-2. **The pain** — memory leaves quietly: grandparents' stories never written down, photos
-   without names scattered across chats and boxes, every relative holding one piece.
-3. **How it works** — three steps: create a tree → send relatives a link → fill it in together,
-   changes appear for everyone at once.
-4. **Why it matters** — children who know their family's stories are more resilient (Duke &
-   Fivush, Emory University, "Do You Know?" scale); a tree is something you hand down.
-5. **What's inside** — only shipped features: live collaboration, history & undo, sources,
-   map, relationship finder, photos & biographies, GEDCOM in/out with Gramps.
-6. **Your data is yours** — stored in Russia (only shown when the operator says so), never
-   sold, no ads or trackers inside the app, export any time, open source (AGPL), delete in one
-   step. Each line links to where it's true (policy, export, source code).
-7. **Pricing** — Free up to `Tree::PLANS["free"][:people_limit]` people; Family without limits
-   (price shown once billing ships).
-8. **FAQ** — `details/summary`, no JS: safety, "what if you shut down", moving from MyHeritage /
-   «Древо Жизни», who sees living relatives, do relatives need an account, price.
-9. **Final CTA**, then a footer with the legal documents and the source code link.
+The page is a run of full-width bands, each with its own shape, so the eye never reads the same
+three-column grid twice. Warm paper (`--color-cream`) alternates with the white surface.
+1. **Hero** (cream) — the promise in one line, its last words under the yellow marker (`<mark>`):
+   *collect the family's story together, while there's still someone to ask.* CTA
+   "Начать бесплатно" → `/registration`; "Войти" in the header. Beside it a **family album**, not
+   the interface: the Pushkins' public-domain portraits (Kiprensky and others) as a person card
+   with dates, and two notes the family "left" — the sister adding a portrait, the brother naming
+   the birthplace. It shows the feeling (relatives filling one story) before the product.
+2. **Now → with Heartwood** — the pain as a before/after: stories in someone's head, photos in
+   chats, everyone with one piece → one tree everyone adds to.
+3. **How it works** — three numbered steps, then the real tree screenshot in a window frame.
+4. **Why it matters** (yellow band) — the Duke & Fivush finding as a large pull quote, then
+   three short reasons.
+5. **What's inside** — only shipped features, icons in a list beside the profile screenshot.
+6. **A letter from the maker** — Basecamp's trust device: why Heartwood exists and what it
+   promises, first person, signed by name with a photo (`landing/founder.jpg`; initials until
+   it exists). No invented testimonials — until real families speak, the maker does.
+7. **Our promises** (cream) — stored in Russia (only when the operator says so), no ads or
+   trackers, living people hidden, export or delete any time, open source, backups. Each links to
+   where it's true.
+8. **Pricing** — two plan cards (a collection, so cards are right): Free up to
+   `Tree::PLANS["free"][:people_limit]` people; Family without limits.
+9. **FAQ** — `details/summary` in two columns, no JS.
+10. **Final CTA** band, then the footer with the operator, legal documents and source link.
 
 ## Rules
-- Same design language as the app ([[design-system]]): tokens, `.btn`, quiet chrome. Wider
-  measure and bigger type than app pages, but no new colours, shadows or radii.
+- Same design language as the app ([[design-system]]): tokens, `.btn`, quiet chrome. The
+  landing is the one page that leaves the sheet: full-width bands, bigger type (18px body,
+  up to 56px titles), the warm `--color-cream` and the marker (`--color-highlight-border`). No
+  other new colours, shadows or radii.
 - No claim the product can't back today. When a feature ships, add it; never the reverse.
 - Analytics on this page only, never inside the app. The hosted engine fills the
   `landing_analytics` slot ([[open-core]]): Yandex.Metrica, off until `YANDEX_METRICA_ID` is

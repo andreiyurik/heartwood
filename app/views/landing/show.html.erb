@@ -17,30 +17,67 @@
 <% end %>
 
 <div class="landing">
-  <section class="landing-hero">
-    <p class="landing-eyebrow"><%= t("landing.hero.eyebrow") %></p>
-    <h1><%= t("landing.hero.title") %></h1>
-    <p class="landing-lede"><%= t("landing.hero.lede") %></p>
-    <div class="landing-actions">
-      <%= link_to t("landing.hero.cta"), new_registration_path, class: "btn btn--primary btn--large" %>
-      <span class="landing-note"><%= t("landing.hero.note", limit: limit) %></span>
+  <section class="landing-band landing-band--cream landing-hero">
+    <div class="landing-hero__text">
+      <p class="landing-eyebrow"><%= t("landing.hero.eyebrow") %></p>
+      <h1><%= highlight t("landing.hero.title"), t("landing.hero.title_mark") %></h1>
+      <p class="landing-lede"><%= t("landing.hero.lede") %></p>
+      <div class="landing-actions">
+        <%= link_to t("landing.hero.cta"), new_registration_path, class: "btn btn--primary btn--large" %>
+        <span class="landing-note"><%= t("landing.hero.note", limit: limit) %></span>
+      </div>
     </div>
-    <%= image_tag "landing/tree.#{I18n.locale}.png", alt: t("landing.hero.image_alt"), class: "landing-shot", width: 940, height: 917 %>
-  </section>
 
-  <section class="landing-section" aria-labelledby="pain">
-    <h2 id="pain"><%= t("landing.pain.title") %></h2>
-    <ul class="landing-grid">
-      <% %w[stories photos pieces].each do |item| %>
-        <li>
-          <h3><%= t("landing.pain.#{item}_title") %></h3>
-          <p><%= t("landing.pain.#{item}_text") %></p>
-        </li>
+    <div class="landing-album">
+      <figure class="landing-album__card">
+        <%= image_tag "landing/portrait-pushkin.jpg", alt: t("landing.album.person"), class: "landing-album__portrait", width: 400, height: 480 %>
+        <figcaption>
+          <strong><%= t("landing.album.person") %></strong>
+          <span class="landing-album__dates"><%= t("landing.album.dates") %></span>
+          <span class="landing-album__bio"><%= t("landing.album.bio") %></span>
+          <span class="landing-album__parents">
+            <% { mother: "nadezhda", father: "sergei" }.each do |parent, file| %>
+              <span>
+                <%= image_tag "landing/portrait-#{file}.jpg", alt: "", class: "avatar" %>
+                <span><small><%= t("landing.album.#{parent}") %></small> <%= t("landing.album.#{parent}_name") %></span>
+              </span>
+            <% end %>
+          </span>
+        </figcaption>
+      </figure>
+
+      <% %w[sister brother].each do |relative| %>
+        <div class="landing-album__note landing-album__note--<%= relative %>">
+          <%= initials_avatar t("landing.album.#{relative}") %>
+          <span><strong><%= t("landing.album.#{relative}") %></strong> <%= t("landing.album.#{relative}_note") %></span>
+        </div>
       <% end %>
-    </ul>
+    </div>
   </section>
 
-  <section class="landing-section" aria-labelledby="how">
+  <section class="landing-band" aria-labelledby="pain">
+    <h2 id="pain"><%= t("landing.pain.title") %></h2>
+    <div class="landing-contrast">
+      <div class="landing-contrast__before">
+        <h3><%= t("landing.pain.before") %></h3>
+        <ul>
+          <% %w[stories photos pieces].each do |item| %>
+            <li><strong><%= t("landing.pain.#{item}_title") %>.</strong> <%= t("landing.pain.#{item}_text") %></li>
+          <% end %>
+        </ul>
+      </div>
+      <div class="landing-contrast__after">
+        <h3><%= t("landing.pain.after") %></h3>
+        <ul>
+          <% %w[stories photos pieces].each do |item| %>
+            <li><%= icon_tag "check" %> <%= t("landing.pain.#{item}_after") %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="landing-band landing-band--surface" aria-labelledby="how">
     <h2 id="how"><%= t("landing.how.title") %></h2>
     <ol class="landing-grid landing-steps">
       <% %w[create invite together].each do |step| %>
@@ -50,9 +87,12 @@
         </li>
       <% end %>
     </ol>
+    <div class="landing-window">
+      <%= image_tag "landing/tree.#{I18n.locale}.png", alt: t("landing.hero.image_alt"), loading: "lazy", width: 940, height: 917 %>
+    </div>
   </section>
 
-  <section class="landing-section landing-why" aria-labelledby="why">
+  <section class="landing-band landing-band--yellow" aria-labelledby="why">
     <h2 id="why"><%= t("landing.why.title") %></h2>
     <p class="landing-lede"><%= t("landing.why.lede") %></p>
     <blockquote class="landing-quote"><p><%= t("landing.why.research") %></p></blockquote>
@@ -66,21 +106,40 @@
     </ul>
   </section>
 
-  <section class="landing-section" aria-labelledby="features">
+  <section class="landing-band landing-band--surface" aria-labelledby="features">
     <h2 id="features"><%= t("landing.features.title") %></h2>
-    <ul class="landing-grid landing-features">
-      <% { live: "people", history: "refresh", sources: "search", map: "map", kinship: "person", gedcom: "download" }.then { Maps.tiles? ? it : it.except(:map) }.each do |feature, icon| %>
-        <li>
-          <%= icon_tag icon %>
-          <h3><%= t("landing.features.#{feature}_title") %></h3>
-          <p><%= t("landing.features.#{feature}_text") %></p>
-        </li>
-      <% end %>
-    </ul>
-    <%= image_tag "landing/profile.#{I18n.locale}.png", alt: "", class: "landing-shot", loading: "lazy", width: 940, height: 917 %>
+    <div class="landing-split">
+      <ul class="landing-features">
+        <% { live: "people", history: "refresh", sources: "search", map: "map", kinship: "person", gedcom: "download" }.then { Maps.tiles? ? it : it.except(:map) }.each do |feature, icon| %>
+          <li>
+            <%= icon_tag icon %>
+            <div>
+              <h3><%= t("landing.features.#{feature}_title") %></h3>
+              <p><%= t("landing.features.#{feature}_text") %></p>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+      <div class="landing-window">
+        <%= image_tag "landing/profile.#{I18n.locale}.png", alt: "", loading: "lazy", width: 940, height: 917 %>
+      </div>
+    </div>
   </section>
 
-  <section class="landing-section" aria-labelledby="trust">
+  <section class="landing-band" id="letter" aria-labelledby="letter-title">
+    <article class="landing-letter">
+      <h2 id="letter-title"><%= t("landing.letter.title") %></h2>
+      <% t("landing.letter.body").each do |paragraph| %>
+        <p><%= paragraph %></p>
+      <% end %>
+      <footer class="landing-signature">
+        <%= founder_portrait t("landing.letter.name") %>
+        <span><strong><%= t("landing.letter.name") %></strong> <%= t("landing.letter.role") %></span>
+      </footer>
+    </article>
+  </section>
+
+  <section class="landing-band landing-band--cream" aria-labelledby="trust">
     <h2 id="trust"><%= t("landing.trust.title") %></h2>
     <p class="landing-lede"><%= t("landing.trust.lede") %></p>
     <ul class="landing-grid landing-trust">
@@ -91,12 +150,12 @@
         <li><%= icon_tag "check" %><h3><%= t("landing.trust.#{item}_title") %></h3><p><%= t("landing.trust.#{item}_text") %></p></li>
       <% end %>
     </ul>
-    <p><%= link_to t("landing.trust.policy"), privacy_path %> · <%= link_to t("landing.footer.source"), Heartwood::SOURCE_CODE_URL %></p>
+    <p class="landing-links"><%= link_to t("landing.trust.policy"), privacy_path %> · <%= link_to t("landing.footer.source"), Heartwood::SOURCE_CODE_URL %></p>
   </section>
 
-  <section class="landing-section" id="pricing" aria-labelledby="pricing-title">
+  <section class="landing-band landing-band--surface" id="pricing" aria-labelledby="pricing-title">
     <h2 id="pricing-title"><%= t("landing.pricing.title") %></h2>
-    <ul class="landing-grid landing-plans">
+    <ul class="landing-plans">
       <li>
         <h3><%= t("landing.pricing.free_title") %></h3>
         <p class="landing-price"><%= t("landing.pricing.free_price") %></p>
@@ -111,7 +170,7 @@
     </ul>
   </section>
 
-  <section class="landing-section" aria-labelledby="faq">
+  <section class="landing-band landing-band--surface" aria-labelledby="faq">
     <h2 id="faq"><%= t("landing.faq.title") %></h2>
     <div class="landing-faq">
       <% %w[safe shutdown move relatives living price].each do |question| %>
@@ -123,12 +182,12 @@
     </div>
   </section>
 
-  <section class="landing-final">
+  <section class="landing-band landing-band--green landing-final">
     <h2><%= t("landing.final.title") %></h2>
-    <%= link_to t("landing.final.cta"), new_registration_path, class: "btn btn--primary btn--large" %>
+    <%= link_to t("landing.final.cta"), new_registration_path, class: "btn btn--large landing-final__cta" %>
   </section>
 
-  <footer class="landing-footer">
+  <footer class="landing-band landing-footer">
     <p>🌳 Heartwood — <%= t("landing.footer.tagline") %></p>
     <% if (operator = Rails.configuration.x.operator).name.present? %>
       <p class="landing-operator"><%= t("landing.footer.operator", name: operator.name, inn: operator.inn, ogrn: operator.ogrn, email: operator.email) %></p>

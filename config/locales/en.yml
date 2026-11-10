@@ -476,14 +476,32 @@ en:
       description: Start a family tree and send your relatives a link — everyone adds what they remember. Changes show up for everyone at once, and your data stays yours. Free.
     hero:
       eyebrow: A family tree for the whole family
-      title: Gather your family's story together — while there's still someone to ask
+      title: Gather your family's story together — while there's still someone to ask
+      title_mark: while there's still someone to ask
       lede: Start a tree and send your relatives a link — everyone adds what they remember. Grandma knows her mother's maiden name, an uncle knows where grandpa served, and you see it all at once, on one tree.
       cta: Start for free
       sign_in: Sign in
       note: "Free up to %{limit} people. No card, no ads."
       image_alt: A family tree in Heartwood
+    album:
+      person: Alexander Sergeyevich Pushkin
+      dates: 1799 — 1837
+      bio: Poet. Born in Moscow's German Quarter; spent his childhood summers at his grandmother's in Zakharovo.
+      mother: Mother
+      father: Father
+      mother_name: Nadezhda Osipovna
+      father_name: Sergei Lvovich
+      sister: Olga Sergeyevna
+      sister_note: added Mother's portrait
+      brother: Lev Sergeyevich
+      brother_note: "“Sasha was born on May 26th, on Ascension Day”"
     pain:
       title: A family's memory fades quietly
+      before: Now
+      after: With Heartwood
+      stories_after: The stories are written down — next to the person they're about.
+      photos_after: Every photo has a name and a place in the tree.
+      pieces_after: All the pieces come together in one tree the whole family sees.
       stories_title: Nobody wrote the stories down
       stories_text: What grandparents remember lives only in their memory. We put off asking every year — until there's no one left to ask.
       photos_title: Photos without names
@@ -522,6 +540,15 @@ en:
       kinship_text: Pick two people and Heartwood names the relationship — down to third cousins and great-grandparents.
       gedcom_title: GEDCOM import and export
       gedcom_text: Bring your tree from MyHeritage, Ancestry or Gramps, and take it back any time.
+    letter:
+      title: Why I'm making Heartwood
+      body:
+        - In almost every family, the story rests on a few people. Someone remembers great-grandmother's maiden name; someone has a box of unlabelled photos in a cupboard. Yet genealogy software is built for one dedicated person at a computer.
+        - Heartwood works the other way. You send your relatives a link, and everyone adds what they remember. It should be as easy for your grandmother as it is for you — that's what I design every screen for.
+        - A family's story is something you hand down, so it has to stay yours. There are no ads, your data is never sold, and you can download the whole tree at any time. The code is open — even if something happens to me, your tree won't be lost.
+        - Thank you for gathering your family's story. I hope Heartwood helps.
+      name: Andrei Yurik
+      role: maker of Heartwood
     trust:
       title: Your data is yours
       lede: Family history is too important to be held hostage.
@@ -561,7 +588,7 @@ en:
       price_q: How much does it cost?
       price_a: "A tree of up to %{limit} people is free, forever. The paid plan removes the limit."
     final:
-      title: Start with yourself — your family will tell you the rest
+      title: Start with yourself — your family will tell you the rest
       cta: Create a tree for free
     footer:
       operator: "%{name} · INN %{inn} · OGRN %{ogrn} · %{email}"

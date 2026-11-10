@@ -10,6 +10,26 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", new_session_path
   end
 
+  test "the hero puts its promise under the marker and shows a family, not the interface" do
+    get root_url
+    assert_select ".landing-hero h1 mark", I18n.t("landing.hero.title_mark")
+    assert_select ".landing-album img[alt=?]", I18n.t("landing.album.person")
+    assert_select ".landing-album .landing-album__note", 2
+  end
+
+  test "the pain reads as before and after" do
+    get root_url
+    assert_select ".landing-contrast__before li", 3
+    assert_select ".landing-contrast__after li", 3
+  end
+
+  test "the maker signs a letter, with initials until there is a photo" do
+    get root_url
+    assert_select "#letter h2", I18n.t("landing.letter.title")
+    assert_select "#letter .landing-signature", text: /#{I18n.t("landing.letter.name")}/
+    assert_select "#letter .avatar", text: "AY"
+  end
+
   test "the map is advertised only when the install has one" do
     get root_url
     assert_select ".landing-features h3", text: I18n.t("landing.features.map_title")
