@@ -30,6 +30,19 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
     assert_select "#letter .avatar", text: "AY"
   end
 
+  test "the screenshots have dark twins for dark mode" do
+    get root_url
+    assert_select ".landing-window picture", 2
+    assert_select ".landing-window picture source[media='(prefers-color-scheme: dark)']", 2
+  end
+
+  test "the questions stack in two independent columns, each marked as expandable" do
+    get root_url
+    assert_select ".landing-faq > .landing-faq__column", 2
+    assert_select ".landing-faq__column details", 6
+    assert_select ".landing-faq summary .icon", 6
+  end
+
   test "the map is advertised only when the install has one" do
     get root_url
     assert_select ".landing-features h3", text: I18n.t("landing.features.map_title")
