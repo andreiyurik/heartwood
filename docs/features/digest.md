@@ -19,6 +19,9 @@ only when something happened — brings them back to what the others added. Part
   2. other changes — counted ("12 changes by Masha and Andrey");
   3. photos added, comments written;
   4. open [[questions]] with links ("Who is in this photo?" — answer it).
+- Every link goes to the app and carries `?tree=<id>`: a member of several trees lands in the right
+  one (`TenantScoping#follow_link_into_tree` switches, then drops the marker). Nothing else switches
+  trees, so a live refresh in a background tab can't move the session.
 - Every link goes to the app; nothing personal beyond what the member already sees in the tree.
   **Living people are named in the letter** — the recipient is a member and sees them anyway.
 - **One-click unsubscribe**: a signed link in the footer (and the `List-Unsubscribe` and
