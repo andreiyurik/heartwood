@@ -72,6 +72,11 @@ editor to type into the biography; a question can also be closed with no field.
   GEDCOM, not in the archive, not in history.
 - Guests' answers are rate-limited; body and name are length-capped.
 
+## Telling the asker
+When an answer arrives (not the asker's own), `QuestionsMailer.answered` mails the asker — at most
+one letter an hour per question, so a family chat answering all at once is one letter. The asker
+turns these off with one click in the letter (RFC 8058) or on the account page
+(`users.answer_emails`); see `User::Letters`, shared with the [[digest]].
+
 ## Not yet
-- An email to the asker the moment an answer arrives (the [[digest]] covers it weekly).
 - Several people or a group of photos in one question.

@@ -1,0 +1,10 @@
+<p><%= t("questions_mailer.answered.lede", tree: @question.tree.name) %></p>
+<h1><%= @question.body %></h1>
+<p><strong><%= @answer.author %></strong>:</p>
+<blockquote><%= simple_format @answer.body %></blockquote>
+<p><%= link_to t("questions_mailer.answered.open"), question_url(@question) %></p>
+
+<p style="color: #777; font-size: 13px;">
+  <%= t("questions_mailer.answered.why") %>
+  <%= link_to t("digests.unsubscribe"), @unsubscribe_url %>
+</p>

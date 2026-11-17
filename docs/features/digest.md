@@ -35,8 +35,9 @@ only when something happened — brings them back to what the others added. Part
   the news from `Edit` (people, changes, photos added — photo additions are history now),
   `Comment` and `Answer`, leaving out the recipient's own. Open questions are listed but alone
   are not news.
-- `users.weekly_digest` (boolean, default true). The unsubscribe token is
-  `user.generate_token_for(:digest_unsubscribe)` (Rails 7.1 `generates_token_for`).
+- `users.weekly_digest` (boolean, default true). `User::Letters` keeps one switch per kind of letter
+  (`digest`, `answers`) and a `generates_token_for` token per kind; `/letters/:kind/unsubscribe/:token`
+  shows one button on GET and unsubscribes on POST, so a mail scanner's prefetch changes nothing.
 - The letter is in the member's language: `users.locale`, set at sign-up and whenever they switch
   the language, falling back to the default.
 

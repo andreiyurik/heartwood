@@ -29,6 +29,10 @@
       <%= form.check_box :weekly_digest, data: { action: "change->auto-submit#submit" } %>
       <span><%= t("accounts.weekly_digest") %></span>
     </label>
+    <label class="auth-consent">
+      <%= form.check_box :answer_emails, data: { action: "change->auto-submit#submit" } %>
+      <span><%= t("accounts.answer_emails") %></span>
+    </label>
     <noscript><%= form.submit t("forms.save"), class: "btn" %></noscript>
   <% end %>
 </section>

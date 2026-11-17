@@ -4,7 +4,7 @@ class DigestMailer < ApplicationMailer
   def weekly(membership, since: WeeklyDigest::WINDOW.ago)
     @digest = WeeklyDigest.new(membership, since: since)
     @user   = membership.user
-    @unsubscribe_url = digest_unsubscribe_url(@user.generate_token_for(:digest_unsubscribe))
+    @unsubscribe_url = letter_unsubscribe_url("digest", @user.unsubscribe_token("digest"))
 
     headers "List-Unsubscribe" => "<#{@unsubscribe_url}>", "List-Unsubscribe-Post" => "List-Unsubscribe=One-Click"
 

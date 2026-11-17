@@ -1,0 +1,12 @@
+<%= t("questions_mailer.answered.lede", tree: @question.tree.name) %>
+
+<%= @question.body %>
+
+<%= @answer.author %>:
+<%= @answer.body %>
+
+<%= t("questions_mailer.answered.open") %>: <%= question_url(@question) %>
+
+--
+<%= t("questions_mailer.answered.why") %>
+<%= t("digests.unsubscribe") %>: <%= @unsubscribe_url %>
