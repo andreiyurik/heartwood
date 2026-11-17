@@ -2,7 +2,7 @@
 <h1><%= @question.body %></h1>
 <p><strong><%= @answer.author %></strong>:</p>
 <blockquote><%= simple_format @answer.body %></blockquote>
-<p><%= link_to t("questions_mailer.answered.open"), question_url(@question) %></p>
+<p><%= link_to t("questions_mailer.answered.open"), question_url(@question, tree: @question.tree_id) %></p>
 
 <p style="color: #777; font-size: 13px;">
   <%= t("questions_mailer.answered.why") %>

@@ -41,6 +41,9 @@ class QuestionsControllerTest < ActionDispatch::IntegrationTest
 
     post person_questions_url(@person), params: { question: { body: "Who is this?", photo_id: photo.id } }
     assert_equal photo, Question.last.photo
+
+    get question_url(Question.last)
+    assert_select ".question-photo-frame a[data-action='lightbox#open'] img.question-photo"
   end
 
   test "open questions show on the profile and in one list" do
@@ -80,6 +83,22 @@ class QuestionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Anna", @person.reload.given_names
     assert question.reload.closed?
     assert Edit.edited.where(subject: @person, user: @owner).exists?
+  end
+
+  test "a closed question takes no answers and no acceptances, and an empty text is refused" do
+    question = @person.questions.create!(asker: @owner, body: "Who?")
+    answer = question.answers.create!(body: "Anna")
+
+    post question_acceptances_url(question), params: { answer_id: answer.id, into: "given_names", text: " " }
+    assert_equal "Vera", @person.reload.given_names
+    assert question.reload.open?
+
+    question.close(by: @owner)
+    assert_no_difference "Answer.count" do
+      post question_answers_url(question), params: { answer: { body: "Late" } }
+    end
+    post question_acceptances_url(question), params: { answer_id: answer.id, into: "given_names", text: "Anna" }
+    assert_equal "Vera", @person.reload.given_names
   end
 
   test "an editor closes or deletes a question" do

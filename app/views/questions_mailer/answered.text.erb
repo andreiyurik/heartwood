@@ -5,7 +5,7 @@
 <%= @answer.author %>:
 <%= @answer.body %>
 
-<%= t("questions_mailer.answered.open") %>: <%= question_url(@question) %>
+<%= t("questions_mailer.answered.open") %>: <%= question_url(@question, tree: @question.tree_id) %>
 
 --
 <%= t("questions_mailer.answered.why") %>

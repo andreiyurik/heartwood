@@ -6,7 +6,7 @@
   <h2><%= t("digests.people", count: people.size) %></h2>
   <ul>
     <% people.first(WeeklyDigest::NAMED_PEOPLE).each do |person| %>
-      <li><%= link_to person.display_name, person_url(person) %><%= " · #{person.life_years}" if person.life_years %></li>
+      <li><%= link_to person.display_name, person_url(person, tree: @digest.tree.id) %><%= " · #{person.life_years}" if person.life_years %></li>
     <% end %>
   </ul>
   <% if people.size > WeeklyDigest::NAMED_PEOPLE %>
@@ -26,12 +26,12 @@
   <h2><%= t("digests.questions") %></h2>
   <ul>
     <% @digest.open_questions.each do |question| %>
-      <li><%= link_to question.body, question_url(question) %> — <%= question.person.display_name %></li>
+      <li><%= link_to question.body, question_url(question, tree: @digest.tree.id) %> — <%= question.person.display_name %></li>
     <% end %>
   </ul>
 <% end %>
 
-<p><%= link_to t("digests.open"), edits_url %></p>
+<p><%= link_to t("digests.open"), edits_url(tree: @digest.tree.id) %></p>
 
 <p style="color: #777; font-size: 13px;">
   <%= t("digests.why", tree: @digest.tree.name) %>

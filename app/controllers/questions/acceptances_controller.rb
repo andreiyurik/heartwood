@@ -6,6 +6,8 @@ class Questions::AcceptancesController < ApplicationController
   end
 
   def create
+    return redirect_to(@question, alert: t("questions.flash.not_accepted")) if @question.closed? || params[:text].blank?
+
     @question.accept(@answer, into: params[:into], text: params[:text].to_s.strip, by: Current.user)
     redirect_to @question.person, notice: t("questions.flash.accepted")
   rescue ArgumentError, ActiveRecord::RecordInvalid
