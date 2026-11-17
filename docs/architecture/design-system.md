@@ -213,10 +213,21 @@ The pre-beta audit's findings that changed the rules above:
   `--color-accent` shape, the same vocabulary as the crest. One per empty page, never decorative
   inside lists.
 
+### Fourth pass (2026-11-17)
+
+- **Threads** (`threads.css`): avatar · bold name · time · the words; the author's Edit/Delete are
+  quiet ghost buttons revealed on hover; one field and a small primary button below.
+- **Times are counted in the browser** (`local_time_ago`, Campfire's `local_time_controller.js`
+  plus an "ago" style), so cached pages never show a stale "5 minutes ago".
+- **A row's controls fold into one … menu on a phone** (events first): icons at the row's edge
+  on wide screens, `details.action-menu` under 40rem.
+- **Pages behind a secret link** (view link, question link) share `SecretLink`: no account
+  chrome, `noindex`, `no-referrer`.
+
 ## 6. Next bar (not yet started)
 
-- **Comments on a person** — Basecamp's thread under every record is the collaboration
-  surface we lack; family members have nowhere to say "I think this date is wrong".
+- ✅ **Comments on a person** — done 2026-11-17: the profile's last section is a thread
+  ([[comments]]); answers to [[questions]] use the same `.thread` rows.
 - **Nav that tucks away on scroll** (Basecamp hides the toolbar after 100px) once pages get
   long enough to need it.
 - **A project-home "dock"** for the tree: People / Tree / Map / Sources as preview cards.

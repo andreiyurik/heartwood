@@ -946,6 +946,11 @@ ru:
     account: Открыть аккаунт
     flash:
       unsubscribed: Готово, письма больше не придут.
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " и "
+      last_word_connector: " и "
   activerecord:
     errors:
       messages:

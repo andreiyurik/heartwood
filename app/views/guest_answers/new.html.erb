@@ -9,11 +9,8 @@
     <div class="invitation">
       <%= tree_crest @question.tree %>
       <div class="invitation__meta">
-        <% if asker %>
-          <%= initials_avatar asker, class: "avatar--small" %>
-          <%= t("guest_answers.asks", name: asker) %> ·
-        <% end %>
-        <%= t("guest_answers.tree", tree: @question.tree.name) %>
+        <%= initials_avatar asker, class: "avatar--small" if asker %>
+        <span><%= safe_join [ (t("guest_answers.asks", name: asker) if asker), t("guest_answers.tree", tree: @question.tree.name) ].compact, " · " %></span>
       </div>
       <h1><%= @question.body %></h1>
     </div>

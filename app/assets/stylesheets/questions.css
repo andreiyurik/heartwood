@@ -88,3 +88,12 @@
     margin-block-start: 0.2rem;
   }
 }
+
+.guest-question .invitation__meta {
+  align-items: flex-start;
+  flex-wrap: nowrap;
+
+  .avatar {
+    flex: none;
+  }
+}
