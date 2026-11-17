@@ -45,6 +45,7 @@ class SharedControllerTest < ActionDispatch::IntegrationTest
 
     get shared_tree_url(token)
     assert_response :not_found
+    assert_select "h1", I18n.t("shared.expired.title")
   end
 
   test "pages ask search engines to stay away and don't leak the URL as a referrer" do

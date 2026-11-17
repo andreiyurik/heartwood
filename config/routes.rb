@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resource :locale, only: :update
 
   resource :session
-  resource :account, only: %i[show destroy]
+  resource :account, only: %i[show update destroy]
 
   scope controller: :legal do
     get :privacy
@@ -14,10 +14,14 @@ Rails.application.routes.draw do
   resources :archives, only: %i[create show]
   resource :import, only: %i[new create show]
   resource :settings, only: %i[show update]
+  namespace :settings do
+    resource :crest_image, only: :destroy
+  end
   resources :passwords, param: :token
 
   # Collaboration: joining a tree via invite link, switching which tree is
   # active, and the owner's member-management page. See [[collaboration]].
+  get  "join/:join_code/card", to: "joins/cards#show", as: :join_card
   get  "join/:join_code", to: "joins#new",  as: :join
   post "join/:join_code", to: "joins#create"
   resource  :active_tree, only: :update
@@ -28,6 +32,7 @@ Rails.application.routes.draw do
   # View-only links for people without an account. See [[privacy-access]] "Share links".
   scope "shared/:token", module: :shared, as: :shared do
     get "/", to: "trees#show", as: :tree
+    get "card", to: "cards#show", as: :card
     resources :people, only: :show
   end
 
@@ -67,6 +72,7 @@ Rails.application.routes.draw do
     resource :tree, only: :show
     resource :relationship, only: :show
     resources :relatives, only: %i[new create]
+    resources :photos, only: %i[create edit update destroy]
     resources :events, only: %i[new create edit update destroy] do
       resources :citations, only: %i[new create destroy]
     end
@@ -75,15 +81,9 @@ Rails.application.routes.draw do
       resource :map,   only: :show
     end
   end
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
-
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
   # Guests (no live session) get the landing page; signed-in people get their tree.
   constraints(->(request) { !Session.exists?(id: request.cookie_jar.signed[:session_id]) }) do

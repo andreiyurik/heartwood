@@ -1,8 +1,20 @@
 <% page_title t("joins.title", tree: @tree.name), heading: false %>
+<%= render "shared/link_preview", title: t("joins.heading", tree: @tree.name), description: t("joins.lede"),
+      image: join_card_url(@tree.join_code, format: :png) %>
 
 <div class="auth-wrap">
   <div class="auth-card">
-    <h1><%= t("joins.heading", tree: @tree.name) %></h1>
+    <div class="invitation">
+      <%= tree_crest @tree %>
+      <h1><%= t("joins.heading", tree: @tree.name) %></h1>
+      <div class="invitation__meta">
+        <% if (owner = @tree.owner) %>
+          <%= initials_avatar owner.name, class: "avatar--small" %>
+          <%= t("joins.invited_by", name: owner.name) %> ·
+        <% end %>
+        <%= t("trees.people", count: @tree.people.count) %>
+      </div>
+    </div>
     <p class="auth-lede"><%= t("joins.lede") %></p>
 
     <% if Current.user %>

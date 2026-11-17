@@ -15,6 +15,15 @@ See [[positioning]], [[pricing-hosting]], [[open-core]].
 - Strong demand for family history (archives, «Бессмертный полк», ВГД forum community).
 - We already ship Russian as a first-class locale.
 
+## To verify before the ads (noted 2026-11-11)
+The competition line above predates two things a web search turned up during
+[[ux-audit-2026-11-10]]; neither was checked first-hand:
+- MyHeritage is reported to have left Russia in February 2025 (accounts of Russian users
+  removed). If so, "your tree lost its home — bring the GEDCOM here" is a stronger message than
+  "move from MyHeritage", and the landing FAQ should say it that way.
+- Wildberries is reported to have launched «Мост поколений» — a collaborative tree with GEDCOM
+  import. That would make it the closest hosted competitor in RF; look at it before pricing ads.
+
 ## What it changes
 - **Personal data law (152-ФЗ).** Personal data of RF citizens must be first recorded and
   stored on servers located in Russia (art. 18 §5). The hosted instance and its backups run

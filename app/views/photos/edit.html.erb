@@ -1,0 +1,16 @@
+<%= turbo_frame_tag dom_id(@photo, :caption) do %>
+  <%= form_with model: [ @person, @photo ], class: "photo__form", data: { turbo_frame: "_top" } do |form| %>
+    <%= form.text_field :caption, class: "input", autofocus: true, placeholder: t("photos.caption_placeholder"),
+          aria: { label: t("photos.caption_placeholder") } %>
+    <%= form.text_field :taken, class: "input", placeholder: t("photos.taken_placeholder"),
+          aria: { label: t("photos.taken_placeholder") } %>
+    <div class="photo__form-actions">
+      <%= form.submit t("forms.save"), class: "btn btn--primary" %>
+      <%= link_to t("forms.cancel"), person_path(@person, anchor: dom_id(@photo)), class: "btn btn--ghost", data: { turbo_frame: "_top" } %>
+      <%= button_to person_photo_path(@person, @photo), method: :delete, class: "btn btn--ghost btn--round photo__remove",
+            title: t("photos.remove"), form: { data: { turbo_confirm: t("photos.remove_confirm"), turbo_frame: "_top" } } do %>
+        <%= icon_tag "trash" %><span class="for-screen-reader"><%= t("photos.remove") %></span>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

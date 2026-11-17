@@ -18,6 +18,9 @@ class RelativesController < ApplicationController
     relative = @person.public_send(RELATION_METHODS.fetch(@relation), relative_source)
     redirect_to url_from(params[:return_to]) || person_path(@person, anchor: dom_id(relative)),
       status: :see_other, notice: t("family.flash.#{@relation}_added")
+  rescue ActiveRecord::RecordInvalid => error
+    @relative = error.record
+    render :new, status: :unprocessable_entity
   end
 
   private
@@ -36,6 +39,6 @@ class RelativesController < ApplicationController
   end
 
   def relative_params
-    params.expect(person: %i[given_names surname name_prefix name_suffix nickname sex])
+    params.expect(person: %i[given_names surname born unnamed name_prefix name_suffix nickname sex])
   end
 end

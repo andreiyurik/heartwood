@@ -69,7 +69,7 @@ class ImportTest < ActiveSupport::TestCase
     assert_not import.valid?
   end
 
-  test "an archive's photo marked _PRIM Y becomes the person's photo; others and unsafe files stay as references" do
+  test "an archive's photo marked _PRIM Y becomes the portrait, the other readable files the album; unsafe ones stay references" do
     import = import_zip(
       "gedcom.ged" => <<~GED,
         0 @I1@ INDI
@@ -85,7 +85,7 @@ class ImportTest < ActiveSupport::TestCase
         0 @O2@ OBJE
         1 FILE media\\portrait.png
       GED
-      "media/letter.png"   => "letter".b,
+      "media/letter.png"   => "\x89PNG letter".b,
       "media/portrait.png" => "\x89PNG portrait".b)
 
     import.process
@@ -93,7 +93,8 @@ class ImportTest < ActiveSupport::TestCase
     assert import.completed?, import.error
     anna = @tree.people.find_by!(given_names: "Anna")
     assert_equal "\x89PNG portrait".b, anna.avatar.download
-    assert_equal [ "media/letter.png", "../../etc/passwd" ],
+    assert_equal "\x89PNG letter".b, anna.photos.sole.image.download
+    assert_equal [ "../../etc/passwd" ],
       anna.gedcom_raw.select { it["tag"] == "OBJE" }.map { it["children"].find { it["tag"] == "FILE" }["value"] }
   end
 

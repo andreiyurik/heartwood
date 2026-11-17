@@ -58,4 +58,11 @@ class DuplicateFinderTest < ActiveSupport::TestCase
     Person.create!(given_names: "John", surname: "Smith", sex: "M", tree: trees(:beta))
     assert_equal 1, DuplicateFinder.new(Current.tree).find_all.size
   end
+
+  test "sisters with different given names are two people, not a duplicate" do
+    born(person(given_names: "Мария Александровна", surname: "Пушкина", sex: "F"), 1832)
+    born(person(given_names: "Наталья Александровна", surname: "Пушкина", sex: "F"), 1836)
+
+    assert_empty DuplicateFinder.new(Current.tree).find_all
+  end
 end

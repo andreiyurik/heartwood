@@ -51,4 +51,23 @@ class ClanTreesControllerTest < ActionDispatch::IntegrationTest
       text: I18n.t("trees.print")
     assert_select ".tree-canvas .tree-tip[data-tree-target=tip]", text: I18n.t("trees.tip")
   end
+
+  test "a tree of one person offers the next step instead of an empty canvas" do
+    me = Person.create!(given_names: "Maria", surname: "Ivanova", sex: "F", tree: trees(:alpha))
+    sign_in_as users(:one)
+    get clan_tree_url
+
+    assert_select ".tree-node--focus[data-tree-node-id='#{me.id}']"
+    assert_select ".tree-node--ghost a[href*=?]", new_person_relative_path(me, relation: "parent")
+    assert_select ".page-header__meta", text: "1 person · 1 generation"
+  end
+
+  test "the tree does not pay per person for dates and portraits" do
+    sign_in_as users(:bach)
+    count = 0
+    counter = ->(*, payload) { count += 1 if payload[:sql].match?(/FROM "(events|active_storage_attachments)"/) && !payload[:cached] }
+    ActiveSupport::Notifications.subscribed(counter, "sql.active_record") { get clan_tree_url }
+
+    assert_operator count, :<=, 7
+  end
 end

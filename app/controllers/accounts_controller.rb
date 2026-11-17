@@ -5,6 +5,15 @@ class AccountsController < ApplicationController
   def show
   end
 
+  def update
+    if Current.user.update(user_params)
+      Current.user.sessions.where.not(id: Current.session.id).destroy_all if Current.user.saved_change_to_password_digest?
+      redirect_to account_path, notice: t("accounts.flash.updated")
+    else
+      render :show, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     if Current.user.authenticate(params[:password].to_s)
       Current.user.destroy!
@@ -15,4 +24,12 @@ class AccountsController < ApplicationController
       render :show, status: :unprocessable_entity
     end
   end
+
+  private
+    # The current password guards the two things that would let someone else take the account over.
+    def user_params
+      attributes = params.expect(user: %i[name email_address password password_challenge]).compact_blank
+      sensitive  = attributes[:password].present? || attributes[:email_address].to_s.strip.downcase != Current.user.email_address
+      sensitive ? attributes.reverse_merge(password_challenge: "") : attributes.except(:password_challenge)
+    end
 end

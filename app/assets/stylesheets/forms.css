@@ -34,7 +34,7 @@
     align-items: start;
     display: grid;
     gap: 0.25rem var(--inline-space-double);
-    grid-template-columns: var(--field-label-width, 9rem) minmax(0, 1fr);
+    grid-template-columns: var(--field-label-width, 11rem) minmax(0, 1fr);
 
     > label {
       grid-column: 1;
@@ -86,7 +86,7 @@
   .form .actions,
   .form .more-fields > summary,
   .form > .errors {
-    margin-inline-start: calc(var(--field-label-width, 9rem) + var(--inline-space-double));
+    margin-inline-start: calc(var(--field-label-width, 11rem) + var(--inline-space-double));
   }
 }
 
@@ -155,5 +155,25 @@
 
   &[open] summary::before {
     content: "▾ ";
+  }
+}
+
+.field--check {
+  align-items: center;
+  flex-direction: row;
+  gap: 0.5rem;
+
+  label {
+    font-weight: 400;
+  }
+
+  @media (min-width: 40rem) {
+    display: flex;
+    padding-inline-start: calc(var(--field-label-width, 11rem) + var(--inline-space-double));
+
+    > label {
+      line-height: inherit;
+      text-align: start;
+    }
   }
 }

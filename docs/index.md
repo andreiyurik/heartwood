@@ -19,6 +19,7 @@ agent, also read [`CLAUDE.md`](../CLAUDE.md) at the repo root.
 - [[roadmap]] — what we build, in what order
 - [[redesign-plan]] — current redesign: phased plan from the audit against the reference apps
 - [[design-audit-2026-10-16]] — every screen walked against the Basecamp bar, ranked, with what was done
+- [[ux-audit-2026-11-10]] — pre-beta audit: every screen, Rails canon, brand name and logo, donations
 
 ## The four pillars
 
@@ -29,6 +30,7 @@ agent, also read [`CLAUDE.md`](../CLAUDE.md) at the repo root.
 ### 2. Features — what users do
 - [[features-index]] — curated & prioritized feature catalog (borrowed from the best)
 - [[change-history]] — who changed what, and one-click undo/restore
+- [[family-crest]] — a crest for every tree: choose, upload, and the link preview card
 - [[landing]] — what guests see at `/`: the story, the rules for marketing claims
 - [[accounts-and-legal]] — 152-ФЗ policy & consent, account deletion, data retention
 

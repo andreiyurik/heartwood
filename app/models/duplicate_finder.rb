@@ -26,6 +26,7 @@ class DuplicateFinder
   def assess(a, b)
     score   = 0
     reasons = []
+    return [ score, reasons ] if given_names_differ?(a, b)
 
     if surnames_match?(a, b)
       score += SURNAME_POINTS
@@ -57,6 +58,11 @@ class DuplicateFinder
     gb = normalize(b.given_names)
     return false if ga.blank? || gb.blank?
     ga == gb || ga.include?(gb) || gb.include?(ga)
+  end
+
+  # Siblings share a surname, a sex and a decade; only the given names tell them apart.
+  def given_names_differ?(a, b)
+    a.given_names.present? && b.given_names.present? && !given_names_match?(a, b)
   end
 
   def birth_years_close?(a, b)

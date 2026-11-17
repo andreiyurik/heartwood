@@ -1,22 +1,25 @@
 <% page_title t("auth.sign_in_title"), heading: false %>
+<% error = flash[:alert] %>
+<% flash.delete(:alert) %>
 
 <div class="auth-wrap">
-  <div class="auth-card <%= "shake" if flash[:alert] %>">
+  <div class="auth-card <%= "shake" if error %>">
     <h1><%= t("auth.sign_in_title") %></h1>
 
     <%= form_with url: session_path, class: "auth-form" do |form| %>
       <label class="input--actor">
         <%= form.email_field :email_address, class: "input", required: true, autofocus: true,
               autocomplete: "username", placeholder: t("auth.email_placeholder"),
-              value: params[:email_address], aria: { invalid: flash[:alert].present? || nil } %>
+              value: params[:email_address], aria: { invalid: error.present? || nil } %>
         <%= icon_tag "email" %>
       </label>
       <label class="input--actor">
         <%= form.password_field :password, class: "input", required: true, autocomplete: "current-password",
               maxlength: 72, placeholder: t("auth.password_placeholder"),
-              aria: { invalid: flash[:alert].present? || nil } %>
+              aria: { invalid: error.present? || nil } %>
         <%= icon_tag "password" %>
       </label>
+      <% if error %><p class="auth-error" role="alert"><%= error %></p><% end %>
       <%= form.submit t("auth.sign_in_submit"), class: "btn btn--primary" %>
     <% end %>
 

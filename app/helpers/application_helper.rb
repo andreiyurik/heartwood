@@ -12,7 +12,7 @@ module ApplicationHelper
 
   # heading: false for pages that draw their own title (the auth cards)
   def page_title(name, heading: true)
-    content_for :title, [ name, Current.tree&.name, "Heartwood" ].compact.join(" · ")
+    content_for :title, [ name, Current.tree&.name, brand_name ].compact.join(" · ")
     content_for :page, name if heading
   end
 
@@ -72,6 +72,18 @@ module ApplicationHelper
   def initials_avatar(name, **options)
     classes = [ "avatar", "avatar--initials", options.delete(:class) ].compact.join(" ")
     tag.div initials_for(name), class: classes, style: "--avatar-hue: #{avatar_hue(name)}", "aria-hidden": true, **options
+  end
+
+  def brand_name
+    Rails.configuration.x.brand.name
+  end
+
+  def tree_crest(tree)
+    if tree.crest_image.attached?
+      image_tag tree.crest_image, class: "crest crest--image", alt: ""
+    else
+      render "shared/crest", tree: tree
+    end
   end
 
   def section_link(section, path)

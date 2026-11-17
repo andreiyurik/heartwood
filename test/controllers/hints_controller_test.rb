@@ -74,4 +74,15 @@ class HintsControllerTest < ActionDispatch::IntegrationTest
     post hints_scan_url
     assert_response :forbidden
   end
+
+  test "a hint shows why, not a number, and offers only what works" do
+    a = Person.create!(given_names: "Ada", surname: "Lovelace", sex: "F", tree: trees(:alpha))
+    b = Person.create!(given_names: "Ada", surname: "Lovelace", sex: "F", tree: trees(:alpha))
+    DuplicateHint.create!(tree: trees(:alpha), person_a: a, person_b: b, score: 80, reasons: %w[surname given_names])
+
+    get hints_url
+    assert_select ".hint-row .hint-reasons li", minimum: 2
+    assert_select ".hint-score", count: 0
+    assert_select ".hint-row [aria-disabled]", count: 0
+  end
 end

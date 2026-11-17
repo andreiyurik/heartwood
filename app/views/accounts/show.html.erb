@@ -3,6 +3,26 @@
 <% back_link root_path %>
 
 <section class="account-section">
+  <h2><%= t("accounts.profile_title") %></h2>
+  <%= form_with model: Current.user, url: account_path, method: :patch, class: "form" do |form| %>
+    <%= render "shared/errors", record: Current.user if Current.user.errors.any? %>
+    <div class="field"><%= form.label :name %><%= form.text_field :name, class: "input", required: true, autocomplete: "name" %></div>
+    <div class="field"><%= form.label :email_address %><%= form.email_field :email_address, class: "input", required: true, autocomplete: "username" %></div>
+    <div class="field">
+      <%= form.label :password, t("accounts.new_password") %>
+      <%= form.password_field :password, class: "input", autocomplete: "new-password", minlength: 8, maxlength: 72,
+            placeholder: t("accounts.new_password_placeholder") %>
+    </div>
+    <div class="field">
+      <%= form.label :password_challenge, t("accounts.current_password") %>
+      <%= form.password_field :password_challenge, class: "input", autocomplete: "current-password", maxlength: 72,
+            placeholder: t("accounts.current_password_placeholder") %>
+    </div>
+    <div class="actions"><%= form.submit t("forms.save"), class: "btn btn--primary" %></div>
+  <% end %>
+</section>
+
+<section class="account-section">
   <h2><%= t("accounts.your_data") %></h2>
   <p class="muted"><%= t("accounts.your_data_lede") %></p>
   <div class="account-section__actions">

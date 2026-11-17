@@ -27,6 +27,15 @@ class Event < ApplicationRecord
     citations.create!(citation_attributes.to_h.merge(source: source))
   end
 
+  # In Ruby, not SQL: a date the parser couldn't read ("весна 1840") still sorts by the year in its text.
+  def self.chronological
+    all.sort_by { |event| [ event.sort_year ? 0 : 1, event.date_start || Date.new(event.sort_year || 0), event.id ] }
+  end
+
+  def sort_year = date_start&.year || date_raw.to_s[/\d{4}/]&.to_i
+
+  def free_form? = !KINDS.key?(kind)
+
   def kind_label
     I18n.t("events.kinds.#{kind}", default: KINDS.fetch(kind, kind))
   end

@@ -1,0 +1,13 @@
+<div class="field">
+  <%= f.label :given_names %>
+  <%= f.text_field :given_names, class: "input", placeholder: t("people.form.given_names_placeholder") %>
+</div>
+<div class="field"><%= f.label :surname %><%= f.text_field :surname, class: "input" %></div>
+<div class="field">
+  <%= f.label :sex %>
+  <%= f.select :sex, Person::SEXES.map { |v| [t("people.sex.#{v}"), v] }, {}, class: "input" %>
+</div>
+<div class="field">
+  <%= f.label :born %>
+  <%= f.text_field :born, class: "input", placeholder: t("people.form.born_placeholder") %>
+</div>

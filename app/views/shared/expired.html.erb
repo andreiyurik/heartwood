@@ -1,0 +1,10 @@
+<% page_title t("shared.expired.title"), heading: false %>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <%= render "drawings/letter" %>
+    <h1><%= t("shared.expired.title") %></h1>
+    <p class="auth-lede"><%= t("shared.expired.lede") %></p>
+    <%= link_to t("shared.start_your_own"), new_registration_path, class: "btn" %>
+  </div>
+</div>

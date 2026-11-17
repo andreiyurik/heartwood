@@ -15,6 +15,7 @@ class Person::TreeGraph
     @unions = collect_unions
     ghost_nodes = @ghosts ? collect_ghosts : []
 
+    ActiveRecord::Associations::Preloader.new(records: @persons.values, associations: [ :events, { avatar_attachment: :blob } ]).call
     nodes = @persons.values.map do |person|
       node_data(person, generation: @gens[person.id], order: @orders[person.id])
     end

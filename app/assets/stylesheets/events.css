@@ -29,8 +29,9 @@
 
 .event-date {
   color: var(--color-muted);
-  flex: 0 0 7rem;
+  flex: 0 0 9rem;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .event-body {
@@ -43,6 +44,10 @@
 
 .event-kind {
   font-weight: 600;
+}
+
+.event-kind--free {
+  font-weight: 500;
 }
 
 .event-place {

@@ -2,7 +2,7 @@
   <h2><%= t("events.title") %></h2>
   <% if person.events.any? %>
     <ul class="event-list">
-      <%= render partial: "events/event", collection: person.events, locals: { person: person } %>
+      <%= render partial: "events/event", collection: person.events.chronological, locals: { person: person } %>
     </ul>
   <% else %>
     <p class="muted"><%= t("events.none") %></p>

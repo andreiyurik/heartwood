@@ -1,7 +1,7 @@
 :root {
   /* Named color values */
   --lch-black: 22% 0.02 230;
-  --lch-white: 97.6% 0.006 140;
+  --lch-white: 97.4% 0.009 85;
   --lch-paper: 100% 0 0;
   --lch-gray: 95% 0.004 230;
   --lch-gray-dark: 90% 0.006 230;
@@ -47,6 +47,7 @@
   --color-male: oklch(var(--lch-blue));
   --color-female: oklch(var(--lch-pink));
   --color-always-white: oklch(var(--lch-always-white));
+  --color-backdrop: oklch(var(--lch-always-black) / 0.8);
 
   /* Ink tints: borders, hovers and dividers are the text color at low opacity */
   --tint-ink-3: color-mix(in oklch, transparent, var(--color-text) 3%);

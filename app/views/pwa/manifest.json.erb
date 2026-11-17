@@ -1,22 +1,16 @@
 {
-  "name": "Heartwood",
+  "name": <%= Rails.configuration.x.brand.name.to_json.html_safe %>,
+  "short_name": <%= Rails.configuration.x.brand.name.to_json.html_safe %>,
+  "description": <%= t("landing.footer.tagline").to_json.html_safe %>,
+  "lang": "<%= I18n.locale %>",
   "icons": [
-    {
-      "src": "/icon.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    },
-    {
-      "src": "/icon.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "maskable"
-    }
+    { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "/icon.png", "type": "image/png", "sizes": "512x512" },
+    { "src": "/icon.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" }
   ],
   "start_url": "/",
   "display": "standalone",
   "scope": "/",
-  "description": "Heartwood.",
-  "theme_color": "red",
-  "background_color": "red"
+  "theme_color": "#fcf5e9",
+  "background_color": "#fcf5e9"
 }

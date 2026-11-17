@@ -1,14 +1,20 @@
 <% page_title t("people.title") %>
+<% page_meta t("trees.people", count: Current.tree.people.count) unless blank_tree? %>
 <%= live_updates %>
 
 <% if blank_tree? %>
   <%= render "people/blank_slate" %>
 <% else %>
   <% content_for :header do %>
+    <% if Current.membership.owner? %>
+      <%= link_to tree_memberships_path(anchor: "invite"), class: "btn" do %>
+        <%= icon_tag "people" %> <span class="btn__label"><%= t("people.invite") %></span>
+      <% end %>
+    <% end %>
     <% if can_edit? %>
       <%= link_to new_person_path, class: "btn btn--primary", title: "#{t("people.add")} (n)",
             data: { controller: "hotkey", hotkey_key_value: "n", action: "keydown@window->hotkey#trigger" } do %>
-        <%= icon_tag "add" %> <%= t("people.add") %>
+        <%= icon_tag "add" %> <span class="btn__label"><%= t("people.add") %></span>
       <% end %>
     <% end %>
   <% end %>
@@ -45,9 +51,17 @@
 
   <% if @people.any? %>
     <ul class="people-list">
-      <%= render @people %>
+      <%= turbo_frame_tag "people_page_#{@page}", target: "_top", class: "people-page" do %>
+        <%= render @people %>
+        <% if @more %>
+          <%= turbo_frame_tag "people_page_#{@page + 1}", target: "_top", class: "people-page", loading: :lazy,
+                src: people_path(q: @q.presence, sex: @sex.presence, sort: @sort, page: @page + 1) %>
+        <% end %>
+      <% end %>
     </ul>
   <% else %>
     <p class="empty"><%= t("people.search_empty") %></p>
   <% end %>
+
+  <%= cloud_slot "thanks", place: "milestone" %>
 <% end %>

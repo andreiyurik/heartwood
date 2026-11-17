@@ -79,6 +79,10 @@ module Gedcom
         line 2, "NICK", person.nickname
         line 2, "SURN", person.surname
         line 2, "NSFX", person.name_suffix
+        if person.birth_surname.present?
+          line 1, "NAME", [ person.given_names.presence, "/#{person.birth_surname}/" ].compact.join(" ")
+          line 2, "TYPE", "BIRTH"
+        end
       end
 
       def write_family(family)
@@ -133,6 +137,8 @@ module Gedcom
         line 0, "OBJE", xref: file[:xref]
         line 1, "FILE", file[:path]
         line 2, "FORM", file[:form]
+        line 2, "TITL", file[:title]
+        line 1, "_DATE", file[:taken]
       end
 
       def write_raw(nodes, level:)

@@ -28,6 +28,11 @@
   --avatar-size: 80px;
 }
 
+.page-header .avatar,
+.page-header .avatar-form {
+  flex: none;
+}
+
 .avatar--gallery {
   --avatar-size: 200px;
 

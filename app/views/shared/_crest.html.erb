@@ -1,0 +1,12 @@
+<%# locals: tree, plus optional shape / hue / symbol to draw one of the options instead of the tree's own choice %>
+<% shape  = local_assigns.fetch(:shape, tree.crest_shape_name) %>
+<% symbol = local_assigns.fetch(:symbol, tree.crest_symbol) %>
+<svg class="crest" viewBox="0 0 64 64" style="--avatar-hue: <%= local_assigns.fetch(:hue, tree.crest_hue_value) %>"
+     data-shape="<%= shape %>" data-symbol="<%= symbol %>" aria-hidden="true">
+  <path class="crest__shape" d="<%= Tree::Crest::SHAPES.fetch(shape) %>"/>
+  <% if symbol %>
+    <%= Tree::Crest::SYMBOLS.fetch(symbol).html_safe %>
+  <% else %>
+    <text x="32" y="43" text-anchor="middle"><%= tree.crest_letter %></text>
+  <% end %>
+</svg>

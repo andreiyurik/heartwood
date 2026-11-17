@@ -1,5 +1,7 @@
 <% page_title @tree.name %>
 <%= render "shared/chrome" %>
+<%= render "shared/link_preview", title: @tree.name, description: t("landing.footer.tagline"),
+      image: shared_card_url(@share_link.token, format: :png) %>
 
 <% if @root %>
   <% canvas_page %>

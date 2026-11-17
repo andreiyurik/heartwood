@@ -33,6 +33,9 @@ env:
     # OSM's tile and geocoding servers are abroad; off until a Russian provider is chosen.
     MAP_TILES_URL: "off"
     GEOCODER_URL: "off"
+    BRAND_NAME: "Вся родня"
+    # The maker's "say thanks" link on /about; remove the line to switch every mention off.
+    THANKS_URL: "https://pay.cloudtips.ru/p/61fe8ef3"
     # YANDEX_METRICA_ID: "12345678"
     # SUPPORT_USER_IDS: "1"
     STORAGE_ENDPOINT: https://s3.twcstorage.ru

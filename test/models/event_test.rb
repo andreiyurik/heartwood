@@ -109,4 +109,14 @@ class EventTest < ActiveSupport::TestCase
   test "cite raises when the source has no title" do
     assert_raises(ActiveRecord::RecordInvalid) { events(:sebastian_death).cite({ title: "" }) }
   end
+
+  test "a person's events read in the order they happened, undated facts last" do
+    person = Person.create!(given_names: "Ada", sex: "F", tree: trees(:alpha))
+    death  = person.events.create!(kind: "DEAT", date_raw: "1852")
+    job    = person.events.create!(kind: "OCCU", value: "Mathematician")
+    spring = person.events.create!(kind: "RESI", date_raw: "весна 1840")
+    birth  = person.events.create!(kind: "BIRT", date_raw: "10 DEC 1815")
+
+    assert_equal [ birth, spring, death, job ], person.events.chronological
+  end
 end

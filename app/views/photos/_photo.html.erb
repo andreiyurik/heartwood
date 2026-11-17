@@ -1,0 +1,18 @@
+<%= tag.figure id: dom_id(photo), class: "photo" do %>
+  <%= link_to rails_blob_path(photo.image), class: "photo__print", data: { action: "lightbox#open", lightbox_caption_param: photo.caption } do %>
+    <%= image_tag photo.image.variant(:print), alt: photo.caption.to_s, loading: "lazy" %>
+  <% end %>
+  <%= turbo_frame_tag dom_id(photo, :caption) do %>
+    <figcaption>
+      <% if photo.caption.present? || photo.taken.present? %>
+        <span class="photo__caption"><%= photo.caption %></span>
+        <span class="photo__taken"><%= photo.taken %></span>
+      <% end %>
+      <% if can_edit? %>
+        <%= link_to edit_person_photo_path(photo.person, photo), class: "photo__sign" do %>
+          <%= photo.caption.present? ? t("photos.edit") : t("photos.sign") %>
+        <% end %>
+      <% end %>
+    </figcaption>
+  <% end %>
+<% end %>

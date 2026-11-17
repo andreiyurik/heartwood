@@ -37,8 +37,20 @@ def pers(tree, given_names:, surname:, sex:, nickname: nil, prefix: nil, suffix:
   end
 end
 
+# Known places get their coordinates here, so seeding never calls a geocoder.
+PLACES = {
+  "Москва" => [ 55.7558, 37.6173 ], "Санкт-Петербург" => [ 59.9343, 30.3351 ], "Одесса" => [ 46.4825, 30.7233 ],
+  "Святогорский монастырь" => [ 57.0236, 28.9217 ], "Ревель" => [ 59.4370, 24.7536 ], "Михайловское" => [ 57.0603, 28.9186 ]
+}.freeze
+
 def evt(subject, kind:, date: nil, value: nil)
-  subject.events.find_or_create_by!(kind: kind, date_raw: date) { |e| e.value = value }
+  subject.events.find_or_create_by!(kind: kind, date_raw: date) do |event|
+    if (latitude, longitude = PLACES[value])
+      event.assign_attributes(place_name: value, place_latitude: latitude, place_longitude: longitude)
+    else
+      event.value = value
+    end
+  end
 end
 
 def fam(tree, partners: [], children: [])

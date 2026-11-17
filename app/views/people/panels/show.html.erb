@@ -18,8 +18,8 @@
     </header>
 
     <div class="person-panel-actions">
-      <%= link_to t("people.tree"), person_tree_path(@person), class: "btn btn--primary" %>
-      <%= link_to t("people.profile"), person_path(@person), class: "btn" %>
+      <%= link_to t("people.profile"), person_path(@person), class: "btn btn--primary" %>
+      <%= link_to t("people.tree"), person_tree_path(@person), class: "btn" %>
       <% if can_edit? %>
         <%= link_to edit_person_path(@person), class: "btn" do %>
           <%= icon_tag "pencil" %> <%= t("people.edit_button") %>

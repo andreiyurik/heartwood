@@ -35,3 +35,30 @@
   flex-direction: column;
   min-block-size: 0;
 }
+
+.map-pin {
+  background-color: var(--color-accent);
+  border: 3px solid var(--color-surface);
+  border-radius: 50%;
+  box-shadow: var(--shadow-md);
+}
+
+/* Leaflet's zoom control, dressed as the tree's round buttons */
+.leaflet-bar {
+  border: none !important;
+  box-shadow: none !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  a {
+    background-color: var(--color-surface);
+    block-size: var(--component-sm) !important;
+    border: 1px solid var(--tint-ink-25) !important;
+    border-radius: 50% !important;
+    box-shadow: var(--shadow-md);
+    color: var(--color-text);
+    inline-size: var(--component-sm) !important;
+    line-height: calc(var(--component-sm) - 2px) !important;
+  }
+}

@@ -87,3 +87,19 @@ body {
     display: none;
   }
 }
+
+/* Canvas pages give the height to the canvas: title and summary share one line */
+.canvas-page .page-header__text {
+  align-items: baseline;
+  column-gap: var(--inline-space-double);
+  display: flex;
+  flex-wrap: wrap;
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .page-header__meta {
+    margin: 0;
+  }
+}

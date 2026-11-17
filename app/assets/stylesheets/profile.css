@@ -59,3 +59,18 @@
     display: none;
   }
 }
+
+/* Inside a profile section the heading already names what is missing: one quiet line, no box */
+.profile-section .blank-slate--inline {
+  border: none;
+  color: var(--color-muted);
+  padding: 0;
+
+  strong {
+    display: none;
+  }
+
+  p {
+    margin: 0;
+  }
+}

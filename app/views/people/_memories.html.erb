@@ -1,8 +1,20 @@
-<% if person.avatar.attached? %>
-  <div class="memories-gallery">
-    <%= image_tag person.avatar, class: "avatar avatar--gallery", alt: person.display_name %>
+<% photos = person.photos.album.with_attached_image %>
+
+<% if photos.any? %>
+  <div class="photo-grid">
+    <%= render partial: "photos/photo", collection: photos %>
   </div>
-  <p class="muted"><%= t("people.memories_more") %></p>
-<% else %>
-  <%= render "shared/blank_slate", title: t("people.memories_empty_title"), lede: t("people.memories_empty") %>
+<% elsif !can_edit? %>
+  <p class="muted"><%= t("photos.none") %></p>
+<% end %>
+
+<% if can_edit? %>
+  <%= form_with url: person_photos_path(person), class: "photo-add", data: { controller: "auto-submit" } do |form| %>
+    <label class="btn btn--ghost">
+      <%= icon_tag "add" %> <%= t("photos.add") %>
+      <%= form.file_field :photos, multiple: true, include_hidden: false, accept: Photo::CONTENT_TYPES.join(","),
+            class: "for-screen-reader", data: { action: "change->auto-submit#submit" } %>
+    </label>
+    <span class="muted"><%= t("photos.add_hint") unless photos.any? %></span>
+  <% end %>
 <% end %>

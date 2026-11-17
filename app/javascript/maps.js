@@ -1,19 +1,12 @@
-// Shared Leaflet helpers for the map controllers. Leaflet is imported lazily and
-// configured once per page: a blocked CDN resolves to null (callers degrade)
-// rather than throwing, and the default marker points at our self-hosted images
-// in public/leaflet — the CDN paths it can't resolve when vendored.
+// Leaflet is imported lazily and configured once per page; if it fails to load, callers get null and degrade.
+// Every marker is the CSS pin (.map-pin), so no marker images are needed.
 let leaflet
 
 export async function loadLeaflet() {
   if (leaflet !== undefined) return leaflet
   try {
     const L = await import("leaflet")
-    delete L.Icon.Default.prototype._getIconUrl
-    L.Icon.Default.mergeOptions({
-      iconUrl: "/leaflet/marker-icon.png",
-      iconRetinaUrl: "/leaflet/marker-icon-2x.png",
-      shadowUrl: "/leaflet/marker-shadow.png"
-    })
+    L.Marker.prototype.options.icon = L.divIcon({ className: "map-pin", iconSize: [20, 20], iconAnchor: [10, 10], popupAnchor: [0, -12] })
     leaflet = L
   } catch (error) {
     console.error("Leaflet failed to load:", error)

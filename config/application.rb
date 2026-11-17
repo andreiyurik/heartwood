@@ -27,13 +27,14 @@ module Heartwood
     config.i18n.available_locales = %i[en ru]
     config.i18n.default_locale   = :en
 
+    config.x.brand.name = ENV.fetch("BRAND_NAME", "Heartwood")
     config.x.operator = config_for(:operator)
     config.x.maps = config_for(:maps)
 
     config.x.backups.directory = Rails.root.join("storage/backups")
     config.x.backups.offsite   = ENV["BACKUP_BUCKET"].present?
 
-    config.action_mailer.default_options = { from: "Heartwood <no-reply@localhost>" }
+    config.action_mailer.default_options = { from: "#{config.x.brand.name} <no-reply@localhost>" }
 
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")

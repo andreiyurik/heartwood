@@ -33,7 +33,7 @@ class JoinsController < ApplicationController
 
   private
     def set_tree
-      @tree = Tree.find_by!(join_code: params[:join_code])
+      @tree = Tree.find_by(join_code: params[:join_code]) or render :expired, status: :not_found
     end
 
     def user_params

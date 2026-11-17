@@ -45,4 +45,11 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_select ".shake", count: 0
     assert_select "[aria-invalid]", count: 0
   end
+
+  test "a wrong password is explained next to the form, not in a toast across the screen" do
+    post session_path, params: { email_address: "one@example.com", password: "wrong" }
+    follow_redirect!
+    assert_select ".auth-form .auth-error[role=alert]", text: I18n.t("flash.invalid_credentials")
+    assert_select ".flash", count: 0
+  end
 end

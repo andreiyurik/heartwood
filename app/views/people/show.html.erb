@@ -8,7 +8,7 @@
   <% if can_edit? %>
     <%= link_to edit_person_path(@person), class: "btn btn--primary", title: "#{t("people.edit_button")} (e)",
           data: { controller: "hotkey", hotkey_key_value: "e", action: "keydown@window->hotkey#trigger" } do %>
-      <%= icon_tag "pencil" %> <%= t("people.edit_button") %>
+      <%= icon_tag "pencil" %> <span class="btn__label"><%= t("people.edit_button") %></span>
     <% end %>
   <% end %>
   <details class="action-menu">
@@ -30,7 +30,7 @@
   </details>
 <% end %>
 
-<% page_meta [ @person.nickname, @person.life_years, (t("people.sex.#{@person.sex}") unless @person.sex == "U"), (t("people.living") if @person.living?) ].compact_blank.join(" · ") %>
+<% page_meta [ @person.nickname, @person.birth_surname_label, @person.life_years, (t("people.alive.#{@person.sex}") if @person.living?) ].compact_blank.join(" · ") %>
 <% content_for :page_avatar do %>
   <% if can_edit? %>
     <%= form_with model: @person, class: "avatar-form", data: { controller: "auto-submit" } do |form| %>

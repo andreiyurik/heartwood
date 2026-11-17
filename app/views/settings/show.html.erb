@@ -13,3 +13,74 @@
     <%= form.submit t("forms.save"), class: "btn btn--primary" %>
   </div>
 <% end %>
+
+<section class="crest-settings" id="crest">
+  <h2><%= t("crests.title") %></h2>
+  <p class="muted"><%= t("crests.lede") %></p>
+
+  <div class="crest-settings__preview">
+    <%= tree_crest Current.tree %>
+    <strong><%= Current.tree.name %></strong>
+  </div>
+
+  <% if Current.tree.crest_image.attached? %>
+    <p class="muted"><%= t("crests.uploaded") %></p>
+    <%= button_to t("crests.remove_image"), settings_crest_image_path, method: :delete, class: "btn" %>
+  <% else %>
+    <%= form_with model: Current.tree, url: settings_path, method: :patch, scope: :tree, class: "crest-form",
+          data: { controller: "auto-submit" } do |form| %>
+      <fieldset>
+        <legend><%= t("crests.shape") %></legend>
+        <% Tree::Crest::SHAPES.each_key do |shape| %>
+          <label class="crest-option" title="<%= t("crests.shapes.#{shape}") %>">
+            <%= form.radio_button :crest_shape, shape, checked: Current.tree.crest_shape_name == shape,
+                  class: "for-screen-reader", data: { action: "change->auto-submit#submit" } %>
+            <%= render "shared/crest", tree: Current.tree, shape: shape %>
+            <span class="for-screen-reader"><%= t("crests.shapes.#{shape}") %></span>
+          </label>
+        <% end %>
+      </fieldset>
+
+      <fieldset>
+        <legend><%= t("crests.colour") %></legend>
+        <% Tree::Crest::HUES.each do |name, hue| %>
+          <label class="crest-option crest-option--colour" title="<%= t("crests.colours.#{name}") %>" style="--avatar-hue: <%= hue %>">
+            <%= form.radio_button :crest_hue, hue, checked: Current.tree.crest_hue == hue,
+                  class: "for-screen-reader", data: { action: "change->auto-submit#submit" } %>
+            <span class="crest-swatch"></span>
+            <span class="for-screen-reader"><%= t("crests.colours.#{name}") %></span>
+          </label>
+        <% end %>
+      </fieldset>
+
+      <fieldset>
+        <legend><%= t("crests.symbol") %></legend>
+        <label class="crest-option" title="<%= t("crests.letter") %>">
+          <%= form.radio_button :crest_symbol, "", checked: Current.tree.crest_symbol.nil?,
+                class: "for-screen-reader", data: { action: "change->auto-submit#submit" } %>
+          <%= render "shared/crest", tree: Current.tree, symbol: nil %>
+          <span class="for-screen-reader"><%= t("crests.letter") %></span>
+        </label>
+        <% Tree::Crest::SYMBOLS.each_key do |symbol| %>
+          <label class="crest-option" title="<%= t("crests.symbols.#{symbol}") %>">
+            <%= form.radio_button :crest_symbol, symbol, checked: Current.tree.crest_symbol == symbol,
+                  class: "for-screen-reader", data: { action: "change->auto-submit#submit" } %>
+            <%= render "shared/crest", tree: Current.tree, symbol: symbol %>
+            <span class="for-screen-reader"><%= t("crests.symbols.#{symbol}") %></span>
+          </label>
+        <% end %>
+      </fieldset>
+    <% end %>
+
+    <%= form_with model: Current.tree, url: settings_path, method: :patch, scope: :tree, class: "crest-upload",
+          data: { controller: "auto-submit" } do |form| %>
+      <%= render "shared/errors", record: Current.tree if Current.tree.errors[:crest_image].any? %>
+      <label class="btn btn--ghost">
+        <%= icon_tag "upload" %> <%= t("crests.upload") %>
+        <%= form.file_field :crest_image, accept: Tree::Crest::IMAGE_CONTENT_TYPES.join(","), class: "for-screen-reader",
+              data: { action: "change->auto-submit#submit" } %>
+      </label>
+      <span class="muted"><%= t("crests.upload_hint") %></span>
+    <% end %>
+  <% end %>
+</section>
