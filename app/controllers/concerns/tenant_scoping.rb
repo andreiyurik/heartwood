@@ -7,6 +7,18 @@ module TenantScoping
 
   private
 
+  # A link from a letter may point into another of the member's trees: switch to it and come back.
+  def find_in_current_tree(scope, id)
+    return Current.tree.public_send(scope).find(id) unless request.get?
+
+    Current.tree.public_send(scope).find_by(id: id) or begin
+      record = Current.tree.public_send(scope).klass.where(tree_id: Current.user.tree_memberships.select(:tree_id)).find(id)
+      Current.session.update!(current_tree: record.tree)
+      redirect_to request.url
+      nil
+    end
+  end
+
   def set_current_tree
     return unless Current.user
 
