@@ -22,3 +22,6 @@ production:
   backup:
     command: "Backup.create"
     schedule: every 6 hours
+  weekly_digest:
+    command: "WeeklyDigest.deliver_all"
+    schedule: every monday at 9am

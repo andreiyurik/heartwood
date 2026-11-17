@@ -1,0 +1,39 @@
+<% people = @digest.added_people.to_a %>
+<h1><%= t("digests.heading", tree: @digest.tree.name) %></h1>
+<p><%= t("digests.greeting", name: @user.name) %></p>
+
+<% if people.any? %>
+  <h2><%= t("digests.people", count: people.size) %></h2>
+  <ul>
+    <% people.first(WeeklyDigest::NAMED_PEOPLE).each do |person| %>
+      <li><%= link_to person.display_name, person_url(person) %><%= " · #{person.life_years}" if person.life_years %></li>
+    <% end %>
+  </ul>
+  <% if people.size > WeeklyDigest::NAMED_PEOPLE %>
+    <p><%= t("digests.more_people", count: people.size - WeeklyDigest::NAMED_PEOPLE) %></p>
+  <% end %>
+<% end %>
+
+<% counts = { changes: @digest.changes_count, photos: @digest.photos_count, comments: @digest.comments_count, answers: @digest.answers_count }.select { |_, count| count > 0 } %>
+<% if counts.any? %>
+  <p><%= counts.map { |kind, count| t("digests.#{kind}", count: count) }.to_sentence %>.</p>
+<% end %>
+<% if @digest.contributors.any? %>
+  <p><%= t("digests.by", names: @digest.contributors.to_sentence) %></p>
+<% end %>
+
+<% if @digest.open_questions.any? %>
+  <h2><%= t("digests.questions") %></h2>
+  <ul>
+    <% @digest.open_questions.each do |question| %>
+      <li><%= link_to question.body, question_url(question) %> — <%= question.person.display_name %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<p><%= link_to t("digests.open"), edits_url %></p>
+
+<p style="color: #777; font-size: 13px;">
+  <%= t("digests.why", tree: @digest.tree.name) %>
+  <%= link_to t("digests.unsubscribe"), @unsubscribe_url %>
+</p>

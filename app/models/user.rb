@@ -16,6 +16,10 @@ class User < ApplicationRecord
 
   before_destroy(prepend: true) { owned_trees.each(&:incinerate_later) }
 
+  generates_token_for :digest_unsubscribe
+
+  before_create { self.locale ||= I18n.locale }
+
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   validates :name, presence: true, length: { maximum: 240 }

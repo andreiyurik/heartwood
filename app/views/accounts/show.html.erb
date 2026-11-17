@@ -22,6 +22,17 @@
   <% end %>
 </section>
 
+<section class="account-section" id="letters">
+  <h2><%= t("accounts.letters_title") %></h2>
+  <%= form_with model: Current.user, url: account_path, method: :patch, class: "account-letters", data: { controller: "auto-submit" } do |form| %>
+    <label class="auth-consent">
+      <%= form.check_box :weekly_digest, data: { action: "change->auto-submit#submit" } %>
+      <span><%= t("accounts.weekly_digest") %></span>
+    </label>
+    <noscript><%= form.submit t("forms.save"), class: "btn" %></noscript>
+  <% end %>
+</section>
+
 <section class="account-section">
   <h2><%= t("accounts.your_data") %></h2>
   <p class="muted"><%= t("accounts.your_data_lede") %></p>

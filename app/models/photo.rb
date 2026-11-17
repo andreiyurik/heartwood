@@ -23,9 +23,9 @@ class Photo < ApplicationRecord
   def edited_person = person
 
   private
-    # Only a caption's changes are history: a removed print takes its file along, so there is nothing to restore.
+    # A removed print takes its file along, so there is nothing to restore.
     def record_edit(action, **)
-      super if action == :edited
+      super unless action == :removed
     end
 
     def image_is_a_photo
