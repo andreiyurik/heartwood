@@ -1,4 +1,4 @@
-<%= turbo_frame_tag dom_id(@comment, :editor), class: "thread-entry__body" do %>
+<%= turbo_frame_tag dom_id(@comment, :editor) do %>
   <%= form_with model: [ @person, @comment ], class: "comment-edit", data: { turbo_frame: "_top" } do |form| %>
     <%= form.text_area :body, class: "input", rows: 3, required: true, maxlength: 5000, autofocus: true,
           aria: { label: t("comments.placeholder") } %>

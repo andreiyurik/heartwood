@@ -1,6 +1,7 @@
 <%= tag.li id: dom_id(comment), class: "thread-entry" do %>
   <%= initials_avatar comment.author %>
-  <%= turbo_frame_tag dom_id(comment, :editor), class: "thread-entry__body" do %>
+  <div class="thread-entry__body">
+  <%= turbo_frame_tag dom_id(comment, :editor) do %>
     <p class="thread-entry__meta">
       <strong><%= comment.author %></strong> · <%= local_time_ago(comment.created_at) %>
       <% if comment.updated_at > comment.created_at + 1.minute %> · <%= t("comments.edited") %><% end %>
@@ -17,4 +18,5 @@
       </div>
     <% end %>
   <% end %>
+  </div>
 <% end %>
