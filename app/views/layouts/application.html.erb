@@ -24,7 +24,11 @@
     <meta name="theme-color" content="#0f181d" media="(prefers-color-scheme: dark)">
 
     <link rel="icon" href="/icon.png" type="image/png" sizes="any">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <% if Current.tree %>
+      <link rel="icon" href="<%= crest_icon_path(v: Current.tree.updated_at.to_i) %>" type="image/svg+xml">
+    <% else %>
+      <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <% end %>
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%= preload_link_tag "golos-text-#{I18n.locale == :ru ? "cyrillic" : "latin"}.woff2", as: "font", type: "font/woff2", crossorigin: "anonymous" %>

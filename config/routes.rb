@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   resource :import, only: %i[new create show]
   resource :settings, only: %i[show update]
   namespace :settings do
+    resource :crest, only: :show
     resource :crest_image, only: :destroy
   end
   resources :passwords, param: :token
@@ -57,6 +58,7 @@ Rails.application.routes.draw do
   end
 
   resource :tree, only: :show, controller: "clan_trees", as: :clan_tree
+  get "tree/crest", to: "crest_icons#show", as: :crest_icon
 
   resource :map, only: :show do
     scope module: :maps do

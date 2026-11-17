@@ -8,6 +8,10 @@ class ApplicationController < ActionController::Base
 
   before_action :set_locale
 
+  # What every page shows besides its own records: who is looking, in which language, the header's
+  # badge and any flash. A page that calls fresh_when is cached only as long as all of these hold.
+  etag { [ Current.session&.id, Current.membership&.role, Current.tree, Current.tree&.duplicate_hints&.pending&.count, I18n.locale, flash.to_hash.presence ] }
+
   private
 
   def set_locale

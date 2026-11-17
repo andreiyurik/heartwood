@@ -1,0 +1,11 @@
+<% page_title t("crests.step_title", tree: Current.tree.name) %>
+<% page_meta t("crests.step_lede") %>
+
+<section class="crest-settings crest-settings--step">
+  <%= render "settings/crest", step: "crest" %>
+
+  <div class="actions">
+    <%= link_to t("crests.step_done"), root_path, class: "btn btn--primary" %>
+    <%= link_to t("crests.step_skip"), root_path, class: "btn btn--ghost" %>
+  </div>
+</section>

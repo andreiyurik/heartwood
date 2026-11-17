@@ -7,6 +7,7 @@ class QuestionsController < ApplicationController
     questions = Current.tree.questions.latest.includes(:person, :asker, :answers, photo: { image_attachment: :blob })
     @open   = questions.open
     @closed = questions.closed.limit(30)
+    fresh_when etag: [ Current.tree.questions.maximum(:updated_at), Current.tree.questions.count ]
   end
 
   def show

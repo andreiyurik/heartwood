@@ -48,3 +48,10 @@ would break [[stack]]. If someone wants more, they draw it anywhere and upload i
 
 ## Related
 [[collaboration]] · [[design-system]] · [[media]]
+
+## Where else it shows (2026-11-17)
+- **Right after sign-up** the owner lands on `/settings/crest`: the same picker, "Done" or "Skip".
+  Joining someone's tree skips it.
+- **The browser tab**: for a signed-in member the favicon is `/tree/crest` — the tree's crest as a
+  64×64 SVG (the same drawing as the link card), or the uploaded picture. Guests keep the
+  service's mark.

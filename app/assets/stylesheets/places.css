@@ -1,17 +1,13 @@
 .place-field,
-.place-suggestions {
-  position: relative;
-}
-
+/* In the flow, not floating: a floating list covered the form's Add button. */
 .place-suggestions .combobox-options {
+  animation: fade-in-up var(--duration-fast) ease-out;
   background-color: var(--color-surface);
   border: 1px solid var(--tint-ink-15);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-menu);
-  inset-inline: 0;
+  border-radius: var(--radius-lg);
   margin: 0.2rem 0 0;
-  position: absolute;
-  z-index: 5;
+  max-block-size: 12rem;
+  overflow-y: auto;
 }
 
 .event-place {

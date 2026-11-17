@@ -24,6 +24,16 @@ The competition line above predates two things a web search turned up during
 - Wildberries is reported to have launched «Мост поколений» — a collaborative tree with GEDCOM
   import. That would make it the closest hosted competitor in RF; look at it before pricing ads.
 
+**Checked 2026-11-17 (web search, press only):**
+- MyHeritage: confirmed. Announced to Russian users on 31.12.2024, accounts and DNA data deleted on
+  01.02.2025, citing Russian law (localisation fines in 2022 and 2023). Sources: Meduza (en),
+  Inc. Russia, Zona. The landing now says the GEDCOM *export*, if someone saved it, still works,
+  and no longer offers to "move from MyHeritage" as if it were running.
+- «Мост поколений» (Wildberries & Russ): a family tree with relatives working together, apps and
+  a web version, in test mode. **GEDCOM import is not confirmed** by any source found — check the
+  app itself before saying anything about it in ads.
+- The "dominate" line under "Why Russia first" is outdated for MyHeritage.
+
 ## What it changes
 - **Personal data law (152-ФЗ).** Personal data of RF citizens must be first recorded and
   stored on servers located in Russia (art. 18 §5). The hosted instance and its backups run

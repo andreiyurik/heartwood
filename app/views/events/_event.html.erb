@@ -30,6 +30,22 @@
               class: "btn--ghost", title: t("events.remove"),
               form: { data: { turbo_confirm: t("events.remove_confirm"), turbo_frame: "_top" } } %>
       </span>
+      <details class="action-menu event-menu">
+        <summary class="btn btn--ghost btn--round" title="<%= t("people.more") %>">
+          <%= icon_tag "more" %><span class="for-screen-reader"><%= t("people.more") %></span>
+        </summary>
+        <menu class="action-sheet action-sheet--end">
+          <li><%= link_to new_person_event_citation_path(person, event), class: "action-sheet__action", data: { turbo_frame: dom_id(event, :citation_form) } do %><%= icon_tag "add" %> <%= t("citations.add") %><% end %></li>
+          <li><%= link_to edit_person_event_path(person, event), class: "action-sheet__action" do %><%= icon_tag "pencil" %> <%= t("events.edit") %><% end %></li>
+          <li><hr class="action-sheet__divider"></li>
+          <li>
+            <%= button_to person_event_path(person, event), method: :delete, class: "action-sheet__action action-sheet__action--negative",
+                  form: { data: { turbo_confirm: t("events.remove_confirm"), turbo_frame: "_top" } } do %>
+              <%= icon_tag "trash" %> <%= t("events.remove") %>
+            <% end %>
+          </li>
+        </menu>
+      </details>
     <% end %>
   <% end %>
   <%= preserved_frame_tag dom_id(event, :citation_form) if can_edit? %>
