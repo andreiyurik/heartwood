@@ -672,6 +672,8 @@ en:
     footer: Legal
 
   accounts:
+    letters_title: Letters
+    weekly_digest: Once a week, tell me what my relatives added to the tree (only if something changed)
     title: Account
     profile_title: You
     new_password: New password
@@ -719,6 +721,7 @@ en:
       added: "Linked in a family with %{relatives}"
       removed: "Unlinked from a family with %{relatives}"
     photo:
+      added: Photo added
       edited: "Photo changed: %{fields}"
     no_relatives: a new family
     deleted_user: Deleted user
@@ -813,6 +816,38 @@ en:
     destroy_confirm: Delete this comment?
     flash:
       blank: Write something first.
+  digests:
+    subject: "What's new in “%{tree}”"
+    heading: "What's new in “%{tree}” this week"
+    greeting: "Hello, %{name}! Here is what your relatives added."
+    people:
+      one: 1 new person
+      other: "%{count} new people"
+    more_people: "and %{count} more"
+    changes:
+      one: 1 change
+      other: "%{count} changes"
+    photos:
+      one: 1 photo
+      other: "%{count} photos"
+    comments:
+      one: 1 comment
+      other: "%{count} comments"
+    answers:
+      one: 1 answer to a question
+      other: "%{count} answers to questions"
+    by: "By %{names}."
+    questions: Waiting for an answer
+    open: See everything in the history
+    why: "You get this letter once a week, only when something changes in “%{tree}”."
+    unsubscribe: Stop these letters
+    unsubscribe_title: Weekly letter
+    unsubscribe_lede: "Stop the weekly “what's new in the tree” letter to %{email}? You can turn it back on in your account."
+    unsubscribe_submit: Stop the letters
+    unsubscribed_lede: The weekly letter is off. You can turn it back on in your account.
+    account: Open my account
+    flash:
+      unsubscribed: Done — no more weekly letters.
   activerecord:
     errors:
       messages:

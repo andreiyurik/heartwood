@@ -28,16 +28,20 @@ only when something happened — brings them back to what the others added. Part
   otherwise require a separate consent).
 
 ## How
-- `config/recurring.yml`: `weekly_digest` runs `Digest.deliver_all` every Monday at 9am (server
-  time). It enqueues `DigestMailer.weekly(membership)` per membership with news, through Solid
-  Queue; `users.digest_sent_at`… is not needed — the week is the window.
-- `Digest` (a plain model over a membership and a time window) collects the news from `Edit`,
-  `Photo`, `Comment` and `Question`, excluding the recipient's own.
+- `config/recurring.yml`: `weekly_digest` runs `WeeklyDigest.deliver_all` every Monday at 9am
+  (server time). It enqueues `DigestMailer.weekly(membership)` for each membership with news,
+  through Solid Queue. The window is the last seven days, so no "last sent" column is needed.
+- `WeeklyDigest` (a plain model over a membership and a window; `Digest` is Ruby's own) collects
+  the news from `Edit` (people, changes, photos added — photo additions are history now),
+  `Comment` and `Answer`, leaving out the recipient's own. Open questions are listed but alone
+  are not news.
 - `users.weekly_digest` (boolean, default true). The unsubscribe token is
   `user.generate_token_for(:digest_unsubscribe)` (Rails 7.1 `generates_token_for`).
-- The letter is in the member's language (`users.locale`, falling back to the default).
+- The letter is in the member's language: `users.locale`, set at sign-up and whenever they switch
+  the language, falling back to the default.
 
 ## Legal check (152-ФЗ)
 The consent ([[accounts-and-legal]]) lists "sending service letters" as a purpose; the privacy
-policy's purposes now name the weekly digest and that it can be switched off. It uses data the
-member already sees in the tree and goes only to members.
+policy's purposes now name the weekly summary and how to switch it off (`Legal::VERSION`
+2026-11-17). It uses data the member already sees in the tree, goes only to members, and carries
+no advertising, so 38-ФЗ's consent for advertising mailings doesn't apply.

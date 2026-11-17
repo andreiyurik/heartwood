@@ -10,6 +10,8 @@ Rails.application.routes.draw do
     get :terms
   end
   resource :registration, only: %i[new create]
+  get  "digest/unsubscribe/:token", to: "digest_unsubscribes#show", as: :digest_unsubscribe
+  post "digest/unsubscribe/:token", to: "digest_unsubscribes#create"
   resource :export, only: :create
   resources :archives, only: %i[create show]
   resource :import, only: %i[new create show]

@@ -28,8 +28,9 @@ class AccountsController < ApplicationController
   private
     # The current password guards the two things that would let someone else take the account over.
     def user_params
-      attributes = params.expect(user: %i[name email_address password password_challenge]).compact_blank
-      sensitive  = attributes[:password].present? || attributes[:email_address].to_s.strip.downcase != Current.user.email_address
+      attributes = params.expect(user: %i[name email_address password password_challenge weekly_digest]).compact_blank
+      sensitive  = attributes[:password].present? ||
+        (attributes.key?(:email_address) && attributes[:email_address].to_s.strip.downcase != Current.user.email_address)
       sensitive ? attributes.reverse_merge(password_challenge: "") : attributes.except(:password_challenge)
     end
 end

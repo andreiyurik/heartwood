@@ -746,6 +746,8 @@ ru:
     footer: Документы
 
   accounts:
+    letters_title: Письма
+    weekly_digest: Раз в неделю присылать, что родные добавили в древо (только если что-то изменилось)
     title: Аккаунт
     profile_title: Вы
     new_password: Новый пароль
@@ -795,6 +797,7 @@ ru:
       added: "Связь добавлена: семья с %{relatives}"
       removed: "Связь удалена: семья с %{relatives}"
     photo:
+      added: Добавлено фото
       edited: "Фото изменено: %{fields}"
     no_relatives: новая семья
     deleted_user: Удалённый пользователь
@@ -897,6 +900,48 @@ ru:
     destroy_confirm: Удалить комментарий?
     flash:
       blank: Сначала напишите что-нибудь.
+  digests:
+    subject: "Что нового в древе «%{tree}»"
+    heading: "Что нового в древе «%{tree}» за неделю"
+    greeting: "Здравствуйте, %{name}! Вот что добавили ваши родные."
+    people:
+      one: "%{count} новый человек"
+      few: "%{count} новых человека"
+      many: "%{count} новых человек"
+      other: "%{count} новых человека"
+    more_people: "и ещё %{count}"
+    changes:
+      one: "%{count} правка"
+      few: "%{count} правки"
+      many: "%{count} правок"
+      other: "%{count} правки"
+    photos:
+      one: "%{count} фотография"
+      few: "%{count} фотографии"
+      many: "%{count} фотографий"
+      other: "%{count} фотографии"
+    comments:
+      one: "%{count} комментарий"
+      few: "%{count} комментария"
+      many: "%{count} комментариев"
+      other: "%{count} комментария"
+    answers:
+      one: "%{count} ответ на вопрос"
+      few: "%{count} ответа на вопросы"
+      many: "%{count} ответов на вопросы"
+      other: "%{count} ответа на вопросы"
+    by: "Добавляли: %{names}."
+    questions: Ждут ответа
+    open: Посмотреть всё в истории изменений
+    why: "Это письмо приходит раз в неделю и только когда в древе «%{tree}» что-то меняется."
+    unsubscribe: Отписаться
+    unsubscribe_title: Письмо раз в неделю
+    unsubscribe_lede: "Больше не присылать на %{email} письмо «что нового в древе»? Включить его снова можно в аккаунте."
+    unsubscribe_submit: Отписаться
+    unsubscribed_lede: Письма отключены. Включить их снова можно в аккаунте.
+    account: Открыть аккаунт
+    flash:
+      unsubscribed: Готово, письма больше не придут.
   activerecord:
     errors:
       messages:
