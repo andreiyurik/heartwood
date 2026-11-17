@@ -10,10 +10,17 @@ license below:
 - `app/assets/stylesheets/base.css` (control reset), `animation.css`, and `.btn--success`
   in `buttons.css`, `.skip-navigation` in `nav.css`
 - `app/javascript/controllers/copy_to_clipboard_controller.js`, `app/helpers/clipboard_helper.rb`,
-  `app/javascript/controllers/element_removal_controller.js`, `app/javascript/helpers/timing_helpers.js`
+  `app/javascript/controllers/element_removal_controller.js`, `app/javascript/helpers/timing_helpers.js`,
+  `app/javascript/controllers/lightbox_controller.js` and the `.lightbox` rules in `photos.css`
 - `app/assets/stylesheets/layout.css` (the `#header`/`#toolbar`/`#main` grid, from Writebook) and
   `flash.css` (the toast, from Campfire)
 - Icons listed in `app/assets/images/NOTICE.md`
+
+## Fonts
+
+`app/assets/fonts` holds **Golos Text** (© 2019 The Golos Text Project Authors, Paratype) and
+**Caveat** (© 2014 The Caveat Project Authors), both under the SIL Open Font License 1.1 — the
+full texts are `OFL-golos-text.txt` and `OFL-caveat.txt` next to the files.
 
 ```
 Copyright (c) 37signals, LLC

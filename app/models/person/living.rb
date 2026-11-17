@@ -19,7 +19,7 @@ module Person::Living
   end
 
   def living?
-    return false if events.where(kind: DEATH_KINDS).any?
+    return false if events.loaded? ? events.any? { it.kind.in?(DEATH_KINDS) } : events.where(kind: DEATH_KINDS).any?
     birth_year = birth&.date_start&.year
     birth_year.nil? || birth_year > Date.current.year - LIVING_CUTOFF_YEARS
   end

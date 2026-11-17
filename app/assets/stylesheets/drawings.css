@@ -1,0 +1,31 @@
+.drawing {
+  block-size: auto;
+  inline-size: 9rem;
+}
+
+.drawing__line {
+  fill: none;
+  stroke: var(--tint-ink-25);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.5;
+}
+
+.drawing__fill {
+  fill: var(--color-accent);
+}
+
+.drawing__paper {
+  fill: var(--color-surface);
+}
+
+.drawing__paper-line {
+  fill: none;
+  stroke: var(--color-surface);
+  stroke-linecap: round;
+  stroke-width: 4;
+}
+
+.auth-card .drawing {
+  margin-block-end: var(--block-space);
+}

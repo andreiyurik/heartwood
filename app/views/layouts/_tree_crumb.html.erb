@@ -1,6 +1,6 @@
 <% if Current.user.trees.size > 1 %>
   <details class="tree-switcher">
-    <summary class="btn btn--ghost tree-name">🌳 <span><%= Current.tree.name %></span></summary>
+    <summary class="btn btn--ghost tree-name"><%= tree_crest Current.tree %> <span><%= Current.tree.name %></span></summary>
     <menu class="action-sheet">
       <% Current.user.tree_memberships.includes(:tree).each do |m| %>
         <li>
@@ -11,5 +11,5 @@
     </menu>
   </details>
 <% else %>
-  <%= link_to root_path, class: "tree-name" do %>🌳 <span><%= Current.tree.name %></span><% end %>
+  <%= link_to root_path, class: "tree-name" do %><%= tree_crest Current.tree %> <span><%= Current.tree.name %></span><% end %>
 <% end %>

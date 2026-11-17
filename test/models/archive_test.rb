@@ -75,6 +75,26 @@ class ArchiveTest < ActiveSupport::TestCase
     assert_no_match(/OBJE/, zip_entries(archive).fetch("gedcom.ged"))
   end
 
+
+  test "the album travels with the archive, captions included" do
+    @person.photos.create!(image: { io: StringIO.new(PNG), filename: "wedding.png", content_type: "image/png" },
+                           caption: "Wedding", taken: "1954")
+
+    archive = build_archive
+    ged = zip_entries(archive).fetch("gedcom.ged")
+    assert_match(/1 OBJE @O2@\n2 _PRIM N/, ged)
+    assert_match(/0 @O2@ OBJE\n1 FILE media\/I7-2\.png\n2 FORM png\n2 TITL Wedding\n1 _DATE 1954/, ged)
+
+    import = Import.new(tree: trees(:beta), user: users(:two))
+    import.file.attach(io: StringIO.new(archive.file.download), filename: "tree.zip")
+    import.save!
+    import.process
+
+    photo = trees(:beta).people.find_by!(given_names: "Anna").photos.sole
+    assert_equal [ "Wedding", "1954" ], photo.values_at(:caption, :taken)
+    assert_equal PNG, photo.image.download
+  end
+
   private
     def build_archive
       @tree.archives.create!(user: @user).tap(&:build)

@@ -1,14 +1,19 @@
 class Person < ApplicationRecord
-  include BelongsToTree, LiveUpdates, Editable, Erasable, Avatar, Kin, Living, Relatives, Searchable
+  include BelongsToTree, LiveUpdates, Editable, Erasable, Avatar, Kin, Lifespan, Living, Relatives, Searchable
 
   SEXES = %w[M F U X].freeze
 
   has_rich_text :biography
   has_many :events, as: :eventable, dependent: :destroy
+  has_many :photos, dependent: :destroy
   has_many :duplicate_hints_as_a, class_name: "DuplicateHint", foreign_key: :person_a_id, dependent: :delete_all
   has_many :duplicate_hints_as_b, class_name: "DuplicateHint", foreign_key: :person_b_id, dependent: :delete_all
 
+  # Set only by the forms: nil for imports and restores, which may bring unnamed people.
+  attribute :unnamed, :boolean
+
   validates :sex, inclusion: { in: SEXES }
+  validate :named_or_marked_unknown, if: -> { unnamed == false }
   # Every creation path goes through Person.create, so the plan cap lives here.
   validate :tree_has_capacity, on: :create
 
@@ -19,8 +24,9 @@ class Person < ApplicationRecord
 
   def located_events = events.joins(:place).merge(Place.geocoded)
 
-  def birth = events.find_by(kind: "BIRT")
-  def death = events.find_by(kind: "DEAT")
+  # Lists preload events; a loaded association answers without another query.
+  def birth = life_event("BIRT")
+  def death = life_event("DEAT")
 
   def life_years
     birth_year = event_year(birth)
@@ -40,7 +46,19 @@ class Person < ApplicationRecord
     name.presence || I18n.t("people.unknown_name")
   end
 
+  def birth_surname_label
+    I18n.t("people.nee", surname: birth_surname) if birth_surname.present? && birth_surname != surname
+  end
+
   private
+    def life_event(kind)
+      events.loaded? ? events.find { it.kind == kind } : events.find_by(kind: kind)
+    end
+
+    def named_or_marked_unknown
+      errors.add(:base, :unnamed) if given_names.blank? && surname.blank?
+    end
+
     def event_year(event)
       event&.life_year
     end

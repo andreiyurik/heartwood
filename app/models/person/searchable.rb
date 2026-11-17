@@ -8,7 +8,7 @@ module Person::Searchable
       terms = query.to_s.strip.split.first(8)
       terms.reduce(visible_to(user)) do |relation, term|
         pattern = "%#{ApplicationRecord.sanitize_sql_like(term)}%"
-        relation.where("given_names LIKE :p OR surname LIKE :p OR nickname LIKE :p", p: pattern)
+        relation.where("given_names LIKE :p OR surname LIKE :p OR birth_surname LIKE :p OR nickname LIKE :p", p: pattern)
       end
     }
 

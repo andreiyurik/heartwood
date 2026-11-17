@@ -8,6 +8,10 @@ class ClanTreesController < ApplicationController
     return unless @root
 
     @depth = CLAN_DEPTH
-    build_tree_graph @root, mode: "descendants", depth: @depth, ghosts: false
+    if Current.tree.people.one?
+      build_tree_graph @root, mode: "ancestors", depth: 1, ghosts: true
+    else
+      build_tree_graph @root, mode: "descendants", depth: @depth, ghosts: false
+    end
   end
 end

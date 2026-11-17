@@ -27,7 +27,8 @@ class FuzzyDate
       return I18n.l(start, format: "%-d %B %Y") if day
       return year.to_s unless month
 
-      names = genitive ? I18n.t("date.month_names") : I18n.t("date.standalone_month_names", default: I18n.t("date.month_names"))
+      # An array passed as default: would be read as a list of fallbacks, not as the month names.
+      names = (I18n.t("date.standalone_month_names", default: nil) unless genitive) || I18n.t("date.month_names")
       "#{names[month]} #{year}"
     end
   end

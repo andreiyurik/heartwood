@@ -53,7 +53,9 @@ module Gedcom
           case child[:tag]
           when "SEX"  then attrs[:sex] = child[:value] if Person::SEXES.include?(child[:value])
           when "NAME"
-            if named
+            if named && birth_name?(child)
+              attrs[:birth_surname] = child[:value].to_s[%r{/([^/]*)/}, 1]&.strip.presence
+            elsif named
               raw << raw_node(child)
             else
               named = true
@@ -67,13 +69,15 @@ module Gedcom
         end
 
         photo, others = pick_photo(record[:children].select { it[:tag] == "OBJE" })
-        raw.concat others.map { raw_node(dereference(it)) }
+        album, others = others.map { dereference(it) }.partition { attachable(it) }
+        raw.concat others.map { raw_node(it) }
 
         attrs[:gedcom_raw] = raw.presence
         attrs[:biography]  = biography_html(notes) if notes.any?
 
         person = Person.create!(attrs.merge(tree: @tree))
         person.avatar.attach(photo) if photo
+        album.each { person.photos.create!(image: attachable(it), caption: file_title(it), taken: child_value(it, "_DATE")) }
         @xref_map[record[:xref]] = person
         @people << person
 
@@ -188,6 +192,10 @@ module Gedcom
         child_value(repository, "NAME") || (node[:value] unless node[:value]&.start_with?("@"))
       end
 
+      def birth_name?(name_record)
+        child_value(name_record, "TYPE").to_s.match?(/\A(birth|maiden)\z/i)
+      end
+
       # Returns the NAME sub-lines Heartwood has no field for, so they reach the raw store.
       def extract_name(name_record, attrs)
         parts, rest = name_record[:children].partition { NAME_PARTS.key?(it[:tag]) }
@@ -231,6 +239,11 @@ module Gedcom
         photo   = attachable(dereference(primary)) if primary
 
         photo ? [ photo, links - [ primary ] ] : [ nil, links ]
+      end
+
+      def file_title(object)
+        file = object[:children].find { it[:tag] == "FILE" }
+        (file && child_value(file, "TITL")) || child_value(object, "TITL")
       end
 
       def attachable(object)

@@ -18,6 +18,15 @@ The vertex of the graph: one human being. Part of [[domain-model]].
 ## Key fields (sketch — finalize in Phase 1)
 - `given_names`, `surname`, `name_prefix`, `name_suffix`, plus `nicknames`.
   - Consider a separate `Name` model if multiple names per person are needed (GEDCOM allows it).
+- `birth_surname` — the surname at birth (maiden name), when it differs from `surname`. Shown as
+  "née …" under the name and searched like the surname. GEDCOM: a second `NAME` with `TYPE BIRTH`.
+- The form asks for what a relative actually knows: given names (in Russian the label is «Имя и
+  отчество» — the patronymic lives in `given_names`, no extra column), surname, surname at birth,
+  born, died. `born`/`died` are free-text dates that become the `BIRT`/`DEAT` [[event]]s, so nobody
+  has to learn about events to record a year. Prefix, suffix, nickname and the biography stay under
+  "More".
+- A person may be unnamed (an unknown great-grandmother), but only on purpose: the form refuses an
+  empty name unless "Name unknown" is ticked. Imports are not affected.
 - `sex` — GEDCOM uses `M`/`F`/`U`/`X`. Store the GEDCOM code for interop; present respectfully.
 - `living` (boolean/derived) — drives [[privacy-access]] defaults.
 - `gedcom_xref` — original `@I123@` id, kept for stable round-trip [[gedcom]] export.

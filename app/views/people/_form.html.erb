@@ -1,11 +1,14 @@
 <%= form_with model: person, class: "form" do |f| %>
   <%= render "shared/errors", record: person if person.errors.any? %>
 
-  <div class="field"><%= f.label :given_names %><%= f.text_field :given_names, class: "input" %></div>
-  <div class="field"><%= f.label :surname %><%= f.text_field :surname, class: "input" %></div>
+  <%= render "people/name_fields", f: f %>
   <div class="field">
-    <%= f.label :sex %>
-    <%= f.select :sex, Person::SEXES.map { |v| [t("people.sex.#{v}"), v] }, {}, class: "input" %>
+    <%= f.label :birth_surname %>
+    <%= f.text_field :birth_surname, class: "input", placeholder: t("people.form.birth_surname_placeholder") %>
+  </div>
+  <div class="field">
+    <%= f.label :died %>
+    <%= f.text_field :died, class: "input", placeholder: t("people.form.died_placeholder") %>
   </div>
 
   <details class="more-fields" <%= "open" if person.more_fields_filled? || person.errors.any? %>>
@@ -14,6 +17,10 @@
     <div class="field"><%= f.label :name_prefix %><%= f.text_field :name_prefix, class: "input" %></div>
     <div class="field"><%= f.label :name_suffix %><%= f.text_field :name_suffix, class: "input" %></div>
     <div class="field"><%= f.label :nickname %><%= f.text_field :nickname, class: "input" %></div>
+    <div class="field field--check">
+      <%= f.check_box :unnamed, { checked: f.object.persisted? && f.object.given_names.blank? && f.object.surname.blank? } %>
+      <%= f.label :unnamed %>
+    </div>
 
     <div class="field field--biography field--stacked">
       <%= f.label :biography, t("people.biography_label") %>

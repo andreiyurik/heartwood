@@ -92,9 +92,9 @@
 
 .hints-badge-count {
   animation: pop-open var(--duration-slow) var(--ease-out-overshoot);
-  background-color: var(--color-negative);
+  background-color: var(--tint-ink-10);
   border-radius: 99rem;
-  color: var(--color-always-white);
+  color: var(--color-text);
   display: inline-grid;
   font-size: 0.75rem;
   font-weight: 700;

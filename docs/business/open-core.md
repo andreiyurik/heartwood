@@ -64,6 +64,7 @@ partials; the Engine ships them. Current slots:
 | `privacy_processors` | privacy policy, after the list of processors | — |
 | `landing_letter` | landing, after the features — the maker's signed letter (`render "landing/letter"`) | — |
 | `landing_analytics` | end of the landing page — the only page analytics may run on | — |
+| `thanks` | account menu, the import result, under the people list — where the hosted service may say "you can thank the maker" ([[ux-audit-2026-11-10]] §4). A self-hosted install shows nothing and never carries the operator's donation link. | `place` (`menu`, `import`, `milestone`) |
 
 A new slot is added to the core only when the Engine needs one — keep the list short.
 

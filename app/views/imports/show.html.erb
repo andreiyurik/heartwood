@@ -20,6 +20,7 @@
     <% end %>
 
     <%= link_to t("imports.show.done"), root_path, class: "btn btn--primary" %>
+    <%= cloud_slot "thanks", place: "import" %>
   <% elsif @import.failed? %>
     <h2><%= t("imports.show.failed.title") %></h2>
     <p><%= t("imports.show.failed.#{@import.error}") %></p>

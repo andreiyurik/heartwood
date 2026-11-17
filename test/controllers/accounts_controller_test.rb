@@ -56,4 +56,34 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     get edits_url
     assert_select ".edit-row", text: /#{I18n.t("edits.deleted_user")}/
   end
+
+  test "you can change your name without typing a password" do
+    patch account_url, params: { user: { name: "J. S. Bach", email_address: @user.email_address } }
+    assert_redirected_to account_url
+    assert_equal "J. S. Bach", @user.reload.name
+  end
+
+  test "a new email or password needs the current password" do
+    patch account_url, params: { user: { name: @user.name, email_address: "new@example.com", password: "new-password-1" } }
+    assert_response :unprocessable_entity
+    assert_equal "bach@example.com", @user.reload.email_address
+
+    patch account_url, params: { user: { name: @user.name, email_address: "new@example.com", password: "new-password-1", password_challenge: "password" } }
+    assert_redirected_to account_url
+    assert_equal "new@example.com", @user.reload.email_address
+    assert @user.authenticate("new-password-1")
+  end
+
+  test "a blank new password leaves the old one in place" do
+    patch account_url, params: { user: { name: "Johann", email_address: @user.email_address, password: "" } }
+    assert @user.reload.authenticate("password")
+  end
+
+  test "changing the password signs out your other devices" do
+    other = @user.sessions.create!
+    patch account_url, params: { user: { name: @user.name, email_address: @user.email_address, password: "new-password-1", password_challenge: "password" } }
+    assert_not Session.exists?(other.id)
+    get account_url
+    assert_response :success
+  end
 end

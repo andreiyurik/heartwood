@@ -176,3 +176,8 @@
 .edit-row--reverted .person-row__name a {
   color: var(--color-muted);
 }
+
+/* The frames that page the list must not interrupt it */
+.people-page {
+  display: contents;
+}

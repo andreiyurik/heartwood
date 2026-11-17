@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_04_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_10_225242) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -188,8 +188,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_04_120000) do
     t.string "surname"
     t.integer "tree_id", null: false
     t.datetime "updated_at", null: false
+    t.string "birth_surname"
     t.index ["gedcom_xref"], name: "index_people_on_gedcom_xref"
     t.index ["tree_id"], name: "index_people_on_tree_id"
+  end
+
+  create_table "photos", force: :cascade do |t|
+    t.integer "person_id", null: false
+    t.integer "tree_id", null: false
+    t.string "caption"
+    t.string "taken"
+    t.integer "taken_year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id"], name: "index_photos_on_person_id"
+    t.index ["tree_id"], name: "index_photos_on_tree_id"
   end
 
   create_table "places", force: :cascade do |t|
@@ -258,6 +271,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_04_120000) do
     t.string "plan", default: "free", null: false
     t.datetime "plan_expires_at"
     t.datetime "updated_at", null: false
+    t.string "crest_shape"
+    t.integer "crest_hue"
+    t.string "crest_symbol"
     t.index ["join_code"], name: "index_trees_on_join_code", unique: true
   end
 
@@ -294,6 +310,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_04_120000) do
   add_foreign_key "imports", "trees"
   add_foreign_key "imports", "users"
   add_foreign_key "people", "trees"
+  add_foreign_key "photos", "people"
+  add_foreign_key "photos", "trees"
   add_foreign_key "places", "trees"
   add_foreign_key "sessions", "trees", column: "current_tree_id"
   add_foreign_key "sessions", "users"

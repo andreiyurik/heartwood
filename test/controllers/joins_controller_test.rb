@@ -76,10 +76,23 @@ class JoinsControllerTest < ActionDispatch::IntegrationTest
     assert_match(@tree.name, @response.body)
   end
 
-  test "unknown join code 404s" do
-    post session_url, params: { email_address: users(:one).email_address, password: "password" }
+  test "an old or mistyped link says so kindly instead of a bare 404" do
     get join_url("NOPE-0000-CODE")
     assert_response :not_found
+    assert_select "h1", I18n.t("joins.expired.title")
+    assert_select "p", I18n.t("joins.expired.lede")
+    assert_select "main form", count: 0
+
+    post join_path("NOPE-0000-CODE")
+    assert_response :not_found
+  end
+
+  test "the invitation says who is calling and what is inside" do
+    Person.create!(given_names: "Ada", surname: "Lovelace", sex: "F", tree: @tree)
+    get join_url(@tree.join_code)
+    assert_select ".invitation", text: /#{users(:two).name}/
+    assert_select ".invitation svg.crest"
+    assert_select ".invitation__meta", text: /1 person/
   end
 
   test "joining as a new person also asks for consent" do

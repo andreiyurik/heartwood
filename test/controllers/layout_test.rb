@@ -134,9 +134,9 @@ class LayoutTest < ActionDispatch::IntegrationTest
 
   test "an unknown page renders the branded 404" do
     Rails.application.env_config["action_dispatch.show_detailed_exceptions"] = false
-    get join_url("nope")
+    get "/no-such-page"
     assert_response :not_found
-    assert_select "title", /Heartwood/
+    assert_select "img[src='/icon.svg']"
     assert_select "a[href='/']"
   ensure
     Rails.application.env_config.delete("action_dispatch.show_detailed_exceptions")

@@ -166,6 +166,53 @@ biography; the metadata line replaces the facts block), row controls are **hover
 icons**, every chrome action has a **label** (Import/Export GEDCOM live in the account
 menu), **avatars are coloured by name**, and **empty maps say what to do**.
 
+### Third pass (2026-11-10, [[ux-audit-2026-11-10]])
+
+The pre-beta audit's findings that changed the rules above:
+
+- **A mark, not an emoji.** `shared/_logo` (a shield with a three-crowned tree, drawn with
+  `--color-accent` / `--color-surface`, so dark mode is free) replaces 🌳 in the guest header, the
+  landing footer, `public/icon.svg`, `icon.png`, `icon-192.png` and the 404 page. Each tree wears a
+  **crest** (`tree_crest`): the same shield in the tree's own hue (`avatar_hue` of its name) with
+  the family's initial. No settings, no builder.
+- **The name is a setting.** `config.x.brand.name` (`BRAND_NAME`, default "Heartwood"); locale
+  strings say `%{app}` and `config/initializers/brand.rb` fills it in. Russian copy never puts the
+  name where it would have to be declined (`BrandTest` enforces it). The hosted service is
+  «Вся родня»; the open-source project stays Heartwood.
+- **A web app manifest** (`/manifest.json`) with the real icons and the paper colour; no service
+  worker — nothing here works offline.
+- **One header row on a phone.** Under 40rem page actions that have an icon drop their words
+  (`.btn__label` stays for screen readers), so crumb · actions · account fit one line.
+- **Canvas pages spend their height on the canvas.** On tree and map the title is 24px and shares
+  a line with the summary; the one-time tip sits at the top, away from the zoom buttons.
+- **A blank section is a quiet line.** Inside a profile section the dashed blank slate is gone:
+  the heading already says what is missing. The dashed box remains for whole empty pages.
+- **The form asks what a relative knows.** Given names (in Russian «Имя и отчество»), surname,
+  born, surname at birth, died; the rest under "More" — see [[person]].
+- **Invitations are one click from the list** (`people.invite` for the owner) and the invitation
+  page says who is calling — see [[collaboration]].
+- **Photos**: the profile's Memories section is an album with captions and a lightbox — [[media]].
+- **Lists page themselves**: 60 rows, then a lazy turbo-frame; events and portraits are preloaded.
+
+### Type and warmth (2026-11-11)
+
+- **Golos Text** (Paratype, OFL) is the interface typeface, Latin and Cyrillic; the system font is
+  the fallback. Chosen over Onest on our own screens: its 800 weight gives headings the weight of
+  Basecamp's Graphik Black, the Cyrillic is the most mature of the free grotesques, and its
+  tabular figures don't spread dates apart. One variable file per script (400–900), `font-display:
+  swap`, the script the locale needs is preloaded.
+- **Caveat** (OFL) is the hand: `--font-hand`, for a photo's caption and the lightbox caption —
+  the note on the back of a print. Never for buttons, labels or body text.
+- Fonts are served from `app/assets/fonts`, never from a font CDN: a relative's browser must not
+  call a server abroad (the same reason the map tiles are off on the hosted service).
+- **Warm paper.** `--lch-white` (the page behind the sheet) moved from barely-green to barely-cream
+  (hue 85, the landing's cream family), so the app and the landing feel like one place. Dark mode
+  is unchanged.
+- **Drawings in empty places.** `drawings/_tree` (an empty tree waiting for its first people) and
+  `drawings/_letter` (a link that no longer works): line drawings in `--tint-ink-25` with one
+  `--color-accent` shape, the same vocabulary as the crest. One per empty page, never decorative
+  inside lists.
+
 ## 6. Next bar (not yet started)
 
 - **Comments on a person** — Basecamp's thread under every record is the collaboration

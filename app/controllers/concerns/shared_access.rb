@@ -10,8 +10,11 @@ module SharedAccess
 
   private
     def set_share_link
-      @share_link = ShareLink.find_by!(token: params[:token])
-      @tree = @share_link.tree
+      if (@share_link = ShareLink.find_by(token: params[:token]))
+        @tree = @share_link.tree
+      else
+        render "shared/expired", status: :not_found
+      end
     end
 
     # The token is the only key, so it must not travel in a Referer header or land in an index.

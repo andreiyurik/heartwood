@@ -3,9 +3,10 @@
 
 <% if @root %>
   <% canvas_page %>
-  <% page_meta t("trees.clan_meta",
-       people: t("trees.people", count: @graph[:nodes].count { |node| !node[:ghost] }),
-       generations: t("trees.generations", count: @graph[:generations]),
+  <% people = @graph[:nodes].count { |node| !node[:ghost] } %>
+  <% generations = @graph[:nodes].reject { |node| node[:ghost] }.map { |node| node[:generation] }.uniq.size %>
+  <% page_meta t(generations > 2 ? "trees.clan_meta" : "shared.tree_meta",
+       people: t("trees.people", count: people), generations: t("trees.generations", count: generations),
        root: @root.display_name) %>
   <% content_for :header do %>
     <%= render "trees/menu" %>

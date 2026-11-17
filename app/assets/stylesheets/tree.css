@@ -392,10 +392,10 @@
   box-shadow: var(--shadow-md);
   color: var(--color-muted);
   font-size: 0.8125rem;
-  inset-block-end: var(--block-space);
+  inset-block-start: var(--block-space);
   inset-inline-start: 50%;
   margin: 0;
-  max-inline-size: calc(100% - 8rem);
+  max-inline-size: calc(100% - 2rem);
   padding: 0.4rem 1rem;
   pointer-events: none;
   position: absolute;

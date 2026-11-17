@@ -5,7 +5,7 @@ class InviteLinkTest < ApplicationSystemTestCase
     sign_in_as users(:one)
     visit tree_memberships_path
 
-    click_on I18n.t("tree_memberships.copy_link")
+    within("#invite") { click_on I18n.t("tree_memberships.copy") }
 
     assert_selector "button.btn--success[data-controller=copy-to-clipboard]"
   end

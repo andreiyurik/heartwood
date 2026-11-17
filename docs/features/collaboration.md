@@ -50,3 +50,12 @@ trees rather than one account per install).
 ## Notes
 - Started simple per the original plan: roles + invite links first, live updates and granular
   per-record privacy are the natural next layers, not blocking v1 collaboration.
+
+## Inviting, as the family meets it (2026-11-10)
+- The owner's People list carries "Invite relatives" next to "Add person"; it lands on the invite
+  box of the members page, where the link has a labelled Copy button and, on phones, Share.
+- The invitation page (`joins#new`) opens with the tree's crest, "You're invited to …", who is
+  inviting (the tree's owner) and how many people the tree holds. It shows no names or portraits:
+  the code alone must not reveal living relatives.
+- A replaced or mistyped invitation renders `joins/expired` (404) with what to do next; a dead
+  view-only link renders `shared/expired` the same way.

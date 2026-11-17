@@ -1,5 +1,5 @@
 class Tree < ApplicationRecord
-  include Incineratable
+  include Crest, Incineratable
 
   # An expired family plan behaves as free only for adding people; existing data is never locked.
   PLANS = {
@@ -26,6 +26,8 @@ class Tree < ApplicationRecord
   validates :join_code, presence: true, uniqueness: true
 
   before_validation { self.join_code ||= generate_join_code }
+
+  def owner = tree_memberships.find_by(role: "owner")&.user
 
   def reset_join_code!
     update! join_code: generate_join_code

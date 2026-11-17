@@ -34,3 +34,5 @@
 .icon--map { --svg: url("map.svg"); }
 .icon--fit { --svg: url("fit.svg"); }
 .icon--print { --svg: url("print.svg"); }
+.icon--remove { --svg: url("remove.svg"); }
+.icon--heart { --svg: url("heart.svg"); }

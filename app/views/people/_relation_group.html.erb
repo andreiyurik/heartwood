@@ -2,7 +2,7 @@
   <h3><%= label %></h3>
   <% if people.any? %>
     <ul class="people-list">
-      <%= render partial: "people/person", collection: people, as: :person %>
+      <%= render partial: "people/person", collection: people.includes(:events).with_attached_avatar, as: :person %>
     </ul>
   <% elsif !can_edit? || relation.nil? %>
     <p class="muted"><%= t("family.none") %></p>

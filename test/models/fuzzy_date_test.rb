@@ -50,4 +50,9 @@ class FuzzyDateTest < ActiveSupport::TestCase
       assert_equal "from March 1830 to 1840", FuzzyDate.parse("с марта 1830 по 1840").label
     end
   end
+
+  test "a month and a year read as a month and a year in every locale" do
+    assert_equal "March 1901", FuzzyDate.parse("март 1901").label
+    I18n.with_locale(:ru) { assert_equal "март 1901", FuzzyDate.parse("March 1901").label }
+  end
 end

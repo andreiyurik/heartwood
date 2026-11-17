@@ -1,0 +1,9 @@
+<dialog class="lightbox" aria-label="<%= t("photos.viewer") %>" data-lightbox-target="dialog" data-action="close->lightbox#reset click->lightbox#dismiss">
+  <figure>
+    <img src="" alt="" class="lightbox__image" data-lightbox-target="zoomedImage">
+    <figcaption data-lightbox-target="caption"></figcaption>
+  </figure>
+  <button type="button" class="btn btn--round lightbox__btn" title="<%= t("photos.close") %>" data-action="lightbox#close">
+    <%= icon_tag "remove" %><span class="for-screen-reader"><%= t("photos.close") %></span>
+  </button>
+</dialog>

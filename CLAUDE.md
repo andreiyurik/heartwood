@@ -126,6 +126,12 @@ Every screen, CSS rule and view decision is checked against these before it ship
    `--component-xs/sm/base`, tints `--tint-ink-*`, text `--color-muted`. A new literal colour,
    radius or shadow in CSS is a smell.
 
+8. **One typeface, one hand.** The interface is Golos Text (`--font-family`), served from
+   `app/assets/fonts` — never a font CDN. Caveat (`--font-hand`) is only for a photo's caption.
+   The mark is `shared/_logo`, each tree's crest is `tree_crest` ([[family-crest]]); no emoji as
+   a logo. The product's name comes from `brand_name` / `%{app}`, never a literal "Heartwood" in
+   user-facing copy.
+
 Honest gap list (what still isn't at the Basecamp bar) is §5 of [[design-system]]; pick from
 it before inventing new UI work.
 

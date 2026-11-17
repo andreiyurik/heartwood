@@ -6,7 +6,6 @@
   </div>
 
   <div class="hint-meta">
-    <span class="hint-score" title="<%= t("hints.score_title") %>"><%= hint.score %></span>
     <ul class="hint-reasons">
       <% hint.reasons.each do |reason| %>
         <li><%= t("hints.reasons.#{reason}", default: reason) %></li>
@@ -15,9 +14,6 @@
   </div>
 
   <div class="hint-actions">
-    <%# Merge is a deliberate v2 step — suggest, never one-click-accept. %>
-    <span class="btn" aria-disabled="true"
-          title="<%= t("hints.merge_soon") %>"><%= t("hints.merge") %></span>
     <%= button_to t("hints.dismiss"), hint_dismissal_path(hint), class: "btn btn--ghost" %>
   </div>
 <% end %>

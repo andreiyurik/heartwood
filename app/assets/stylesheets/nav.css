@@ -64,13 +64,41 @@
     text-overflow: ellipsis;
   }
 
-  .header-account {
-    order: 2;
+  /* One row on a phone: icons carry the page actions, their words stay for screen readers */
+  #header:has(.account-menu) {
+    column-gap: var(--inline-space);
+    flex-wrap: nowrap;
   }
 
-  .header-actions {
-    flex-basis: 100%;
-    order: 3;
+  .breadcrumbs {
+    flex: 1 1 0;
+  }
+
+  /* Next to the back button the crest alone names the tree */
+  .breadcrumbs:has(.back) .tree-name span {
+    display: none;
+  }
+
+  .header-actions,
+  .header-account {
+    flex-wrap: nowrap;
+  }
+
+  .header-actions .btn:has(.icon),
+  .hints-badge {
+    .btn__label {
+      clip-path: inset(50%);
+      block-size: 1px;
+      inline-size: 1px;
+      overflow: hidden;
+      position: absolute;
+      white-space: nowrap;
+    }
+  }
+
+  .header-actions .btn:has(.icon):not(.btn--round) {
+    aspect-ratio: 1;
+    padding: 0;
   }
 }
 
@@ -245,4 +273,50 @@
   &:focus {
     --left-offset: var(--inline-space);
   }
+}
+
+.logo,
+.crest {
+  block-size: 1.375em;
+  flex: none;
+  inline-size: 1.375em;
+  vertical-align: -0.3em;
+}
+
+.logo__shield {
+  fill: var(--color-accent);
+}
+
+.logo__tree {
+  fill: var(--color-surface);
+  stroke: var(--color-surface);
+  stroke-linecap: round;
+  stroke-width: 4;
+
+  circle {
+    stroke: none;
+  }
+
+  path {
+    fill: none;
+  }
+}
+
+.crest {
+  color: var(--color-surface);
+
+  text {
+    fill: currentColor;
+    font-size: 30px;
+    font-weight: 800;
+  }
+}
+
+.crest__shape {
+  fill: oklch(var(--lch-avatar-tone) var(--avatar-hue));
+}
+
+.crest--image {
+  border-radius: var(--radius-sm);
+  object-fit: cover;
 }

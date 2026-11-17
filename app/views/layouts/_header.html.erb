@@ -4,7 +4,7 @@
       <%= yield :back %>
       <%= render "layouts/tree_crumb" %>
     <% else %>
-      <%= link_to "🌳 Heartwood", root_path, class: "brand" %>
+      <%= link_to root_path, class: "brand" do %><%= render "shared/logo" %> <span><%= brand_name %></span><% end %>
     <% end %>
   </nav>
 
@@ -53,6 +53,7 @@
               <% end %>
             </nav>
           </li>
+          <%= cloud_slot "thanks", place: "menu" %>
           <li><hr class="action-sheet__divider"></li>
           <li><%= button_to session_path, method: :delete, class: "action-sheet__action" do %><%= icon_tag "logout" %> <%= t("nav.sign_out") %><% end %></li>
         </menu>

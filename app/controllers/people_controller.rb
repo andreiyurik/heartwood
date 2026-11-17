@@ -1,4 +1,6 @@
 class PeopleController < ApplicationController
+  PER_PAGE = 60
+
   include PersonScoped
   skip_before_action :set_person, only: %i[index new create]
   before_action :require_can_edit, only: %i[new create edit update destroy]
@@ -11,6 +13,8 @@ class PeopleController < ApplicationController
                      .search(@q, user: Current.user)
                      .then { |r| Person::SEXES.include?(@sex) ? r.where(sex: @sex) : r }
                      .sorted(@sort)
+    @page   = [ params[:page].to_i, 1 ].max
+    @people, @more = paged(@people)
   end
 
   def show
@@ -47,7 +51,13 @@ class PeopleController < ApplicationController
 
   private
 
+  # One extra row tells whether another page exists, without a COUNT.
+  def paged(people)
+    rows = people.includes(:events).with_attached_avatar.offset((@page - 1) * PER_PAGE).limit(PER_PAGE + 1).to_a
+    [ rows.first(PER_PAGE), rows.size > PER_PAGE ]
+  end
+
   def person_params
-    params.expect(person: %i[given_names surname name_prefix name_suffix nickname sex avatar biography])
+    params.expect(person: %i[given_names surname birth_surname born died unnamed name_prefix name_suffix nickname sex avatar biography])
   end
 end

@@ -64,11 +64,11 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     assert_equal positions.sort, positions, "sections are out of order"
   end
 
-  test "the metadata line carries nickname, years and sex" do
+  test "the metadata line carries nickname and years" do
     @person.update!(nickname: "Countess")
     Event.create!(kind: "BIRT", eventable: @person, tree: @tree, date_raw: "1815", date_start: Date.new(1815, 12, 10))
     get person_url(@person)
-    assert_select ".page-header__meta", text: "Countess · 1815 · Female"
+    assert_select ".page-header__meta", text: "Countess · 1815"
   end
 
   test "the metadata line is left out when there is nothing to say" do
@@ -96,10 +96,10 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     assert_select "#family a[href=?]", new_person_relative_path(@person, relation: "child"), count: 0
   end
 
-  test "empty sources and memories show a blank slate" do
+  test "empty sources say what a source is; empty memories offer to add photos" do
     get person_url(@person)
     assert_select "section#sources .blank-slate"
-    assert_select "section#memories .blank-slate"
+    assert_select "section#memories form.photo-add"
   end
 
   test "the profile's more menu offers the relationship calculator and deletion for editors" do
@@ -363,4 +363,96 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     get people_url
     assert_select ".person-row .avatar--initials[style*='--avatar-hue']"
   end
+
+  test "the owner is one click from inviting relatives" do
+    get people_url
+    assert_select ".header-actions a[href=?]", tree_memberships_path(anchor: "invite"), text: /#{I18n.t("people.invite")}/
+  end
+
+  test "an editor is not offered the owner's invite link" do
+    tree_memberships(:one_alpha).update!(role: "editor")
+    get people_url
+    assert_select "a[href=?]", tree_memberships_path(anchor: "invite"), count: 0
+  end
+
+  test "the form asks for what a relative knows: names, surname at birth, born, died" do
+    get new_person_url
+    %w[given_names surname birth_surname born died].each { assert_select "form input[name='person[#{it}]']" }
+    assert_select "form input[type=checkbox][name='person[unnamed]']"
+  end
+
+  test "creating a person with years records the events in the same step" do
+    post people_url, params: { person: { given_names: "Grace", surname: "Hopper", sex: "F", born: "1906", died: "1992", unnamed: "0" } }
+    person = Person.find_by!(surname: "Hopper")
+    assert_redirected_to person
+    assert_equal "1906 – 1992", person.life_years
+  end
+
+  test "an empty form adds nobody" do
+    assert_no_difference "Person.count" do
+      post people_url, params: { person: { given_names: "", surname: "", sex: "U", unnamed: "0" } }
+    end
+    assert_response :unprocessable_entity
+    assert_select ".errors", text: /#{I18n.t("activerecord.errors.models.person.attributes.base.unnamed")}/
+  end
+
+  test "an unknown ancestor can still be added on purpose" do
+    assert_difference "Person.count", 1 do
+      post people_url, params: { person: { given_names: "", surname: "", sex: "F", unnamed: "1" } }
+    end
+  end
+
+  test "the profile shows the surname at birth and no sex in the metadata line" do
+    @person.update!(birth_surname: "Byron")
+    get person_url(@person)
+    assert_select ".page-header__meta", text: /#{I18n.t("people.nee", surname: "Byron")}/
+    assert_select ".page-header__meta", text: /#{I18n.t("people.sex.F")}/, count: 0
+  end
+
+  test "the list says how many people the tree holds" do
+    get people_url
+    assert_select ".page-header__meta", text: I18n.t("trees.people", count: 1)
+  end
+
+  test "a free-form event leads with what happened, not with the word Event" do
+    Event.create!(kind: "EVEN", eventable: @person, tree: @tree, date_raw: "1833", value: "Met Charles Babbage")
+    get person_url(@person)
+    assert_select ".event-row .event-kind", text: "Met Charles Babbage"
+    assert_select ".event-row", text: /#{I18n.t("events.kinds.EVEN")}/, count: 0
+  end
+
+  test "the list costs the same number of queries for three people as for twelve" do
+    grow_tree_to 3
+    small = count_queries { get people_url }
+    grow_tree_to 12
+    large = count_queries { get people_url }
+
+    assert_equal small, large
+  end
+
+  test "a long list arrives a page at a time" do
+    grow_tree_to PeopleController::PER_PAGE + 5
+    get people_url
+    assert_select ".people-list li.person-row", PeopleController::PER_PAGE
+    assert_select "turbo-frame#people_page_2[loading=lazy][src*='page=2']"
+
+    get people_url(page: 2)
+    assert_select "turbo-frame#people_page_2 li.person-row", 5
+    assert_select "turbo-frame#people_page_3", count: 0
+  end
+
+  private
+    def grow_tree_to(size)
+      (size - @tree.people.count).times do |i|
+        person = Person.create!(given_names: "Person #{i}", surname: "Test", sex: "U", tree: @tree)
+        person.events.create!(kind: "BIRT", date_raw: (1800 + i).to_s)
+      end
+    end
+
+    def count_queries(&block)
+      count = 0
+      counter = ->(*, payload) { count += 1 unless payload[:name].in?(%w[SCHEMA TRANSACTION]) || payload[:cached] }
+      ActiveSupport::Notifications.subscribed(counter, "sql.active_record", &block)
+      count
+    end
 end

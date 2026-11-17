@@ -1,0 +1,10 @@
+<% page_title t("joins.expired.title"), heading: false %>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <%= render "drawings/letter" %>
+    <h1><%= t("joins.expired.title") %></h1>
+    <p class="auth-lede"><%= t("joins.expired.lede") %></p>
+    <%= link_to t("auth.sign_in_submit"), new_session_path, class: "btn" unless authenticated? %>
+  </div>
+</div>
