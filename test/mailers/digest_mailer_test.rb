@@ -23,8 +23,8 @@ class DigestMailerTest < ActionMailer::TestCase
     body = mail.html_part.body.to_s
     assert_match "Vera Ivanova", body
     assert_match "Masha", body
-    assert_match person_url(@vera), body
-    assert_match question_url(@question), body
+    assert_match person_url(@vera, tree: @tree.id), body
+    assert_match question_url(@question, tree: @tree.id), body
     assert_match "What was her mother called?", body
     assert_match "Vera Ivanova", mail.text_part.body.to_s
   end

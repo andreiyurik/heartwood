@@ -23,7 +23,7 @@ class QuestionsMailerTest < ActionMailer::TestCase
     assert_match "What was her mother called?", body
     assert_match "Aunt Masha", body
     assert_match "Anna Petrovna", body
-    assert_match question_url(@question), body
+    assert_match question_url(@question, tree: @question.tree_id), body
     assert_match letter_unsubscribe_url("answers", ""), body
     assert_equal "List-Unsubscribe=One-Click", mail.header["List-Unsubscribe-Post"].to_s
   end

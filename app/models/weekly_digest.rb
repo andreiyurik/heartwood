@@ -37,12 +37,14 @@ class WeeklyDigest
   def open_questions = tree.questions.open.latest.limit(5).to_a
 
   private
-    def edits = tree.edits.where(created_at: since..).where.not(user_id: user.id)
+    def edits = by_others(tree.edits.where(created_at: since..))
 
-    def comments = tree.comments.where(created_at: since..).where.not(user_id: user.id)
+    def comments = by_others(tree.comments.where(created_at: since..))
+
+    # Rows whose author deleted their account have no user, and are still someone else's news.
+    def by_others(recent) = recent.where(user_id: nil).or(recent.where.not(user_id: user.id))
 
     def answers
-      recent = Answer.joins(:question).where(questions: { tree_id: tree.id }, created_at: since..)
-      recent.where(user_id: nil).or(recent.where.not(user_id: user.id))
+      by_others Answer.joins(:question).where(questions: { tree_id: tree.id }, created_at: since..)
     end
 end

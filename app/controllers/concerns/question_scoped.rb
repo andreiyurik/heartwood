@@ -7,6 +7,6 @@ module QuestionScoped
 
   private
     def set_question
-      @question = find_in_current_tree(:questions, params[:question_id] || params[:id])
+      @question = Current.tree.questions.find(params[:question_id] || params[:id])
     end
 end

@@ -2,22 +2,10 @@ module TenantScoping
   extend ActiveSupport::Concern
 
   included do
-    before_action :set_current_tree
+    before_action :set_current_tree, :follow_link_into_tree
   end
 
   private
-
-  # A link from a letter may point into another of the member's trees: switch to it and come back.
-  def find_in_current_tree(scope, id)
-    return Current.tree.public_send(scope).find(id) unless request.get?
-
-    Current.tree.public_send(scope).find_by(id: id) or begin
-      record = Current.tree.public_send(scope).klass.where(tree_id: Current.user.tree_memberships.select(:tree_id)).find(id)
-      Current.session.update!(current_tree: record.tree)
-      redirect_to request.url
-      nil
-    end
-  end
 
   def set_current_tree
     return unless Current.user
@@ -25,6 +13,17 @@ module TenantScoping
     membership = resolve_membership
     Current.tree = membership.tree
     Current.membership = membership
+  end
+
+  # A letter's links carry ?tree=, since they may point into another of the member's trees: switch, then drop
+  # the marker. Nothing else switches — a live refresh in a background tab must never move the session.
+  def follow_link_into_tree
+    return unless Current.user && request.get? && params[:tree].present?
+
+    if (membership = Current.user.tree_memberships.find_by(tree_id: params[:tree]))
+      Current.session.update!(current_tree: membership.tree)
+    end
+    redirect_to request.path + (request.query_parameters.except("tree").to_query.presence&.prepend("?")).to_s
   end
 
   # Falls back to the oldest membership, then bootstraps a tree if there is none.

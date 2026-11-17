@@ -22,6 +22,12 @@ class WeeklyDigestTest < ActiveSupport::TestCase
     assert_equal [ "Masha" ], WeeklyDigest.new(@owner_membership).contributors
   end
 
+  test "what someone did before deleting their account is still news" do
+    as(@cousin) { @tree.people.create!(given_names: "Vera") }
+    @cousin.destroy!
+    assert WeeklyDigest.new(@owner_membership).news?
+  end
+
   test "last week's news is old news" do
     travel_to 10.days.ago do
       as(@cousin) { @tree.people.create!(given_names: "Vera") }

@@ -31,6 +31,11 @@
 .question-photo-frame {
   margin: 0 0 var(--block-space);
 
+  a {
+    display: inline-block;
+    max-inline-size: 100%;
+  }
+
   figcaption {
     margin-block-start: 0.4rem;
   }

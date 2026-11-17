@@ -7,6 +7,6 @@ module PersonScoped
 
   private
     def set_person
-      @person = find_in_current_tree(:people, params[:person_id] || params[:id])
+      @person = Current.tree.people.find(params[:person_id] || params[:id])
     end
 end

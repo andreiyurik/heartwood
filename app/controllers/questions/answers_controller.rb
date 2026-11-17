@@ -2,6 +2,8 @@ class Questions::AnswersController < ApplicationController
   include QuestionScoped
 
   def create
+    return redirect_to(@question) if @question.closed?
+
     answer = @question.answers.create!(params.expect(answer: [ :body ]).merge(user: Current.user))
     redirect_to question_path(@question, anchor: dom_id(answer))
   rescue ActiveRecord::RecordInvalid

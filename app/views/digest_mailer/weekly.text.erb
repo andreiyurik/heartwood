@@ -6,7 +6,7 @@
 
 <%= t("digests.people", count: people.size) %>
 <% people.first(WeeklyDigest::NAMED_PEOPLE).each do |person| %>
-- <%= person.display_name %>: <%= person_url(person) %>
+- <%= person.display_name %>: <%= person_url(person, tree: @digest.tree.id) %>
 <% end %>
 <% if people.size > WeeklyDigest::NAMED_PEOPLE %>
 <%= t("digests.more_people", count: people.size - WeeklyDigest::NAMED_PEOPLE) %>
@@ -24,11 +24,11 @@
 
 <%= t("digests.questions") %>
 <% @digest.open_questions.each do |question| %>
-- <%= question.body %> (<%= question.person.display_name %>): <%= question_url(question) %>
+- <%= question.body %> (<%= question.person.display_name %>): <%= question_url(question, tree: @digest.tree.id) %>
 <% end %>
 <% end %>
 
-<%= t("digests.open") %>: <%= edits_url %>
+<%= t("digests.open") %>: <%= edits_url(tree: @digest.tree.id) %>
 
 --
 <%= t("digests.why", tree: @digest.tree.name) %>

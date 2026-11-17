@@ -31,6 +31,27 @@ class ConditionalGetTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "renaming a person or removing a photo changes the lists that show them" do
+    person = @tree.people.create!(given_names: "Vera")
+    person.questions.create!(asker: users(:one), body: "Who?")
+    photo = person.photos.create!(image: { io: file_fixture("avatar.png").open, filename: "p.png", content_type: "image/png" })
+
+    get questions_url
+    questions_etag = response.headers["ETag"]
+    get edits_url
+    edits_etag = response.headers["ETag"]
+
+    travel 1.minute do
+      person.update!(given_names: "Vera Ivanovna")
+      get questions_url, headers: { "If-None-Match" => questions_etag }
+      assert_response :success
+
+      photo.destroy!
+      get edits_url, headers: { "If-None-Match" => edits_etag }
+      assert_response :success
+    end
+  end
+
   test "another member gets their own copy" do
     get edits_url
     etag = response.headers["ETag"]
