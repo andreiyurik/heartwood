@@ -799,7 +799,7 @@ en:
     body_label: Your answer
     body_placeholder: Write what you know — even if you're not sure
     name_label: Your name
-    name_placeholder: Who's answering? For example, Aunt Masha
+    name_placeholder: Your name (optional)
     submit: Answer
     submit_more: Add more
     thanks: Thank you!

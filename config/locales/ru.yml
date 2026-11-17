@@ -883,7 +883,7 @@ ru:
     body_label: Ваш ответ
     body_placeholder: Напишите, что знаете, — даже если не уверены
     name_label: Ваше имя
-    name_placeholder: Кто отвечает? Например, тётя Маша
+    name_placeholder: Ваше имя (необязательно)
     submit: Ответить
     submit_more: Дописать ещё
     thanks: Спасибо!

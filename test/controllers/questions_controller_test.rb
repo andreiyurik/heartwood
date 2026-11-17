@@ -115,6 +115,19 @@ class QuestionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
+  test "every page of the feature speaks Russian too" do
+    question = @person.questions.create!(asker: @owner, body: "Кто это?")
+    question.answers.create!(author_name: "Тётя Галя", body: "Я")
+    @person.comments.create!(user: @owner, body: "Проверю")
+    patch locale_url, params: { locale: "ru" }
+
+    [ question_url(question), questions_url, person_url(@person), edits_url, question_link_url(question.token) ].each do |url|
+      get url
+      follow_redirect! if response.redirect?
+      assert_response :success, url
+    end
+  end
+
   test "another tree's questions are out of reach" do
     stranger = trees(:beta).people.create!(given_names: "Else")
     question = stranger.questions.create!(asker: users(:two), body: "Who?")
