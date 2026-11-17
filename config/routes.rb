@@ -86,6 +86,7 @@ Rails.application.routes.draw do
     resource :relationship, only: :show
     resources :relatives, only: %i[new create]
     resources :photos, only: %i[create edit update destroy]
+    resources :comments, only: %i[create edit update destroy]
     resources :events, only: %i[new create edit update destroy] do
       resources :citations, only: %i[new create destroy]
     end

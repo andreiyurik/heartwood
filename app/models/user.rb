@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :questions, foreign_key: :asker_id, dependent: :nullify
   has_many :closed_questions, class_name: "Question", foreign_key: :closed_by_id, dependent: :nullify
   has_many :answers, dependent: :nullify
+  has_many :comments, dependent: :nullify
   has_many :reverted_edits, class_name: "Edit", foreign_key: :reverted_by_id, dependent: :nullify
 
   before_destroy(prepend: true) { owned_trees.each(&:incinerate_later) }

@@ -1,0 +1,18 @@
+<section class="profile-section" id="comments">
+  <h2><%= t("people.sections.comments") %></h2>
+  <% comments = person.comments.chronological.includes(:user) %>
+  <% if comments.any? %>
+    <ul class="thread">
+      <%= render partial: "comments/comment", collection: comments, locals: { person: person } %>
+    </ul>
+  <% end %>
+
+  <%= preserved_frame_tag "new_comment" do %>
+    <%= form_with model: [ person, Comment.new ], class: "thread-form", data: { turbo_frame: "_top" } do |form| %>
+      <%= initials_avatar Current.user.name %>
+      <%= form.text_area :body, class: "input", rows: 1, required: true, maxlength: 5000,
+            placeholder: t("comments.placeholder"), aria: { label: t("comments.placeholder") } %>
+      <%= form.submit t("comments.submit"), class: "btn btn--primary" %>
+    <% end %>
+  <% end %>
+</section>

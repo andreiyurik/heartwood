@@ -75,11 +75,13 @@
     <% end %>
 
     <% if @question.open? %>
-      <%= form_with model: Answer.new, url: question_answers_path(@question), class: "thread-form" do |form| %>
-        <%= initials_avatar Current.user.name %>
-        <%= form.text_area :body, class: "input", rows: 2, required: true, maxlength: 2000,
-              placeholder: t("answers.placeholder"), aria: { label: t("answers.placeholder") } %>
-        <%= form.submit t("answers.submit"), class: "btn btn--primary" %>
+      <%= preserved_frame_tag "new_answer" do %>
+        <%= form_with model: Answer.new, url: question_answers_path(@question), class: "thread-form", data: { turbo_frame: "_top" } do |form| %>
+          <%= initials_avatar Current.user.name %>
+          <%= form.text_area :body, class: "input", rows: 2, required: true, maxlength: 2000,
+                placeholder: t("answers.placeholder"), aria: { label: t("answers.placeholder") } %>
+          <%= form.submit t("answers.submit"), class: "btn btn--primary" %>
+        <% end %>
       <% end %>
     <% end %>
   </section>
