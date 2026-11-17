@@ -42,5 +42,6 @@ class DigestMailerTest < ActionMailer::TestCase
     @owner.update!(locale: "ru")
     mail = DigestMailer.weekly(tree_memberships(:one_alpha))
     assert_match "Что нового", mail.subject
+    assert_no_match(/ and /, mail.html_part.body.to_s)
   end
 end
