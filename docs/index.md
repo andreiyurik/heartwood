@@ -30,6 +30,9 @@ agent, also read [`CLAUDE.md`](../CLAUDE.md) at the repo root.
 ### 2. Features — what users do
 - [[features-index]] — curated & prioritized feature catalog (borrowed from the best)
 - [[change-history]] — who changed what, and one-click undo/restore
+- [[questions]] — ask relatives about a person or a photo; they answer by link, no account
+- [[comments]] — a thread under every person
+- [[digest]] — the weekly "what's new in the tree" email
 - [[family-crest]] — a crest for every tree: choose, upload, and the link preview card
 - [[landing]] — what guests see at `/`: the story, the rules for marketing claims
 - [[accounts-and-legal]] — 152-ФЗ policy & consent, account deletion, data retention

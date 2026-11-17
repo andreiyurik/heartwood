@@ -1,0 +1,16 @@
+<% about = local_assigns.fetch(:about, true) %>
+<%= tag.li id: dom_id(question), class: "person-row question-row" do %>
+  <% if question.photo %>
+    <%= image_tag question.photo.image.variant(:print), class: "avatar question-row__photo", alt: "" %>
+  <% else %>
+    <%= initials_avatar question.asker&.name || t("edits.deleted_user") %>
+  <% end %>
+  <div class="person-row__body">
+    <p class="person-row__name"><%= link_to question.body, question %></p>
+    <p class="person-row__meta">
+      <%= safe_join [ (question.person.display_name if about),
+            t("questions.answers", count: question.answers.size),
+            t("questions.asked_by_html", name: question.asker&.name || t("edits.deleted_user"), time: local_time_ago(question.created_at)) ].compact, " · " %>
+    </p>
+  </div>
+<% end %>

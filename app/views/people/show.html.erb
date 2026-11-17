@@ -6,6 +6,9 @@
   <%= link_to t("people.tree"), person_tree_path(@person), class: "btn", title: "#{t("people.tree")} (t)",
         data: { controller: "hotkey", hotkey_key_value: "t", action: "keydown@window->hotkey#trigger" } %>
   <% if can_edit? %>
+    <%= link_to new_person_question_path(@person), class: "btn", title: t("questions.ask"), data: { turbo_frame: "new_question" } do %>
+      <%= icon_tag "help-circle" %> <span class="btn__label"><%= t("questions.ask") %></span>
+    <% end %>
     <%= link_to edit_person_path(@person), class: "btn btn--primary", title: "#{t("people.edit_button")} (e)",
           data: { controller: "hotkey", hotkey_key_value: "e", action: "keydown@window->hotkey#trigger" } do %>
       <%= icon_tag "pencil" %> <span class="btn__label"><%= t("people.edit_button") %></span>
@@ -56,6 +59,8 @@
       <a href="#<%= section %>"><%= t("people.sections.#{section}") %></a>
     <% end %>
   </nav>
+
+  <%= render "people/questions", person: @person %>
 
   <%= render "people/events", person: @person %>
 

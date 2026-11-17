@@ -1,0 +1,24 @@
+<%= tag.li id: dom_id(answer), class: class_names("thread-entry", "thread-entry--accepted": answer.accepted?) do %>
+  <%= initials_avatar answer.author %>
+  <div class="thread-entry__body">
+    <p class="thread-entry__meta">
+      <strong><%= answer.author %></strong> · <%= local_time_ago(answer.created_at) %>
+      <% if answer.accepted? %> · <span class="thread-entry__mark"><%= icon_tag "check" %> <%= t("answers.accepted") %></span><% end %>
+    </p>
+    <div class="thread-entry__text"><%= simple_format answer.body %></div>
+
+    <% if question.open? && can_edit? %>
+      <%= turbo_frame_tag dom_id(answer, :acceptance) do %>
+        <div class="thread-entry__actions">
+          <%= link_to new_question_acceptance_path(question, answer_id: answer.id), class: "btn" do %>
+            <%= icon_tag "check" %> <%= t("answers.accept") %>
+          <% end %>
+          <%= button_to question_answer_path(question, answer), method: :delete, class: "btn btn--ghost btn--round",
+                title: t("answers.destroy"), form: { data: { turbo_confirm: t("answers.destroy_confirm"), turbo_frame: "_top" } } do %>
+            <%= icon_tag "trash" %><span class="for-screen-reader"><%= t("answers.destroy") %></span>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
