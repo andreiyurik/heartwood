@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  include PrivacyConsent
+  include PrivacyConsent, Letters
 
   has_secure_password
   has_many :sessions, dependent: :destroy
@@ -15,8 +15,6 @@ class User < ApplicationRecord
   has_many :reverted_edits, class_name: "Edit", foreign_key: :reverted_by_id, dependent: :nullify
 
   before_destroy(prepend: true) { owned_trees.each(&:incinerate_later) }
-
-  generates_token_for :digest_unsubscribe
 
   before_create { self.locale ||= I18n.locale }
 

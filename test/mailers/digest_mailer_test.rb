@@ -35,7 +35,7 @@ class DigestMailerTest < ActionMailer::TestCase
 
     assert_equal "List-Unsubscribe=One-Click", mail.header["List-Unsubscribe-Post"].to_s
     assert_match url, mail.html_part.body.to_s
-    assert_equal @owner, User.find_by_token_for(:digest_unsubscribe, url.split("/").last)
+    assert_equal @owner, User.find_by_unsubscribe_token("digest", url.split("/").last)
   end
 
   test "the letter speaks the member's language" do

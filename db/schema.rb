@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_17_144525) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_153731) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -330,6 +330,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_144525) do
     t.string "privacy_consent_version"
     t.boolean "weekly_digest", default: true, null: false
     t.string "locale"
+    t.boolean "answer_emails", default: true, null: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 

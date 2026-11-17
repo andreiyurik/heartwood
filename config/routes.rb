@@ -10,8 +10,10 @@ Rails.application.routes.draw do
     get :terms
   end
   resource :registration, only: %i[new create]
-  get  "digest/unsubscribe/:token", to: "digest_unsubscribes#show", as: :digest_unsubscribe
-  post "digest/unsubscribe/:token", to: "digest_unsubscribes#create"
+  scope "letters/:kind/unsubscribe/:token", constraints: { kind: Regexp.union(User::Letters::KINDS.keys) } do
+    get  "/", to: "letter_unsubscribes#show", as: :letter_unsubscribe
+    post "/", to: "letter_unsubscribes#create"
+  end
   resource :export, only: :create
   resources :archives, only: %i[create show]
   resource :import, only: %i[new create show]

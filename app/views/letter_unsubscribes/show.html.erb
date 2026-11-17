@@ -1,0 +1,15 @@
+<% kind = params[:kind] %>
+<% page_title t("letters.#{kind}.title"), heading: false %>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1><%= t("letters.#{kind}.title") %></h1>
+    <% if @user.receives?(kind) %>
+      <p class="auth-lede"><%= t("letters.#{kind}.lede", email: @user.email_address) %></p>
+      <%= button_to t("letters.submit"), letter_unsubscribe_path(kind, params[:token]), class: "btn btn--primary" %>
+    <% else %>
+      <p class="auth-lede"><%= t("letters.off") %></p>
+      <%= link_to t("letters.account"), account_path, class: "btn" %>
+    <% end %>
+  </div>
+</div>

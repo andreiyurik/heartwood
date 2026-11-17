@@ -678,6 +678,7 @@ en:
   accounts:
     letters_title: Letters
     weekly_digest: Once a week, tell me what my relatives added to the tree (only if something changed)
+    answer_emails: Tell me by email when someone answers my questions
     title: Account
     profile_title: You
     new_password: New password
@@ -845,13 +846,26 @@ en:
     open: See everything in the history
     why: "You get this letter once a week, only when something changes in “%{tree}”."
     unsubscribe: Stop these letters
-    unsubscribe_title: Weekly letter
-    unsubscribe_lede: "Stop the weekly “what's new in the tree” letter to %{email}? You can turn it back on in your account."
-    unsubscribe_submit: Stop the letters
-    unsubscribed_lede: The weekly letter is off. You can turn it back on in your account.
+  letters:
+    submit: Stop these letters
+    off: These letters are off. You can turn them back on in your account.
     account: Open my account
     flash:
-      unsubscribed: Done — no more weekly letters.
+      unsubscribed: Done — no more of these letters.
+    digest:
+      title: Weekly letter
+      lede: "Stop the weekly “what's new in the tree” letter to %{email}? You can turn it back on in your account."
+    answers:
+      title: Letters about answers
+      lede: "Stop letting %{email} know when someone answers your questions? You'll still see the answers in the tree and in the weekly letter."
+
+  questions_mailer:
+    answered:
+      subject: "A new answer: %{question}"
+      lede: "Someone answered your question in “%{tree}”."
+      open: Open the question to put the answer into the tree
+      why: You get this letter when a question you asked gets an answer — at most one an hour per question.
+
   activerecord:
     errors:
       messages:
