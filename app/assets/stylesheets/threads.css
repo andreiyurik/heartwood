@@ -1,0 +1,100 @@
+/* Answers to a question and comments on a person: Basecamp's thread under a record */
+.thread {
+  list-style: none;
+  margin: 0 0 var(--block-space);
+  padding: 0;
+}
+
+.thread-entry {
+  align-items: flex-start;
+  border-block-end: 1px solid var(--tint-ink-10);
+  display: flex;
+  gap: var(--inline-space-double);
+  padding-block: 0.75rem;
+  scroll-margin-block-start: 5rem;
+
+  &:last-child {
+    border-block-end: none;
+  }
+
+  &:target {
+    animation: yellow-fade 3s ease-out;
+  }
+
+  .avatar {
+    flex: none;
+  }
+}
+
+.thread-entry__body {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.thread-entry__meta {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  margin: 0;
+
+  strong {
+    color: var(--color-text);
+  }
+}
+
+.thread-entry__text {
+  overflow-wrap: anywhere;
+
+  p {
+    margin: 0.15rem 0 0;
+  }
+}
+
+.thread-entry__mark {
+  align-items: center;
+  color: var(--color-positive, var(--color-accent));
+  display: inline-flex;
+  gap: 0.25em;
+
+  .icon {
+    --icon-size: 0.875em;
+  }
+}
+
+.thread-entry__actions {
+  display: flex;
+  gap: var(--inline-space);
+  margin-block-start: 0.5rem;
+}
+
+.thread-entry__actions,
+.thread-entry .acceptance-form {
+  animation: fade-in-up var(--duration-medium) ease-out;
+}
+
+.thread-form {
+  align-items: flex-start;
+  display: flex;
+  gap: var(--inline-space-double);
+
+  .avatar {
+    flex: none;
+  }
+
+  .input {
+    flex: 1;
+    min-block-size: var(--component-base);
+    resize: vertical;
+  }
+
+  @media (max-width: 40rem) {
+    flex-wrap: wrap;
+
+    .avatar {
+      display: none;
+    }
+
+    .btn {
+      margin-inline-start: auto;
+    }
+  }
+}

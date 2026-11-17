@@ -1,0 +1,13 @@
+<% questions = person.questions.open.latest.includes(:asker, :answers, photo: { image_attachment: :blob }) %>
+
+<% if questions.any? || can_edit? %>
+  <section class="profile-section questions" id="questions">
+    <% if questions.any? %>
+      <h2><%= t("questions.title") %></h2>
+      <ul class="people-list">
+        <%= render partial: "questions/question", collection: questions, locals: { about: false } %>
+      </ul>
+    <% end %>
+    <%= preserved_frame_tag "new_question" if can_edit? %>
+  </section>
+<% end %>

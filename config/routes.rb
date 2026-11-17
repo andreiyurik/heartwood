@@ -36,6 +36,19 @@ Rails.application.routes.draw do
     resources :people, only: :show
   end
 
+  # A question's own link: one question and an answer form, for relatives without an account. See [[questions]].
+  get  "q/:token/card", to: "guest_answers/cards#show", as: :question_link_card
+  get  "q/:token", to: "guest_answers#new", as: :question_link
+  post "q/:token", to: "guest_answers#create"
+
+  resources :questions, only: %i[index show destroy] do
+    scope module: :questions do
+      resources :answers, only: %i[create destroy]
+      resources :acceptances, only: %i[new create]
+      resource :closure, only: :create
+    end
+  end
+
   namespace :places do
     resource :search,  only: :show
     resource :geocode, only: :show
@@ -79,6 +92,7 @@ Rails.application.routes.draw do
     scope module: :people do
       resource :panel, only: :show
       resource :map,   only: :show
+      resources :questions, only: %i[new create]
     end
   end
 

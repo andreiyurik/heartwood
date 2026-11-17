@@ -402,6 +402,7 @@ en:
 
   photos:
     add: Add photos
+    ask: Ask who this is
     add_hint: Old prints, documents, family gatherings — several files at once.
     none: No photos yet.
     sign: Add a caption
@@ -699,8 +700,8 @@ en:
     empty_lede: When you or your relatives add, edit or delete something, it shows up here.
     undo: Undo
     restore: Restore
-    reverted: "Undone by %{name} %{time} ago"
-    by: "%{name}, %{time} ago"
+    reverted_html: "Undone by %{name}, %{time}"
+    by_html: "%{name}, %{time}"
     family: family of %{names}
     person:
       added: Added to the tree
@@ -716,12 +717,92 @@ en:
     family_partner:
       added: "Linked in a family with %{relatives}"
       removed: "Unlinked from a family with %{relatives}"
+    photo:
+      edited: "Photo changed: %{fields}"
     no_relatives: a new family
     deleted_user: Deleted user
     flash:
       reverted: Undone.
       failed: "Couldn't undo: %{errors}"
 
+  questions:
+    title: Questions for relatives
+    lede: Ask what nobody here knows — who is in a photo, what great-grandmother was called. Relatives answer through a link, without signing up.
+    ask: Ask relatives
+    new_title: Ask relatives
+    photo_default: Who is in this photo?
+    body_label: What would you like to know?
+    body_placeholder: For example, what was grandmother Vera's mother called?
+    hint: You'll get a link for the family chat. Relatives answer without signing up.
+    photo_hint: You'll get a link for the family chat. Anyone with the link will see this photo.
+    submit: Ask
+    answers:
+      zero: No answers yet
+      one: 1 answer
+      other: "%{count} answers"
+    asked_by_html: "Asked by %{name}, %{time}"
+    send_title: Send it to your relatives
+    send_lede: Paste the link into the family chat or send it by mail. The link opens this question and nothing else in the tree; anyone can answer without signing up.
+    close: Close the question
+    closed_by_html: "Closed by %{name}, %{time}"
+    destroy: Delete the question
+    destroy_confirm: Delete this question and its answers?
+    empty: No questions yet
+    empty_lede: Ask on a person's page or under a photo — who is in the picture, what great-grandmother was called.
+    closed_title: Closed
+    flash:
+      destroyed: Question deleted.
+      accepted: Written into the tree.
+      closed: Question closed.
+      not_accepted: Couldn't write that into the tree. Check the field and the words.
+
+  answers:
+    title: Answers
+    none: No answers yet.
+    placeholder: Write what you know…
+    submit: Answer
+    accepted: In the tree
+    accept: Put in the tree
+    destroy: Delete the answer
+    destroy_confirm: Delete this answer?
+    someone: A relative
+    flash:
+      blank: Write an answer first.
+      destroyed: Answer deleted.
+
+  acceptances:
+    into: Where
+    choose: Choose a field
+    text: Text
+    submit: Put in the tree
+    fields:
+      given_names: Given names
+      surname: Surname
+      birth_surname: Surname at birth
+      born: Born
+      died: Died
+      caption: Caption
+      taken: When it was taken
+
+  guest_answers:
+    preview: "%{name} asks the family · %{tree}"
+    asks: "%{name} asks"
+    tree: "Family tree “%{tree}”"
+    body_label: Your answer
+    body_placeholder: Write what you know — even if you're not sure
+    name_label: Your name
+    name_placeholder: Who's answering? For example, Aunt Masha
+    submit: Answer
+    submit_more: Add more
+    thanks: Thank you!
+    thanks_lede: Your answer has reached the family.
+    privacy_html: "Only the members of “%{tree}” will see your answer. %{policy}"
+    policy: How we handle data
+    closed: This question has been answered already. Thank you!
+    too_many: Too many answers in a row. Try again in a few minutes.
+
+  local_time:
+    ago: "%{time} ago"
   activerecord:
     errors:
       messages:
@@ -755,6 +836,9 @@ en:
         sex: Sex
         avatar: Photo
         private: Private
+      photo:
+        caption: Caption
+        taken: When it was taken
       event:
         kind: Type
         date_raw: Date

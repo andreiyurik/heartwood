@@ -1,0 +1,21 @@
+<% page_title t("questions.title") %>
+<% page_meta t("questions.lede") %>
+<% back_link root_path %>
+<%= live_updates %>
+
+<% if @open.any? %>
+  <ul class="people-list" id="open_questions">
+    <%= render partial: "questions/question", collection: @open %>
+  </ul>
+<% else %>
+  <%= render "shared/blank_slate", id: "open_questions", title: t("questions.empty"), lede: t("questions.empty_lede") %>
+<% end %>
+
+<% if @closed.any? %>
+  <section class="profile-section" id="closed_questions">
+    <h2><%= t("questions.closed_title") %></h2>
+    <ul class="people-list">
+      <%= render partial: "questions/question", collection: @closed %>
+    </ul>
+  </section>
+<% end %>

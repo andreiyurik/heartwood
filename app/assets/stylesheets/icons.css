@@ -36,3 +36,5 @@
 .icon--print { --svg: url("print.svg"); }
 .icon--remove { --svg: url("remove.svg"); }
 .icon--heart { --svg: url("heart.svg"); }
+.icon--help-circle { --svg: url("help-circle.svg"); }
+.icon--messages { --svg: url("messages.svg"); }

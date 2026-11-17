@@ -29,6 +29,11 @@ trees rather than one account per install).
 - **Member management**: `/tree_memberships` — owner-only role toggle and removal, visible
   member list for everyone in the tree.
 - **Change history & undo** — see [[change-history]].
+- **Questions for relatives** — an editor asks about a person or a photo, a relative answers
+  through the question's own link without an account, and the answer goes into the tree in one
+  step — see [[questions]].
+- **Comments on a person** — a thread at the bottom of every profile — see [[comments]].
+- **Weekly digest** — one letter a week about what others added — see [[digest]].
 - **Multi-tree membership**: a user can belong to more than one tree (their own plus any they've
   joined). `sessions.current_tree_id` remembers which one is active; a nav `<details>` switcher
   appears once someone actually has more than one.

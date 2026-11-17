@@ -43,6 +43,12 @@ it, read-only, with nothing to sign up for.
   `Referrer-Policy: no-referrer`, so the secret URL doesn't leak through a clicked link.
 - Not yet: a link to one branch or one person only, an expiry date.
 
+## Question links
+A third kind of link, one per question (`/q/<token>`, [[questions]]): it shows that question, the
+tree's name and crest, who asks, and the person only if `visible_to(nil)` — a living person is
+never named by the page, though the asker's own words may name them. A photo the question is about
+is shown, on purpose, without its caption. Same `noindex` / `no-referrer` headers (`SecretLink`).
+
 ## Implementation notes
 - Default to **private/safe**: new data is members-only until deliberately published.
 - Enforce at the query layer (scopes), not just the view — never leak a hidden living person

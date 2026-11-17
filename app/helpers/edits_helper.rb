@@ -1,5 +1,5 @@
 module EditsHelper
-  DERIVED_ATTRIBUTES = %w[ date_start date_end date_precision gedcom_raw gedcom_xref tree_id ].freeze
+  DERIVED_ATTRIBUTES = %w[ date_start date_end date_precision gedcom_raw gedcom_xref tree_id taken_year ].freeze
 
   def edit_subject(edit)
     if edit.person

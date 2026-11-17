@@ -1,0 +1,86 @@
+<% page_title @question.body %>
+<% back_link person_path(@question.person) %>
+<%= live_updates %>
+
+<% if can_edit? %>
+  <% content_for :header do %>
+    <details class="action-menu">
+      <summary class="btn btn--round" title="<%= t("people.more") %>">
+        <%= icon_tag "more" %><span class="for-screen-reader"><%= t("people.more") %></span>
+      </summary>
+      <menu class="action-sheet action-sheet--end">
+        <% if @question.open? %>
+          <li><%= button_to question_closure_path(@question), class: "action-sheet__action" do %><%= icon_tag "check" %> <%= t("questions.close") %><% end %></li>
+          <li><hr class="action-sheet__divider"></li>
+        <% end %>
+        <li>
+          <%= button_to question_path(@question), method: :delete, class: "action-sheet__action action-sheet__action--negative",
+                form: { data: { turbo_confirm: t("questions.destroy_confirm") } } do %>
+            <%= icon_tag "trash" %> <%= t("questions.destroy") %>
+          <% end %>
+        </li>
+      </menu>
+    </details>
+  <% end %>
+<% end %>
+
+<% content_for :page_meta do %>
+  <%= safe_join [ link_to(@question.person.display_name, @question.person),
+        t("questions.asked_by_html", name: @question.asker&.name || t("edits.deleted_user"), time: local_time_ago(@question.created_at)) ], " · " %>
+<% end %>
+
+<article class="question">
+  <% if @question.photo %>
+    <figure class="question-photo-frame">
+      <%= link_to rails_blob_path(@question.photo.image), data: { action: "lightbox#open", lightbox_caption_param: @question.photo.caption } do %>
+        <%= image_tag @question.photo.image.variant(:print), class: "question-photo", alt: @question.photo.caption.to_s %>
+      <% end %>
+      <% if @question.photo.caption.present? %><figcaption class="photo__caption"><%= @question.photo.caption %></figcaption><% end %>
+    </figure>
+  <% end %>
+
+  <% if @question.open? %>
+    <% url = question_link_url(@question.token) %>
+    <section class="invite-box" id="send">
+      <h2 id="question_link_label"><%= t("questions.send_title") %></h2>
+      <p class="muted"><%= t("questions.send_lede") %></p>
+      <div class="invite-box__actions">
+        <input type="text" class="input" value="<%= url %>" aria-labelledby="question_link_label" readonly>
+        <%= button_to_copy_to_clipboard(url, class: "btn btn--primary") do %>
+          <%= icon_tag "copy-paste" %> <%= t("tree_memberships.copy") %>
+        <% end %>
+        <button type="button" class="btn" hidden
+                data-controller="share" data-action="share#share"
+                data-share-url-value="<%= url %>" data-share-title-value="<%= @question.body %>">
+          <%= icon_tag "share" %> <%= t("tree_memberships.share") %>
+        </button>
+      </div>
+    </section>
+  <% else %>
+    <p class="question__closed muted">
+      <%= icon_tag "check" %>
+      <%= t("questions.closed_by_html", name: @question.closed_by&.name || t("edits.deleted_user"), time: local_time_ago(@question.closed_at)) %>
+    </p>
+  <% end %>
+
+  <section class="profile-section" id="answers">
+    <h2><%= t("answers.title") %></h2>
+    <% answers = @question.answers.chronological.includes(:user) %>
+    <% if answers.any? %>
+      <ul class="thread">
+        <%= render partial: "answers/answer", collection: answers, locals: { question: @question } %>
+      </ul>
+    <% else %>
+      <p class="muted"><%= t("answers.none") %></p>
+    <% end %>
+
+    <% if @question.open? %>
+      <%= form_with model: Answer.new, url: question_answers_path(@question), class: "thread-form" do |form| %>
+        <%= initials_avatar Current.user.name %>
+        <%= form.text_area :body, class: "input", rows: 2, required: true, maxlength: 2000,
+              placeholder: t("answers.placeholder"), aria: { label: t("answers.placeholder") } %>
+        <%= form.submit t("answers.submit"), class: "btn btn--primary" %>
+      <% end %>
+    <% end %>
+  </section>
+</article>

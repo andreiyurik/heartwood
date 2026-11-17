@@ -11,7 +11,8 @@ license below:
   in `buttons.css`, `.skip-navigation` in `nav.css`
 - `app/javascript/controllers/copy_to_clipboard_controller.js`, `app/helpers/clipboard_helper.rb`,
   `app/javascript/controllers/element_removal_controller.js`, `app/javascript/helpers/timing_helpers.js`,
-  `app/javascript/controllers/lightbox_controller.js` and the `.lightbox` rules in `photos.css`
+  `app/javascript/controllers/lightbox_controller.js` and the `.lightbox` rules in `photos.css`,
+  `app/javascript/controllers/local_time_controller.js` and `app/helpers/time_helper.rb` (the "ago" style is ours)
 - `app/assets/stylesheets/layout.css` (the `#header`/`#toolbar`/`#main` grid, from Writebook) and
   `flash.css` (the toast, from Campfire)
 - Icons listed in `app/assets/images/NOTICE.md`

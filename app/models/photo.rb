@@ -1,4 +1,6 @@
 class Photo < ApplicationRecord
+  include Editable
+
   CONTENT_TYPES = Person::AVATAR_CONTENT_TYPES
   MAX_BYTES     = 15.megabytes
 
@@ -9,6 +11,8 @@ class Photo < ApplicationRecord
     attachable.variant :print, resize_to_limit: [ 640, 640 ]
   end
 
+  has_many :questions, dependent: :destroy
+
   broadcasts_refreshes_to :tree
 
   validate :image_is_a_photo
@@ -16,7 +20,14 @@ class Photo < ApplicationRecord
 
   scope :album, -> { order(Arel.sql("taken_year IS NULL, taken_year"), :id) }
 
+  def edited_person = person
+
   private
+    # Only a caption's changes are history: a removed print takes its file along, so there is nothing to restore.
+    def record_edit(action, **)
+      super if action == :edited
+    end
+
     def image_is_a_photo
       return errors.add(:image, :blank) unless image.attached?
 

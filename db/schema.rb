@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_10_225242) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_143331) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -47,6 +47,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_225242) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "answers", force: :cascade do |t|
+    t.integer "question_id", null: false
+    t.integer "user_id"
+    t.string "author_name"
+    t.text "body", null: false
+    t.datetime "accepted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_answers_on_question_id"
+    t.index ["user_id"], name: "index_answers_on_user_id"
   end
 
   create_table "archives", force: :cascade do |t|
@@ -219,6 +231,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_225242) do
     t.index ["tree_id"], name: "index_places_on_tree_id"
   end
 
+  create_table "questions", force: :cascade do |t|
+    t.integer "tree_id", null: false
+    t.integer "person_id", null: false
+    t.integer "photo_id"
+    t.integer "asker_id"
+    t.text "body", null: false
+    t.string "token", null: false
+    t.datetime "closed_at"
+    t.integer "closed_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["asker_id"], name: "index_questions_on_asker_id"
+    t.index ["closed_by_id"], name: "index_questions_on_closed_by_id"
+    t.index ["person_id"], name: "index_questions_on_person_id"
+    t.index ["photo_id"], name: "index_questions_on_photo_id"
+    t.index ["token"], name: "index_questions_on_token", unique: true
+    t.index ["tree_id"], name: "index_questions_on_tree_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "current_tree_id"
@@ -290,6 +321,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_225242) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "answers", "questions"
+  add_foreign_key "answers", "users"
   add_foreign_key "archives", "trees"
   add_foreign_key "archives", "users"
   add_foreign_key "citations", "sources"
@@ -313,6 +346,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_10_225242) do
   add_foreign_key "photos", "people"
   add_foreign_key "photos", "trees"
   add_foreign_key "places", "trees"
+  add_foreign_key "questions", "people"
+  add_foreign_key "questions", "photos"
+  add_foreign_key "questions", "trees"
+  add_foreign_key "questions", "users", column: "asker_id"
+  add_foreign_key "questions", "users", column: "closed_by_id"
   add_foreign_key "sessions", "trees", column: "current_tree_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "share_links", "trees"

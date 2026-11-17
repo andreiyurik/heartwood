@@ -12,6 +12,7 @@
         <%= link_to edit_person_photo_path(photo.person, photo), class: "photo__sign" do %>
           <%= photo.caption.present? ? t("photos.edit") : t("photos.sign") %>
         <% end %>
+        <%= link_to t("photos.ask"), new_person_question_path(photo.person, photo_id: photo.id), class: "photo__sign", data: { turbo_frame: "_top" } %>
       <% end %>
     </figcaption>
   <% end %>

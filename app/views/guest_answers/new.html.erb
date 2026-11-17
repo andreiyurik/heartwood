@@ -1,0 +1,57 @@
+<% asker = @question.asker&.name %>
+<% page_title @question.body, heading: false %>
+<%= render "shared/link_preview", title: @question.body,
+      description: asker ? t("guest_answers.preview", name: asker, tree: @question.tree.name) : @question.tree.name,
+      image: question_link_card_url(@question.token, format: :png) %>
+
+<div class="auth-wrap">
+  <div class="auth-card guest-question">
+    <div class="invitation">
+      <%= tree_crest @question.tree %>
+      <div class="invitation__meta">
+        <% if asker %>
+          <%= initials_avatar asker, class: "avatar--small" %>
+          <%= t("guest_answers.asks", name: asker) %> ·
+        <% end %>
+        <%= t("guest_answers.tree", tree: @question.tree.name) %>
+      </div>
+      <h1><%= @question.body %></h1>
+    </div>
+
+    <% if @question.photo %>
+      <%= image_tag @question.photo.image.variant(:print), class: "question-photo", alt: "" %>
+    <% elsif @question.person.visible_to?(nil) %>
+      <div class="person-row guest-question__person">
+        <%= render "people/avatar", person: @question.person %>
+        <div class="person-row__body">
+          <p class="person-row__name"><%= @question.person.display_name %></p>
+          <% if @question.person.life_years.present? %><p class="person-row__meta"><%= @question.person.life_years %></p><% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if flash[:answered] %>
+      <div class="answered">
+        <%= icon_tag "check" %>
+        <p><strong><%= t("guest_answers.thanks") %></strong> <%= t("guest_answers.thanks_lede") %></p>
+      </div>
+    <% end %>
+
+    <% if @question.open? %>
+      <%= render "shared/errors", record: @answer if @answer&.errors&.any? %>
+      <%= form_with model: @answer || Answer.new, url: question_link_path(@question.token), class: "auth-form" do |form| %>
+        <%= form.text_area :body, class: "input", rows: 4, required: true, maxlength: 2000, autofocus: !flash[:answered],
+              placeholder: t("guest_answers.body_placeholder"), aria: { label: t("guest_answers.body_label") } %>
+        <label class="input--actor">
+          <%= form.text_field :author_name, class: "input", maxlength: 100, autocomplete: "name",
+                placeholder: t("guest_answers.name_placeholder"), aria: { label: t("guest_answers.name_label") } %>
+          <%= icon_tag "person" %>
+        </label>
+        <%= form.submit t(flash[:answered] ? "guest_answers.submit_more" : "guest_answers.submit"), class: "btn btn--primary" %>
+        <p class="auth-hint"><%= t("guest_answers.privacy_html", tree: @question.tree.name, policy: link_to(t("guest_answers.policy"), privacy_path)) %></p>
+      <% end %>
+    <% else %>
+      <p class="auth-lede"><%= t("guest_answers.closed") %></p>
+    <% end %>
+  </div>
+</div>

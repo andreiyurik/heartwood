@@ -1,0 +1,27 @@
+<% page_title t("questions.new_title") %>
+<% back_link person_path(@person) %>
+
+<%= turbo_frame_tag "new_question" do %>
+  <%= form_with model: @question, url: person_questions_path(@person), class: "form form--inline question-form", data: { turbo_frame: "_top" } do |form| %>
+    <%= render "shared/errors", record: @question if @question.errors.any? %>
+
+    <% if @question.photo %>
+      <%= form.hidden_field :photo_id %>
+      <figure class="question-form__photo">
+        <%= image_tag @question.photo.image.variant(:print), alt: "" %>
+      </figure>
+    <% end %>
+
+    <%= form.label :body, t("questions.body_label", name: @person.display_name), class: "question-form__label" %>
+    <%= form.text_area :body, class: "input", rows: 2, required: true, maxlength: 500, autofocus: true,
+          placeholder: t("questions.body_placeholder") %>
+    <p class="muted question-form__hint">
+      <%= t(@question.photo ? "questions.photo_hint" : "questions.hint") %>
+    </p>
+
+    <div class="actions">
+      <%= form.submit t("questions.submit"), class: "btn btn--primary" %>
+      <%= link_to t("forms.cancel"), person_path(@person), class: "btn btn--ghost", data: { turbo_frame: "_top" } %>
+    </div>
+  <% end %>
+<% end %>

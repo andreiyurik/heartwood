@@ -1,0 +1,18 @@
+<%= turbo_frame_tag dom_id(@answer, :acceptance) do %>
+  <%= form_with url: question_acceptances_path(@question), class: "form form--inline acceptance-form", data: { turbo_frame: "_top" } do |form| %>
+    <%= form.hidden_field :answer_id, value: @answer.id %>
+    <div class="field">
+      <%= form.label :into, t("acceptances.into") %>
+      <%= form.select :into, @question.fields.map { [ t("acceptances.fields.#{it}"), it ] },
+            { include_blank: t("acceptances.choose") }, class: "input", required: true %>
+    </div>
+    <div class="field">
+      <%= form.label :text, t("acceptances.text") %>
+      <%= form.text_field :text, value: @answer.body.squish, class: "input", required: true %>
+    </div>
+    <div class="actions">
+      <%= form.submit t("acceptances.submit"), class: "btn btn--primary" %>
+      <%= link_to t("forms.cancel"), question_path(@question, anchor: dom_id(@answer)), class: "btn btn--ghost", data: { turbo_frame: "_top" } %>
+    </div>
+  <% end %>
+<% end %>
