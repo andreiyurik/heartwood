@@ -1,0 +1,20 @@
+<%= tag.li id: dom_id(comment), class: "thread-entry" do %>
+  <%= initials_avatar comment.author %>
+  <%= turbo_frame_tag dom_id(comment, :editor), class: "thread-entry__body" do %>
+    <p class="thread-entry__meta">
+      <strong><%= comment.author %></strong> · <%= local_time_ago(comment.created_at) %>
+      <% if comment.updated_at > comment.created_at + 1.minute %> · <%= t("comments.edited") %><% end %>
+    </p>
+    <div class="thread-entry__text"><%= simple_format comment.body %></div>
+
+    <% if comment.editable_by?(Current.user) || comment.deletable_by?(Current.user) %>
+      <div class="thread-entry__actions thread-entry__actions--quiet">
+        <% if comment.editable_by?(Current.user) %>
+          <%= link_to t("comments.edit"), edit_person_comment_path(person, comment), class: "btn btn--ghost" %>
+        <% end %>
+        <%= button_to t("comments.destroy"), person_comment_path(person, comment), method: :delete, class: "btn btn--ghost",
+              form: { data: { turbo_confirm: t("comments.destroy_confirm"), turbo_frame: "_top" } } %>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

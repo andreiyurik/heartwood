@@ -1,0 +1,10 @@
+<%= turbo_frame_tag dom_id(@comment, :editor), class: "thread-entry__body" do %>
+  <%= form_with model: [ @person, @comment ], class: "comment-edit", data: { turbo_frame: "_top" } do |form| %>
+    <%= form.text_area :body, class: "input", rows: 3, required: true, maxlength: 5000, autofocus: true,
+          aria: { label: t("comments.placeholder") } %>
+    <div class="actions">
+      <%= form.submit t("forms.save"), class: "btn btn--primary" %>
+      <%= link_to t("forms.cancel"), person_path(@person, anchor: dom_id(@comment)), class: "btn btn--ghost", data: { turbo_frame: "_top" } %>
+    </div>
+  <% end %>
+<% end %>

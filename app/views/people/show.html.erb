@@ -55,6 +55,7 @@
     <% sections = %w[events family biography sources memories] %>
     <% mapped = Maps.tiles? && @person.located_events.exists? %>
     <% sections << "map" if mapped %>
+    <% sections << "comments" %>
     <% sections.each do |section| %>
       <a href="#<%= section %>"><%= t("people.sections.#{section}") %></a>
     <% end %>
@@ -95,4 +96,6 @@
       <%= render "people/map", person: @person %>
     </section>
   <% end %>
+
+  <%= render "people/comments", person: @person %>
 </article>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_17_143331) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_144228) do
   create_table "action_text_rich_texts", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -83,6 +83,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_143331) do
     t.datetime "updated_at", null: false
     t.index ["citable_type", "citable_id"], name: "index_citations_on_citable"
     t.index ["source_id"], name: "index_citations_on_source_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.integer "tree_id", null: false
+    t.integer "person_id", null: false
+    t.integer "user_id"
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id"], name: "index_comments_on_person_id"
+    t.index ["tree_id"], name: "index_comments_on_tree_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "duplicate_hints", force: :cascade do |t|
@@ -326,6 +338,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_143331) do
   add_foreign_key "archives", "trees"
   add_foreign_key "archives", "users"
   add_foreign_key "citations", "sources"
+  add_foreign_key "comments", "people"
+  add_foreign_key "comments", "trees"
+  add_foreign_key "comments", "users"
   add_foreign_key "duplicate_hints", "people", column: "person_a_id"
   add_foreign_key "duplicate_hints", "people", column: "person_b_id"
   add_foreign_key "duplicate_hints", "trees"

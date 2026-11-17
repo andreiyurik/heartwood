@@ -98,3 +98,35 @@
     }
   }
 }
+
+.thread-entry__actions--quiet {
+  animation: none;
+  margin-block-start: 0.25rem;
+
+  .btn {
+    --btn-size: 1.75rem;
+    font-size: 0.8125rem;
+    opacity: 0.6;
+    padding-inline: 0.5rem;
+  }
+
+  form {
+    display: contents;
+  }
+}
+
+.thread-entry:hover .thread-entry__actions--quiet .btn,
+.thread-entry:focus-within .thread-entry__actions--quiet .btn {
+  opacity: 1;
+}
+
+.comment-edit {
+  animation: fade-in-up var(--duration-medium) ease-out;
+  display: grid;
+  gap: 0.5rem;
+
+  .input {
+    inline-size: 100%;
+    resize: vertical;
+  }
+}

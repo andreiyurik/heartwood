@@ -136,6 +136,7 @@ en:
       sources: Sources
       memories: Memories
       map: Map
+      comments: Discussion
     biography_empty_title: No biography yet
     biography_empty_viewer: No biography yet.
     biography_write: Write their story
@@ -803,6 +804,15 @@ en:
 
   local_time:
     ago: "%{time} ago"
+  comments:
+    placeholder: Add a comment…
+    submit: Post
+    edit: Edit
+    edited: edited
+    destroy: Delete
+    destroy_confirm: Delete this comment?
+    flash:
+      blank: Write something first.
   activerecord:
     errors:
       messages:
