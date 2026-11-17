@@ -36,7 +36,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
         name: "Ada Lovelace", email_address: "ada@example.com", password: "secret123", privacy_consent: "1" } }
     end
 
-    assert_redirected_to root_path
+    assert_redirected_to settings_crest_path
     assert cookies[:session_id].present?, "the new user should be signed in"
 
     user = User.find_by(email_address: "ada@example.com")

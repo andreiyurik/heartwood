@@ -11,6 +11,11 @@ class Tree::Card
     @tree = tree
   end
 
+  # The crest alone, for a browser tab.
+  def icon_svg
+    %(<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">#{crest}</svg>)
+  end
+
   def png
     card = draw
     card = card.composite2(uploaded_crest, :over, x: 440, y: 70) if @tree.crest_image.attached?

@@ -112,8 +112,17 @@
   }
 
   .event-actions {
-    gap: 0;
+    display: none;
   }
+
+  .event-menu {
+    display: block;
+  }
+}
+
+.event-menu {
+  display: none;
+  margin-inline-start: auto;
 }
 
 .event-add-actions {

@@ -112,3 +112,9 @@
   font-size: 0.9375rem;
   gap: 0.4rem;
 }
+
+.crest-settings--step {
+  border-block-start: none;
+  margin-block-start: 0;
+  padding-block-start: 0;
+}

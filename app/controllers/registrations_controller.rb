@@ -12,7 +12,8 @@ class RegistrationsController < ApplicationController
     user = User.sign_up!(registration_params, tree_name: params[:tree_name])
     start_new_session_for user
     RegistrationMailer.with(locale: I18n.locale).welcome(user).deliver_later
-    redirect_to after_authentication_url, notice: t("registrations.flash.welcome", name: user.name)
+    redirect_to session[:return_to_after_authenticating] ? after_authentication_url : settings_crest_path,
+      notice: t("registrations.flash.welcome", name: user.name)
   rescue ActiveRecord::RecordInvalid => error
     @user = error.record
     render :new, status: :unprocessable_entity
