@@ -28,6 +28,18 @@ class EditTest < ActiveSupport::TestCase
     end
   end
 
+  test "the edit form's empty fields and its 'name unknown' box are not changes" do
+    @sebastian.update!(name_prefix: "", name_suffix: "", birth_surname: "", unnamed: false, nickname: "Thomaskantor")
+
+    edit = @tree.edits.last
+    assert_equal({ "nickname" => nil }, edit.particulars["before"])
+    assert_equal({ "nickname" => "Thomaskantor" }, edit.particulars["after"])
+
+    assert_no_difference -> { Edit.count } do
+      @sebastian.update!(name_prefix: nil, unnamed: false)
+    end
+  end
+
   test "changes made without a signed-in person are not recorded" do
     Current.session = nil
     assert_no_difference -> { Edit.count } do

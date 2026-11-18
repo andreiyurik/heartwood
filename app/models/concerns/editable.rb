@@ -34,7 +34,9 @@ module Editable
     def edit_particulars = {}
 
     def saved_attribute_changes
-      changes = saved_changes.except(*UNTRACKED_ATTRIBUTES)
+      # Forms send "" and false for fields a record never had (nil); that is not a change.
+      changes = saved_changes.slice(*self.class.column_names).except(*UNTRACKED_ATTRIBUTES)
+        .reject { |_, (before, after)| before.blank? && after.blank? }
       changes.any? ? { before: changes.transform_values(&:first).as_json, after: changes.transform_values(&:last).as_json } : {}
     end
 end
