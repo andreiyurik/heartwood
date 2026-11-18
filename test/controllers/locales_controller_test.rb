@@ -19,6 +19,20 @@ class LocalesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_session_url
   end
 
+  test "returns to the page the switcher was on, which secret-link pages send no referrer for" do
+    question = trees(:alpha).people.create!(given_names: "Vera").questions.create!(asker: users(:one), body: "Who?")
+    get question_link_url(question.token)
+    assert_select ".locale-switcher input[name=return_to][value=?]", question_link_path(question.token)
+
+    patch locale_url, params: { locale: "en", return_to: question_link_path(question.token) }
+    assert_redirected_to question_link_url(question.token)
+  end
+
+  test "never returns to another site" do
+    patch locale_url, params: { locale: "en", return_to: "https://evil.example/phish" }
+    assert_redirected_to root_url
+  end
+
   test "an unsupported locale falls back to the default" do
     patch locale_url, params: { locale: "de" }
     assert_equal I18n.default_locale.to_s, cookies[:locale]
