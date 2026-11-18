@@ -880,6 +880,35 @@ en:
         too_long:
           one: is too long (maximum is 1 character)
           other: is too long (maximum is %{count} characters)
+      models:
+        user:
+          attributes:
+            email_address:
+              taken: is already registered — sign in or reset your password
+        import:
+          attributes:
+            file:
+              blank: Choose a file to import
+              invalid: must be a .ged file
+        photo:
+          attributes:
+            image:
+              blank: is missing
+              invalid_content_type: must be a JPEG, PNG, WebP or GIF image
+              too_large: must be smaller than 15 MB
+        tree:
+          attributes:
+            crest_image:
+              invalid_content_type: must be a PNG or JPEG image
+              too_large: must be smaller than 5 MB
+        person:
+          attributes:
+            base:
+              unnamed: Enter a name or a surname — or tick "Name unknown" under More
+              tree_full: "The free plan holds up to %{limit} people per tree. Upgrade to Family to add without limits."
+            avatar:
+              invalid_content_type: must be a JPEG, PNG, or WebP image
+              too_large: must be smaller than 5 MB
     attributes:
       user:
         name: Name
@@ -907,29 +936,3 @@ en:
         date_raw: Date
         value: Details
         place_id: Place
-    errors:
-      models:
-        import:
-          attributes:
-            file:
-              blank: Choose a file to import
-              invalid: must be a .ged file
-        photo:
-          attributes:
-            image:
-              blank: is missing
-              invalid_content_type: must be a JPEG, PNG, WebP or GIF image
-              too_large: must be smaller than 15 MB
-        tree:
-          attributes:
-            crest_image:
-              invalid_content_type: must be a PNG or JPEG image
-              too_large: must be smaller than 5 MB
-        person:
-          attributes:
-            base:
-              unnamed: Enter a name or a surname — or tick "Name unknown" under More
-              tree_full: "The free plan holds up to %{limit} people per tree. Upgrade to Family to add without limits."
-            avatar:
-              invalid_content_type: must be a JPEG, PNG, or WebP image
-              too_large: must be smaller than 5 MB

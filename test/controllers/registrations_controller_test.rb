@@ -68,6 +68,15 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test "a Russian visitor reads the errors in Russian" do
+    post registration_path, headers: { "Accept-Language" => "ru" }, params: { user: {
+      name: "", email_address: users(:one).email_address, password: "secret123", privacy_consent: "1" } }
+
+    assert_select ".errors li", text: "Имя не может быть пустым"
+    assert_select ".errors li", text: /\AЭлектронная почта уже зарегистрирована/
+    assert_no_match(/Translation missing|translation_missing/, response.body)
+  end
+
   test "the form asks for consent separately and links the legal documents" do
     get new_registration_path
     assert_select "input[type=checkbox][name='user[privacy_consent]'][required]"
