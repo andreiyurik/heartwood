@@ -983,6 +983,35 @@ ru:
           few: слишком длинное (максимум %{count} символа)
           many: слишком длинное (максимум %{count} символов)
           other: слишком длинное (максимум %{count} символа)
+      models:
+        user:
+          attributes:
+            email_address:
+              taken: уже зарегистрирована — войдите или восстановите пароль
+        import:
+          attributes:
+            file:
+              blank: Выберите файл для импорта
+              invalid: должен быть файлом .ged
+        photo:
+          attributes:
+            image:
+              blank: не выбрано
+              invalid_content_type: должно быть в формате JPEG, PNG, WebP или GIF
+              too_large: должно быть меньше 15 МБ
+        tree:
+          attributes:
+            crest_image:
+              invalid_content_type: должна быть в формате PNG или JPEG
+              too_large: должна быть меньше 5 МБ
+        person:
+          attributes:
+            base:
+              unnamed: Напишите имя или фамилию — или отметьте «Имя неизвестно» в разделе «Ещё»
+              tree_full: "В бесплатном тарифе — до %{limit} человек в древе. Перейдите на «Семейный», чтобы добавлять без ограничений."
+            avatar:
+              invalid_content_type: должно быть изображением JPEG, PNG или WebP
+              too_large: не должно превышать 5 МБ
     attributes:
       user:
         name: Имя
@@ -1010,29 +1039,3 @@ ru:
         date_raw: Дата
         value: Подробности
         place_id: Место
-    errors:
-      models:
-        import:
-          attributes:
-            file:
-              blank: Выберите файл для импорта
-              invalid: должен быть файлом .ged
-        photo:
-          attributes:
-            image:
-              blank: не выбрано
-              invalid_content_type: должно быть в формате JPEG, PNG, WebP или GIF
-              too_large: должно быть меньше 15 МБ
-        tree:
-          attributes:
-            crest_image:
-              invalid_content_type: должна быть в формате PNG или JPEG
-              too_large: должна быть меньше 5 МБ
-        person:
-          attributes:
-            base:
-              unnamed: Напишите имя или фамилию — или отметьте «Имя неизвестно» в разделе «Ещё»
-              tree_full: "В бесплатном тарифе — до %{limit} человек в древе. Перейдите на «Семейный», чтобы добавлять без ограничений."
-            avatar:
-              invalid_content_type: должно быть изображением JPEG, PNG или WebP
-              too_large: не должно превышать 5 МБ
