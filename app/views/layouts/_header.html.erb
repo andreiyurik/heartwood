@@ -46,13 +46,7 @@
           <% end %>
           <li><hr class="action-sheet__divider"></li>
           <li>
-            <nav class="locale-switcher" aria-label="<%= t("locale.switcher") %>">
-              <% I18n.available_locales.each do |loc| %>
-                <%= button_to t("locale.#{loc}"), locale_path, method: :patch, params: { locale: loc },
-                      class: "locale-switcher__btn #{"locale-switcher__btn--active" if I18n.locale == loc}",
-                      aria: { current: I18n.locale == loc ? "true" : nil } %>
-              <% end %>
-            </nav>
+            <%= render "layouts/locale_switcher" %>
           </li>
           <%= cloud_slot "thanks", place: "menu" %>
           <li><hr class="action-sheet__divider"></li>
@@ -62,13 +56,7 @@
     </div>
   <% else %>
     <div class="header-account">
-      <nav class="locale-switcher" aria-label="<%= t("locale.switcher") %>">
-        <% I18n.available_locales.each do |loc| %>
-          <%= button_to t("locale.#{loc}"), locale_path, method: :patch, params: { locale: loc },
-                class: "locale-switcher__btn #{"locale-switcher__btn--active" if I18n.locale == loc}",
-                aria: { current: I18n.locale == loc ? "true" : nil } %>
-        <% end %>
-      </nav>
+      <%= render "layouts/locale_switcher" %>
     </div>
   <% end %>
 </header>
