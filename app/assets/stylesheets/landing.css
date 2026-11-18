@@ -7,6 +7,13 @@
     inline-size: 100%;
     margin: 0;
     padding-inline: var(--landing-gutter);
+
+    /* On a phone the hero's own button starts; the header keeps the way back in */
+    @media (max-width: 40rem) {
+      .header-actions .btn--primary {
+        display: none;
+      }
+    }
   }
 
   #main {
