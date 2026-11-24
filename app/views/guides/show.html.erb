@@ -1,0 +1,24 @@
+<% page_title @guide.title %>
+<% page_meta link_to(t("guides.index.title"), guides_path(locale: I18n.locale)) %>
+<%= render "guides/head", title: @guide.title, description: @guide.description, json_ld: guide_json_ld(@guide) %>
+
+<article class="guide">
+  <p class="guide-lede"><%= @guide.description %></p>
+
+  <%= render "guides/#{@guide.slug.underscore}" %>
+
+  <% general, regional = @guide.sites.partition { it.region.nil? } %>
+  <% if general.any? %>
+    <section class="guide-sites" id="sites">
+      <h2><%= t("guides.sites") %></h2>
+      <ul class="site-list"><%= render partial: "guides/site", collection: general %></ul>
+      <% if regional.any? %>
+        <h3><%= t("guides.regional_sites") %></h3>
+        <ul class="site-list"><%= render partial: "guides/site", collection: regional %></ul>
+      <% end %>
+    </section>
+  <% end %>
+
+  <%= render "guides/cta" %>
+  <%= render "guides/credit" %>
+</article>

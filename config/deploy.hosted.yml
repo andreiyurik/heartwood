@@ -34,10 +34,14 @@ env:
     MAP_TILES_URL: "off"
     GEOCODER_URL: "off"
     BRAND_NAME: "Вся родня"
+    # Only the hosted service lets search engines index the guides (docs/features/guides.md).
+    GUIDES_INDEX: "on"
     # The maker's "say thanks" link on /about; remove the line to switch every mention off.
     THANKS_URL: "https://pay.cloudtips.ru/p/61fe8ef3"
     # YANDEX_METRICA_ID: "12345678"
     # SUPPORT_USER_IDS: "1"
+    # The landing's example tree: run `bin/rails demo:rurikids OWNER=<email>` once on the server, paste what it prints.
+    # DEMO_URL: "/shared/<token>"
     STORAGE_ENDPOINT: https://s3.twcstorage.ru
     STORAGE_REGION: ru-1
     BACKUP_ENDPOINT: https://s3.twcstorage.ru

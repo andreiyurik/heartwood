@@ -2,6 +2,7 @@
 
 <div class="auth-wrap">
   <div class="auth-card">
+    <%= render "shared/auth_mark" %>
     <h1><%= t("auth.update_title") %></h1>
 
     <%= form_with url: password_path(params[:token]), method: :put, class: "auth-form" do |form| %>

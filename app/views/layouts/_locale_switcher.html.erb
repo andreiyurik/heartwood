@@ -1,7 +1,9 @@
 <nav class="locale-switcher" aria-label="<%= t("locale.switcher") %>">
   <% I18n.available_locales.each do |locale| %>
+    <%# A page with the language in its address returns to the same page in the other language. %>
+    <% return_to = request.path_parameters[:locale] ? url_for(locale: locale, only_path: true) : request.path if request.get? %>
     <%= button_to t("locale.#{locale}"), locale_path, method: :patch,
-          params: { locale: locale, return_to: (request.path if request.get?) }.compact,
+          params: { locale: locale, return_to: return_to }.compact,
           class: ["locale-switcher__btn", { "locale-switcher__btn--active": I18n.locale == locale }],
           aria: { current: I18n.locale == locale ? "true" : nil } %>
   <% end %>

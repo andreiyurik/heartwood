@@ -39,7 +39,9 @@
     margin-block-end: var(--block-space);
   }
 
-  .profile-nav + & {
+  /* An editor's empty "ask relatives" frame sits between the links and the first section. */
+  .profile-nav + &,
+  .profile-nav + turbo-frame:empty + & {
     border-block-start: 0;
     margin-block-start: 0;
     padding-block-start: 0;

@@ -34,7 +34,7 @@ module Tree::Crest
   IMAGE_CONTENT_TYPES = %w[image/png image/jpeg].freeze
   IMAGE_MAX_BYTES     = 5.megabytes
 
-  # "Род Пушкиных" is the Pushkins' tree: the initial that matters is П.
+  # "Род Рюриковичей" is the Rurikids' tree: the initial that matters is Р.
   LEADING_WORDS = /\A(род|семья|древо|family|the)\s+/i
 
   included do

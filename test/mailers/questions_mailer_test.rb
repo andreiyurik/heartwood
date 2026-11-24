@@ -45,4 +45,10 @@ class QuestionsMailerTest < ActionMailer::TestCase
       end
     end
   end
+
+  test "the letter says a photo came with the answer" do
+    answer = @question.answers.create!(author_name: "Aunt Masha",
+      photo: { io: file_fixture("avatar.png").open, filename: "avatar.png", content_type: "image/png" })
+    assert_match I18n.t("questions_mailer.answered.photo"), QuestionsMailer.answered(answer).text_part.body.to_s
+  end
 end

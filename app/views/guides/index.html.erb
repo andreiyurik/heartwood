@@ -1,0 +1,18 @@
+<% page_title t("guides.index.title") %>
+<%= render "guides/head", title: t("guides.index.title"), description: t("guides.index.description"), json_ld: guides_json_ld(@guides) %>
+
+<article class="guide">
+  <p class="guide-lede"><%= t("guides.index.description") %></p>
+
+  <ul class="site-list">
+    <% @guides.each do |guide| %>
+      <li class="site-row">
+        <p class="site-row__name"><%= link_to guide.title, guide_path(guide, locale: I18n.locale) %></p>
+        <p class="site-row__about"><%= guide.description %></p>
+      </li>
+    <% end %>
+  </ul>
+
+  <%= render "guides/cta" %>
+  <%= render "guides/credit" %>
+</article>

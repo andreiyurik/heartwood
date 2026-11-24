@@ -30,6 +30,8 @@ module Heartwood
     config.x.brand.name = ENV.fetch("BRAND_NAME", "Heartwood")
     config.x.operator = config_for(:operator)
     config.x.maps = config_for(:maps)
+    config.x.guides.indexed = ENV["GUIDES_INDEX"] == "on"
+    config.x.landing.demo_url = ENV["DEMO_URL"].presence
 
     config.x.backups.directory = Rails.root.join("storage/backups")
     config.x.backups.offsite   = ENV["BACKUP_BUCKET"].present?

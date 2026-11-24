@@ -16,6 +16,11 @@ The page everything orbits. Part of [[features-index]] (Must).
   inline "add relative" actions.
 - **Facts**: occupation, religion, residence (from [[event]] attributes).
 - **Media gallery**, **notes**, **sources** sections.
+- **Where to look**, under the sources: a closed `details` listing the archive and memorial sites
+  whose years the person lived through (the [[guides]] catalog, `ResearchSite.for`) — the war
+  databases for someone who was an adult in 1941–1945, parish registers for someone born before
+  1918. A site with a search template opens with the person's name already filled in, so the link
+  carries the name: never shown for living people. Each row links to its guide.
 - A button into the [[family-tree-view]] centered on this person.
 
 ## Hotwire shape (the canonical loop)

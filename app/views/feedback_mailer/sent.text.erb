@@ -1,0 +1,6 @@
+<%= @body %>
+
+--
+<%= t("feedback_mailer.sent.from") %>: <%= @user.name %> <<%= @user.email_address %>>
+<%= t("feedback_mailer.sent.page") %>: <%= @page_url || t("feedback_mailer.sent.no_page") %>
+<%= t("feedback_mailer.sent.locale") %>: <%= @locale %>

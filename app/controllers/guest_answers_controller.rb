@@ -9,7 +9,7 @@ class GuestAnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.build(params.expect(answer: %i[body author_name]).merge(user: Current.user))
+    @answer = @question.answers.build(params.expect(answer: %i[body author_name photo]).merge(user: Current.user))
 
     if @question.closed?
       redirect_to question_link_path(@question.token)

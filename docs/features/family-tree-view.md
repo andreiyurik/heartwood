@@ -54,7 +54,10 @@ The tree is a sheet page like every other: `h1` ("Tree", or the person's name) a
 metadata line ("14 people · 5 generations · from Abram Gannibal", or "Ancestors · 4
 generations"), then an action row (search, and for a person's tree the Ancestors/Descendants
 switch and the generations stepper), then the canvas, which bleeds to the sheet's edges and
-takes its bottom corners (`canvas_page` helper → `body.canvas-page`, `#main` flexes). No
+takes its bottom corners (`canvas_page` helper → `body.canvas-page`, `#main` flexes). On a
+screen wider than 70rem the canvas page's sheet takes the window less a 2rem margin, so a big
+monitor shows the tree at full size instead of shrinking it into the 1088px reading width
+([[design-system]] rule 1); the search field stays at most 32rem. No
 instruction strip: one gesture tip (`.tree-tip`) shows until the first pan, wheel or key and
 is then remembered in `localStorage`. Controls are three round `.btn`s (zoom in / out / fit)
 at the bottom right; Print lives in the header's `…` menu and reaches the canvas through a

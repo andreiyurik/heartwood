@@ -22,36 +22,49 @@
       <p class="landing-eyebrow"><%= t("landing.hero.eyebrow") %></p>
       <h1><%= t("landing.hero.title_html", mark: tag.mark(t("landing.hero.title_mark"))) %></h1>
       <p class="landing-lede"><%= t("landing.hero.lede") %></p>
+      <%= form_with url: new_registration_path, method: :get, class: "landing-start", data: { controller: "crest-preview" } do %>
+        <label class="input--actor landing-start__field">
+          <span data-crest-preview-target="crest"><%= render "shared/crest", tree: Tree.new(name: "") %></span>
+          <%= text_field_tag :tree_name, nil, class: "input", maxlength: 240, autocomplete: "family-name",
+                placeholder: t("landing.hero.start_placeholder"), aria: { label: t("landing.hero.start_label") },
+                data: { crest_preview_target: "name", action: "input->crest-preview#draw" } %>
+        </label>
+        <%= button_tag t("landing.hero.cta"), type: "submit", name: nil, class: "btn btn--primary btn--large" %>
+      <% end %>
       <div class="landing-actions">
-        <%= link_to t("landing.hero.cta"), new_registration_path, class: "btn btn--primary btn--large" %>
         <span class="landing-note"><%= t("landing.hero.note", limit: limit) %></span>
+        <% if (demo = Rails.configuration.x.landing.demo_url) %>
+          <%= link_to t("landing.hero.demo"), demo, class: "landing-demo" %>
+        <% end %>
       </div>
     </div>
 
     <div class="landing-album">
-      <figure class="landing-album__card">
-        <%= image_tag "landing/portrait-pushkin.jpg", alt: t("landing.album.person"), class: "landing-album__portrait", width: 400, height: 480 %>
+      <%= tag.public_send(demo ? :a : :figure, href: demo, class: "landing-album__card") do %>
+        <%= image_tag "landing/portrait-yaroslav.jpg", alt: t("landing.album.person"), class: "landing-album__portrait", width: 400, height: 480 %>
         <figcaption>
           <strong><%= t("landing.album.person") %></strong>
           <span class="landing-album__dates"><%= t("landing.album.dates") %></span>
           <span class="landing-album__bio"><%= t("landing.album.bio") %></span>
           <span class="landing-album__parents">
-            <% { mother: "nadezhda", father: "sergei" }.each do |parent, file| %>
-              <span>
+            <% { mother: "rogneda", father: "vladimir" }.each do |parent, file| %>
+              <%= tag.span class: { "landing-album__answered": parent == :mother } do %>
                 <%= image_tag "landing/portrait-#{file}.jpg", alt: "", class: "avatar" %>
                 <span><small><%= t("landing.album.#{parent}") %></small> <%= t("landing.album.#{parent}_name") %></span>
-              </span>
+              <% end %>
             <% end %>
           </span>
         </figcaption>
-      </figure>
-
-      <% %w[sister brother].each do |relative| %>
-        <div class="landing-album__note landing-album__note--<%= relative %>">
-          <%= initials_avatar t("landing.album.#{relative}") %>
-          <span><strong><%= t("landing.album.#{relative}") %></strong> <%= t("landing.album.#{relative}_note") %></span>
-        </div>
       <% end %>
+
+      <div class="landing-album__note landing-album__note--ask">
+        <span class="avatar"><%= icon_tag "help-circle" %></span>
+        <span><strong><%= t("landing.album.ask") %></strong> <%= t("landing.album.ask_note") %></span>
+      </div>
+      <div class="landing-album__note landing-album__note--answer">
+        <%= initials_avatar t("landing.album.answer") %>
+        <span><strong><%= t("landing.album.answer") %></strong> <%= t("landing.album.answer_note") %></span>
+      </div>
     </div>
   </section>
 
@@ -190,6 +203,7 @@
       <%= link_to t("legal.consent.title"), consent_path %>
       <%= link_to t("legal.terms.title"), terms_path %>
       <%= cloud_slot "legal_links" %>
+      <%= link_to t("guides.index.title"), guides_path(locale: I18n.locale) %>
       <%= link_to t("landing.footer.source"), Heartwood::SOURCE_CODE_URL %>
     </nav>
   </footer>

@@ -12,7 +12,7 @@ the look follows [[design-system]].
 
 ## What the owner can do
 - **Nothing** — the default crest is a shield in a colour derived from the tree's name, carrying the
-  family's initial ("Род Пушкиных" → П).
+  family's initial ("Род Рюриковичей" → Р).
 - **Choose** — a shape (4), a colour (8) and a symbol (14, or the initial). An ordinary form of
   radio buttons on the Settings page; every change saves itself and the page morphs, so the header
   crest is the live preview. Any combination looks decent — that is the point of offering parts

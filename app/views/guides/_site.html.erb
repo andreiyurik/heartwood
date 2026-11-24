@@ -1,0 +1,5 @@
+<li class="site-row">
+  <p class="site-row__name"><%= link_to site.name, site.url, target: "_blank", rel: "noopener" %></p>
+  <p class="site-row__meta"><%= [ t("research_sites.tiers.#{site.tier}"), site.region_name ].compact.join(" · ") %></p>
+  <p class="site-row__about"><%= site.about %></p>
+</li>

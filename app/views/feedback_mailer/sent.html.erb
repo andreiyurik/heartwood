@@ -1,0 +1,7 @@
+<%= simple_format @body %>
+
+<p style="color: #777; font-size: 13px;">
+  <%= t("feedback_mailer.sent.from") %>: <%= @user.name %> &lt;<%= mail_to @user.email_address %>&gt;<br>
+  <%= t("feedback_mailer.sent.page") %>: <%= @page_url ? link_to(@page_url, @page_url) : t("feedback_mailer.sent.no_page") %><br>
+  <%= t("feedback_mailer.sent.locale") %>: <%= @locale %>
+</p>

@@ -3,9 +3,13 @@ require "test_helper"
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   setup { @user = User.take }
 
-  test "new" do
+  test "new is one panel: the mark leading home, a welcome, the form, and the way to forgotten passwords beside the password" do
     get new_session_path
     assert_response :success
+    assert_select ".auth-card .auth-mark[href=?] svg.logo", root_path
+    assert_select ".auth-card h1", I18n.t("auth.welcome_title")
+    assert_select ".auth-card .auth-form a[href=?]", new_password_path
+    assert_select ".auth-wrap > .auth-alt a[href=?]", new_registration_path
   end
 
   test "create with valid credentials" do

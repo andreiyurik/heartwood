@@ -1,0 +1,19 @@
+<% if (sites = ResearchSite.for(person)).any? %>
+  <details class="where-to-look">
+    <summary><%= icon_tag "add" %> <%= t("people.where_to_look.title") %> <span class="txt-subtle"><%= sites.size %></span></summary>
+    <p class="txt-subtle"><%= t("people.where_to_look.lede") %></p>
+    <ul class="site-list">
+      <% sites.each do |site| %>
+        <li class="site-row">
+          <p class="site-row__name"><%= link_to site.name, site.search_url_for(person) || site.url, target: "_blank", rel: "noopener" %></p>
+          <p class="site-row__meta">
+            <%= t("research_sites.tiers.#{site.tier}") %>
+            <% if site.search %> · <%= t("people.where_to_look.search_filled") %><% end %>
+            · <%= link_to t("people.where_to_look.how"), guide_path(site.guide, locale: I18n.locale) %>
+          </p>
+          <p class="site-row__about"><%= site.about %></p>
+        </li>
+      <% end %>
+    </ul>
+  </details>
+<% end %>

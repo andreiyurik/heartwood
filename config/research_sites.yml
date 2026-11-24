@@ -1,0 +1,194 @@
+# The sites the guides point to (docs/features/guides.md). Names and descriptions: research_sites.<key> in config/locales.
+# years: the span the records cover; only sites with years are suggested on a person's profile.
+# adult: the person must have been of fighting age (16 to 50) at some point in that span.
+# search: a link template the person's name is filled into (surname, first_name, patronymic).
+# Many Russian state sites refuse connections from abroad — check those from a Russian connection.
+
+pamyat_naroda:
+  url: https://pamyat-naroda.ru/
+  tier: official
+  guide: military
+  years: [1941, 1945]
+  adult: true
+  search: "https://pamyat-naroda.ru/heroes/?adv_search=y&last_name=%{surname}&first_name=%{first_name}&middle_name=%{patronymic}&group=all"
+  checked_on: 2026-11-21
+
+obd_memorial:
+  url: https://obd-memorial.ru/html/
+  tier: official
+  guide: military
+  years: [1941, 1945]
+  adult: true
+  checked_on: 2026-11-21
+
+podvig_naroda:
+  url: https://podvignaroda.ru/
+  tier: official
+  guide: military
+  years: [1941, 1945]
+  adult: true
+  checked_on: 2026-11-21
+
+rkka_wiki:
+  url: https://rkka.wiki/
+  tier: project
+  guide: military
+  checked_on: 2026-11-21
+
+gwar:
+  url: https://gwar.mil.ru/
+  tier: official
+  guide: military
+  years: [1914, 1918]
+  adult: true
+  checked_on: 2026-11-21
+
+arolsen:
+  url: https://collections.arolsen-archives.org/en/search
+  tier: official
+  guide: military
+  checked_on: 2026-11-21
+
+metric_books_familysearch:
+  url: https://www.familysearch.org/search/catalog
+  tier: project
+  guide: metric-books
+  years: [1720, 1918]
+  checked_on: 2026-11-21
+
+uiad:
+  url: https://online.archives.ru/
+  tier: official
+  guide: metric-books
+  checked_on: 2026-11-21
+
+cgamos:
+  url: https://cgamos.ru/metric-books/
+  tier: official
+  guide: metric-books
+  region: moscow
+  checked_on: 2026-11-21
+
+gaso_metriki:
+  url: https://metriki.gaso-ural.ru/
+  tier: official
+  guide: metric-books
+  region: sverdlovsk
+  checked_on: 2026-11-21
+
+donarch:
+  url: https://donarch.ru/metrikbooks/
+  tier: official
+  guide: metric-books
+  region: rostov
+  checked_on: 2026-11-21
+
+duck_inspector:
+  url: https://inspector.duckarchive.com/
+  tier: project
+  guide: metric-books
+  region: ukraine
+  checked_on: 2026-11-21
+
+niab:
+  url: https://niab.by/newsite/
+  tier: official
+  guide: metric-books
+  region: belarus
+  checked_on: 2026-11-21
+
+raduraksti:
+  url: https://raduraksti.arhivi.lv/
+  tier: official
+  guide: metric-books
+  region: latvia
+  checked_on: 2026-11-21
+
+geneteka:
+  url: https://geneteka.genealodzy.pl/
+  tier: project
+  guide: metric-books
+  region: poland
+  checked_on: 2026-11-21
+
+parish_map:
+  url: https://shappoff.github.io/prikhody/
+  tier: community
+  guide: metric-books
+  checked_on: 2026-11-21
+
+retromap:
+  url: https://retromap.ru/
+  tier: project
+  guide: metric-books
+  checked_on: 2026-11-21
+
+vgd:
+  url: https://forum.vgd.ru/
+  tier: community
+  guide: metric-books
+  checked_on: 2026-11-21
+
+openlist:
+  url: https://ru.openlist.wiki/
+  tier: project
+  guide: repressions
+  years: [1917, 1956]
+  checked_on: 2026-11-21
+
+memsearch:
+  url: https://www.memsearch.org/ru
+  tier: project
+  guide: repressions
+  years: [1917, 1956]
+  checked_on: 2026-11-21
+
+vozvrashchennye_imena:
+  url: http://visz.nlr.ru/
+  tier: project
+  guide: repressions
+  checked_on: 2026-11-21
+
+posledny_adres:
+  url: https://www.poslednyadres.ru/
+  tier: project
+  guide: repressions
+  checked_on: 2026-11-21
+
+e_memory_kz:
+  url: https://e-memory.kz/
+  tier: project
+  guide: repressions
+  region: kazakhstan
+  checked_on: 2026-11-21
+
+reabit_ua:
+  url: https://www.reabit.org.ua/nbr/
+  tier: project
+  guide: repressions
+  region: ukraine
+  checked_on: 2026-11-21
+
+archive_guides:
+  url: https://guides.rusarchives.ru/guides-list
+  tier: official
+  guide: archive-request
+  checked_on: 2026-11-21
+
+gosuslugi:
+  url: https://www.gosuslugi.ru/
+  tier: official
+  guide: archive-request
+  checked_on: 2026-11-21
+
+minjust_abroad:
+  url: https://minjust.gov.ru/ru/appeals/faq/512/
+  tier: official
+  guide: archive-request
+  checked_on: 2026-11-21
+
+garf:
+  url: https://statearchive.ru/
+  tier: official
+  guide: archive-request
+  checked_on: 2026-11-21

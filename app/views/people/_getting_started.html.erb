@@ -1,0 +1,33 @@
+<section class="getting-started" aria-labelledby="getting_started_title">
+  <header class="getting-started__header">
+    <h2 id="getting_started_title"><%= t("getting_started.title") %></h2>
+    <span class="getting-started__count"><%= t("getting_started.count", done: getting_started.done_count, total: getting_started.steps.size) %></span>
+    <%= button_to getting_started_path, method: :delete, class: "btn btn--ghost btn--round getting-started__hide", title: t("getting_started.hide") do %>
+      <%= icon_tag "remove" %><span class="for-screen-reader"><%= t("getting_started.hide") %></span>
+    <% end %>
+  </header>
+
+  <ol class="getting-started__steps">
+    <% getting_started.steps.each do |step| %>
+      <%= tag.li class: class_names("getting-started__step", "getting-started__step--done": step.done?) do %>
+        <span class="getting-started__check"><%= icon_tag "check" if step.done? %></span>
+        <div class="getting-started__text">
+          <strong><%= t("getting_started.#{step.name}.title") %></strong>
+          <% unless step.done? %><p><%= t("getting_started.#{step.name}.lede") %></p><% end %>
+        </div>
+        <% if step == getting_started.next_step %>
+          <% case step.name %>
+          <% when :parents %>
+            <% person = getting_started.parents_for %>
+            <%= link_to t("getting_started.parents.button", name: person.given_names.presence || person.display_name),
+                  new_person_relative_path(person, relation: "parent"), class: "btn btn--primary" %>
+          <% when :ask %>
+            <% person = getting_started.ask_about %>
+            <%= link_to t("getting_started.ask.button", name: person.given_names.presence || person.display_name),
+                  new_person_question_path(person), class: "btn btn--primary" %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </ol>
+</section>

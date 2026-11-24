@@ -52,6 +52,11 @@ body {
 }
 
 @media (min-width: 70rem) {
+  /* The tree and the map are a workspace, not a text: they take the window, less a margin. */
+  .canvas-page {
+    --main-width: calc(100% - 2 * var(--block-space-double));
+  }
+
   #header {
     border-start-start-radius: var(--radius-sheet);
     border-start-end-radius: var(--radius-sheet);

@@ -4,6 +4,9 @@
 
 <%= @answer.author %>:
 <%= @answer.body %>
+<% if @answer.photo.attached? %>
+<%= t("questions_mailer.answered.photo") %>
+<% end %>
 
 <%= t("questions_mailer.answered.open") %>: <%= question_url(@question, tree: @question.tree_id) %>
 

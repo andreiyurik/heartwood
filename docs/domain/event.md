@@ -47,6 +47,7 @@ rest. `FuzzyDate.parse(date_raw)` understands GEDCOM and the Russian way of writ
 | `после 1900`, `AFT 1900` | `AFT 1900` | start of 1901… (end empty) | `after` |
 | `между 1830 и 1840`, `BET 1830 AND 1840` | `BET 1830 AND 1840` | 1830…1840 | `between` |
 | `с 1830 по 1840`, `1830–1840`, `FROM 1830 TO 1840` | `FROM 1830 TO 1840` | 1830…1840 | `between` |
+| `12 марта 1885 ст. ст.`, `@#DJULIAN@ 12 MAR 1885`, `JULIAN 12 MAR 1885` | `@#DJULIAN@ 12 MAR 1885` | 24 March 1885 (the modern date) | `day` |
 
 - The range is recomputed whenever `date_raw` changes; sorting, the living-person rule, the
   duplicate finder and the tree's root pick all read it.
@@ -54,6 +55,8 @@ rest. `FuzzyDate.parse(date_raw)` understands GEDCOM and the Russian way of writ
   `ок. 1696`), or the typed text when it can't be parsed.
 - Export writes the GEDCOM form; a date we can't parse goes out as a date phrase `(весна 1812)`,
   and import unwraps the parentheses again.
+- An Old Style (Julian) date shows as written plus «(ст. ст.)» / "(Old Style)", and that label
+  parses back to the same date; its range is converted to the modern calendar.
 - Life years show the bare year only for a known day/month/year; a fuzzy date shows its label
   (`ок. 1696 – 1781`).
 

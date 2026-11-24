@@ -64,10 +64,28 @@ who accepted it and can be undone there: a name is a `Person` edit, *born*/*died
 the `BIRT`/`DEAT` [[event]], a caption is a `Photo` edit. Facts that fit none of these are for the
 editor to type into the biography; a question can also be closed with no field.
 
+## A photo in the answer
+The aunt has the great-grandfather's print in her phone. The answer form on the link has
+**"Attach a photo"** (one picture; on a phone it opens the camera or the gallery), so she sends it
+with a line of text — or with no text at all: a photo alone is an answer.
+
+- JPEG, PNG, WebP or GIF, up to 15 MB, as the album takes. The form says the photo is seen only by
+  the tree's members — never on the question's link, which shows no answers.
+- The asker's letter says a photo came with the answer.
+- On the question, the photo shows in the answer (opens full size). An owner or editor puts it in
+  the person's album with one button, **"To <name>'s album"**: a copy becomes an ordinary `Photo`
+  of the question's person (in [[change-history]] under that editor), and the answer remembers it
+  (`kept_photo`), so the button turns into "In the album". Keeping a photo doesn't close the
+  question; the answer's words can still go into a field.
+- The answer's own file goes with the answer: deleting the answer, the question, or the person
+  (`Person#erase` included) purges it. A kept copy is the album's from then on.
+
 ## Model
 - `Question`: tree, person, optional photo, `asker` (user), `body`, `token`, `closed_at`,
   `closed_by`. Destroyed with its person or photo; `Person#erase` takes them along.
-- `Answer`: question, optional `user`, `author_name` (guests), `body`, `accepted_at`.
+- `Answer`: question, optional `user`, `author_name` (guests), `body` (optional when a photo is
+  attached), `accepted_at`, `has_one_attached :photo`, `kept_photo` (the album copy, nullified if
+  that print is deleted).
 - Both refresh open pages live (`broadcasts_refreshes_to :tree`). Neither is tree data: not in
   GEDCOM, not in the archive, not in history.
 - Guests' answers are rate-limited; body and name are length-capped.
@@ -80,3 +98,4 @@ turns these off with one click in the letter (RFC 8058) or on the account page
 
 ## Not yet
 - Several people or a group of photos in one question.
+- Several photos in one answer; an answer by voice.

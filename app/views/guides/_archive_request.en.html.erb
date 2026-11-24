@@ -1,0 +1,36 @@
+<h2>Where to write</h2>
+<ul>
+  <li><strong>A birth, marriage or death certificate after 1918</strong> — to the registry office (ZAGS) that made the record. A repeat certificate or extract can be ordered on Gosuslugi; the service says who is entitled to one. Registry offices keep records for a hundred years, then pass them to the regional state archive.</li>
+  <li><strong>Parish registers before 1918</strong> — to the state archive of the region the parish was in.</li>
+  <li><strong>Records from another former Soviet country</strong> — through the Russian Ministry of Justice, or directly to that country's archive.</li>
+  <li><strong>Don't know which archive holds the fond?</strong> The guides to the archives of Russia list every archive's fonds.</li>
+</ul>
+
+<h2>What to put in the request</h2>
+<ul>
+  <li>Surname, first name, patronymic and dates — even approximate ones.</li>
+  <li>The place as it was at the time: governorate, uyezd, volost, village, parish.</li>
+  <li>What exactly you are looking for: a birth record, the household, a service record.</li>
+  <li>How you are related. Registry offices and departmental archives want documents proving it.</li>
+  <li>How to send the answer: by post or by email.</li>
+</ul>
+<p>Archives answer within 30 days. Genealogical research by an archive is often paid — they will send an invoice or a contract. Write in Russian; the template below is in Russian on purpose — replace the brackets.</p>
+
+<h2>The request</h2>
+<% letter = <<~TEXT
+  В [название архива]
+  от [ФИО], [почтовый адрес], [электронная почта, телефон]
+
+  Прошу выдать архивную справку (копию записи) о рождении [ФИО предка], родившегося около [год] года в деревне [название] [название] волости [название] уезда [название] губернии, прихода [название церкви] в селе [название].
+
+  Известно: родители — [имена], вероисповедание — [например, православное].
+  Предполагаемый источник: метрические книги [церковь] за [годы]; фонд [номер], если известен.
+
+  Цель — генеалогическое исследование. Я прихожусь [ФИО предка] [правнуком, внучкой…]. Ответ прошу направить [на электронную почту / почтой по адресу].
+
+  [Дата], [подпись]
+TEXT
+%>
+<pre class="guide-template" lang="ru"><%= letter %></pre>
+<%= button_to_copy_to_clipboard(letter, class: "btn") do %><%= icon_tag "copy-paste" %> <%= t("guides.copy") %><% end %>
+<p class="txt-subtle">It reads: “To [archive], from [your name, address, email, phone]. I ask for an archival certificate (a copy of the record) of the birth of [ancestor], born about [year] in the village of [name], [name] volost, [name] uyezd, [name] governorate, of the parish of [church] in the village of [name]. Known: parents [names], faith [e.g. Orthodox]. Probable source: the parish registers of [church] for [years]; fond [number] if known. The purpose is genealogical research. I am [ancestor]'s [great-grandson, granddaughter…]. Please send the answer [by email / by post to the address].”</p>

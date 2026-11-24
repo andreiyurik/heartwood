@@ -45,6 +45,9 @@
             <li><%= button_to export_path, class: "action-sheet__action" do %><%= icon_tag "download" %> <%= t("exports.create") %><% end %></li>
           <% end %>
           <li><hr class="action-sheet__divider"></li>
+          <% if Rails.configuration.x.operator[:email].present? %>
+            <li><%= link_to new_feedback_path, class: "action-sheet__action" do %><%= icon_tag "messages" %> <%= t("feedbacks.menu") %><% end %></li>
+          <% end %>
           <li>
             <%= render "layouts/locale_switcher" %>
           </li>
