@@ -34,7 +34,7 @@ class FeedbacksController < ApplicationController
       return unless (url = url_from(url))
       uri = URI.parse(url)
       path = [ uri.path, uri.query ].compact.join("?")
-      path unless path.start_with?(new_feedback_path)
+      path unless path.start_with?(new_feedback_path) || path.start_with?("//")
     rescue URI::InvalidURIError
       nil
     end

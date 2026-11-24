@@ -52,6 +52,8 @@ class FeedbacksControllerTest < ActionDispatch::IntegrationTest
       assert_emails 1 do
         post feedback_path, params: { feedback: { body: "Hello", page: "//evil.example/x" } }
       end
+      post feedback_path, params: { feedback: { body: "Hello", page: "http://www.example.com//evil.example/x" } }
+      assert_redirected_to root_path
       assert_no_match "evil.example", ActionMailer::Base.deliveries.last.text_part.body.to_s
       assert_redirected_to root_path
 
