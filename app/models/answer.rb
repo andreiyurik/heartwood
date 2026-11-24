@@ -28,9 +28,11 @@ class Answer < ApplicationRecord
 
   # A copy, not the same file: the answer's own photo goes when the answer does.
   def keep_photo!
-    kept_photo || transaction do
+    with_lock do
+      kept_photo || begin
       question.person.photos.create!(image: { io: StringIO.new(photo.download), filename: photo.filename.to_s,
         content_type: photo.content_type }).tap { update!(kept_photo: it) }
+      end
     end
   end
 
