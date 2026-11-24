@@ -102,3 +102,41 @@
     flex: none;
   }
 }
+
+/* A photo sent with an answer: picked on the link, shown in the thread, kept in the album in one step */
+.answer-photo-field {
+  align-self: flex-start;
+  cursor: pointer;
+  max-inline-size: 100%;
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.answer-photo {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  display: block;
+  max-block-size: 16rem;
+  max-inline-size: min(100%, 16rem);
+  object-fit: cover;
+}
+
+.answer-photo-frame {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--block-space-half);
+  margin: var(--block-space-half) 0 0;
+}
+
+.answer-photo__kept {
+  align-items: center;
+  color: var(--color-muted);
+  display: flex;
+  font-size: 0.875rem;
+  gap: 0.35rem;
+}

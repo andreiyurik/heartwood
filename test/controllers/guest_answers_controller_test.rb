@@ -82,4 +82,18 @@ class GuestAnswersControllerTest < ActionDispatch::IntegrationTest
     def image
       { io: file_fixture("avatar.png").open, filename: "print.png", content_type: "image/png" }
     end
+
+  test "a relative can send a photo with the answer, or a photo alone, and is told who will see it" do
+    question = @deceased.questions.create!(asker: @asker, body: "Do you have her photo?")
+
+    get question_link_url(question.token)
+    assert_select "form[enctype='multipart/form-data'] input[type=file][name='answer[photo]'][accept]"
+    assert_select ".auth-hint", text: /#{Regexp.escape(I18n.t("guest_answers.privacy_html", tree: @tree.name, policy: "").strip)}/
+
+    assert_difference "question.answers.count" do
+      post question_link_url(question.token), params: { answer: { author_name: "Aunt Masha", photo: fixture_file_upload("avatar.png", "image/png") } }
+    end
+    assert question.answers.last.photo.attached?
+    assert_redirected_to question_link_url(question.token)
+  end
 end

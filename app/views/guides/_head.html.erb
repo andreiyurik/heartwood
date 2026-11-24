@@ -1,0 +1,15 @@
+<% content_for :head do %>
+  <%= tag.meta name: "description", content: description %>
+  <%= tag.meta name: "robots", content: "noindex" unless Guide.indexed? %>
+  <%= tag.link rel: "canonical", href: url_for(locale: I18n.locale, only_path: false) %>
+  <% I18n.available_locales.each do |locale| %>
+    <%= tag.link rel: "alternate", hreflang: locale, href: url_for(locale: locale, only_path: false) %>
+  <% end %>
+  <%= tag.link rel: "alternate", hreflang: "x-default", href: url_for(locale: :ru, only_path: false) %>
+  <%= tag.meta property: "og:type", content: "article" %>
+  <%= tag.meta property: "og:site_name", content: brand_name %>
+  <%= tag.meta property: "og:title", content: title %>
+  <%= tag.meta property: "og:description", content: description %>
+  <%= tag.meta property: "og:url", content: url_for(locale: I18n.locale, only_path: false) %>
+  <%= tag.script json_ld.to_json.html_safe, type: "application/ld+json" %>
+<% end %>

@@ -17,6 +17,14 @@ license below:
   `flash.css` (the toast, from Campfire)
 - Icons listed in `app/assets/images/NOTICE.md`
 
+## Guides
+
+The guides (`app/views/guides`, `config/research_sites.yml` and the `guides`/`research_sites`
+strings in `config/locales`) are based on the methodology and source catalog of
+[ex-ussr-kinship-research](https://github.com/DenisSergeevitch/ex-ussr-kinship-research),
+Copyright (c) 2026 Denis Shiryaev, used under the MIT license (the same text as below, with
+his name in place of 37signals).
+
 ## Fonts
 
 `app/assets/fonts` holds **Golos Text** (© 2019 The Golos Text Project Authors, Paratype) and

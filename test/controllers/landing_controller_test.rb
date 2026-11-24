@@ -18,6 +18,34 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
 
     get root_url, headers: { "Accept-Language" => "ru" }
     assert_select ".landing-hero h1 mark", I18n.t("landing.hero.title_mark", locale: :ru)
+    assert_select ".landing-album figcaption strong", "Ярослав Владимирович Мудрый"
+    assert_select ".landing-album__note--ask", /#{Regexp.escape(I18n.t("landing.album.ask_note", locale: :ru))}/
+    assert_select ".landing-album__note--answer", /#{Regexp.escape(I18n.t("landing.album.answer_note", locale: :ru))}/
+    assert_select ".landing-album__parents .landing-album__answered", /Рогнеда/
+    assert_select ".landing-album img[src*=?]", "portrait-yaroslav"
+  end
+
+  test "the hero starts a tree from the family's name, with its crest drawn as it is typed" do
+    get root_url
+    assert_select "form.landing-start[action=?][method=get][data-controller~=crest-preview]", new_registration_path do
+      assert_select "input[name=tree_name][maxlength='240']"
+      assert_select "[data-crest-preview-target=crest] svg.crest"
+      assert_select "button[type=submit]", I18n.t("landing.hero.cta")
+    end
+  end
+
+  test "the example tree is one click away when the install has one" do
+    get root_url
+    assert_select "a", text: I18n.t("landing.hero.demo"), count: 0
+
+    with_demo_url("/shared/abc") { get root_url }
+    assert_select ".landing-hero a[href='/shared/abc']", text: I18n.t("landing.hero.demo")
+    assert_select ".landing-album a.landing-album__card[href='/shared/abc']"
+  end
+
+  test "the footer leads to the guides in the visitor's language" do
+    get root_url, headers: { "Accept-Language" => "ru" }
+    assert_select ".landing-footer a[href=?]", guides_path(locale: "ru"), text: I18n.t("guides.index.title", locale: :ru)
   end
 
   test "the pain reads as before and after" do
@@ -156,5 +184,12 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
   private
     def hero_title(locale: I18n.locale)
       I18n.t("landing.hero.title_html", mark: I18n.t("landing.hero.title_mark", locale:), locale:)
+    end
+
+    def with_demo_url(url)
+      Rails.configuration.x.landing.demo_url = url
+      yield
+    ensure
+      Rails.configuration.x.landing.demo_url = nil
     end
 end

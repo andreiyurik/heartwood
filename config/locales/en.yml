@@ -92,6 +92,11 @@ en:
         update: Save
 
   people:
+    where_to_look:
+      title: Where to look for records
+      lede: Sites with records of the years this person lived through. Found an entry? Add it as a source to the event.
+      search_filled: the name search is filled in
+      how: how to search
     title: People
     invite: Invite relatives
     add: Add person
@@ -368,6 +373,7 @@ en:
     retry: Build it again
 
   fuzzy_dates:
+    julian: "%{date} (Old Style)"
     about: "abt. %{date}"
     before: "before %{date}"
     after: "after %{date}"
@@ -478,6 +484,8 @@ en:
       child: Add child
 
   auth:
+    welcome_title: Welcome back
+    welcome_lede: Your family tree is waiting.
     sign_in_title: Sign in to %{app}
     email_placeholder: Enter your email address
     password_placeholder: Enter your password
@@ -493,7 +501,7 @@ en:
   registrations:
     title: Create your %{app}
     lede: Start your family tree — it's free and yours to keep.
-    tree_name_placeholder: "Name your family tree (e.g. Pushkin family)"
+    tree_name_placeholder: "Tree name, e.g. the Rurikids"
     name_placeholder: Your name
     password_placeholder: Choose a password
     password_hint: At least 8 characters.
@@ -503,6 +511,37 @@ en:
     flash:
       welcome: "Welcome to %{app}, %{name}!"
 
+  feedbacks:
+    menu: Write to us
+    title: Write to us
+    lede: What's awkward, what's missing, what broke — write it as it is. A person who builds %{app} reads every letter.
+    body: Your letter
+    placeholder: "For example: I couldn't find how to add a grandmother's sister"
+    send: Send
+    sent: Thank you! Your letter is on its way — the reply will come to your email.
+    blank: Write a few words first.
+  feedback_mailer:
+    sent:
+      subject: "Feedback from %{name}"
+      from: From
+      page: Page
+      no_page: not known
+      locale: Language
+  getting_started:
+    title: Getting started
+    count: "%{done} of %{total}"
+    hide: Hide
+    yourself:
+      title: Add yourself
+      lede: The tree starts with you.
+    parents:
+      title: Add your parents and grandparents
+      lede: Three generations, and it's a family's story, not a list of names.
+      button: "Add parents — %{name}"
+    ask:
+      title: Ask the family what you don't know
+      lede: One link in the family chat. They answer without signing up — from a phone, in words or with a photo.
+      button: "Ask about %{name}"
   forms:
     more: More details
     cancel: Cancel
@@ -534,6 +573,132 @@ en:
       cta_link: Open %{app}
       signoff: "— The %{app} team"
 
+  guides:
+    index:
+      title: Where to look for your ancestors
+      description: Short guides to the archives and databases of the former USSR — for ancestors who fought in a war, were repressed or were baptised before 1918 — and how to write to an archive.
+    military:
+      title: How to find an ancestor who fought in the war
+      description: The Second and the First World War — where to find service cards, awards and loss reports. Pamyat Naroda, OBD Memorial, Podvig Naroda, Heroes of the Great War.
+    metric_books:
+      title: Russian parish registers — finding a birth record before 1918
+      description: How to work out which archive and which church's registers to search, where to see parish register scans online, and how to read them.
+    repressions:
+      title: How to find an ancestor who was repressed or dispossessed
+      description: Databases of Soviet political repression victims and memory books, and how to request the case file and a rehabilitation certificate.
+    archive_request:
+      title: How to write to an archive or registry office in Russia
+      description: Where to ask for an ancestor's birth, marriage or death certificate, what to put in the request — and a ready letter in Russian.
+    ai_research:
+      title: Researching your family with an AI agent
+      description: How an AI agent with the open ex-ussr-kinship-research skill searches the archives of the former USSR — and how to bring what it finds into your family tree.
+    sites: Where to look
+    regional_sites: By country and region
+    copy: Copy the text
+    credit_html: "These guides are based on the methodology and source catalog of %{skill}, an open project by Denis Shiryaev (MIT license)."
+    cta:
+      title: Found a document? Keep it in the tree
+      lede: Add the person, attach the source and note where the original is kept. Send the family a link — everyone adds what they remember, and nothing gets lost in a chat.
+      start: Start for free
+      open_tree: Open the tree
+  research_sites:
+    tiers:
+      official: archive or state database
+      project: project or index
+      community: community
+    regions:
+      moscow: Moscow
+      sverdlovsk: Sverdlovsk region
+      rostov: Rostov region
+      ukraine: Ukraine
+      belarus: Belarus
+      latvia: Latvia
+      poland: Poland
+      kazakhstan: Kazakhstan
+    pamyat_naroda:
+      name: Pamyat Naroda (Memory of the People)
+      about: The Russian Ministry of Defence's main Second World War database — service cards, award documents, loss reports, a unit's combat path. In Russian.
+    obd_memorial:
+      name: OBD Memorial
+      about: Soldiers killed or missing in 1941–1945 — loss reports, death notices, burial and prisoner-of-war records. In Russian.
+    podvig_naroda:
+      name: Podvig Naroda (Feat of the People)
+      about: Award sheets and award orders. Part of it has moved into Pamyat Naroda. In Russian.
+    rkka_wiki:
+      name: Index of Red Army units
+      about: Field post numbers and units of the Red Army — to work out which unit a letter or a document names.
+    gwar:
+      name: Heroes of the Great War 1914–1918
+      about: The First World War — loss cards, hospitals, awards, captivity. A garbled village name on one card often becomes clear from other cards of the same volost. In Russian.
+    arolsen:
+      name: Arolsen Archives
+      about: Forced labourers taken to Germany, camp prisoners and displaced persons, 1939 to the 1950s. Search in English, German or Russian.
+    metric_books_familysearch:
+      name: FamilySearch Catalog
+      about: Millions of filmed parish registers, revision lists and confession lists of the Russian Empire. Search by place; free, with an account.
+    uiad:
+      name: Remote access to archival documents (GIS UIAD)
+      about: Scans of files from Russia's federal and regional archives, to read from home. In Russian.
+    cgamos:
+      name: Moscow Main Archive — parish registers
+      about: Scans of the parish registers of Moscow's churches. In Russian.
+    gaso_metriki:
+      name: State Archive of Sverdlovsk Region — parish registers
+      about: Scans of the parish registers of Yekaterinburg uyezd and its neighbours in Perm governorate. In Russian.
+    donarch:
+      name: State Archive of Rostov Region — parish registers
+      about: Scans of the parish registers of the Don Host Oblast. In Russian.
+    duck_inspector:
+      name: Duck Inspector
+      about: Searches the Ukrainian archives' sites for parish register and inventory scans in one go.
+    niab:
+      name: National Historical Archives of Belarus
+      about: Parish registers, revision lists and records of the Belarusian governorates.
+    raduraksti:
+      name: Raduraksti
+      about: Scans of the parish registers of every faith in Latvia and Courland, censuses and revisions.
+    geneteka:
+      name: Geneteka
+      about: An index of Polish parish records, including the lands once in the Russian Empire.
+    parish_map:
+      name: Parish map
+      about: Shows which church a village belonged to — without that you don't know whose registers to search.
+    retromap:
+      name: Retromap
+      about: Old maps over the modern one — to find a vanished village and its neighbours.
+    vgd:
+      name: VGD forum
+      about: The largest Russian-language genealogy forum — people there know the fond and opis numbers for an uyezd. Leads, not proof.
+    openlist:
+      name: Open List
+      about: A free database of the victims of political repression in the USSR, with a source for every entry.
+    memsearch:
+      name: Memorial's search
+      about: Searches many databases of repression victims, memory books and lists of dispossessed peasants at once. In Russian.
+    vozvrashchennye_imena:
+      name: Returned Names
+      about: Memory books of repression victims, mostly Leningrad and its region, from the National Library of Russia. In Russian.
+    posledny_adres:
+      name: Last Address
+      about: Plaques on the houses people were taken from, and their stories — search by name and street. In Russian.
+    e_memory_kz:
+      name: e-memory.kz
+      about: Kazakhstan's state rehabilitation commission — repression victims, special settlers, deported peoples.
+    reabit_ua:
+      name: Rehabilitated by History
+      about: Ukraine's national bank of repressed people.
+    archive_guides:
+      name: Guides to the archives of Russia
+      about: Which fonds every state archive holds — where you find out whom to write to. In Russian.
+    gosuslugi:
+      name: Gosuslugi
+      about: A repeat birth, marriage or death certificate and civil registry extracts, for records still kept by a registry office. Needs a Russian account.
+    minjust_abroad:
+      name: Russian Ministry of Justice — documents from abroad
+      about: How to get a civil registry certificate from another country, such as Ukraine or Kazakhstan. In Russian.
+    garf:
+      name: State Archive of the Russian Federation
+      about: Records of Russia's and the USSR's highest authorities — including rehabilitation and emigration files. In Russian.
   landing:
     meta:
       title: "%{app} — the family tree your whole family builds"
@@ -543,22 +708,25 @@ en:
       title_html: "Gather your family's story together — %{mark}"
       title_mark: while you can still ask
       lede: Start a tree and send your relatives a link — everyone adds what they remember. Grandma knows her mother's maiden name, an uncle knows where grandpa served, and you see it all at once, on one tree.
+      start_label: Your family's name
+      start_placeholder: Your family's name
+      demo: See an example — the Rurikids' tree
       cta: Start for free
       sign_in: Sign in
       note: "Free up to %{limit} people. No card, no ads."
       image_alt: A family tree in %{app}
     album:
-      person: Alexander Sergeyevich Pushkin
-      dates: 1799 — 1837
-      bio: Poet. Born in Moscow's German Quarter; spent his childhood summers at his grandmother's in Zakharovo.
+      person: Yaroslav the Wise
+      dates: c. 978 — 1054
+      bio: Grand Prince of Kiev, Rurik's great-great-grandson. Under him the Russkaya Pravda was written down and St Sophia's in Kiev was built.
       mother: Mother
       father: Father
-      mother_name: Nadezhda Osipovna
-      father_name: Sergei Lvovich
-      sister: Olga Sergeyevna
-      sister_note: added Mother's portrait
-      brother: Lev Sergeyevich
-      brother_note: "“Sasha was born on May 26th, on Ascension Day”"
+      mother_name: Rogneda of Polotsk
+      father_name: Vladimir Sviatoslavich
+      ask: You asked by link
+      ask_note: "“What was Yaroslav's mother called?”"
+      answer: Anna Yaroslavna
+      answer_note: "answered, no sign-up: “Rogneda of Polotsk”"
     pain:
       title: A family's memory fades quietly
       before: Now
@@ -766,6 +934,8 @@ en:
       not_accepted: Couldn't write that into the tree. Check the field and the words.
 
   answers:
+    keep_photo: "Add to %{name}'s album"
+    photo_kept: In the album
     title: Answers
     none: No answers yet.
     placeholder: Write what you know…
@@ -776,6 +946,7 @@ en:
     destroy_confirm: Delete this answer?
     someone: A relative
     flash:
+      photo_kept: "The photo is in the album: %{name}."
       blank: Write an answer first.
       destroyed: Answer deleted.
 
@@ -794,6 +965,7 @@ en:
       taken: When it was taken
 
   guest_answers:
+    attach_photo: Attach a photo
     preview: "%{name} asks the family · %{tree}"
     asks: "%{name} asks"
     tree: "Family tree “%{tree}”"
@@ -805,7 +977,7 @@ en:
     submit_more: Add more
     thanks: Thank you!
     thanks_lede: Your answer has reached the family.
-    privacy_html: "Only the members of “%{tree}” will see your answer. %{policy}"
+    privacy_html: "Only the members of “%{tree}” will see your answer and photo. %{policy}"
     policy: How we handle data
     closed: This question has been answered already. Thank you!
     too_many: Too many answers in a row. Try again in a few minutes.
@@ -861,6 +1033,7 @@ en:
 
   questions_mailer:
     answered:
+      photo: A photo came with the answer.
       subject: "A new answer: %{question}"
       lede: "Someone answered your question in “%{tree}”."
       open: Open the question to put the answer into the tree

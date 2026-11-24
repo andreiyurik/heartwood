@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   private
 
   def set_locale
-    I18n.locale = available_locale(cookies[:locale]) || browser_locale || I18n.default_locale
+    I18n.locale = available_locale(request.path_parameters[:locale]) || available_locale(cookies[:locale]) || browser_locale || I18n.default_locale
   end
 
   def browser_locale

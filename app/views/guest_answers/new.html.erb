@@ -36,9 +36,15 @@
 
     <% if @question.open? %>
       <%= render "shared/errors", record: @answer if @answer&.errors&.any? %>
-      <%= form_with model: @answer || Answer.new, url: question_link_path(@question.token), class: "auth-form" do |form| %>
-        <%= form.text_area :body, class: "input", rows: 4, required: true, maxlength: 2000, autofocus: !flash[:answered],
+      <%= form_with model: @answer || Answer.new, url: question_link_path(@question.token), class: "auth-form", data: { controller: "file-name" } do |form| %>
+        <%= form.text_area :body, class: "input", rows: 4, maxlength: 2000, autofocus: !flash[:answered],
               placeholder: t("guest_answers.body_placeholder"), aria: { label: t("guest_answers.body_label") } %>
+        <img class="answer-photo answer-photo--preview" alt="" hidden data-file-name-target="preview">
+        <label class="btn answer-photo-field">
+          <%= icon_tag "camera" %> <span data-file-name-target="name"><%= t("guest_answers.attach_photo") %></span>
+          <%= form.file_field :photo, accept: Photo::CONTENT_TYPES.join(","), class: "for-screen-reader",
+                data: { action: "change->file-name#show" } %>
+        </label>
         <label class="input--actor">
           <%= form.text_field :author_name, class: "input", maxlength: 100, autocomplete: "name",
                 placeholder: t("guest_answers.name_placeholder"), aria: { label: t("guest_answers.name_label") } %>

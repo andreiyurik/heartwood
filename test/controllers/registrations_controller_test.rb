@@ -12,6 +12,12 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
     assert_select "input[name=tree_name]"
   end
 
+  test "a family name brought from the landing is filled in, and the form starts at the person's own name" do
+    get new_registration_path(tree_name: "Ивановы")
+    assert_select "input[name=tree_name][value=?]:not([autofocus])", "Ивановы"
+    assert_select "input[name='user[name]'][autofocus]"
+  end
+
   test "create makes the user and their named tree in one request" do
     assert_difference [ "User.count", "Tree.count" ], 1 do
       post registration_path, params: { tree_name: "Lovelace family", user: {

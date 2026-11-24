@@ -102,5 +102,13 @@ biography. `SOUR` records become sources, an event's `SOUR` becomes a citation. 
 pointer resolves to its `NAME`. Unknown tags keep their whole subtree, so e.g. a `CREM` with its
 `DATE` and `PLAC` comes back out exactly as it went in.
 
+**Old Style dates.** Records from the Russian Empire are dated by the Julian calendar.
+`@#DJULIAN@ 12 MAR 1885` (5.5.1), `JULIAN 12 MAR 1885` (7) and a typed `12 марта 1885 ст. ст.`
+all read as one Julian date: the screen shows it as written with «(ст. ст.)», the range
+(`date_start`…) is the modern equivalent so it sorts and counts as 1885 for the living-person
+rule, and export writes `@#DJULIAN@` back. Other calendars (`@#DHEBREW@`…) stay as text. Files
+from the ex-USSR research agent ([[guides]] `ai-research`) are tested as they come:
+`test/services/gedcom/agent_file_test.rb`.
+
 ## Related
 - [[import-export]] · [[domain-model]] · [[source-citation]] · [[media]] · [[adr/0004-gedcom-interop]]

@@ -1,0 +1,17 @@
+<% page_title t("feedbacks.title") %>
+<% page_meta t("feedbacks.lede") %>
+<% back_link @page || root_path %>
+
+<%= form_with scope: :feedback, url: feedback_path, class: "form form--letter" do |form| %>
+  <% if @body && @body.blank? %>
+    <p class="txt-negative" role="alert"><%= t("feedbacks.blank") %></p>
+  <% end %>
+  <%= form.hidden_field :page, value: @page if @page %>
+  <%= form.label :body, t("feedbacks.body"), class: "for-screen-reader" %>
+  <%= form.text_area :body, value: @body, class: "input", rows: 8, required: true, autofocus: true,
+        maxlength: FeedbacksController::MAX_LENGTH, placeholder: t("feedbacks.placeholder") %>
+  <div class="actions">
+    <%= form.submit t("feedbacks.send"), class: "btn btn--primary" %>
+    <%= link_to t("forms.cancel"), @page || root_path, class: "btn btn--ghost" %>
+  </div>
+<% end %>

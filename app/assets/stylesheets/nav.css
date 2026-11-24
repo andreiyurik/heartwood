@@ -74,6 +74,16 @@
     flex: 1 1 0;
   }
 
+  /* Outside a tree the brand is the whole crumb: it keeps its width and the actions wrap instead */
+  .breadcrumbs:has(> .brand) {
+    flex: none;
+  }
+
+  /* The shared tree's own button already says it's someone else's; the note would crowd the row */
+  .shared-note {
+    display: none;
+  }
+
   /* Next to the back button the crest alone names the tree */
   .breadcrumbs:has(.back) .tree-name span {
     display: none;

@@ -51,6 +51,44 @@ class FuzzyDateTest < ActiveSupport::TestCase
     end
   end
 
+  test "an Old Style date keeps its calendar as written and dates the range by the modern calendar" do
+    {
+      "@#DJULIAN@ 12 MAR 1885"                    => [ "@#DJULIAN@ 12 MAR 1885", "1885-03-24", "1885-03-24", "day" ],
+      "JULIAN 12 MAR 1885"                        => [ "@#DJULIAN@ 12 MAR 1885", "1885-03-24", "1885-03-24", "day" ],
+      "12 марта 1885 ст. ст."                     => [ "@#DJULIAN@ 12 MAR 1885", "1885-03-24", "1885-03-24", "day" ],
+      "12 марта 1885 (ст. ст.)"                   => [ "@#DJULIAN@ 12 MAR 1885", "1885-03-24", "1885-03-24", "day" ],
+      "12 March 1885 (Old Style)"                 => [ "@#DJULIAN@ 12 MAR 1885", "1885-03-24", "1885-03-24", "day" ],
+      "1 JAN 1910 (Old Style)"                    => [ "@#DJULIAN@ 1 JAN 1910", "1910-01-14", "1910-01-14", "day" ],
+      "@#DJULIAN@ 1885"                           => [ "@#DJULIAN@ 1885", "1885-01-13", "1886-01-12", "year" ],
+      "ABT @#DJULIAN@ 1885"                       => [ "ABT @#DJULIAN@ 1885", "1885-01-13", "1886-01-12", "about" ],
+      "BET @#DJULIAN@ 1850 AND @#DJULIAN@ 1855"   => [ "BET @#DJULIAN@ 1850 AND @#DJULIAN@ 1855", "1850-01-13", "1856-01-12", "between" ],
+      "@#DGREGORIAN@ 12 MAR 1885"                 => [ "12 MAR 1885", "1885-03-12", "1885-03-12", "day" ]
+    }.each do |typed, (gedcom, start, finish, precision)|
+      date = FuzzyDate.parse(typed)
+      assert date, "#{typed.inspect} should parse"
+      assert_equal [ gedcom, start, finish, precision ],
+        [ date.gedcom, date.start&.iso8601, date.finish&.iso8601, date.precision ], typed
+    end
+  end
+
+  test "a year before 1000 is written as people write it, without a leading zero" do
+    I18n.with_locale(:ru) { assert_equal "11 июля 969", FuzzyDate.parse("11 JUL 969").label }
+    I18n.with_locale(:en) { assert_equal "11 July 969", FuzzyDate.parse("11 JUL 969").label }
+  end
+
+  test "an Old Style date says so in its label, and the label reads back as the same date" do
+    I18n.with_locale(:ru) do
+      label = FuzzyDate.parse("@#DJULIAN@ 12 MAR 1885").label
+      assert_equal "12 марта 1885 (ст. ст.)", label
+      assert_equal "@#DJULIAN@ 12 MAR 1885", FuzzyDate.parse(label).gedcom
+    end
+    I18n.with_locale(:en) { assert_equal "12 March 1885 (Old Style)", FuzzyDate.parse("@#DJULIAN@ 12 MAR 1885").label }
+  end
+
+  test "other calendars stay as written" do
+    assert_nil FuzzyDate.parse("@#DHEBREW@ 1 TSH 5645")
+  end
+
   test "a month and a year read as a month and a year in every locale" do
     assert_equal "March 1901", FuzzyDate.parse("март 1901").label
     I18n.with_locale(:ru) { assert_equal "март 1901", FuzzyDate.parse("March 1901").label }

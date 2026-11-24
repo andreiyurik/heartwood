@@ -96,6 +96,22 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     assert_select "#family a[href=?]", new_person_relative_path(@person, relation: "child"), count: 0
   end
 
+  test "the sources section suggests where to look for someone who lived through the war, with the search filled in" do
+    soldier = @tree.people.create!(given_names: "Иван Петрович", surname: "Сидоров", sex: "M", born: "1912", died: "1985")
+    get person_url(soldier)
+
+    assert_select "#sources details.where-to-look" do
+      assert_select ".site-row a[href=?]", ResearchSite.find("pamyat_naroda").search_url_for(soldier)
+      assert_select ".site-row a[href=?]", ResearchSite.find("obd_memorial").url
+      assert_select "a[href=?]", guide_path("military", locale: I18n.locale)
+    end
+  end
+
+  test "living people get no research suggestions" do
+    get person_url(@tree.people.create!(given_names: "Мария", sex: "F", born: "1990"))
+    assert_select "details.where-to-look", count: 0
+  end
+
   test "empty sources say what a source is; empty memories offer to add photos" do
     get person_url(@person)
     assert_select "section#sources .blank-slate"

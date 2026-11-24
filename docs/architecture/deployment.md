@@ -22,6 +22,8 @@ certificate. The same recipe serves a self-hoster and the hosted service in Russ
 | `SMTP_USERNAME`, `SMTP_PASSWORD` | with `SMTP_ADDRESS` | SMTP login, kept in `.kamal/secrets`. |
 | `OPERATOR_*` | hosted in RF | The personal-data operator — [[accounts-and-legal]]. |
 | `STORAGE_*`, `BACKUP_*` | hosted | Photos and backups in S3 — [[backups]]. |
+| `GUIDES_INDEX` | hosted | `on` lets search engines index the [[guides]] and fills `sitemap.xml`; elsewhere the guides are served with `noindex`. |
+| `DEMO_URL` | any | The landing's "see an example" link and album card: the view link `bin/rails demo:rurikids OWNER=email` prints ([[landing]] "The example tree"). Unset: no example link. |
 | `MAP_TILES_URL`, `MAP_TILES_ATTRIBUTION`, `GEOCODER_URL` | no | Map tiles and place lookup, default OpenStreetMap; `off` turns them off (not `""`: Kamal drops empty values) — [[place]]. An operator in Russia either points them at a Russian provider or turns them off: the OSM servers are abroad. |
 
 `/up` is excluded from the HTTPS redirect and host check so kamal-proxy's health check works.

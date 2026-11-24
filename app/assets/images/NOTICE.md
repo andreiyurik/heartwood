@@ -8,12 +8,16 @@ Copyright (c) 37signals, LLC.
 
 ## Landing portraits
 
-`landing/portrait-*.jpg` are reproductions of early-19th-century works in the public domain,
-cropped and resized to 400×480:
+`landing/portrait-*.jpg` are reproductions of works in the public domain, cropped and resized
+to 400×480:
 
-- `portrait-pushkin.jpg` — Alexander Pushkin by Orest Kiprensky (1827), State Tretyakov Gallery;
-  https://commons.wikimedia.org/wiki/File:Kiprensky_Pushkin.jpg
-- `portrait-nadezhda.jpg` — Nadezhda Osipovna Pushkina, miniature by Xavier de Maistre (1810);
-  https://commons.wikimedia.org/wiki/File:N.O.Puskina.jpg
-- `portrait-sergei.jpg` — Sergei Lvovich Pushkin, drawing by Karl Hampeln (1824), All-Russian
-  Pushkin Museum, inv. Р-992; https://commons.wikimedia.org/wiki/File:Pushkin_Sergey_L.jpg
+- `portrait-yaroslav.jpg` — Yaroslav the Wise, *Tsarsky titulyarnik* (1672);
+  https://commons.wikimedia.org/wiki/File:Yaroslav_the_Wise.jpg
+- `portrait-vladimir.jpg` — Vladimir Sviatoslavich, *Tsarsky titulyarnik* (1672);
+  https://commons.wikimedia.org/wiki/File:Vladimir_I_The_Saint.jpg
+- `portrait-rogneda.jpg` — Rogneda, a detail of Anton Losenko's *Vladimir and Rogneda* (1770),
+  State Russian Museum; https://commons.wikimedia.org/wiki/File:Anton_Losenko_-_Vladimir_and_Rogneda_-_Google_Art_Project.jpg
+
+The development seeds' portraits (`db/seed_images/`) come from the same public-domain sources,
+plus `olga.jpg` (https://commons.wikimedia.org/wiki/File:OlgaKiev.jpg), `rurik.jpg`,
+`svyatoslav.png` and `monomakh.jpg` (*Tsarsky titulyarnik*, 1672).

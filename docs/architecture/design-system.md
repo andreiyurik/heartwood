@@ -20,6 +20,15 @@ Short version in `CLAUDE.md`; this note is the source of truth.
    no border). Nothing else on screen competes with it. There are no cards inside the sheet
    for ordinary content — cards appear only for *collections of things* (project dock,
    kanban) — so a form, a profile or a list is never "a box inside a box".
+   The 1088px is a *reading* width. The tree and the map are a workspace, not text: on a
+   screen wider than 70rem their sheet (`body.canvas-page`) takes the window less a 2rem
+   margin each side, as Basecamp's card table does, while their search keeps a 32rem field.
+   The doors in — sign-in, sign-up, password reset, an invitation, a question's link
+   (`.auth-wrap`) — have no sheet: warm paper (`--color-cream`) and one 26rem white panel
+   (`.auth-card`, `--radius-xl`, `--shadow-lg`), as campfire's and Writebook's sign-in. Where
+   the panel opens with the product's mark (`shared/_auth_mark`, leading home) it is centred and
+   the header drops its own logo; the secondary way ("No account yet?") and the legal links sit
+   under the panel, not in it.
 2. **One quiet chrome.** Above the sheet: one slim toolbar — breadcrumbs on the left
    (`Project ‹ To-dos`), page actions on the right (`Bookmark · Edit · …`), one `…` menu
    for everything secondary. Account things (profile, settings, sign out) live behind the

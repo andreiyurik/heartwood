@@ -181,3 +181,105 @@
 .people-page {
   display: contents;
 }
+
+/* A new tree's first three steps (docs/features/getting-started.md): Basecamp's to-do list, ticked by the tree itself */
+.getting-started {
+  animation: fade-in-up var(--duration-slow) var(--ease-out-expo);
+  border: 1px solid var(--tint-ink-10);
+  border-radius: var(--radius-xl);
+  margin-block-end: var(--block-space-double);
+  padding: var(--block-space) var(--block-space) var(--block-space-half);
+}
+
+.getting-started__header {
+  align-items: center;
+  display: flex;
+  gap: var(--inline-space);
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.getting-started__count {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+/* button_to wraps the button in a form: the form is what goes to the end */
+.getting-started__header form {
+  margin-inline-start: auto;
+}
+
+.getting-started__hide {
+  color: var(--color-muted);
+
+  .icon {
+    block-size: 0.875rem;
+    inline-size: 0.875rem;
+  }
+}
+
+.getting-started__steps {
+  list-style: none;
+  margin: var(--block-space-half) 0 0;
+  padding: 0;
+}
+
+.getting-started__step {
+  align-items: center;
+  border-block-start: 1px solid var(--tint-ink-10);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--inline-space) var(--inline-space-double);
+  padding-block: var(--block-space-half);
+
+  &:first-child {
+    border-block-start: 0;
+  }
+
+  .btn {
+    margin-inline-start: auto;
+  }
+}
+
+.getting-started__check {
+  align-items: center;
+  border: 2px solid var(--tint-ink-25);
+  border-radius: 50%;
+  block-size: 1.375rem;
+  display: inline-flex;
+  flex: none;
+  inline-size: 1.375rem;
+  justify-content: center;
+
+  .icon {
+    block-size: 0.875rem;
+    inline-size: 0.875rem;
+  }
+}
+
+.getting-started__step--done {
+  color: var(--color-muted);
+
+  .getting-started__check {
+    background-color: var(--color-selected-dark);
+    border-color: var(--color-selected-dark);
+    color: var(--color-always-white);
+  }
+
+  strong {
+    font-weight: 500;
+  }
+}
+
+.getting-started__text {
+  flex: 1 1 16rem;
+  min-inline-size: 0;
+
+  p {
+    color: var(--color-muted);
+    font-size: 0.875rem;
+    margin: 0.15rem 0 0;
+  }
+}

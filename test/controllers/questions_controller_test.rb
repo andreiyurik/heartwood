@@ -134,6 +134,31 @@ class QuestionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
+  test "an editor puts the photo from an answer into the person's album in one step; a viewer only sees it" do
+    question = @person.questions.create!(asker: @owner, body: "Do you have her photo?")
+    answer = question.answers.create!(author_name: "Aunt Masha", photo: fixture_file_upload("avatar.png", "image/png"))
+
+    get question_url(question)
+    assert_select "##{dom_id(answer)} img.answer-photo"
+    assert_select "##{dom_id(answer)} a[href^=?]", new_question_acceptance_path(question), count: 0
+    assert_select "##{dom_id(answer)} form[action=?] button", question_kept_photos_path(question, answer_id: answer.id),
+      text: /#{Regexp.escape(I18n.t("answers.keep_photo", name: @person.given_names))}/
+
+    assert_difference -> { @person.photos.count } do
+      post question_kept_photos_url(question, answer_id: answer.id)
+    end
+    assert_redirected_to question_url(question, anchor: dom_id(answer))
+    follow_redirect!
+    assert_select "##{dom_id(answer)} .answer-photo__kept", text: /#{I18n.t("answers.photo_kept")}/
+    assert_select "##{dom_id(answer)} form[action^=?]", question_kept_photos_path(question), count: 0
+
+    viewer = User.create!(name: "Viewer", email_address: "viewer@example.com", password: "password")
+    TreeMembership.create!(user: viewer, tree: @tree, role: "viewer")
+    sign_in_as viewer
+    post question_kept_photos_url(question, answer_id: answer.id)
+    assert_response :forbidden
+  end
+
   test "every page of the feature speaks Russian too" do
     question = @person.questions.create!(asker: @owner, body: "Кто это?")
     question.answers.create!(author_name: "Тётя Галя", body: "Я")

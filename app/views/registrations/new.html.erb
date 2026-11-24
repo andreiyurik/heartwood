@@ -2,6 +2,7 @@
 
 <div class="auth-wrap">
   <div class="auth-card">
+    <%= render "shared/auth_mark" %>
     <h1><%= t("registrations.title") %></h1>
     <p class="auth-lede"><%= t("registrations.lede") %></p>
 
@@ -9,12 +10,12 @@
 
     <%= form_with model: @user, url: registration_path, class: "auth-form" do |form| %>
       <label class="input--actor">
-        <%= text_field_tag :tree_name, params[:tree_name], class: "input", maxlength: 240, autofocus: true,
+        <%= text_field_tag :tree_name, params[:tree_name], class: "input", maxlength: 240, autofocus: params[:tree_name].blank?,
               placeholder: t("registrations.tree_name_placeholder") %>
         <%= icon_tag "people" %>
       </label>
       <label class="input--actor">
-        <%= form.text_field :name, class: "input", required: true, autocomplete: "name",
+        <%= form.text_field :name, class: "input", required: true, autocomplete: "name", autofocus: params[:tree_name].present?,
               placeholder: t("registrations.name_placeholder") %>
         <%= icon_tag "person" %>
       </label>
@@ -32,10 +33,10 @@
       <%= render "users/privacy_consent", form: form %>
       <%= form.submit t("registrations.submit"), class: "btn btn--primary" %>
     <% end %>
-
-    <p class="auth-alt">
-      <%= t("registrations.have_account") %>
-      <%= link_to t("auth.sign_in_submit"), new_session_path %>
-    </p>
   </div>
+
+  <p class="auth-alt">
+    <%= t("registrations.have_account") %>
+    <%= link_to t("auth.sign_in_submit"), new_session_path %>
+  </p>
 </div>

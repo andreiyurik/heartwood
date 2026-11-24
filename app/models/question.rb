@@ -8,7 +8,7 @@ class Question < ApplicationRecord
   belongs_to :asker, class_name: "User", optional: true
   belongs_to :closed_by, class_name: "User", optional: true
 
-  has_many :answers, dependent: :delete_all
+  has_many :answers, dependent: :destroy # each answer purges its own photo
   has_secure_token :token, length: 32
 
   broadcasts_refreshes_to :tree

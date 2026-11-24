@@ -19,6 +19,11 @@
     <% end %>
   <% end %>
 
+  <% getting_started = GettingStarted.new(Current.tree) %>
+  <% if can_edit? && !Current.membership.getting_started_hidden_at && !getting_started.done? %>
+    <%= render "people/getting_started", getting_started: getting_started %>
+  <% end %>
+
   <%= form_with url: people_path, method: :get,
         data: { controller: "autocomplete auto-submit", turbo_action: "advance" },
         class: "search-form" do |f| %>

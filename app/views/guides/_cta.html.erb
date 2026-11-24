@@ -1,0 +1,9 @@
+<section class="guide-cta">
+  <h2><%= t("guides.cta.title") %></h2>
+  <p><%= t("guides.cta.lede") %></p>
+  <% if authenticated? %>
+    <%= link_to t("guides.cta.open_tree"), root_path, class: "btn btn--primary btn--large" %>
+  <% else %>
+    <%= link_to t("guides.cta.start"), new_registration_path, class: "btn btn--primary btn--large" %>
+  <% end %>
+</section>

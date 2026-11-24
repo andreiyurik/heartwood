@@ -1,0 +1,17 @@
+<h2>What it is</h2>
+<p><%= link_to "ex-ussr-kinship-research", Guide::SKILL_URL %> is an open skill for AI agents such as Claude Code and Codex. With it an agent researches like a careful genealogist: it searches the archives, databases and catalogs of the former USSR and the Russian Empire, reads scans, keeps where every find came from, separates a record from its interpretation, and says plainly what is proven and what isn't. It does not merge namesakes until it finds what tells them apart. It answers in your language and searches in the records' languages.</p>
+
+<h2>How it fits with the tree</h2>
+<ol>
+  <li><strong>Download the tree.</strong> In the account menu — "<%= t("exports.create") %>". The agent reads this file as its starting material and as a list of leads.</li>
+  <li><strong>Give the agent a question.</strong> For example: "Find the parents of my great-grandfather Ivan Sidorov, born 1885, Tver governorate."</li>
+  <li><strong>Get a new GEDCOM file from the agent</strong> — with sources and a note on how well each fact is proven.</li>
+  <li><strong>Upload it back.</strong> Everything in the file is added to the tree, and anyone who ends up there twice shows in "<%= t("hints.title") %>" — you decide. The family sees what was found and adds what they remember.</li>
+</ol>
+
+<h2>Before you start</h2>
+<ul>
+  <li>The agent runs on your computer with the AI model you choose. Whatever you give it, that model's service sees too — including living relatives in the tree file.</li>
+  <li>The skill does not look for living people, their addresses or phones, does not get around sites' protections and sends no letters to archives without your permission.</li>
+  <li>How to install it is in its <%= link_to "description", Guide::SKILL_URL %>.</li>
+</ul>

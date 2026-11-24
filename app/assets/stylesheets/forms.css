@@ -177,3 +177,14 @@
     }
   }
 }
+
+/* One box and nothing to label it against: the field takes the form's whole width. */
+.form--letter {
+  textarea {
+    inline-size: 100%;
+  }
+
+  .actions {
+    margin-inline-start: 0;
+  }
+}

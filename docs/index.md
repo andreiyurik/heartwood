@@ -31,10 +31,13 @@ agent, also read [`CLAUDE.md`](../CLAUDE.md) at the repo root.
 - [[features-index]] — curated & prioritized feature catalog (borrowed from the best)
 - [[change-history]] — who changed what, and one-click undo/restore
 - [[questions]] — ask relatives about a person or a photo; they answer by link, no account
+- [[feedback]] — "Write to us" in the account menu: a letter to the operator with the page it came from
+- [[getting-started]] — three real first steps on the people page: yourself, three generations, ask the family
 - [[comments]] — a thread under every person
 - [[digest]] — the weekly "what's new in the tree" email
 - [[family-crest]] — a crest for every tree: choose, upload, and the link preview card
 - [[landing]] — what guests see at `/`: the story, the rules for marketing claims
+- [[guides]] — public "where to look for your ancestors" guides (SEO) and the site catalog behind "Where to look"
 - [[accounts-and-legal]] — 152-ФЗ policy & consent, account deletion, data retention
 
 ### 3. Interop — getting data in & out (our moat)

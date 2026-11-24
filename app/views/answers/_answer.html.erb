@@ -5,13 +5,30 @@
       <strong><%= answer.author %></strong> · <%= local_time_ago(answer.created_at) %>
       <% if answer.accepted? %> · <span class="thread-entry__mark"><%= icon_tag "check" %> <%= t("answers.accepted") %></span><% end %>
     </p>
-    <div class="thread-entry__text"><%= simple_format answer.body %></div>
+    <% if answer.body.present? %><div class="thread-entry__text"><%= simple_format answer.body %></div><% end %>
+
+    <% if answer.photo.attached? %>
+      <figure class="answer-photo-frame">
+        <%= link_to rails_blob_path(answer.photo), data: { action: "lightbox#open" } do %>
+          <%= image_tag answer.photo.variant(:print), class: "answer-photo", alt: "" %>
+        <% end %>
+        <% if answer.kept_photo %>
+          <figcaption class="answer-photo__kept"><%= icon_tag "check" %> <%= link_to t("answers.photo_kept"), person_path(question.person, anchor: "memories") %></figcaption>
+        <% elsif can_edit? %>
+          <%= button_to question_kept_photos_path(question, answer_id: answer.id), class: "btn" do %>
+            <%= icon_tag "add" %> <%= t("answers.keep_photo", name: question.person.given_names.presence || question.person.display_name) %>
+          <% end %>
+        <% end %>
+      </figure>
+    <% end %>
 
     <% if question.open? && can_edit? %>
       <%= turbo_frame_tag dom_id(answer, :acceptance) do %>
         <div class="thread-entry__actions">
-          <%= link_to new_question_acceptance_path(question, answer_id: answer.id), class: "btn" do %>
-            <%= icon_tag "check" %> <%= t("answers.accept") %>
+          <% if answer.body.present? %>
+            <%= link_to new_question_acceptance_path(question, answer_id: answer.id), class: "btn" do %>
+              <%= icon_tag "check" %> <%= t("answers.accept") %>
+            <% end %>
           <% end %>
           <%= button_to question_answer_path(question, answer), method: :delete, class: "btn btn--ghost btn--round",
                 title: t("answers.destroy"), form: { data: { turbo_confirm: t("answers.destroy_confirm"), turbo_frame: "_top" } } do %>

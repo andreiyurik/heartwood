@@ -3,12 +3,21 @@ Rails.application.routes.draw do
 
   resource :session
   resource :account, only: %i[show update destroy]
+  resource :feedback, only: %i[new create]
+  resource :getting_started, only: :destroy, controller: "getting_started"
 
   scope controller: :legal do
     get :privacy
     get :consent
     get :terms
   end
+  # The language is in the address so search engines index both (docs/features/guides.md).
+  scope ":locale", locale: Regexp.union(I18n.available_locales.map(&:to_s)) do
+    resources :guides, only: %i[index show], param: :slug
+  end
+  get "guides", to: "guides#index", as: nil
+  get "sitemap", to: "sitemaps#show", defaults: { format: :xml }
+
   resource :registration, only: %i[new create]
   scope "letters/:kind/unsubscribe/:token", constraints: { kind: Regexp.union(User::Letters::KINDS.keys) } do
     get  "/", to: "letter_unsubscribes#show", as: :letter_unsubscribe
@@ -49,6 +58,7 @@ Rails.application.routes.draw do
   resources :questions, only: %i[index show destroy] do
     scope module: :questions do
       resources :answers, only: %i[create destroy]
+      resources :kept_photos, only: :create
       resources :acceptances, only: %i[new create]
       resource :closure, only: :create
     end
