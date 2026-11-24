@@ -1,4 +1,6 @@
 class PasswordsMailer < ApplicationMailer
+  include ActionView::Helpers::DateHelper
+
   def reset(user)
     @user   = user
     @locale = params[:locale] || I18n.default_locale
