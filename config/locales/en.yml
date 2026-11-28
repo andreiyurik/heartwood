@@ -93,7 +93,7 @@ en:
   helpers:
     submit:
       person:
-        create: Save
+        create: Add person
         update: Save
 
   people:
@@ -127,6 +127,10 @@ en:
       X: Living
     nee: "née %{surname}"
     form:
+      nickname_placeholder: "what the family called them: Bess, the Wise"
+      name_prefix_placeholder: "e.g. Dr, Sir or Fr"
+      name_suffix_placeholder: "e.g. Jr. or III"
+      born_place_placeholder: "Village or town, as you remember it"
       given_names_placeholder: e.g. Mary Ann
       birth_surname_placeholder: Maiden name, if it changed
       born_placeholder: e.g. 1901, 12 March 1901 or about 1900
@@ -1177,10 +1181,12 @@ en:
         surname: Surname
         birth_surname: Surname at birth
         born: Born
+        born_place: Place of birth
+        deceased: "Died, date unknown"
         died: Died
         unnamed: Name unknown
-        name_prefix: Prefix
-        name_suffix: Suffix
+        name_prefix: Title
+        name_suffix: After the name
         nickname: Nickname
         sex: Sex
         avatar: Photo

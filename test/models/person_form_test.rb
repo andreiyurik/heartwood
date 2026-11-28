@@ -30,6 +30,40 @@ class PersonFormTest < ActiveSupport::TestCase
     assert_nil person.birth.date_raw
   end
 
+  test "the place of birth goes on the birth event, with or without a date" do
+    person = @tree.people.create!(given_names: "Praskovya", sex: "F", born: "1885", born_place: "Вятка")
+    assert_equal "Вятка", person.birth.place.name
+    assert_equal "Вятка", Person.find(person.id).born_place
+
+    only_place = @tree.people.create!(given_names: "Anna", sex: "F", born_place: "Вятка")
+    assert_equal [ "Вятка", nil ], [ only_place.birth.place.name, only_place.birth.date_raw ]
+    assert_equal 1, @tree.places.where(name: "Вятка").count
+
+    person.update!(born_place: "")
+    assert_nil person.birth.reload.place
+    assert_equal "1885", person.birth.date_raw
+  end
+
+  test "died with the date unknown is a death without a date, so the person is not taken for living" do
+    person = @tree.people.create!(given_names: "Praskovya", sex: "F", deceased: "1")
+    assert_nil person.death.date_raw
+    assert_not person.living?
+    assert Person.find(person.id).deceased
+
+    person.update!(deceased: "0")
+    assert_nil person.reload.death
+    assert person.living?
+  end
+
+  test "the tick neither invents a second death nor removes a dated one" do
+    person = @tree.people.create!(given_names: "Ada", sex: "F", died: "1852", deceased: "1")
+    assert_equal 1, person.events.where(kind: "DEAT").count
+    assert_not Person.find(person.id).deceased, "a dated death needs no tick"
+
+    person.update!(died: "1852", deceased: "0")
+    assert_equal "1852", person.death.date_raw
+  end
+
   test "the form refuses a nameless person unless the name is marked unknown" do
     person = @tree.people.build(sex: "U", unnamed: "0")
     assert_not person.valid?

@@ -311,6 +311,10 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     assert_select "form.form > fieldset.field legend", Person.human_attribute_name(:sex)
     assert_select "form.form details.more-fields" do
       assert_select "input[name='person[name_prefix]']"
+      assert_equal %w[nickname name_prefix name_suffix], css_select(".more-fields .field input[type=text]").map { it["name"][/\[(\w+)\]/, 1] }
+      %w[nickname name_prefix name_suffix].each do |field|
+        assert_select "input[name='person[#{field}]'][placeholder=?]", I18n.t("people.form.#{field}_placeholder")
+      end
       assert_select "input[name='person[name_suffix]']"
       assert_select "input[name='person[nickname]']"
     end
@@ -397,7 +401,11 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     %w[given_names surname birth_surname born died].each { assert_select "form input[name='person[#{it}]']" }
     assert_select "form .field[data-controller=date-reading] input[name='person[born]'][data-action='input->date-reading#read']"
     assert_select "form .field[data-controller=date-reading] turbo-frame#person_born_reading"
-    assert_select "form .field:has(input[name='person[born]']) + .field input[name='person[died]']"
+    assert_select "form .field:has(input[name='person[born]']) + .field input[name='person[born_place]'][data-action='input->place#search']"
+    assert_select "form .field:has(input[name='person[born_place]']) + .field input[name='person[died]']"
+    assert_select "form .field:has(input[name='person[died]']) + .field--check input[type=checkbox][name='person[deceased]']"
+    assert_select "form[data-controller~=sex-guess] input[name='person[given_names]'][data-action~='input->sex-guess#guess']"
+    assert_select "form input[type=submit][value=?]", I18n.t("helpers.submit.person.create")
     assert_select "form input[type=checkbox][name='person[unnamed]']"
   end
 
@@ -461,6 +469,31 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-frame#people_page_3", count: 0
   end
 
+  test "a person is added with where they were born and that they died, date unknown" do
+    post people_url, params: { person: { given_names: "Praskovya", sex: "F", born_place: "Vyatka", deceased: "1", unnamed: "0" } }
+
+    person = @tree.people.find_by!(given_names: "Praskovya")
+    assert_equal "Vyatka", person.birth.place.name
+    assert_not person.living?
+
+    get edit_person_url(person)
+    assert_select "input[name='person[born_place]'][value=Vyatka]"
+    assert_select "input[type=checkbox][name='person[deceased]'][checked]"
+    assert_select "form input[type=submit][value=?]", I18n.t("helpers.submit.person.update")
+  end
+
+  test "a free tree past its limit, still inside the grace, gives the hosted engine a place to say so" do
+    with_cloud_slots do
+      get people_url
+      assert_select ".cloud-outgrown", count: 0
+
+      now = Time.current
+      Person.insert_all(Array.new(@tree.people_limit - @tree.people.count) { { tree_id: @tree.id, sex: "U", created_at: now, updated_at: now } })
+      get people_url
+      assert_select ".cloud-outgrown"
+    end
+  end
+
   private
     def grow_tree_to(size)
       (size - @tree.people.count).times do |i|
@@ -475,16 +508,4 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
       ActiveSupport::Notifications.subscribed(counter, "sql.active_record", &block)
       count
     end
-
-  test "a free tree past its limit, still inside the grace, gives the hosted engine a place to say so" do
-    with_cloud_slots do
-      get people_url
-      assert_select ".cloud-outgrown", count: 0
-
-      now = Time.current
-      Person.insert_all(Array.new(@tree.people_limit - @tree.people.count) { { tree_id: @tree.id, sex: "U", created_at: now, updated_at: now } })
-      get people_url
-      assert_select ".cloud-outgrown"
-    end
-  end
 end
