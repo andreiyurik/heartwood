@@ -28,7 +28,7 @@ three-column grid twice. Warm paper (`--color-cream`) alternates with the white 
      crest step follows, so the shield the visitor watched appear is the one they then finish.
      Only a family name, never a relative's: nothing personal is typed before consent.
    - **"See an example — the Rurikids' tree"**: the real, read-only example tree, no sign-up, when
-     the install sets `DEMO_OWNER`. The album card links there too.
+     the install sets `DEMO_OWNER`.
    - Beside it **the product's story as one scene** (`landing/_scene`, see "Scenes" in
      [[design-system]]), about six seconds, once:
      1. a small family tree **grows** from "you" upward — parents, grandparents, and an empty
@@ -89,7 +89,8 @@ chronology for Yaroslav. The development seeds use it; a live install keeps it u
 of its own (one account owns one tree).
 
 **`DEMO_OWNER=<email>` is all an install sets.** The container's start builds the tree under
-that account when it isn't there yet (`db:prepare demo:rurikids`, one boot), and the landing
+that account when it isn't there yet (`demo:rurikids` after `db:prepare`; a failure is logged and
+the server starts without the example), and the landing
 finds the account's view link by itself — no token to copy, and renewing the link needs no
 redeploy. The account gets a random password and no letters; an address that can't receive mail
 (`demo@example.invalid`) means nobody can ever reset its password and sign in as it.

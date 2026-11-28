@@ -21,6 +21,16 @@ class ConditionalGetTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "a page cached in one theme is sent again in the other" do
+    get edits_url
+    etag = response.headers["ETag"]
+
+    cookies[:theme] = "dark"
+    get edits_url, headers: { "If-None-Match" => etag }
+    assert_response :success
+    assert_select "html[data-theme=dark]"
+  end
+
   test "closing a question changes the list" do
     question = @tree.people.create!(given_names: "Vera").questions.create!(asker: users(:one), body: "Who?")
     get questions_url

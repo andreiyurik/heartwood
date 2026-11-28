@@ -46,7 +46,7 @@
             <h2><%= step.title %></h2>
             <p><%= step.text %></p>
             <% if step.key == "ask" %>
-              <p><%= link_to t("research_route.ask_family"), authenticated? ? questions_path : new_registration_path, class: "btn btn--primary" %></p>
+              <p><%= link_to t("research_route.ask_family"), authenticated? ? questions_path : new_registration_path, class: "btn btn--primary", data: { turbo_frame: "_top" } %></p>
             <% end %>
             <% if step.guide %>
               <p><%= link_to t("research_route.more", guide: step.guide.title), guide_path(step.guide, locale: I18n.locale), data: { turbo_frame: "_top" } %></p>

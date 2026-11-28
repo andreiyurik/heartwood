@@ -26,4 +26,12 @@ class ResearchRouteTest < ApplicationSystemTestCase
     assert first(".route-step__done input").checked?
     assert_selector "[data-checklist-target=count]", text: "1 из #{ResearchRoute.new(era: "empire").steps.size}"
   end
+
+  test "the first step's button leaves the route for the page it names" do
+    visit guide_path("start", locale: "ru")
+    click_on I18n.t("research_route.ask_family", locale: :ru)
+
+    assert_current_path new_registration_path
+    assert_no_text "Content missing"
+  end
 end
