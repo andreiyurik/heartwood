@@ -5,8 +5,14 @@ export default class extends Controller {
   static targets = [ "input", "frame" ]
   static values = { url: String }
 
+  connect() {
+    this.forget = () => clearTimeout(this.timer)
+    this.element.closest("form")?.addEventListener("submit", this.forget)
+  }
+
   disconnect() {
-    clearTimeout(this.timer)
+    this.forget()
+    this.element.closest("form")?.removeEventListener("submit", this.forget)
   }
 
   read() {
