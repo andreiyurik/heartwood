@@ -2,8 +2,9 @@ class Tree < ApplicationRecord
   include Crest, Incineratable
 
   # An expired family plan behaves as free only for adding people; existing data is never locked.
+  # grace: how many more still go in past the limit, so nobody is stopped mid-evening (docs/business/pricing-hosting.md).
   PLANS = {
-    "free"   => { people_limit: 100 },
+    "free"   => { people_limit: 100, grace: 10 },
     "family" => { people_limit: nil }
   }.freeze
 
@@ -43,13 +44,14 @@ class Tree < ApplicationRecord
 
   def people_limit = PLANS.fetch(effective_plan)[:people_limit]
 
+  def people_cap = people_limit && people_limit + PLANS.fetch(effective_plan)[:grace].to_i
+
   def people_remaining
-    people_limit && [ people_limit - people.count, 0 ].max
+    people_cap && [ people_cap - people.count, 0 ].max
   end
 
-  def at_people_limit?
-    people_limit ? people.count >= people_limit : false
-  end
+  def outgrown? = people_limit ? people.count >= people_limit : false
+  def at_people_limit? = people_cap ? people.count >= people_cap : false
 
   def activate_family!(period: 1.year)
     return if plan == "family" && plan_expires_at.nil?

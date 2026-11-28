@@ -49,18 +49,36 @@ class TreePlanTest < ActiveSupport::TestCase
     assert_not @tree.valid?
   end
 
-  test "creating a person past the free cap is blocked, upgrading lifts it" do
-    now  = Time.current
-    rows = Array.new(@tree.people_limit - @tree.people.count) do
-      { tree_id: @tree.id, sex: "U", created_at: now, updated_at: now }
-    end
-    Person.insert_all(rows)
+  test "past the free limit there is a grace: a few more people go in before the hard stop" do
+    limit, grace = Tree::PLANS["free"].values_at(:people_limit, :grace)
+    assert_equal limit + grace, @tree.people_cap
+
+    fill_to limit
+    assert @tree.outgrown?
+    assert_not @tree.at_people_limit?
+    assert_equal grace, @tree.people_remaining
+    assert Person.new(tree: @tree, sex: "U", given_names: "Still Fits").valid?
+
+    @tree.update!(plan: "family", plan_expires_at: 1.month.from_now)
+    assert_not @tree.outgrown?
+    assert_nil @tree.people_cap
+  end
+
+  test "creating a person past the grace is blocked, upgrading lifts it" do
+    fill_to @tree.people_cap
 
     over = Person.new(tree: @tree, sex: "U", given_names: "One Too Many")
     assert_not over.valid?
     assert over.errors.of_kind?(:base, :tree_full)
+    assert_match Tree::PLANS["free"][:people_limit].to_s, over.errors.full_messages.to_sentence
 
     @tree.activate_family!
     assert Person.new(tree: @tree.reload, sex: "U", given_names: "Fits Now").valid?
   end
+
+  private
+    def fill_to(count)
+      now = Time.current
+      Person.insert_all(Array.new(count - @tree.people.count) { { tree_id: @tree.id, sex: "U", created_at: now, updated_at: now } })
+    end
 end

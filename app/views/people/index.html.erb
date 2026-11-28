@@ -68,5 +68,6 @@
     <p class="empty"><%= t("people.search_empty") %></p>
   <% end %>
 
+  <%= cloud_slot("tree_outgrown", tree: Current.tree) if Current.tree.outgrown? %>
   <%= cloud_slot "thanks", place: "milestone" %>
 <% end %>

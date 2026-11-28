@@ -885,7 +885,7 @@ en:
       free_text: "Up to %{limit} people per tree, every feature, as many relatives as you like."
       family_title: Family
       family_price: Soon
-      family_text: No limit on people. If the subscription ends, your data is never locked or deleted.
+      family_text: No limit on people. One person pays and the whole family uses it. If the subscription ends, your data is never locked or deleted.
     faq:
       title: Questions
       safe_q: Is it safe?

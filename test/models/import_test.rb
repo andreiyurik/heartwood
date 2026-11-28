@@ -51,7 +51,7 @@ class ImportTest < ActiveSupport::TestCase
   end
 
   test "a tree over its plan limit fails and imports nothing" do
-    @tree.define_singleton_method(:people_limit) { 1 }
+    @tree.define_singleton_method(:people_cap) { 1 }
     import = import_from("minimal_551.ged")
 
     assert_no_difference -> { Person.count } do
