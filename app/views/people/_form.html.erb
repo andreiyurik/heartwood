@@ -1,8 +1,18 @@
-<%= form_with model: person, class: "form" do |f| %>
+<%= form_with model: person, class: "form", data: { controller: "sex-guess" } do |f| %>
   <%= render "shared/errors", record: person if person.errors.any? %>
 
   <%= render "people/name_fields", f: f %>
+  <div class="field place-field" data-controller="place" data-place-search-url-value="<%= places_search_path %>">
+    <%= f.label :born_place %>
+    <%= f.text_field :born_place, class: "input", placeholder: t("people.form.born_place_placeholder"), autocomplete: "off",
+          data: { place_target: "input", action: "input->place#search" } %>
+    <div class="place-suggestions" data-place-target="suggestions" data-action="click->place#chooseSuggestion"></div>
+  </div>
   <%= render "shared/date_field", f: f, attribute: :died, placeholder: t("people.form.died_placeholder") %>
+  <div class="field field--check">
+    <%= f.check_box :deceased %>
+    <%= f.label :deceased %>
+  </div>
   <div class="field">
     <%= f.label :birth_surname %>
     <%= f.text_field :birth_surname, class: "input", placeholder: t("people.form.birth_surname_placeholder") %>
@@ -11,9 +21,9 @@
   <details class="more-fields" <%= "open" if person.more_fields_filled? || person.errors.any? %>>
     <summary><%= t("forms.more") %></summary>
 
-    <div class="field"><%= f.label :name_prefix %><%= f.text_field :name_prefix, class: "input" %></div>
-    <div class="field"><%= f.label :name_suffix %><%= f.text_field :name_suffix, class: "input" %></div>
-    <div class="field"><%= f.label :nickname %><%= f.text_field :nickname, class: "input" %></div>
+    <% %i[ nickname name_prefix name_suffix ].each do |field| %>
+      <div class="field"><%= f.label field %><%= f.text_field field, class: "input", placeholder: t("people.form.#{field}_placeholder") %></div>
+    <% end %>
     <div class="field field--check">
       <%= f.check_box :unnamed, { checked: f.object.persisted? && f.object.given_names.blank? && f.object.surname.blank? } %>
       <%= f.label :unnamed %>

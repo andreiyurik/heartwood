@@ -1,14 +1,18 @@
 <div class="field">
   <%= f.label :given_names %>
-  <%= f.text_field :given_names, class: "input", placeholder: t("people.form.given_names_placeholder") %>
+  <%= f.text_field :given_names, class: "input", placeholder: t("people.form.given_names_placeholder"),
+        data: { sex_guess_target: "name", action: "input->sex-guess#guess" } %>
 </div>
-<div class="field"><%= f.label :surname %><%= f.text_field :surname, class: "input" %></div>
+<div class="field">
+  <%= f.label :surname %>
+  <%= f.text_field :surname, class: "input", data: { sex_guess_target: "name", action: "input->sex-guess#guess" } %>
+</div>
 <fieldset class="field">
   <legend><%= f.object.class.human_attribute_name(:sex) %></legend>
   <div class="choices">
     <% Person::SEXES.each do |sex| %>
       <label class="choice">
-        <%= f.radio_button :sex, sex, class: "for-screen-reader" %>
+        <%= f.radio_button :sex, sex, class: "for-screen-reader", data: { sex_guess_target: "sex", action: "change->sex-guess#chosen" } %>
         <span><%= t("people.sex.#{sex}") %></span>
       </label>
     <% end %>

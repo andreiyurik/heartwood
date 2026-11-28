@@ -40,3 +40,19 @@ The page everything orbits. Part of [[features-index]] (Must).
 - Gramps/webtrees person pages: keep **evidence visible** next to each fact, not hidden away
   (see [[sources-evidence]]).
 - Don't bury "add relative" — it's the #1 action; make it one click from the profile.
+
+## The add-person form
+The most used form in the product: a relative should get a person in within half a minute.
+- **Six things, in the order people say them:** name and patronymic, surname, sex, born (date,
+  then place), died, surname at birth. Everything else waits under "More".
+- **Sex is guessed** from the patronymic or the surname's ending as it is typed («Петрович»,
+  «Ивановна», «Кузнецова») — `sex-guess` controller — until the person picks one themself. A
+  name it can't read leaves "not stated".
+- **Place of birth** is on the form because it is the fact that leads to the records: it goes on
+  the birth event, suggests places already in the tree, and feeds the map and "Where to look".
+- **"Died, date unknown".** With no birth year and no death a person counts as living and is
+  hidden from guests ([[privacy-access]]); a great-grandmother added by name alone would vanish
+  from the view link. One tick under the death date records a death without a date.
+- Dates are typed, not picked ([[event]] "Typing a date"). The button says what it does: "Add
+  person" on a new one, "Save" on an existing one.
+

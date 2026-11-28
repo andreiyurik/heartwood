@@ -99,7 +99,7 @@ ru:
   helpers:
     submit:
       person:
-        create: Сохранить
+        create: Добавить человека
         update: Сохранить
 
   people:
@@ -133,6 +133,10 @@ ru:
       X: Здравствует
     nee: "урожд. %{surname}"
     form:
+      nickname_placeholder: "как звали дома или прозвали: Шура, Мудрый"
+      name_prefix_placeholder: "например, князь, о. или д-р"
+      name_suffix_placeholder: "например, младший или III"
+      born_place_placeholder: "Село, город — как помните"
       given_names_placeholder: например, Мария Ивановна
       birth_surname_placeholder: Девичья фамилия, если менялась
       born_placeholder: например, 1901, 12.03.1901 или около 1900
@@ -1280,10 +1284,12 @@ ru:
         surname: Фамилия
         birth_surname: Фамилия при рождении
         born: Дата рождения
+        born_place: Место рождения
+        deceased: "Умер(ла), дата неизвестна"
         died: Дата смерти
         unnamed: Имя неизвестно
         name_prefix: Титул или звание
-        name_suffix: Добавление к имени
+        name_suffix: После имени
         nickname: Прозвище
         sex: Пол
         avatar: Фото
