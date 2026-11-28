@@ -3,11 +3,15 @@
   <%= f.text_field :given_names, class: "input", placeholder: t("people.form.given_names_placeholder") %>
 </div>
 <div class="field"><%= f.label :surname %><%= f.text_field :surname, class: "input" %></div>
-<div class="field">
-  <%= f.label :sex %>
-  <%= f.select :sex, Person::SEXES.map { |v| [t("people.sex.#{v}"), v] }, {}, class: "input" %>
-</div>
-<div class="field">
-  <%= f.label :born %>
-  <%= f.text_field :born, class: "input", placeholder: t("people.form.born_placeholder") %>
-</div>
+<fieldset class="field">
+  <legend><%= f.object.class.human_attribute_name(:sex) %></legend>
+  <div class="choices">
+    <% Person::SEXES.each do |sex| %>
+      <label class="choice">
+        <%= f.radio_button :sex, sex, class: "for-screen-reader" %>
+        <span><%= t("people.sex.#{sex}") %></span>
+      </label>
+    <% end %>
+  </div>
+</fieldset>
+<%= render "shared/date_field", f: f, attribute: :born, placeholder: t("people.form.born_placeholder") %>

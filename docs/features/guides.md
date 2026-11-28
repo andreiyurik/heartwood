@@ -27,6 +27,7 @@ a site has a record, only what kind of records it holds.
 ## The guides
 | Slug | Question it answers |
 |---|---|
+| `start` | С чего начать поиск предков и как составить родословную — the method, as a route (below) |
 | `military` | Великая Отечественная и Первая мировая: «Память народа», ОБД «Мемориал», «Подвиг народа», GWAR, Arolsen |
 | `metric-books` | Метрические книги до 1918 года: в каком архиве, как найти приход, где сканы |
 | `repressions` | Репрессированные и раскулаченные: «Открытый список», базы «Мемориала», «Возвращённые имена» |
@@ -36,11 +37,34 @@ a site has a record, only what kind of records it holds.
 `/guides` is the index. Guides are Rails views (`app/views/guides/<slug>.<locale>.html.erb`,
 like the legal pages) — no CMS, no database: they change with the code and are reviewed with it.
 
+## The search route (`start`)
+The flagship guide is the skill's *method* turned into a route a person can follow: ask the
+family → gather the papers at home → fix the place as of the event's date → the records of that
+time → search under other spellings → write to the archive → keep the find with its source.
+Each step says one thing to do, links to the detailed guide and lists the sites to open.
+
+Three questions at the top make it **their** route — no AI, no names, nothing personal typed:
+- **which time** — before 1918, 1918–1945, after 1945;
+- **what happened** — fought in a war, was repressed or exiled, was taken to Germany or captured,
+  or nothing is known;
+- **where** — one of the regions the catalog has sites for, or nowhere in particular.
+
+`ResearchRoute.new(era:, fate:, region:)` picks the steps by plain rules; an unknown answer is
+no answer. With no answers the route is the whole method, and that is the page search engines
+index: the answers are query parameters (`?era=empire&fate=war`), the canonical address stays
+the bare one, and the form is a GET into a Turbo Frame, so a route can be copied and sent to a
+relative. The page never claims a record exists — only which kind of records that time left.
+
+Every step has a small **scene** (inline SVG, played once when it scrolls into view — "Scenes" in
+[[design-system]]) and a "done" tick kept in the reader's own browser (`checklist` controller,
+`localStorage`); nothing about their progress reaches the server. The first step ends in the
+product's own move: ask the family by link.
+
 ## The site catalog — one list, two places
 `config/research_sites.yml` holds every site we point to: key, URL, tier, the years its records
 cover, which guide lists it, and when the link was checked. Names and descriptions are I18n
 (`research_sites.<key>.*`). `ResearchSite` reads it. The same catalog drives:
-- the guides' site rows;
+- the guides' site rows, and the steps of the search route;
 - "Where to look" on a person's profile ([[person-profile]]): sites whose years overlap the
   person's life, for people who are not living.
 

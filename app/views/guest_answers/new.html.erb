@@ -30,7 +30,12 @@
     <% if flash[:answered] %>
       <div class="answered">
         <%= icon_tag "check" %>
-        <p><strong><%= t("guest_answers.thanks") %></strong> <%= t("guest_answers.thanks_lede") %></p>
+        <p>
+          <strong><%= t("guest_answers.thanks") %></strong> <%= t("guest_answers.thanks_lede") %>
+          <% unless authenticated? %>
+            <span class="answered__own"><%= t("guest_answers.own_lede") %> <%= link_to t("guest_answers.own_tree"), new_registration_path %></span>
+          <% end %>
+        </p>
       </div>
     <% end %>
 

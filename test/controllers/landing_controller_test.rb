@@ -10,28 +10,64 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href=?]", new_session_path
   end
 
-  test "the hero puts its promise under the marker and shows a family, not the interface" do
+  test "the hero puts its promise under the marker" do
     get root_url
     assert_select ".landing-hero h1 mark", I18n.t("landing.hero.title_mark")
-    assert_select ".landing-album img[alt=?]", I18n.t("landing.album.person")
-    assert_select ".landing-album .landing-album__note", 2
 
     get root_url, headers: { "Accept-Language" => "ru" }
     assert_select ".landing-hero h1 mark", I18n.t("landing.hero.title_mark", locale: :ru)
-    assert_select ".landing-album figcaption strong", "Ярослав Владимирович Мудрый"
-    assert_select ".landing-album__note--ask", /#{Regexp.escape(I18n.t("landing.album.ask_note", locale: :ru))}/
-    assert_select ".landing-album__note--answer", /#{Regexp.escape(I18n.t("landing.album.answer_note", locale: :ru))}/
-    assert_select ".landing-album__parents .landing-album__answered", /Рогнеда/
-    assert_select ".landing-album img[src*=?]", "portrait-yaroslav"
   end
 
-  test "the hero starts a tree from the family's name, with its crest drawn as it is typed" do
-    get root_url
-    assert_select "form.landing-start[action=?][method=get][data-controller~=crest-preview]", new_registration_path do
-      assert_select "input[name=tree_name][maxlength='240']"
-      assert_select "[data-crest-preview-target=crest] svg.crest"
-      assert_select "button[type=submit]", I18n.t("landing.hero.cta")
+  test "the hero tells the product's story as one scene that plays once" do
+    get root_url, headers: { "Accept-Language" => "ru" }
+    assert_select ".landing-hero .landing-scene.landing-scene--playing[data-controller=scene]" do
+      assert_select "svg.landing-scene__tree[role=img][aria-label]" do
+        assert_select ".landing-scene__person", 6
+        assert_select ".landing-scene__person--found .landing-scene__name", "Прасковья"
+        assert_select ".landing-scene__slot", 1
+      end
+      assert_select "button[data-action='scene#replay'][aria-label=?]", I18n.t("landing.scene.replay", locale: :ru)
     end
+  end
+
+  test "the question and the answer look like the family chat they travel through" do
+    get root_url, headers: { "Accept-Language" => "ru" }
+    assert_select ".landing-scene .chat-bubble--out", /Как звали маму бабушки Анны/ do
+      assert_select ".chat-bubble__link", I18n.t("landing.scene.ask_link", locale: :ru)
+      assert_select "time", "12:04"
+    end
+    assert_select ".landing-scene .chat-bubble--typing[aria-hidden=true] i", 3
+    assert_select ".landing-scene .chat-bubble--in", /Прасковья Ильинична/ do
+      assert_select ".chat-bubble__name", "Тётя Вера"
+      assert_select ".chat-bubble__via", I18n.t("landing.scene.answer_via", locale: :ru)
+      assert_select "img.chat-bubble__photo[data-scene-target=from][src*='scene-found']"
+    end
+  end
+
+  test "the ancestors have faces and the living have initials; the found one's photograph flies in from the chat" do
+    get root_url
+    assert_select ".landing-scene__tree image", 2
+    assert_select ".landing-scene__person--grandmother image[href*='scene-grandmother']"
+    assert_select ".landing-scene__person--you image", count: 0
+    assert_select ".landing-scene__canvas img.landing-scene__flight[data-scene-target=to][src*='scene-found'][alt='']"
+  end
+
+  test "the hero starts a tree from the family's name, and the scene's tree takes that name and crest" do
+    get root_url
+    assert_select ".landing-hero[data-controller~=crest-preview]" do
+      assert_select "form.landing-start[action=?][method=get]", new_registration_path do
+        assert_select "input[name=tree_name][maxlength='240'][data-action='input->crest-preview#draw']"
+        assert_select "[data-crest-preview-target=crest] svg.crest"
+        assert_select "button[type=submit]", I18n.t("landing.hero.cta")
+      end
+      assert_select ".landing-scene__title [data-crest-preview-target=crest] svg.crest"
+      assert_select ".landing-scene__title [data-crest-preview-target=title]", I18n.t("landing.scene.family")
+    end
+  end
+
+  test "a guest can flip the theme from the header" do
+    get root_url
+    assert_select "#header button.btn[data-controller=theme][data-action='theme#toggle'][aria-label=?]", I18n.t("theme.toggle")
   end
 
   test "the example tree is one click away when the install has one" do
@@ -40,7 +76,21 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
 
     with_demo_url("/shared/abc") { get root_url }
     assert_select ".landing-hero a[href='/shared/abc']", text: I18n.t("landing.hero.demo")
-    assert_select ".landing-album a.landing-album__card[href='/shared/abc']"
+  end
+
+  test "the example is found by its owner's account, with no link to copy" do
+    owner = User.create!(email_address: "demo@example.invalid", name: "Demo", password: SecureRandom.base58(32))
+    tree = Tree.create!(name: "Example").tap { it.tree_memberships.create!(user: owner, role: "owner") }
+
+    with_demo_owner(owner.email_address) { get root_url }
+    assert_select "a", text: I18n.t("landing.hero.demo"), count: 0
+
+    link = tree.create_share_link!
+    with_demo_owner(owner.email_address) { get root_url }
+    assert_select ".landing-hero a[href=?]", shared_tree_path(link.token), text: I18n.t("landing.hero.demo")
+
+    with_demo_owner(owner.email_address) { with_demo_url("/shared/abc") { get root_url } }
+    assert_select ".landing-hero a[href='/shared/abc']"
   end
 
   test "the footer leads to the guides in the visitor's language" do
@@ -64,10 +114,19 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
     assert_select "#letter .landing-signature", text: /#{I18n.t("landing.letter.name")}/
   end
 
-  test "the screenshots have dark twins for dark mode" do
+  test "asking for support belongs to the hosted engine; an install of its own asks for nothing" do
     get root_url
-    assert_select ".landing-window picture", 2
-    assert_select ".landing-window picture source[media='(prefers-color-scheme: dark)']", 2
+    assert_select "#support", count: 0
+    assert_no_match "cloudtips", response.body
+
+    with_cloud_slots { get root_url }
+    assert_select "#letter ~ #support"
+  end
+
+  test "the screenshots have dark twins that follow the theme" do
+    get root_url
+    assert_select ".landing-window img.only-light[loading=lazy]", 2
+    assert_select ".landing-window img.only-dark[loading=lazy][src*='.dark']", 2
   end
 
   test "the questions stack in two independent columns, each marked as expandable" do
@@ -184,6 +243,13 @@ class LandingControllerTest < ActionDispatch::IntegrationTest
   private
     def hero_title(locale: I18n.locale)
       I18n.t("landing.hero.title_html", mark: I18n.t("landing.hero.title_mark", locale:), locale:)
+    end
+
+    def with_demo_owner(email)
+      Rails.configuration.x.landing.demo_owner = email
+      yield
+    ensure
+      Rails.configuration.x.landing.demo_owner = nil
     end
 
     def with_demo_url(url)

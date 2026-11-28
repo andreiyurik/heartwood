@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resource :locale, only: :update
+  resource :date_reading, only: :show
 
   resource :session
   resource :account, only: %i[show update destroy]

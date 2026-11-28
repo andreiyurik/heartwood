@@ -18,7 +18,7 @@ class ResearchSiteTest < ActiveSupport::TestCase
 
   test "every site belongs to a guide that exists, and every guide lists sites" do
     ResearchSite.all.each { assert_includes Guide::SLUGS, it.guide, it.key }
-    Guide::SLUGS.excluding("ai-research").each do |slug|
+    Guide::SLUGS.excluding("start", "ai-research").each do |slug|
       assert ResearchSite.in_guide(slug).any?, slug
     end
   end

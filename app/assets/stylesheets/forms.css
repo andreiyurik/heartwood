@@ -53,6 +53,108 @@
   font-size: 0.8125rem;
 }
 
+/* One of a few: radios drawn as buttons (sex, the search route's questions). */
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.choice {
+  border: 1px solid var(--tint-ink-25);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: calc(var(--component-sm) - 2px);
+  padding-inline: 0.75rem;
+  position: relative;
+
+  &:hover {
+    background-color: var(--tint-ink-5);
+  }
+
+  &:has(input:checked) {
+    background-color: var(--color-selected);
+    border-color: var(--color-selected-dark);
+  }
+
+  &:has(input:focus-visible) {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+fieldset.field {
+  border: 0;
+  min-inline-size: 0;
+  padding: 0;
+
+  legend {
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0;
+  }
+
+  @media (min-width: 40rem) {
+    display: block;
+
+    legend {
+      float: inline-start;
+      inline-size: var(--field-label-width, 11rem);
+      line-height: var(--component-base);
+      margin-inline-end: var(--inline-space-double);
+      text-align: end;
+    }
+
+    .choices {
+      align-items: center;
+      display: flex;
+      min-block-size: var(--component-base);
+      overflow: hidden;
+      padding: 2px;
+    }
+  }
+}
+
+.date-reading {
+  align-items: center;
+  animation: appear var(--duration-medium) ease-out;
+  color: var(--color-muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.8125rem;
+  gap: 0.15rem 0.4rem;
+  margin: 0;
+
+  .icon {
+    color: var(--color-positive);
+  }
+}
+
+/* The frame around it is display: contents, so the reading itself is the field's grid item. */
+@media (min-width: 40rem) {
+  .field .date-reading {
+    grid-column: 2;
+  }
+}
+
+.date-reading__date {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.date-reading__old {
+  background: none;
+  border: 0;
+  color: var(--color-link);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
 /* Inline forms open in place */
 .form--inline {
   --field-label-width: 8rem;

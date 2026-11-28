@@ -49,6 +49,12 @@
             <li><%= link_to new_feedback_path, class: "action-sheet__action" do %><%= icon_tag "messages" %> <%= t("feedbacks.menu") %><% end %></li>
           <% end %>
           <li>
+            <%= theme_button class: "action-sheet__action" do %>
+              <%= icon_tag "moon", class: "only-light" %><span class="only-light"><%= t("theme.dark") %></span>
+              <%= icon_tag "sun", class: "only-dark" %><span class="only-dark"><%= t("theme.light") %></span>
+            <% end %>
+          </li>
+          <li>
             <%= render "layouts/locale_switcher" %>
           </li>
           <%= cloud_slot "thanks", place: "menu" %>
@@ -59,6 +65,9 @@
     </div>
   <% else %>
     <div class="header-account">
+      <%= theme_button class: "btn btn--ghost btn--round", title: t("theme.toggle"), aria: { label: t("theme.toggle") } do %>
+        <%= icon_tag "moon", class: "only-light" %><%= icon_tag "sun", class: "only-dark" %>
+      <% end %>
       <%= render "layouts/locale_switcher" %>
     </div>
   <% end %>

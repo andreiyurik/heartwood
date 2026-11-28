@@ -49,6 +49,23 @@ rest. `FuzzyDate.parse(date_raw)` understands GEDCOM and the Russian way of writ
 | `с 1830 по 1840`, `1830–1840`, `FROM 1830 TO 1840` | `FROM 1830 TO 1840` | 1830…1840 | `between` |
 | `12 марта 1885 ст. ст.`, `@#DJULIAN@ 12 MAR 1885`, `JULIAN 12 MAR 1885` | `@#DJULIAN@ 12 MAR 1885` | 24 March 1885 (the modern date) | `day` |
 
+### Typing a date
+A date field is **a text field, not a calendar**. A date picker asks for a full day and makes
+the person scroll back a century; family dates are mostly "1901", "around 1890" or "March
+1901", and a calendar would either refuse them or invent a day nobody knows. What the field
+needs is to show that it understood:
+- under the field, as the person types, **the reading**: the date as the app parsed it
+  (`12.03.1901` → «12 марта 1901»). `GET /date_reading?date=…` renders it into a Turbo Frame
+  (`date-reading` controller, debounced); the parser stays in one place, `FuzzyDate`.
+- day–month–year order, always (`12.03.1901` is 12 March) — the way it is written in Russia and
+  the rest of Europe; there is no month-first reading.
+- **Old Style in one click**: for a full date before 14 February 1918 the reading offers "this
+  is Old Style", which adds «ст. ст.»; an Old Style date shows its modern equivalent beside it.
+- a text the parser can't read is kept as written, and the reading says so with examples.
+- a person's birth and death sit next to each other in the form; the birth surname follows.
+
+Used by every date input: born, died ([[person]]) and an event's date.
+
 - The range is recomputed whenever `date_raw` changes; sorting, the living-person rule, the
   duplicate finder and the tree's root pick all read it.
 - Screens show `date_label`: the parsed date in the reader's language (`14 мая 1781`,

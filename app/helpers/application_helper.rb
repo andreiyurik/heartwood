@@ -5,6 +5,16 @@ module ApplicationHelper
     "map"    => %w[maps]
   }.freeze
 
+  THEMES = %w[ light dark ].freeze
+
+  def chosen_theme
+    cookies[:theme].presence_in(THEMES)
+  end
+
+  def theme_button(**options, &block)
+    tag.button type: "button", data: { controller: "theme", action: "theme#toggle" }, **options, &block
+  end
+
   def icon_tag(name, **options)
     classes = [ "icon", "icon--#{name}", options.delete(:class) ].compact.join(" ")
     tag.span class: classes, "aria-hidden": true, **options

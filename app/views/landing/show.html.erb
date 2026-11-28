@@ -17,12 +17,12 @@
 <% end %>
 
 <div class="landing">
-  <section class="landing-band landing-band--cream landing-hero">
+  <section class="landing-band landing-band--cream landing-hero" data-controller="crest-preview">
     <div class="landing-hero__text">
       <p class="landing-eyebrow"><%= t("landing.hero.eyebrow") %></p>
       <h1><%= t("landing.hero.title_html", mark: tag.mark(t("landing.hero.title_mark"))) %></h1>
       <p class="landing-lede"><%= t("landing.hero.lede") %></p>
-      <%= form_with url: new_registration_path, method: :get, class: "landing-start", data: { controller: "crest-preview" } do %>
+      <%= form_with url: new_registration_path, method: :get, class: "landing-start" do %>
         <label class="input--actor landing-start__field">
           <span data-crest-preview-target="crest"><%= render "shared/crest", tree: Tree.new(name: "") %></span>
           <%= text_field_tag :tree_name, nil, class: "input", maxlength: 240, autocomplete: "family-name",
@@ -33,39 +33,15 @@
       <% end %>
       <div class="landing-actions">
         <span class="landing-note"><%= t("landing.hero.note", limit: limit) %></span>
-        <% if (demo = Rails.configuration.x.landing.demo_url) %>
-          <%= link_to t("landing.hero.demo"), demo, class: "landing-demo" %>
+        <% if (demo = demo_url) %>
+          <%= link_to demo, class: "landing-demo" do %>
+            <%= image_tag "landing/portrait-yaroslav.jpg", alt: "", class: "avatar avatar--small" %><%= t("landing.hero.demo") %>
+          <% end %>
         <% end %>
       </div>
     </div>
 
-    <div class="landing-album">
-      <%= tag.public_send(demo ? :a : :figure, href: demo, class: "landing-album__card") do %>
-        <%= image_tag "landing/portrait-yaroslav.jpg", alt: t("landing.album.person"), class: "landing-album__portrait", width: 400, height: 480 %>
-        <figcaption>
-          <strong><%= t("landing.album.person") %></strong>
-          <span class="landing-album__dates"><%= t("landing.album.dates") %></span>
-          <span class="landing-album__bio"><%= t("landing.album.bio") %></span>
-          <span class="landing-album__parents">
-            <% { mother: "rogneda", father: "vladimir" }.each do |parent, file| %>
-              <%= tag.span class: { "landing-album__answered": parent == :mother } do %>
-                <%= image_tag "landing/portrait-#{file}.jpg", alt: "", class: "avatar" %>
-                <span><small><%= t("landing.album.#{parent}") %></small> <%= t("landing.album.#{parent}_name") %></span>
-              <% end %>
-            <% end %>
-          </span>
-        </figcaption>
-      <% end %>
-
-      <div class="landing-album__note landing-album__note--ask">
-        <span class="avatar"><%= icon_tag "help-circle" %></span>
-        <span><strong><%= t("landing.album.ask") %></strong> <%= t("landing.album.ask_note") %></span>
-      </div>
-      <div class="landing-album__note landing-album__note--answer">
-        <%= initials_avatar t("landing.album.answer") %>
-        <span><strong><%= t("landing.album.answer") %></strong> <%= t("landing.album.answer_note") %></span>
-      </div>
-    </div>
+    <%= render "landing/scene" %>
   </section>
 
   <section class="landing-band" aria-labelledby="pain">
@@ -140,6 +116,7 @@
   </section>
 
   <%= cloud_slot "landing_letter" %>
+  <%= cloud_slot "landing_support" %>
 
   <section class="landing-band landing-band--cream" aria-labelledby="trust">
     <h2 id="trust"><%= t("landing.trust.title") %></h2>
@@ -191,6 +168,7 @@
   <section class="landing-band landing-band--green landing-final">
     <h2><%= t("landing.final.title") %></h2>
     <%= link_to t("landing.final.cta"), new_registration_path, class: "btn btn--large landing-final__cta" %>
+    <%= link_to t("landing.final.route"), guide_path("start", locale: I18n.locale), class: "landing-final__route" %>
   </section>
 
   <footer class="landing-band landing-footer">

@@ -6,18 +6,26 @@
 `people.svg` is from [37signals/writebook](https://github.com/basecamp/writebook), MIT-licensed.
 Copyright (c) 37signals, LLC.
 
-## Landing portraits
+## Landing portrait
 
-`landing/portrait-*.jpg` are reproductions of works in the public domain, cropped and resized
-to 400×480:
-
-- `portrait-yaroslav.jpg` — Yaroslav the Wise, *Tsarsky titulyarnik* (1672);
-  https://commons.wikimedia.org/wiki/File:Yaroslav_the_Wise.jpg
-- `portrait-vladimir.jpg` — Vladimir Sviatoslavich, *Tsarsky titulyarnik* (1672);
-  https://commons.wikimedia.org/wiki/File:Vladimir_I_The_Saint.jpg
-- `portrait-rogneda.jpg` — Rogneda, a detail of Anton Losenko's *Vladimir and Rogneda* (1770),
-  State Russian Museum; https://commons.wikimedia.org/wiki/File:Anton_Losenko_-_Vladimir_and_Rogneda_-_Google_Art_Project.jpg
+`landing/portrait-yaroslav.jpg` is a reproduction of a work in the public domain, cropped and
+resized to 400×480: Yaroslav the Wise, *Tsarsky titulyarnik* (1672);
+https://commons.wikimedia.org/wiki/File:Yaroslav_the_Wise.jpg
 
 The development seeds' portraits (`db/seed_images/`) come from the same public-domain sources,
 plus `olga.jpg` (https://commons.wikimedia.org/wiki/File:OlgaKiev.jpg), `rurik.jpg`,
 `svyatoslav.png` and `monomakh.jpg` (*Tsarsky titulyarnik*, 1672).
+
+## Landing scene faces
+
+`landing/scene-*.jpg` are details of old photographs, cropped to the face, resized to 240×240
+and toned sepia:
+
+- `scene-found.jpg` — a family of Old Believers, Novy Usad, Nizhny Novgorod governorate,
+  c. 1910–1915; uploaded by Fedoseevin, CC0;
+  https://commons.wikimedia.org/wiki/File:Семья_старообрядцев_—_поморцев_(1910-1915_года)._Новый_усад,_Васильсурский_уезд,_Нижегородская_губерния.jpg
+- `scene-grandmother.jpg`, `scene-grandfather.jpg` — a studio negative by Jaan Riet, 1914,
+  Viljandi Museum photo collection, public domain;
+  https://commons.wikimedia.org/wiki/File:Foto_Jaan_Riet_11.jpg
+
+`sun.svg` and `moon.svg` are drawn for this project.

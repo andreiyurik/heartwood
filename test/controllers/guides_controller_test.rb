@@ -103,4 +103,41 @@ class GuidesControllerTest < ActionDispatch::IntegrationTest
     ensure
       Rails.configuration.x.guides.indexed = false
     end
+
+  test "the first guide is the method as a route, whole when nothing is answered" do
+    assert_equal "start", Guide.all.first.slug
+
+    get guide_path("start", locale: "ru")
+    assert_select "form.route-form[method=get][action=?][data-turbo-frame=route]", guide_path("start", locale: "ru") do
+      assert_select "input[type=radio][name=era]", ResearchRoute::ERAS.size + 1
+      assert_select "input[type=radio][name=fate]", ResearchRoute::FATES.size
+      assert_select "select[name=region] option", ResearchRoute::REGIONS.size + 1
+    end
+    assert_select "turbo-frame#route ol.route > li.route-step", ResearchRoute.new.steps.size
+    assert_select ".route-step h2", text: I18n.t("research_route.steps.ask.title", locale: :ru)
+    assert_select ".route-step svg.route-art", ResearchRoute.new.steps.size
+    assert_select ".route-step input[type=checkbox][data-checklist-target=item]", ResearchRoute.new.steps.size
+  end
+
+  test "the answers make the route the reader's own, under an address that can be sent on" do
+    get guide_path("start", locale: "ru", era: "soviet", fate: "war")
+    assert_select "input[name=era][value=soviet][checked]"
+    assert_select "input[name=fate][value=war][checked]"
+    assert_select ".route-step", ResearchRoute.new(era: "soviet", fate: "war").steps.size
+    assert_select ".route-step a[href=?]", guide_path("military", locale: "ru")
+    assert_select ".route-step .site-row a[href=?]", ResearchSite.find("pamyat_naroda").url
+    assert_select "link[rel=canonical][href=?]", guide_url("start", locale: "ru")
+    assert_select "[data-controller~=copy-to-clipboard][data-copy-to-clipboard-content-value=?]",
+      guide_url("start", locale: "ru", era: "soviet", fate: "war")
+  end
+
+  test "the route's first step leads to asking the family by link" do
+    get guide_path("start", locale: "ru")
+    assert_select ".route-step:first-child a[href=?]", new_registration_path
+  end
+
+  test "the landing page leads to the route" do
+    get root_url
+    assert_select ".landing a[href=?]", guide_path("start", locale: I18n.locale), minimum: 1
+  end
 end

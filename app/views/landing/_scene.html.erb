@@ -1,0 +1,81 @@
+<%# docs/features/landing.md "Hero": the last frame is the resting state; the animations only lead up to it. %>
+<%# person => x, y, and its turn (--i) as the tree grows from "you" upward %>
+<% people = { you: [ 250, 340, 0 ], mother: [ 190, 240, 1 ], father: [ 310, 240, 1 ], grandmother: [ 100, 140, 2 ], grandfather: [ 200, 140, 2 ], found: [ 100, 40, nil ] } %>
+<% faces = %i[ grandmother grandfather ] %>
+<% portraits = faces + [ :found ] %>
+<% aunt = t("landing.scene.answer") %>
+<div class="landing-scene landing-scene--playing" data-controller="scene" data-scene-playing-class="landing-scene--playing" data-scene-waiting-class="landing-scene--waiting">
+  <div class="landing-scene__ask">
+    <span class="landing-scene__caption"><%= t("landing.scene.chat") %></span>
+    <div class="chat-bubble chat-bubble--out">
+      <p><%= t("landing.scene.ask_text") %></p>
+      <span class="chat-bubble__link"><%= icon_tag "share" %> <%= t("landing.scene.ask_link") %></span>
+      <span class="chat-bubble__meta"><time>12:04</time> <%= icon_tag "check" %><%= icon_tag "check" %></span>
+    </div>
+  </div>
+
+  <figure class="landing-scene__sheet">
+    <figcaption class="landing-scene__title">
+      <span data-crest-preview-target="crest"><%= render "shared/crest", tree: Tree.new(name: "") %></span>
+      <strong data-crest-preview-target="title" data-placeholder="<%= t("landing.scene.family") %>"><%= t("landing.scene.family") %></strong>
+      <span class="landing-scene__count">
+        <span class="landing-scene__before"><%= t("landing.scene.before") %></span>
+        <span class="landing-scene__after"><%= t("landing.scene.after") %></span>
+      </span>
+    </figcaption>
+
+    <div class="landing-scene__canvas">
+      <svg class="landing-scene__tree" viewBox="48 8 336 392" role="img" aria-label="<%= t("landing.scene.tree") %>">
+        <clipPath id="scene-face"><circle r="26"/></clipPath>
+        <path class="landing-scene__line" style="--i: 0" pathLength="1" d="M250 318V240M212 240H288"/>
+        <path class="landing-scene__line" style="--i: 1" pathLength="1" d="M190 218V205H150V140M122 140H178"/>
+        <g class="landing-scene__ghosts">
+          <path class="landing-scene__ghost" d="M312 140H328M320 140V205H310V218"/>
+          <circle class="landing-scene__ghost" cx="290" cy="140" r="21"/>
+          <circle class="landing-scene__ghost" cx="350" cy="140" r="21"/>
+          <g class="landing-scene__slot" transform="translate(100 40)">
+            <path class="landing-scene__ghost" d="M0 22V78"/>
+            <circle class="landing-scene__ghost" r="21"/>
+            <text class="landing-scene__initial" y="6">?</text>
+          </g>
+        </g>
+        <path class="landing-scene__line landing-scene__line--found" pathLength="1" d="M100 118V62"/>
+        <circle class="landing-scene__ripple" cx="100" cy="40" r="22"/>
+
+        <% people.each do |key, (x, y, turn)| %>
+          <% name = t("landing.scene.people.#{key}.name") %>
+          <g transform="translate(<%= x %> <%= y %>)">
+            <g class="landing-scene__person landing-scene__person--<%= key %>" style="--avatar-hue: <%= avatar_hue(name) %><%= "; --i: #{turn}" if turn %>">
+              <circle r="22"/>
+              <text class="landing-scene__initial" y="6"><%= name.first %></text>
+              <% if key.in?(faces) %>
+                <image href="<%= image_path("landing/scene-#{key}.jpg") %>" x="-26" y="-26" width="52" height="52" clip-path="url(#scene-face)" preserveAspectRatio="xMidYMid slice"/>
+              <% end %>
+              <% if key == :found %><rect class="landing-scene__fresh" x="-40" y="30" width="80" height="30" rx="5"/><% end %>
+              <text class="landing-scene__name" y="<%= key.in?(portraits) ? 44 : 41 %>"><%= name %></text>
+              <text class="landing-scene__kin" y="<%= key.in?(portraits) ? 57 : 54 %>"><%= t("landing.scene.people.#{key}.kin") %></text>
+            </g>
+          </g>
+        <% end %>
+      </svg>
+      <%= image_tag "landing/scene-found.jpg", alt: "", class: "landing-scene__flight", width: 240, height: 240, data: { scene_target: "to" } %>
+    </div>
+  </figure>
+
+  <div class="landing-scene__reply">
+    <%= initials_avatar aunt, class: "avatar--thumb" %>
+    <div class="chat-bubble chat-bubble--typing" aria-hidden="true"><%= t("landing.scene.typing", name: aunt) %> <i></i><i></i><i></i></div>
+    <div class="chat-bubble chat-bubble--in">
+      <strong class="chat-bubble__name"><%= aunt %></strong>
+      <span class="chat-bubble__via"><%= t("landing.scene.answer_via") %></span>
+      <div class="chat-bubble__body">
+        <%= image_tag "landing/scene-found.jpg", alt: "", class: "chat-bubble__photo", width: 240, height: 240, data: { scene_target: "from" } %>
+        <p><%= t("landing.scene.answer_text") %></p>
+      </div>
+      <span class="chat-bubble__meta"><time>12:09</time></span>
+    </div>
+  </div>
+
+  <button type="button" class="btn btn--ghost btn--round landing-scene__replay" data-action="scene#replay"
+          title="<%= t("landing.scene.replay") %>" aria-label="<%= t("landing.scene.replay") %>"><%= icon_tag "refresh" %></button>
+</div>

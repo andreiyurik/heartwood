@@ -1,0 +1,16 @@
+<%= turbo_frame_tag @frame do %>
+  <% if @date %>
+    <p class="date-reading">
+      <%= icon_tag "check" %>
+      <span class="date-reading__date"><%= @date.label %></span>
+      <% if @date.julian? && @date.precision == "day" %>
+        <span>· <%= t("date_readings.new_style", date: l(@date.start, format: "%-d %B %-Y")) %></span>
+      <% elsif @date.old_style_possible? %>
+        <button type="button" class="date-reading__old" data-action="date-reading#oldStyle"
+                data-date-reading-suffix-param="<%= t("date_readings.old_style_suffix") %>"><%= t("date_readings.old_style") %></button>
+      <% end %>
+    </p>
+  <% elsif @text.present? %>
+    <p class="date-reading"><%= t("date_readings.as_written") %></p>
+  <% end %>
+<% end %>

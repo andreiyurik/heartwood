@@ -1,0 +1,56 @@
+<%# locals: art. One small scene per step; --i staggers the parts (docs/architecture/design-system.md "Scenes"). %>
+<svg class="route-art" viewBox="0 0 96 96" aria-hidden="true">
+  <% case art %>
+  <% when "ask" %>
+    <path d="M14 14h40a6 6 0 0 1 6 6v20a6 6 0 0 1-6 6H32l-10 9v-9h-8a6 6 0 0 1-6-6V20a6 6 0 0 1 6-6z"/>
+    <text x="34" y="37">?</text>
+    <g class="route-art__pop" style="--i: 2">
+      <path class="route-art__paper route-art__accent" d="M46 48h36a6 6 0 0 1 6 6v18a6 6 0 0 1-6 6h-6v9l-10-9H46a6 6 0 0 1-6-6V54a6 6 0 0 1 6-6z"/>
+      <path class="route-art__accent" d="M54 63l7 7 13-14"/>
+    </g>
+  <% when "papers" %>
+    <path d="M20 12h30l16 16v52a4 4 0 0 1-4 4H20a4 4 0 0 1-4-4V16a4 4 0 0 1 4-4z"/>
+    <path d="M50 12v16h16M26 40h28M26 50h20M26 60h14"/>
+    <g class="route-art__rise" style="--i: 2">
+      <rect class="route-art__paper route-art__accent" x="48" y="46" width="34" height="40" rx="3"/>
+      <circle class="route-art__accent" cx="65" cy="61" r="6"/>
+      <path class="route-art__accent" d="M54 80c2-9 20-9 22 0"/>
+    </g>
+  <% when "place" %>
+    <path d="M10 28l25-9 26 9 25-9v50l-25 9-26-9-25 9z"/>
+    <path d="M35 19v50M61 28v50"/>
+    <g class="route-art__drop" style="--i: 2">
+      <path class="route-art__mark route-art__accent" d="M48 16a14 14 0 0 1 14 14c0 11-14 25-14 25S34 41 34 30a14 14 0 0 1 14-14z"/>
+      <circle class="route-art__paper route-art__accent" cx="48" cy="30" r="5"/>
+    </g>
+  <% when "records" %>
+    <path d="M48 24c-8-6-20-8-36-6v54c16-2 28 0 36 6 8-6 20-8 36-6V18c-16-2-28 0-36 6z"/>
+    <path d="M48 24v54M20 32h18M20 42h18M20 52h18"/>
+    <rect class="route-art__mark route-art__appear" style="--i: 2" x="55" y="37" width="24" height="10" rx="2"/>
+    <path d="M58 32h18M58 42h18M58 52h18"/>
+    <g class="route-art__pop" style="--i: 3">
+      <circle class="route-art__accent" cx="67" cy="62" r="10"/>
+      <path class="route-art__accent" d="M74 69l10 10"/>
+    </g>
+  <% when "names" %>
+    <rect x="12" y="12" width="72" height="20" rx="10"/>
+    <rect class="route-art__mark route-art__appear" style="--i: 2" x="12" y="38" width="72" height="20" rx="10"/>
+    <rect x="12" y="38" width="72" height="20" rx="10"/>
+    <rect x="12" y="64" width="72" height="20" rx="10"/>
+    <path d="M22 22h30M22 48h36M22 74h22"/>
+    <path class="route-art__accent route-art__draw" style="--i: 3" pathLength="1" d="M64 48l5 5 9-10"/>
+  <% when "request" %>
+    <rect x="10" y="22" width="76" height="52" rx="5"/>
+    <path d="M10 27l38 27 38-27"/>
+    <g class="route-art__pop" style="--i: 2">
+      <circle class="route-art__paper route-art__accent" cx="72" cy="68" r="13"/>
+      <path class="route-art__accent" d="M66 68l5 5 8-9"/>
+    </g>
+  <% when "keep" %>
+    <path d="M26 62V46h44v16"/>
+    <circle cx="26" cy="72" r="10"/>
+    <circle cx="70" cy="72" r="10"/>
+    <path class="route-art__accent route-art__draw" style="--i: 2" pathLength="1" d="M48 46V32"/>
+    <circle class="route-art__mark route-art__accent route-art__pop" style="--i: 3" cx="48" cy="21" r="11"/>
+  <% end %>
+</svg>

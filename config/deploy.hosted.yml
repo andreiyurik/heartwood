@@ -40,8 +40,9 @@ env:
     THANKS_URL: "https://pay.cloudtips.ru/p/61fe8ef3"
     # YANDEX_METRICA_ID: "12345678"
     # SUPPORT_USER_IDS: "1"
-    # The landing's example tree: run `bin/rails demo:rurikids OWNER=<email>` once on the server, paste what it prints.
-    # DEMO_URL: "/shared/<token>"
+    # The landing's example tree lives under this account; the container builds it on start. The
+    # address can't receive mail on purpose: nobody can reset its password and sign in as it.
+    DEMO_OWNER: "demo@example.invalid"
     STORAGE_ENDPOINT: https://s3.twcstorage.ru
     STORAGE_REGION: ru-1
     BACKUP_ENDPOINT: https://s3.twcstorage.ru
