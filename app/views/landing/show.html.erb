@@ -33,7 +33,7 @@
       <% end %>
       <div class="landing-actions">
         <span class="landing-note"><%= t("landing.hero.note", limit: limit) %></span>
-        <% if (demo = demo_url) %>
+        <% if (demo = @demo_url) %>
           <%= link_to demo, class: "landing-demo" do %>
             <%= image_tag "landing/portrait-yaroslav.jpg", alt: "", class: "avatar avatar--small" %><%= t("landing.hero.demo") %>
           <% end %>

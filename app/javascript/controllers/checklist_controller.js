@@ -3,7 +3,7 @@ import { Controller } from "@hotwired/stimulus"
 // Ticks stay in the reader's own browser; the server never learns what they have done.
 export default class extends Controller {
   static targets = [ "item", "count" ]
-  static values = { key: String }
+  static values = { key: String, progress: String }
 
   connect() {
     const done = this.#stored
@@ -22,7 +22,7 @@ export default class extends Controller {
     if (!this.hasCountTarget) return
     const done = this.itemTargets.filter(item => item.checked).length
     this.countTarget.hidden = done == 0
-    this.countTarget.textContent = this.countTarget.dataset.template.replace("%{done}", done).replace("%{total}", this.itemTargets.length)
+    this.countTarget.textContent = this.progressValue.replace("%{done}", done).replace("%{total}", this.itemTargets.length)
   }
 
   get #stored() {

@@ -51,7 +51,7 @@ class Tree < ApplicationRecord
   end
 
   def outgrown? = people_limit ? people.count >= people_limit : false
-  def at_people_limit? = people_cap ? people.count >= people_cap : false
+  def at_people_cap? = people_cap ? people.count >= people_cap : false
 
   def activate_family!(period: 1.year)
     return if plan == "family" && plan_expires_at.nil?

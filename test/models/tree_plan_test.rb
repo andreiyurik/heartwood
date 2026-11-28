@@ -18,7 +18,7 @@ class TreePlanTest < ActiveSupport::TestCase
     assert @tree.family_plan?
     assert_nil @tree.people_limit
     assert_nil @tree.people_remaining
-    assert_not @tree.at_people_limit?
+    assert_not @tree.at_people_cap?
   end
 
   test "a lapsed family plan falls back to the free cap" do
@@ -55,7 +55,7 @@ class TreePlanTest < ActiveSupport::TestCase
 
     fill_to limit
     assert @tree.outgrown?
-    assert_not @tree.at_people_limit?
+    assert_not @tree.at_people_cap?
     assert_equal grace, @tree.people_remaining
     assert Person.new(tree: @tree, sex: "U", given_names: "Still Fits").valid?
 

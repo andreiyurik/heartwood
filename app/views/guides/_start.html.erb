@@ -37,7 +37,8 @@
 <% end %>
 
 <%= turbo_frame_tag "route", data: { turbo_action: "advance" } do %>
-  <div data-controller="checklist" data-checklist-key-value="route">
+  <div data-controller="checklist" data-checklist-key-value="route"
+       data-checklist-progress-value="<%= t("research_route.progress", done: "%{done}", total: "%{total}") %>">
     <ol class="route">
       <% @route.steps.each do |step| %>
         <li class="route-step route-step--playing" data-controller="scene" data-scene-playing-class="route-step--playing" data-scene-waiting-class="route-step--waiting">
@@ -64,7 +65,7 @@
     </ol>
 
     <p class="route-progress">
-      <span data-checklist-target="count" data-template="<%= t("research_route.progress", done: "%{done}", total: "%{total}") %>" hidden></span>
+      <span data-checklist-target="count" hidden></span>
       <% if @route.answered? %>
         <%= button_to_copy_to_clipboard(guide_url(@guide, locale: I18n.locale, **@route.answers), class: "btn") do %>
           <%= icon_tag "copy-paste" %> <%= t("research_route.copy") %>
