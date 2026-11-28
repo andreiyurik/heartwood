@@ -6,6 +6,20 @@ require "test_helper"
 #
 # NOTE: requires a Chrome/Chromium + chromedriver on the host. They are NOT part of the
 # default `bin/rails test` run — execute with `bin/rails test:system`.
+# Chrome 158 answers "* is not a valid URL" to the wildcard origin Capybara 3.40 clears storage with
+# after every test. Clear the app's own origin and the cookies instead: the same things, named.
+module ClearStorageByOrigin
+  def execute_cdp(cmd, params = {})
+    return super unless cmd == "Storage.clearDataForOrigin" && params[:origin] == "*"
+
+    super("Network.clearBrowserCookies")
+    if (origin = Capybara.current_session.server&.base_url)
+      super(cmd, params.merge(origin:))
+    end
+  end
+end
+Capybara::Selenium::Driver::ChromeDriver.prepend ClearStorageByOrigin
+
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   driven_by :selenium, using: :headless_chrome, screen_size: [ 1400, 1400 ] do |options|
     # Rails eagerly pins Chrome::Service.driver_path (Browser#preload), which makes
