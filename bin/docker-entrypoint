@@ -2,8 +2,13 @@
 
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  # DEMO_OWNER: the landing's example tree is built with the database (docs/features/landing.md)
-  ./bin/rails db:prepare ${DEMO_OWNER:+demo:rurikids}
+  ./bin/rails db:prepare
+
+  # The landing's example tree (docs/features/landing.md). Without it the landing has no example
+  # link; that must never keep the server from starting.
+  if [ -n "$DEMO_OWNER" ]; then
+    ./bin/rails demo:rurikids || echo "demo:rurikids failed; starting without the example tree" >&2
+  fi
 fi
 
 exec "${@}"

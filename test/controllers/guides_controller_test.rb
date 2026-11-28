@@ -96,14 +96,6 @@ class GuidesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  private
-    def with_guides_indexed
-      Rails.configuration.x.guides.indexed = true
-      yield
-    ensure
-      Rails.configuration.x.guides.indexed = false
-    end
-
   test "the first guide is the method as a route, whole when nothing is answered" do
     assert_equal "start", Guide.all.first.slug
 
@@ -140,4 +132,12 @@ class GuidesControllerTest < ActionDispatch::IntegrationTest
     get root_url
     assert_select ".landing a[href=?]", guide_path("start", locale: I18n.locale), minimum: 1
   end
+
+  private
+    def with_guides_indexed
+      Rails.configuration.x.guides.indexed = true
+      yield
+    ensure
+      Rails.configuration.x.guides.indexed = false
+    end
 end
