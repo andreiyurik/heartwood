@@ -1,7 +1,7 @@
 require "application_system_test_case"
 
 # docs/features/guides.md "The search route"
-class ResearchRouteTest < ApplicationSystemTestCase
+class ResearchRouteGuideTest < ApplicationSystemTestCase
   test "answering makes the route the reader's own, in place, under an address that can be sent on" do
     visit guide_path("start", locale: "ru")
     assert_selector ".route-step", count: ResearchRoute.new.steps.size

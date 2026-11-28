@@ -66,7 +66,7 @@ class Person < ApplicationRecord
     end
 
     def tree_has_capacity
-      return unless tree&.at_people_limit?
+      return unless tree&.at_people_cap?
       errors.add(:base, :tree_full, limit: tree.people_limit)
     end
 end

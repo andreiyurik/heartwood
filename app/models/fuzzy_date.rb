@@ -2,6 +2,8 @@
 # See docs/domain/event.md "Dates".
 class FuzzyDate
   MONTHS = %w[JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC].freeze
+  # Russia changed calendars on 14 February 1918: the day after 31 January (docs/domain/event.md).
+  NEW_STYLE_SINCE = Date.new(1918, 2, 14)
 
   RUSSIAN_MONTHS = { /\AЯНВ/ => "JAN", /\AФЕВ/ => "FEB", /\AМАР/ => "MAR", /\AАПР/ => "APR",
                      /\AМА[ЙЯ]\z/ => "MAY", /\AИЮН/ => "JUN", /\AИЮЛ/ => "JUL", /\AАВГ/ => "AUG",
@@ -93,9 +95,6 @@ class FuzzyDate
   def initialize(kind, from, to = nil, julian: false)
     @kind, @from, @to, @julian = kind, from, to, julian
   end
-
-  # Russia changed calendars on 14 February 1918: the day after 31 January (docs/domain/event.md).
-  NEW_STYLE_SINCE = Date.new(1918, 2, 14)
 
   def julian? = @julian
   def old_style_possible? = !julian? && precision == "day" && from.start < NEW_STYLE_SINCE
