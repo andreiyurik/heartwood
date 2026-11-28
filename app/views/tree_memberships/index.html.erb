@@ -55,8 +55,9 @@
     <% end %>
   </section>
 
-  <%= cloud_slot "tree_plan", tree: Current.tree %>
 <% end %>
+
+<%= cloud_slot "tree_plan", tree: Current.tree %>
 
 <ul class="people-list">
   <% @memberships.each do |membership| %>

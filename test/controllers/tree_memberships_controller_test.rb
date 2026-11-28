@@ -117,7 +117,7 @@ class TreeMembershipsControllerTest < ActionDispatch::IntegrationTest
     assert_select "form[action=?] button.btn--negative", tree_membership_path(@membership), count: 0
   end
 
-  test "the owner sees the hosted plan slot, other members do not" do
+  test "every member sees the hosted plan slot: any of them may pay for the tree" do
     with_cloud_slots do
       post session_url, params: { email_address: @owner.email_address, password: "password" }
       get tree_memberships_url
@@ -125,7 +125,7 @@ class TreeMembershipsControllerTest < ActionDispatch::IntegrationTest
 
       post session_url, params: { email_address: @editor_user.email_address, password: "password" }
       get tree_memberships_url
-      assert_select "#cloud-plan", count: 0
+      assert_select "#cloud-plan", text: @tree.name
     end
   end
 end

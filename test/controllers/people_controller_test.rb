@@ -475,4 +475,16 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
       ActiveSupport::Notifications.subscribed(counter, "sql.active_record", &block)
       count
     end
+
+  test "a free tree past its limit, still inside the grace, gives the hosted engine a place to say so" do
+    with_cloud_slots do
+      get people_url
+      assert_select ".cloud-outgrown", count: 0
+
+      now = Time.current
+      Person.insert_all(Array.new(@tree.people_limit - @tree.people.count) { { tree_id: @tree.id, sex: "U", created_at: now, updated_at: now } })
+      get people_url
+      assert_select ".cloud-outgrown"
+    end
+  end
 end
