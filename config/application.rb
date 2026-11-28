@@ -32,6 +32,7 @@ module Heartwood
     config.x.maps = config_for(:maps)
     config.x.guides.indexed = ENV["GUIDES_INDEX"] == "on"
     config.x.landing.demo_url = ENV["DEMO_URL"].presence
+    config.x.landing.demo_owner = ENV["DEMO_OWNER"].presence
 
     config.x.backups.directory = Rails.root.join("storage/backups")
     config.x.backups.offsite   = ENV["BACKUP_BUCKET"].present?

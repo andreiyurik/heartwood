@@ -118,6 +118,7 @@
 
   @media (min-width: 60rem) {
     grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    padding-block-start: calc(var(--block-space-double) * 1.5);
 
     mark {
       white-space: nowrap;
@@ -175,7 +176,10 @@
 }
 
 .landing-demo {
+  align-items: center;
   color: inherit;
+  display: inline-flex;
+  gap: 0.5rem;
   font-size: 0.9375rem;
   font-weight: 500;
   text-decoration: underline;
@@ -187,145 +191,423 @@
   }
 }
 
-.landing-album {
+/* The hero's scene: the tree grows, a question goes to the family chat, the answer brings a
+   photograph, and it flies onto the tree. The rules outside .landing-scene--playing are the last
+   frame; see "Scenes" in docs/architecture/design-system.md. */
+.landing-scene {
+  --turn: 250ms;
+  --scene-ask: 1300ms;
+  --scene-typing: 2300ms;
+  --scene-answer: 3400ms;
+  --scene-fly: 4300ms;
+  --scene-found: 4900ms;
+
   display: grid;
-  justify-items: center;
-  padding-block: 4.5rem 3.5rem;
+  justify-self: center;
+  max-inline-size: 27rem;
+  inline-size: 100%;
+  padding-block: 6.25rem 2.75rem;
   position: relative;
 }
 
-.landing-album__card {
+.landing-scene__sheet {
   background-color: var(--color-surface);
-  color: inherit;
-  text-decoration: none;
-  transition: box-shadow var(--duration-medium) ease-out;
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
-  display: grid;
-  gap: var(--inline-space-double);
-  grid-template-columns: 9rem minmax(0, 1fr);
   margin: 0;
-  max-inline-size: 30rem;
   padding: var(--block-space);
-  rotate: -1.5deg;
+}
 
-  figcaption {
-    display: flex;
-    flex-direction: column;
-    font-size: 0.9375rem;
-    gap: 0.25rem;
-    min-inline-size: 0;
+.landing-scene__title {
+  align-items: center;
+  border-block-end: 1px solid var(--tint-ink-10);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 1rem;
+  gap: 0 0.5rem;
+  line-height: 1.3;
+  padding-block-end: 0.6rem;
+
+  .crest {
+    block-size: 1.75rem;
+    display: block;
+    inline-size: 1.75rem;
   }
 
   strong {
-    font-size: 1.125rem;
-    line-height: 1.25;
+    max-inline-size: 9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
-.landing-album__portrait {
-  aspect-ratio: 5 / 6;
+.landing-scene__count {
+  color: var(--color-muted);
+  display: grid;
+  flex-basis: 100%;
+  font-size: 0.8125rem;
+  padding-inline-start: 2.25rem;
+
+  > * {
+    grid-area: 1 / 1;
+  }
+}
+
+.landing-scene__before {
+  opacity: 0;
+}
+
+.landing-scene__canvas {
+  margin-block-start: 0.5rem;
+  position: relative;
+}
+
+.landing-scene__tree {
   block-size: auto;
-  border-radius: var(--radius-lg);
+  display: block;
   inline-size: 100%;
+
+  text {
+    fill: var(--color-text);
+    font-size: 13px;
+    font-weight: 600;
+    text-anchor: middle;
+  }
+}
+
+.landing-scene__line {
+  fill: none;
+  stroke: var(--tint-ink-25);
+  stroke-dasharray: 1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.landing-scene__ghost {
+  fill: none;
+  stroke: var(--tint-ink-25);
+  stroke-dasharray: 3 4;
+  stroke-width: 1.5;
+}
+
+.landing-scene__line--found {
+  stroke: var(--color-accent);
+}
+
+.landing-scene__slot {
+  opacity: 0;
+
+  .landing-scene__initial {
+    fill: var(--color-muted);
+  }
+}
+
+.landing-scene__ripple {
+  fill: none;
+  opacity: 0;
+  stroke: var(--color-highlight-border);
+  stroke-width: 3;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.landing-scene__person {
+  transform-box: fill-box;
+  transform-origin: center;
+
+  circle {
+    fill: oklch(var(--lch-avatar-tone) var(--avatar-hue));
+  }
+
+  .landing-scene__initial {
+    fill: var(--color-always-white);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .landing-scene__kin {
+    fill: var(--color-muted);
+    font-size: 11px;
+    font-weight: 400;
+  }
+}
+
+.landing-scene__person--you circle {
+  fill: var(--color-accent);
+}
+
+.landing-scene__person--you .landing-scene__initial {
+  fill: var(--color-text-reversed);
+}
+
+.landing-scene__fresh {
+  fill: var(--color-highlight);
+}
+
+/* The found person's face, over her place on the tree: (100, 40) and r=26 of the viewBox. */
+.landing-scene__flight {
+  aspect-ratio: 1;
+  block-size: auto;
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+  inline-size: 15.5%;
+  inset-block-start: 8.16%;
+  inset-inline-start: 15.48%;
+  object-fit: cover;
+  position: absolute;
+  translate: -50% -50%;
+  z-index: 2;
+}
+
+.landing-scene__ask,
+.landing-scene__reply {
+  position: absolute;
+  z-index: 1;
+}
+
+.landing-scene__ask {
+  display: grid;
+  gap: 0.2rem;
+  inset-block-start: 0;
+  inset-inline-end: -1rem;
+  justify-items: end;
+}
+
+.landing-scene__caption {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding-inline-end: 0.5rem;
+}
+
+/* Its right edge stops short of "you", so it covers only the tree's empty corner at any width. */
+.landing-scene__reply {
+  align-items: flex-end;
+  display: flex;
+  gap: 0.4rem;
+  inset-block-end: 0.75rem;
+  inset-inline-end: 50%;
+  inline-size: max-content;
+}
+
+.landing-scene__replay {
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  position: absolute;
+}
+
+/* A message the way a messenger draws it; no particular messenger's colours. */
+.chat-bubble {
+  background-color: var(--color-surface);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-md);
+  display: grid;
+  font-size: 0.875rem;
+  gap: 0.3rem;
+  line-height: 1.35;
+  max-inline-size: 14.5rem;
+  padding: 0.55rem 0.8rem;
+
+  p {
+    margin: 0;
+  }
+}
+
+.chat-bubble--out {
+  background-color: var(--color-selected);
+  border-end-end-radius: var(--radius-sm);
+}
+
+.chat-bubble--in {
+  border-end-start-radius: var(--radius-sm);
+  box-shadow: 0 0 0 1px var(--tint-ink-10), var(--shadow-lg);
+  gap: 0;
+  max-inline-size: 16.5rem;
+}
+
+.chat-bubble__link {
+  align-items: center;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  color: var(--color-link);
+  display: flex;
+  font-weight: 600;
+  gap: 0.4rem;
+  padding: 0.35rem 0.6rem;
+}
+
+.chat-bubble__meta {
+  align-items: center;
+  color: var(--color-muted);
+  display: inline-flex;
+  font-size: 0.6875rem;
+  justify-self: end;
+
+  .icon {
+    --icon-size: 0.7rem;
+
+    color: var(--color-accent);
+    margin-inline-start: 0.2rem;
+  }
+
+  .icon + .icon {
+    margin-inline-start: -0.4rem;
+  }
+}
+
+.chat-bubble__name {
+  color: var(--color-link);
+}
+
+.chat-bubble__via {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+.chat-bubble__body {
+  align-items: center;
+  display: flex;
+  gap: 0.7rem;
+  margin-block: 0.4rem 0.1rem;
+}
+
+.chat-bubble__photo {
+  block-size: 4.5rem;
+  border-radius: var(--radius-lg);
+  flex: none;
+  inline-size: 4.5rem;
   object-fit: cover;
 }
 
-.landing-album__dates {
-  color: var(--color-muted);
-}
-
-.landing-album__bio {
-  line-height: 1.45;
-  margin-block-start: 0.25rem;
-}
-
-/* The fact the answer brought, marked the way the app marks a fresh change */
-.landing-album__answered {
-  background-color: var(--color-highlight);
-  border-radius: var(--radius-md);
-  margin: -0.2rem -0.4rem;
-  padding: 0.2rem 0.4rem;
-}
-
-.landing-album__parents {
-  border-block-start: 1px solid var(--tint-ink-10);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem var(--inline-space-double);
-  margin-block-start: auto;
-  padding-block-start: 0.6rem;
-
-  > span {
-    align-items: center;
-    display: flex;
-    font-size: 0.8125rem;
-    gap: 0.5rem;
-    line-height: 1.25;
-  }
-
-  small {
-    color: var(--color-muted);
-    display: block;
-  }
-
-  .avatar {
-    --avatar-size: var(--component-sm);
-
-    object-fit: cover;
-    object-position: top;
-  }
-}
-
-a.landing-album__card:hover {
-  box-shadow: var(--shadow-xl);
-  text-decoration: none;
-}
-
-.landing-album__note {
+.chat-bubble--typing {
   align-items: center;
-  background-color: var(--color-surface);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
+  color: var(--color-muted);
   display: flex;
-  font-size: 0.875rem;
-  gap: 0.6rem;
-  line-height: 1.35;
-  max-inline-size: 17rem;
-  padding: 0.6rem 0.85rem;
+  font-size: 0.75rem;
+  gap: 0.2rem;
+  inset-block-end: 0;
+  inset-inline-start: calc(var(--component-sm) + 0.4rem);
+  opacity: 0;
   position: absolute;
+  white-space: nowrap;
 
-  .avatar {
-    --avatar-size: var(--component-sm);
+  i {
+    background-color: currentColor;
+    block-size: 0.3rem;
+    border-radius: 50%;
+    inline-size: 0.3rem;
   }
 }
 
-.landing-album__note--ask {
-  inset-block-start: 0;
-  inset-inline-end: 0;
-  rotate: 2deg;
+/* Between a phone and a wide laptop the text column is close: the answer takes less room. */
+@media (min-width: 40rem) and (max-width: 72rem) {
+  .chat-bubble--in {
+    max-inline-size: 13.5rem;
+  }
+
+  .chat-bubble__photo {
+    block-size: 3.5rem;
+    inline-size: 3.5rem;
+  }
 }
 
-.landing-album__note--answer {
-  inset-block-end: -0.5rem;
-  inset-inline-start: 0;
-  rotate: -1deg;
+.landing-scene--playing {
+  .landing-scene__person {
+    animation: pop-open var(--duration-slow) var(--ease-out-overshoot) calc(var(--i) * var(--turn)) backwards;
+  }
+
+  .landing-scene__line {
+    animation: draw-line var(--duration-slow) ease-out calc(var(--i) * var(--turn) + var(--duration-medium)) backwards;
+  }
+
+  .landing-scene__ghosts {
+    animation: appear var(--duration-slow) ease-out calc(3 * var(--turn)) backwards;
+  }
+
+  .landing-scene__ask {
+    animation: fade-in-up var(--duration-slow) var(--ease-out-expo) var(--scene-ask) backwards;
+  }
+
+  .chat-bubble--typing {
+    animation: appear-then-fade calc(var(--scene-answer) - var(--scene-typing)) linear var(--scene-typing);
+
+    i {
+      animation: typing-dot 500ms ease-in-out var(--scene-typing) 2;
+    }
+
+    i:nth-of-type(2) {
+      animation-delay: calc(var(--scene-typing) + 120ms);
+    }
+
+    i:nth-of-type(3) {
+      animation-delay: calc(var(--scene-typing) + 240ms);
+    }
+  }
+
+  .landing-scene__reply .avatar {
+    animation: appear var(--duration-slow) ease-out var(--scene-typing) backwards;
+  }
+
+  .chat-bubble--in {
+    animation: fade-in-up var(--duration-slow) var(--ease-out-expo) var(--scene-answer) backwards;
+  }
+
+  .landing-scene__flight {
+    animation: fly-in 600ms var(--ease-out-expo) var(--scene-fly) backwards;
+  }
+
+  .landing-scene__slot,
+  .landing-scene__before {
+    animation: disappear var(--duration-medium) ease-out var(--scene-found) backwards;
+  }
+
+  .landing-scene__after {
+    animation: appear var(--duration-medium) ease-out var(--scene-found) backwards;
+  }
+
+  .landing-scene__line--found {
+    animation: draw-line var(--duration-slow) ease-out calc(var(--scene-found) - var(--duration-medium)) backwards;
+  }
+
+  .landing-scene__person--found {
+    animation: pop-open var(--duration-slow) var(--ease-out-overshoot) var(--scene-found) backwards;
+  }
+
+  .landing-scene__ripple {
+    animation: ripple var(--duration-slow) ease-out var(--scene-found);
+  }
+
+  .landing-scene__replay {
+    animation: appear var(--duration-slow) ease-out calc(var(--scene-found) + 600ms) backwards;
+  }
+}
+
+.landing-scene--waiting * {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-scene * {
+    animation-delay: 0s !important;
+  }
 }
 
 @media (max-width: 40rem) {
-  .landing-album {
+  .landing-scene {
     gap: var(--block-space-half);
-    padding-block: 0;
+    padding-block: 0 3rem;
   }
 
-  .landing-album__card {
-    grid-template-columns: 6.5rem minmax(0, 1fr);
-    rotate: none;
+  .landing-scene__ask,
+  .landing-scene__reply {
+    position: relative;
+    inset: auto;
   }
 
-  .landing-album__note {
-    position: static;
-    rotate: none;
+  .landing-scene__ask {
+    justify-self: end;
   }
 }
 
@@ -432,10 +714,6 @@ a.landing-album__card:hover {
   box-shadow: var(--shadow-lg);
   max-inline-size: 56rem;
   overflow: hidden;
-
-  picture {
-    display: block;
-  }
 
   img {
     aspect-ratio: 3 / 2;
@@ -655,6 +933,14 @@ a.landing-album__card:hover {
   --btn-background: var(--color-surface);
   --btn-color: var(--color-accent);
   --btn-border-color: transparent;
+}
+
+.landing-final__route {
+  color: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 .landing-footer {

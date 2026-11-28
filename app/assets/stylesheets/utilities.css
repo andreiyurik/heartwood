@@ -149,21 +149,28 @@
 /* Shadows */
 .shadow {
   box-shadow:
-    0 0 0 1px oklch(var(--lch-always-black) / 0.02),
-    0 .2em 1.6em -0.8em oklch(var(--lch-always-black) / 0.2),
-    0 .4em 2.4em -1em oklch(var(--lch-always-black) / 0.3),
-    0 .4em .8em -1.2em oklch(var(--lch-always-black) / 0.4),
-    0 .8em 1.2em -1.6em oklch(var(--lch-always-black) / 0.5),
-    0 1.2em 1.6em -2em oklch(var(--lch-always-black) / 0.6);
+    0 0 0 1px oklch(var(--lch-always-black) / calc(0.02 + var(--shadow-boost))),
+    0 .2em 1.6em -0.8em oklch(var(--lch-always-black) / calc(0.2 + var(--shadow-boost))),
+    0 .4em 2.4em -1em oklch(var(--lch-always-black) / calc(0.3 + var(--shadow-boost))),
+    0 .4em .8em -1.2em oklch(var(--lch-always-black) / calc(0.4 + var(--shadow-boost))),
+    0 .8em 1.2em -1.6em oklch(var(--lch-always-black) / calc(0.5 + var(--shadow-boost))),
+    0 1.2em 1.6em -2em oklch(var(--lch-always-black) / calc(0.6 + var(--shadow-boost)));
+}
 
-  @media (prefers-color-scheme: dark) {
-    box-shadow:
-      0 0 0 1px oklch(var(--lch-always-black) / 0.42),
-      0 .2em 1.6em -0.8em oklch(var(--lch-always-black) / 0.6),
-      0 .4em 2.4em -1em oklch(var(--lch-always-black) / 0.7),
-      0 .4em .8em -1.2em oklch(var(--lch-always-black) / 0.8),
-      0 .8em 1.2em -1.6em oklch(var(--lch-always-black) / 0.9),
-      0 1.2em 1.6em -2em oklch(var(--lch-always-black) / 1);
+:root[data-theme="dark"] .only-light,
+:root[data-theme="light"] .only-dark {
+  display: none;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .only-dark {
+    display: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .only-light {
+    display: none;
   }
 }
 

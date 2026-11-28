@@ -121,8 +121,31 @@ is pure white. Dark mode: body `hsl(202 42% 7.5%)`, sheet `hsl(200 28% 14.7%)` �
 | `modal-appear` (0.85 → 1.02 → 1) | the tree drawer / dialogs |
 | `shake-it` (±0.15em, 400ms) | invalid sign-in / form |
 | `pulse` | skeleton while an import runs |
+| `fly-in` (600ms) / `typing-dot` (twice) | scene steps: the one travelling thing; someone is typing |
+| `appear` / `disappear` / `drop-in` / `draw-line` | scene steps: something arrives, gives way, lands from above, a branch is drawn (`pathLength="1"`) |
 
 All honour `prefers-reduced-motion: reduce` (durations collapse to 1ms).
+
+**Scenes** (the landing hero, the steps of the flagship guide — [[landing]], [[guides]]) are the one
+place where several of these run in a row. A scene tells what the product does, in order; it is
+built from the same keyframes, each step ≤300ms, and:
+- it plays **once**, when it scrolls into view (`scene` controller), and never loops; a small
+  "play again" button replays it;
+- one thing may **travel** between two places in it (`fly-in`, 600ms — the only step longer
+  than 300ms): the controller measures the way from its `from` target to its `to` target and
+  hands it to CSS as `--fly-x` / `--fly-y`; without JS the thing simply appears in place;
+- its resting state is the last frame, so no JS, a cached page or reduced motion all show the
+  whole story at once (delays collapse too);
+- it is inline SVG + CSS, coloured by tokens only — no animation library, no video, no canvas.
+
+### Theme
+The app follows the system colour scheme. One button (`theme` controller: the header for guests,
+the account menu for members) flips what is on screen and keeps the choice in the `theme` cookie,
+which the layout reads into `<html data-theme>` so the first paint is already right. Choosing what
+the system would have shown anyway clears the cookie: the page follows the system again.
+Dark values live once, in `colors.css`, under both `prefers-color-scheme: dark` (unless
+`data-theme="light"`) and `data-theme="dark"`. Anything else that differs by scheme uses
+`.only-light` / `.only-dark`, never its own media query.
 
 ## 5. Honest recommendations — where Heartwood still falls short of the bar
 

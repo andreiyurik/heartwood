@@ -32,6 +32,10 @@ link and the view link: it can't give membership, and it opens nothing but this 
 - **We don't send the question by email to an address the asker types.** That would make our
   server mail strangers (spam reputation, and an outsider's email collected without their consent
   under 152-ФЗ). The asker's own mail app, through Share, does it better.
+- **After answering, the guest is offered a tree of their own** — one quiet line under the thanks
+  ("Your side of the family has a story too"), leading to sign-up. Everyone who marries into a
+  family brings another one; this is how a tree reaches the next family. Shown only once they
+  have answered, never before, and never to someone who already has an account.
 - Members see open questions on the person's profile, in one list (`/questions`, in the account
   menu) and in the weekly [[digest]].
 - The link carries a preview card (the tree's card with its crest) so it looks trustworthy in a

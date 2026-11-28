@@ -9,6 +9,7 @@ class GuidesController < ApplicationController
 
   def show
     @guide = Guide.find(params[:slug])
+    @route = ResearchRoute.new(**params.permit(:era, :fate, :region).to_h.symbolize_keys)
   end
 
   private

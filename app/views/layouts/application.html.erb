@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<%= I18n.locale %>">
+<%= tag.html lang: I18n.locale, data: { theme: chosen_theme } do %>
   <head>
     <title><%= content_for(:title) || brand_name %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -20,8 +20,12 @@
     <%= yield :head %>
 
     <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-    <meta name="theme-color" content="#fcf5e9" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0f181d" media="(prefers-color-scheme: dark)">
+    <% if chosen_theme %>
+      <meta name="theme-color" content="<%= chosen_theme == "dark" ? "#0f181d" : "#fcf5e9" %>">
+    <% else %>
+      <meta name="theme-color" content="#fcf5e9" media="(prefers-color-scheme: light)">
+      <meta name="theme-color" content="#0f181d" media="(prefers-color-scheme: dark)">
+    <% end %>
 
     <link rel="icon" href="/icon.png" type="image/png" sizes="any">
     <% if Current.tree %>
@@ -69,4 +73,4 @@
 
     <%= render "layouts/lightbox" %>
   </body>
-</html>
+<% end %>

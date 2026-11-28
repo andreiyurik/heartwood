@@ -1,5 +1,5 @@
 class Guide < Data.define(:slug)
-  SLUGS = %w[military metric-books repressions archive-request ai-research].freeze
+  SLUGS = %w[start military metric-books repressions archive-request ai-research].freeze
   SKILL_URL = "https://github.com/DenisSergeevitch/ex-ussr-kinship-research"
 
   def self.all = SLUGS.map { new(it) }

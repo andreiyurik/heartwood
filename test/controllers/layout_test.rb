@@ -15,6 +15,29 @@ class LayoutTest < ActionDispatch::IntegrationTest
     assert_select "html[lang=ru]"
   end
 
+  test "follows the system colour scheme until a theme is chosen" do
+    get people_url
+    assert_select "html[data-theme]", count: 0
+    assert_select "meta[name=theme-color]", 2
+
+    cookies[:theme] = "dark"
+    get people_url
+    assert_select "html[data-theme=dark]"
+    assert_select "meta[name=theme-color]:not([media])", 1
+
+    cookies[:theme] = "sepia"
+    get people_url
+    assert_select "html[data-theme]", count: 0
+  end
+
+  test "the account menu flips the theme" do
+    get people_url
+    assert_select ".account-menu button.action-sheet__action[data-controller=theme][data-action='theme#toggle']" do
+      assert_select ".only-light", text: I18n.t("theme.dark")
+      assert_select ".only-dark", text: I18n.t("theme.light")
+    end
+  end
+
   test "offers a skip link to the main content" do
     get people_url
     assert_select "a.skip-navigation[href='#main']", text: I18n.t("nav.skip_to_content")

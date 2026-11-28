@@ -307,7 +307,8 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     get new_person_url
     assert_select "form.form > .field input[name='person[given_names]']"
     assert_select "form.form > .field input[name='person[surname]']"
-    assert_select "form.form > .field select[name='person[sex]']"
+    assert_select "form.form > fieldset.field label.choice input[type=radio][name='person[sex]']", Person::SEXES.size
+    assert_select "form.form > fieldset.field legend", Person.human_attribute_name(:sex)
     assert_select "form.form details.more-fields" do
       assert_select "input[name='person[name_prefix]']"
       assert_select "input[name='person[name_suffix]']"
@@ -394,6 +395,9 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
   test "the form asks for what a relative knows: names, surname at birth, born, died" do
     get new_person_url
     %w[given_names surname birth_surname born died].each { assert_select "form input[name='person[#{it}]']" }
+    assert_select "form .field[data-controller=date-reading] input[name='person[born]'][data-action='input->date-reading#read']"
+    assert_select "form .field[data-controller=date-reading] turbo-frame#person_born_reading"
+    assert_select "form .field:has(input[name='person[born]']) + .field input[name='person[died]']"
     assert_select "form input[type=checkbox][name='person[unnamed]']"
   end
 

@@ -31,7 +31,7 @@ class TreeGhostsTest < ApplicationSystemTestCase
     within ".tree-drawer" do
       fill_in "person[given_names]", with: "Greta"
       fill_in "person[surname]",     with: "Parent"
-      select I18n.t("people.sex.F"), from: "person[sex]"
+      find("label.choice", text: I18n.t("people.sex.F"), exact_text: true).click
       click_on I18n.t("people.add")
     end
 

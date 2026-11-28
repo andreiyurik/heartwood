@@ -1,0 +1,75 @@
+<%= form_with url: guide_path(@guide, locale: I18n.locale), method: :get, class: "route-form",
+      data: { turbo_frame: "route", controller: "auto-submit", action: "change->auto-submit#submit" } do %>
+  <h2><%= t("research_route.form.title") %></h2>
+  <p class="muted"><%= t("research_route.form.lede") %></p>
+
+  <fieldset>
+    <legend><%= t("research_route.form.era") %></legend>
+    <div class="choices">
+      <% [ nil, *ResearchRoute::ERAS ].each do |era| %>
+        <label class="choice">
+          <%= radio_button_tag :era, era, @route.era == era, class: "for-screen-reader" %>
+          <span><%= t("research_route.eras.#{era || "any"}") %></span>
+        </label>
+      <% end %>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend><%= t("research_route.form.fate") %></legend>
+    <div class="choices">
+      <% ResearchRoute::FATES.each do |fate| %>
+        <label class="choice">
+          <%= radio_button_tag :fate, fate, @route.fate == fate, class: "for-screen-reader" %>
+          <span><%= t("research_route.fates.#{fate}") %></span>
+        </label>
+      <% end %>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend><%= label_tag :region, t("research_route.form.region") %></legend>
+    <%= select_tag :region, options_for_select(ResearchRoute::REGIONS.map { [ t("research_sites.regions.#{it}"), it ] }, @route.region),
+          include_blank: t("research_route.form.any_region"), class: "input" %>
+  </fieldset>
+
+  <noscript><%= button_tag t("research_route.form.show"), name: nil, class: "btn btn--primary" %></noscript>
+<% end %>
+
+<%= turbo_frame_tag "route", data: { turbo_action: "advance" } do %>
+  <div data-controller="checklist" data-checklist-key-value="route">
+    <ol class="route">
+      <% @route.steps.each do |step| %>
+        <li class="route-step route-step--playing" data-controller="scene" data-scene-playing-class="route-step--playing" data-scene-waiting-class="route-step--waiting">
+          <%= render "guides/route_art", art: step.art %>
+          <div class="route-step__body">
+            <h2><%= step.title %></h2>
+            <p><%= step.text %></p>
+            <% if step.key == "ask" %>
+              <p><%= link_to t("research_route.ask_family"), authenticated? ? questions_path : new_registration_path, class: "btn btn--primary" %></p>
+            <% end %>
+            <% if step.guide %>
+              <p><%= link_to t("research_route.more", guide: step.guide.title), guide_path(step.guide, locale: I18n.locale), data: { turbo_frame: "_top" } %></p>
+            <% end %>
+            <% if step.sites.any? %>
+              <ul class="site-list"><%= render partial: "guides/site", collection: step.sites %></ul>
+            <% end %>
+            <label class="route-step__done">
+              <%= check_box_tag nil, step.key, false, id: nil, data: { checklist_target: "item", action: "checklist#save" } %>
+              <%= t("research_route.done") %>
+            </label>
+          </div>
+        </li>
+      <% end %>
+    </ol>
+
+    <p class="route-progress">
+      <span data-checklist-target="count" data-template="<%= t("research_route.progress", done: "%{done}", total: "%{total}") %>" hidden></span>
+      <% if @route.answered? %>
+        <%= button_to_copy_to_clipboard(guide_url(@guide, locale: I18n.locale, **@route.answers), class: "btn") do %>
+          <%= icon_tag "copy-paste" %> <%= t("research_route.copy") %>
+        <% end %>
+      <% end %>
+    </p>
+  </div>
+<% end %>

@@ -4,15 +4,19 @@ import { Controller } from "@hotwired/stimulus"
 const LEADING_WORDS = /^(род|семья|древо|family|the)\s+/i
 
 export default class extends Controller {
-  static targets = [ "crest", "name" ]
+  static targets = [ "crest", "name", "title" ]
 
   draw() {
     const name = this.nameTarget.value
-    const svg = this.crestTarget.querySelector("svg")
-    const letter = svg.querySelector("text")
 
-    if (letter) letter.textContent = (name.replace(LEADING_WORDS, "")[0] || "").toUpperCase()
-    svg.style.setProperty("--avatar-hue", crc32(name) % 360)
+    for (const crest of this.crestTargets) {
+      const svg = crest.querySelector("svg")
+      const letter = svg.querySelector("text")
+
+      if (letter) letter.textContent = (name.replace(LEADING_WORDS, "")[0] || "").toUpperCase()
+      svg.style.setProperty("--avatar-hue", crc32(name) % 360)
+    }
+    for (const title of this.titleTargets) title.textContent = name.trim() || title.dataset.placeholder
   }
 }
 

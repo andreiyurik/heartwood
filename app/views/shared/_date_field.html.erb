@@ -1,0 +1,7 @@
+<%# locals: f, attribute, placeholder, optional label. docs/domain/event.md "Typing a date" %>
+<div class="field" data-controller="date-reading" data-date-reading-url-value="<%= date_reading_path %>">
+  <%= f.label attribute, local_assigns[:label] %>
+  <%= f.text_field attribute, class: "input", placeholder: placeholder, autocomplete: "off",
+        data: { date_reading_target: "input", action: "input->date-reading#read" } %>
+  <%= turbo_frame_tag "#{f.field_id(attribute)}_reading", data: { date_reading_target: "frame" } %>
+</div>

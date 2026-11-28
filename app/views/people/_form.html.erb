@@ -2,13 +2,10 @@
   <%= render "shared/errors", record: person if person.errors.any? %>
 
   <%= render "people/name_fields", f: f %>
+  <%= render "shared/date_field", f: f, attribute: :died, placeholder: t("people.form.died_placeholder") %>
   <div class="field">
     <%= f.label :birth_surname %>
     <%= f.text_field :birth_surname, class: "input", placeholder: t("people.form.birth_surname_placeholder") %>
-  </div>
-  <div class="field">
-    <%= f.label :died %>
-    <%= f.text_field :died, class: "input", placeholder: t("people.form.died_placeholder") %>
   </div>
 
   <details class="more-fields" <%= "open" if person.more_fields_filled? || person.errors.any? %>>

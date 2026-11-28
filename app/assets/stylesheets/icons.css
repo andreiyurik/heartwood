@@ -38,3 +38,5 @@
 .icon--heart { --svg: url("heart.svg"); }
 .icon--help-circle { --svg: url("help-circle.svg"); }
 .icon--messages { --svg: url("messages.svg"); }
+.icon--sun { --svg: url("sun.svg"); }
+.icon--moon { --svg: url("moon.svg"); }

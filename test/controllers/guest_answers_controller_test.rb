@@ -29,6 +29,20 @@ class GuestAnswersControllerTest < ActionDispatch::IntegrationTest
 
     follow_redirect!
     assert_select ".answered", text: /#{I18n.t("guest_answers.thanks")}/
+    assert_select ".answered a[href=?]", new_registration_path, text: I18n.t("guest_answers.own_tree")
+  end
+
+  test "a tree of their own is offered only after answering, and not to someone who already has one" do
+    question = @deceased.questions.create!(asker: @asker, body: "What was her mother's name?")
+
+    get question_link_url(question.token)
+    assert_select "a[href=?]", new_registration_path, count: 0
+
+    sign_in_as users(:two)
+    post question_link_url(question.token), params: { answer: { body: "Anna Petrovna" } }
+    follow_redirect!
+    assert_select ".answered"
+    assert_select ".answered a[href=?]", new_registration_path, count: 0
   end
 
   test "a living person stays out of the page; only the question's words are there" do

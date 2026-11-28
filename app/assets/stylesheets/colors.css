@@ -81,8 +81,12 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-overshoot: cubic-bezier(0.25, 1.25, 0.5, 1);
 
-  /* Redefine named color values for dark mode */
-  @media (prefers-color-scheme: dark) {
+  --shadow-boost: 0;
+}
+
+/* The dark values, by system setting and by choice (the theme button). Keep the two blocks identical. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
     --lch-black: 93% 0.006 230;
     --lch-white: 15% 0.015 235;
     --lch-paper: 22% 0.016 230;
@@ -97,11 +101,42 @@
     --lch-red-light: 28% 0.04 30;
     --lch-yellow: 45% 0.09 75;
     --lch-yellow-light: 27% 0.04 75;
-    --lch-cream: 19% 0.016 70;
+    --lch-cream: 19% 0.016 230;
     --lch-blue: 58% 0.07 229.68;
     --lch-pink: 58% 0.09 343.07;
     --lch-avatar-tone: 62% 0.1;
 
     --shadow-xl: 0 0 3rem oklch(var(--lch-always-black) / 0.4);
+    --shadow-boost: 0.4;
+    color-scheme: dark;
   }
+}
+
+:root[data-theme="dark"] {
+  --lch-black: 93% 0.006 230;
+  --lch-white: 15% 0.015 235;
+  --lch-paper: 22% 0.016 230;
+  --lch-gray: 27% 0.012 230;
+  --lch-gray-dark: 32% 0.012 230;
+  --lch-gray-darker: 48% 0.012 230;
+  --lch-taupe: 70% 0.012 230;
+  --lch-green: 70% 0.09 137.63;
+  --lch-green-dark: 78% 0.08 138.12;
+  --lch-green-light: 30% 0.03 135;
+  --lch-red: 70% 0.14 30;
+  --lch-red-light: 28% 0.04 30;
+  --lch-yellow: 45% 0.09 75;
+  --lch-yellow-light: 27% 0.04 75;
+  --lch-cream: 19% 0.016 230;
+  --lch-blue: 58% 0.07 229.68;
+  --lch-pink: 58% 0.09 343.07;
+  --lch-avatar-tone: 62% 0.1;
+
+  --shadow-xl: 0 0 3rem oklch(var(--lch-always-black) / 0.4);
+  --shadow-boost: 0.4;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
 }

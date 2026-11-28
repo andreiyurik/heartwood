@@ -63,6 +63,7 @@ partials; the Engine ships them. Current slots:
 | `legal_links` | landing footer, after the terms | — |
 | `privacy_processors` | privacy policy, after the list of processors | — |
 | `landing_letter` | landing, after the features — the maker's signed letter (`render "landing/letter"`) | — |
+| `landing_support` | landing, after the maker's letter — the hosted service's "the project is open; you can support it" band with the operator's own donation link ([[landing]]). A self-hosted install shows nothing. | — |
 | `landing_analytics` | end of the landing page — the only page analytics may run on | — |
 | `thanks` | account menu, the import result, under the people list — where the hosted service may say "you can thank the maker" ([[ux-audit-2026-11-10]] §4). A self-hosted install shows nothing and never carries the operator's donation link. | `place` (`menu`, `import`, `milestone`) |
 

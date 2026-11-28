@@ -94,7 +94,11 @@ class FuzzyDate
     @kind, @from, @to, @julian = kind, from, to, julian
   end
 
+  # Russia changed calendars on 14 February 1918: the day after 31 January (docs/domain/event.md).
+  NEW_STYLE_SINCE = Date.new(1918, 2, 14)
+
   def julian? = @julian
+  def old_style_possible? = !julian? && precision == "day" && from.start < NEW_STYLE_SINCE
 
   def precision
     case kind

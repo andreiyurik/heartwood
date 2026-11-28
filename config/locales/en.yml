@@ -85,6 +85,11 @@ en:
     ru: RU
     switcher: Language
 
+  theme:
+    toggle: Light or dark theme
+    light: Light theme
+    dark: Dark theme
+
   helpers:
     submit:
       person:
@@ -372,6 +377,12 @@ en:
     failed: We couldn't build the archive. Please try again, and write to us if it keeps failing.
     retry: Build it again
 
+  date_readings:
+    new_style: "%{date} New Style"
+    old_style: This date is Old Style
+    old_style_suffix: "O.S."
+    as_written: Kept as written. For the date to take its place in the timeline, write it like this — 12.03.1901, March 1901, about 1900, before 1917.
+
   fuzzy_dates:
     julian: "%{date} (Old Style)"
     about: "abt. %{date}"
@@ -577,6 +588,9 @@ en:
     index:
       title: Where to look for your ancestors
       description: Short guides to the archives and databases of the former USSR — for ancestors who fought in a war, were repressed or were baptised before 1918 — and how to write to an archive.
+    start:
+      title: "Where to start looking for your ancestors: a route, step by step"
+      description: How to build a family tree — ask the family, gather the papers, work out which archive holds the record, and find it. Answer three questions and get a route for your own family.
     military:
       title: How to find an ancestor who fought in the war
       description: The Second and the First World War — where to find service cards, awards and loss reports. Pamyat Naroda, OBD Memorial, Podvig Naroda, Heroes of the Great War.
@@ -601,6 +615,65 @@ en:
       lede: Add the person, attach the source and note where the original is kept. Send the family a link — everyone adds what they remember, and nothing gets lost in a chat.
       start: Start for free
       open_tree: Open the tree
+  research_route:
+    form:
+      title: Your route
+      lede: Answer three questions about the person you are looking for and see the steps for their time and fate. No names asked.
+      era: Which time
+      fate: What is known
+      region: Where
+      any_region: Another region, or not sure
+      show: Show the route
+    eras:
+      any: Any
+      empire: Before 1918
+      soviet: 1918–1945
+      later: After 1945
+    fates:
+      war: War
+      repressed: Repression or exile
+      labour: Captivity or forced labour in Germany
+      unknown: Nothing is known
+    ask_family: Ask the family by link
+    more: "In detail: %{guide}"
+    done: Done
+    progress: "Steps done: %{done} of %{total}"
+    copy: Copy the link to this route
+    steps:
+      ask:
+        title: Ask the family
+        text: Start with those who remember. Ask them simply to tell the story first, and only then ask further — “what do you remember yourself, and what did you hear from others?”, “is there a letter about it, or a note on a photograph?”. Don't suggest names or dates; people readily agree with your version. Write down who told you, and when.
+      papers:
+        title: Gather the papers at home
+        text: Birth, marriage and death certificates, a military service book, a work record book, letters, notes on the backs of photographs. From each you need three things — the full name, a date and a place. Photograph the document; it becomes the first source in the tree.
+      place:
+        title: Find out what the place was then
+        text: A record is kept where it was made. Work out which governorate, district, volost and parish — or which raion and village council — the village belonged to in the year of the event. Borders and names changed, and villages of the same name turn up in neighbouring districts. Today's map only tells you which archive it all ended up in.
+      metric_books:
+        title: Find the entry in the parish register
+        text: Before 1918, births, marriages and deaths were recorded by the church, synagogue or mosque. The books are kept in the regional archive, and many are scanned. A birth entry names the parents and godparents; a marriage entry gives ages and where each came from. That is the thread to the generation before.
+      ww1:
+        title: Check the First World War records
+        text: For the soldiers of 1914–1918 there are casualty cards, hospital lists and award lists. A card gives the governorate, district, volost and village — which lead you to the parish register.
+      ww2:
+        title: Find the military records
+        text: Those who fought in 1941–1945 left service cards, award citations and casualty reports. Open the document itself, not just the index card — a casualty report may give the place of conscription, the family's address and the name of a wife or mother. That is what tells your ancestor from a namesake.
+      repressions:
+        title: Check the databases of the repressed
+        text: People who were arrested, dispossessed or exiled are looked for in memorial books and combined databases. A database entry is only a pointer; it says where the case file is kept. Relatives have the right to request it and to receive a certificate of rehabilitation.
+      labour:
+        title: Check the records of captivity and forced labour
+        text: Prisoners of war and forced labourers left registration cards and camp documents. Those who returned were screened, and those filtration files are kept in regional archives — you ask for them in writing.
+      names:
+        title: Search under other spellings
+        text: Clerks made mistakes, and names changed form — Paraskeva and Praskovya, Ivanov and Ivanenko, no patronymic, a birth year a year or two off. Write the name down as the document has it, and try the variants separately. Dates before February 1918 are Old Style — 12 days behind in the 19th century, 13 in the 20th.
+      request:
+        title: Write to where the record is kept
+        archive: What isn't online is in the archive. Write to the archive of the region where the record was made — who you are looking for, what the event was, the year or range of years, the place and the parish. One question per letter gets answered sooner.
+        zags: Records after 1918 are kept by the civil registry (ZAGS). A duplicate certificate or an extract is issued to relatives who can prove the relationship. You can apply through Gosuslugi or by letter to the registry office where the event took place; records over a hundred years old are passed to the archive.
+      keep:
+        title: Write the find down with its source
+        text: Write down where it was found — archive, fond, opis, file, sheet, or a link — and what it says, word for word. Note how well it is proven — a guess, one document, or several independent ones. A matching name is not yet kinship.
   research_sites:
     tiers:
       official: archive or state database
@@ -715,18 +788,26 @@ en:
       sign_in: Sign in
       note: "Free up to %{limit} people. No card, no ads."
       image_alt: A family tree in %{app}
-    album:
-      person: Yaroslav the Wise
-      dates: c. 978 — 1054
-      bio: Grand Prince of Kiev, Rurik's great-great-grandson. Under him the Russkaya Pravda was written down and St Sophia's in Kiev was built.
-      mother: Mother
-      father: Father
-      mother_name: Rogneda of Polotsk
-      father_name: Vladimir Sviatoslavich
-      ask: You asked by link
-      ask_note: "“What was Yaroslav's mother called?”"
-      answer: Anna Yaroslavna
-      answer_note: "answered, no sign-up: “Rogneda of Polotsk”"
+    scene:
+      family: Your family
+      tree: "A family tree: you, mum and dad, Grandma Anna, Grandpa Nikolai and great-grandmother Praskovya, whom Aunt Vera helped to find"
+      before: 5 people · 3 generations
+      after: 6 people · 4 generations
+      chat: Family chat
+      ask_text: "What was Grandma Anna's mother called?"
+      ask_link: Answer by link
+      typing: "%{name} is typing"
+      answer: Aunt Vera
+      answer_via: by link, no sign-up
+      answer_text: Praskovya Ilyinichna, from near Vyatka. Found her photo!
+      replay: Play again
+      people:
+        you: { name: You, kin: "" }
+        mother: { name: Olga, kin: mum }
+        father: { name: Sergei, kin: dad }
+        grandmother: { name: Anna, kin: grandma }
+        grandfather: { name: Nikolai, kin: grandpa }
+        found: { name: Praskovya, kin: great-grandma }
     pain:
       title: A family's memory fades quietly
       before: Now
@@ -820,6 +901,7 @@ en:
       price_q: How much does it cost?
       price_a: "A tree of up to %{limit} people is free, forever. The paid plan removes the limit."
     final:
+      route: Where to start looking for your ancestors
       title: Start with yourself — your family will tell you the rest
       cta: Create a tree for free
     footer:
@@ -977,6 +1059,8 @@ en:
     submit_more: Add more
     thanks: Thank you!
     thanks_lede: Your answer has reached the family.
+    own_lede: Your side of the family has a story too.
+    own_tree: Start a tree of your own
     privacy_html: "Only the members of “%{tree}” will see your answer and photo. %{policy}"
     policy: How we handle data
     closed: This question has been answered already. Thank you!

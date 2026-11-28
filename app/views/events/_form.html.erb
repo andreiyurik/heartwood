@@ -12,10 +12,7 @@
     <%= f.select :kind, Event::PERSON_KINDS.map { |k| [t("events.kinds.#{k}"), k] },
           { include_blank: t("events.select_blank") }, class: "input" %>
   </div>
-  <div class="field">
-    <%= f.label :date_raw, t("events.date_label") %>
-    <%= f.text_field :date_raw, class: "input", placeholder: t("events.date_placeholder") %>
-  </div>
+  <%= render "shared/date_field", f: f, attribute: :date_raw, label: t("events.date_label"), placeholder: t("events.date_placeholder") %>
   <div class="field">
     <%= f.label :value, t("events.detail_label") %>
     <%= f.text_field :value, class: "input", placeholder: t("events.detail_placeholder") %>

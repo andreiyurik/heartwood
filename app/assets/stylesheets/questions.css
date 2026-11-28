@@ -73,6 +73,11 @@
   margin-block-end: var(--block-space-half);
 }
 
+.answered__own {
+  display: block;
+  margin-block-start: 0.25rem;
+}
+
 .answered {
   align-items: flex-start;
   animation: pop-open var(--duration-slow) var(--ease-out-overshoot);
